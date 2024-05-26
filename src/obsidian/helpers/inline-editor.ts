@@ -69,12 +69,18 @@ export class InlineEditor {
         if (!content) {
             vimEnterInsertMode(this.view.plugin, this.inlineView);
         }
+        this.target.addEventListener('focusin', this.setActiveEditor);
+        this.setActiveEditor();
     }
 
     unloadNode() {
         this.nodeId = null;
-        if (this.target) this.target.empty();
-        this.target = null;
+        if (this.target) {
+            this.view.plugin.app.workspace.activeEditor = null;
+            this.target.removeEventListener('focusin', this.setActiveEditor);
+            this.target.empty();
+            this.target = null;
+        }
     }
 
     async onload() {
@@ -120,7 +126,12 @@ export class InlineEditor {
             this.inlineView.file = null;
             await this.inlineView.onUnloadFile(file);
         }
+        this.unloadNode();
     }
+
+    private setActiveEditor = () => {
+        this.view.plugin.app.workspace.activeEditor = this.inlineView;
+    };
 
     private invokeAndDeleteOnChangeSubscriptions = () => {
         if (this.onChangeSubscriptions.size)

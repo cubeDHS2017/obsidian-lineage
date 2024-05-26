@@ -28,6 +28,7 @@ import { registerActiveLeafChange } from 'src/obsidian/events/workspace/register
 import { registerWorkspaceResize } from 'src/obsidian/events/workspace/register-workspace-resize';
 import { registerLayoutReady } from 'src/obsidian/events/workspace/register-layout-ready';
 import { loadCustomIcons } from 'src/helpers/load-custom-icons';
+import { setActiveLeaf } from 'src/obsidian/patches/set-active-leaf';
 
 export type SettingsStore = Store<Settings, SettingsActions>;
 export type DocumentsStore = Store<DocumentsState, DocumentsStoreAction>;
@@ -48,8 +49,7 @@ export default class Lineage extends Plugin {
             FILE_VIEW_TYPE,
             (leaf) => new LineageView(leaf, this),
         );
-        // @ts-ignore
-        this.register(around(WorkspaceLeaf.prototype, { setViewState }));
+        this.registerPatches();
         this.registerEffects();
         this.registerEvents();
         addCommands(this);
@@ -86,5 +86,11 @@ export default class Lineage extends Plugin {
     private registerEffects() {
         hotkeySubscriptions(this);
         documentsStoreSubscriptions(this);
+    }
+
+    private registerPatches() {
+        this.register(around(this.app.workspace, { setActiveLeaf }));
+        // @ts-ignore
+        this.register(around(WorkspaceLeaf.prototype, { setViewState }));
     }
 }
