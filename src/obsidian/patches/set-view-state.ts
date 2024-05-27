@@ -2,7 +2,7 @@ import { ViewState } from 'obsidian';
 import { FILE_VIEW_TYPE } from 'src/view/view';
 import { fileViewTypeCache } from 'src/stores/settings/subscriptions/effects/update-file-view-type-cache';
 
-export function setViewState(next: () => unknown) {
+export function setViewState(next: (...params: unknown[]) => unknown) {
     return function (state: ViewState, ...rest: unknown[]) {
         const isMarkdownView = state.type === 'markdown';
 
