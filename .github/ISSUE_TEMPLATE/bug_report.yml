@@ -1,0 +1,64 @@
+name: Bug Report
+description: Report a bug encountered while using the plugin
+labels: ["bug"]
+body:
+
+  - type: checkboxes
+    id: version-checkbox
+    attributes:
+      label: Are you using the latest version of the plugin?
+      options:
+        - label: I have verified that I am using the latest version
+          required: true
+
+  - type: checkboxes
+    id: issues-duplicates-checkbox
+    attributes:
+      label: Have you checked for similar issues?
+      options:
+        - label: I have verified that there are no similar issues
+          required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: |
+        Please provide as much detail as possible.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant console output
+      description: Please take a screenshot of any relevant errors in the Obsidian dev console. (To open the dev console, use `cmd+opt+i` on MacOS, `ctrl+shift+i` on Linux/Windows)
+
+  - type: input
+    id: obsidian-version
+    attributes:
+      label: Obsidian version
+      description: You can find the version under Settings -> General -> Current version.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      multiple: true
+      options:
+        - Windows
+        - macOS
+        - Linux
+        - Other
+    validations:
+      required: true
+
