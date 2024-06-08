@@ -7,7 +7,7 @@ import { jsonToSections } from 'src/lib/data-conversion/json-to-sections';
 import { createColumn } from 'src/lib/tree-utils/create/create-column';
 import { createGroup } from 'src/lib/tree-utils/create/create-group';
 
-export const branchToSection = (branch: ClipboardBranch) => {
+const branchToColumns = (branch: ClipboardBranch) => {
     const columns: Column[] = [];
     columns.push(createColumn());
     columns[columns.length - 1].groups.push(createGroup('root'));
@@ -18,6 +18,13 @@ export const branchToSection = (branch: ClipboardBranch) => {
             columns[columns.length - 1].groups.push(group);
         }
     }
+    return columns;
+};
 
-    return jsonToSections(columnsToJson(columns, branch.content));
+export const branchToJson = (branch: ClipboardBranch) => {
+    return columnsToJson(branchToColumns(branch), branch.content);
+};
+
+export const branchToSection = (branch: ClipboardBranch) => {
+    return jsonToSections(branchToJson(branch));
 };

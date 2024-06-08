@@ -14,7 +14,7 @@ export const registerFileDeleteEvent = (plugin: LabeledAnnotations) => {
                         },
                     });
                     plugin.settings.dispatch({
-                        type: 'SET_DOCUMENT_TYPE_TO_MARKDOWN',
+                        type: 'DELETE_DOCUMENT_PREFERENCES',
                         payload: {
                             path: file.path,
                         },

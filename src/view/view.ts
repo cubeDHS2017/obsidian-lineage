@@ -4,15 +4,12 @@ import Component from './components/container/main.svelte';
 import Lineage from '../main';
 import { documentReducer } from 'src/stores/document/document-reducer';
 import { Unsubscriber } from 'svelte/store';
-import { columnsToJson } from 'src/lib/data-conversion/columns-to-json';
-import { jsonToSections } from 'src/lib/data-conversion/json-to-sections';
 import { OnError, Store } from 'src/lib/store/store';
 import { defaultDocumentState } from 'src/stores/document/default-document-state';
 import { DocumentState } from 'src/stores/document/document-state-type';
 import { clone } from 'src/helpers/clone';
 import { extractFrontmatter } from 'src/view/helpers/extract-frontmatter';
 import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
-import { setFileViewType } from 'src/obsidian/events/workspace/helpers/set-file-view-type';
 import { ViewState } from 'src/stores/view/view-state-type';
 import { ViewStoreAction } from 'src/stores/view/view-store-actions';
 import { defaultViewState } from 'src/stores/view/default-view-state';
@@ -23,6 +20,14 @@ import { InlineEditor } from 'src/obsidian/helpers/inline-editor';
 import { id } from 'src/helpers/id';
 import invariant from 'tiny-invariant';
 import { customIcons } from 'src/helpers/load-custom-icons';
+
+import { setViewType } from 'src/obsidian/events/workspace/actions/set-view-type';
+import { getDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-document-format';
+import { stringifyDocument } from 'src/view/helpers/stringify-document';
+import { getOrDetectDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-or-detect-document-format';
+import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/maybe-get-document-format';
+import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
+import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
 
 export const FILE_VIEW_TYPE = 'lineage';
 
@@ -149,7 +154,12 @@ export class LineageView extends TextFileView {
                     type: 'DOCUMENTS/DELETE_DOCUMENT',
                     payload: { path: this.file.path },
                 });
-                setFileViewType(this.plugin, this.file, this.leaf, 'markdown');
+                setViewType(this.plugin, this.file.path, 'markdown');
+                toggleObsidianViewType(
+                    this.plugin,
+                    this.plugin.app.workspace.getLeaf(),
+                    'markdown',
+                );
             }
         }
         onPluginError(error, location, action);
@@ -160,9 +170,7 @@ export class LineageView extends TextFileView {
         const state = clone(this.documentStore.getValue());
         const data: string =
             state.file.frontmatter +
-            jsonToSections(
-                columnsToJson(state.document.columns, state.document.content),
-            );
+            stringifyDocument(state.document, getDocumentFormat(this));
         if (data !== this.data || force) {
             this.data = data;
             if (immediate) await this.save();
@@ -241,15 +249,20 @@ export class LineageView extends TextFileView {
         const { data, frontmatter } = extractFrontmatter(this.data);
 
         const state = this.documentStore.getValue();
-        const existingData = jsonToSections(
-            columnsToJson(state.document.columns, state.document.content),
-        );
-        if (!existingData || existingData !== data)
+        const format = getOrDetectDocumentFormat(this);
+        const existingData = stringifyDocument(state.document, format);
+        if (!existingData || existingData !== data) {
             this.documentStore.dispatch({
                 payload: {
                     document: { data: data, frontmatter, position: null },
+                    format,
                 },
                 type: 'DOCUMENT/LOAD_FILE',
             });
+            if (!maybeGetDocumentFormat(this)) {
+                invariant(this.file);
+                setDocumentFormat(this.plugin, this.file.path, format);
+            }
+        }
     };
 }

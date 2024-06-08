@@ -1,7 +1,7 @@
 import { TFile } from 'obsidian';
-import { createNewFile } from 'src/obsidian/commands/helpers/create-new-file';
+import { createNewFile } from 'src/obsidian/events/workspace/effects/create-new-file';
 import Lineage from 'src/main';
-import { openFile } from 'src/obsidian/commands/helpers/open-file';
+import { openFile } from 'src/obsidian/events/workspace/effects/open-file';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
 import { prepareExportedDocument } from 'src/obsidian/commands/helpers/export-document/prepare-exported-document';
 
@@ -21,7 +21,9 @@ export const exportDocument = async (
             output,
             file.basename,
         );
-        if (newFile) await openFile(plugin, newFile, 'split', 'markdown');
+        if (newFile) {
+            await openFile(plugin, newFile, 'split');
+        }
     } catch (e) {
         onPluginError(e, 'command', { type: 'export-document' });
     }

@@ -2,7 +2,7 @@
     import { relativeTime } from 'src/helpers/relative-time';
     import { DocumentBackup } from 'src/stores/settings/settings-type';
     import { TFile } from 'obsidian';
-    import { openFile } from 'src/obsidian/commands/helpers/open-file';
+    import { openFile } from 'src/obsidian/events/workspace/effects/open-file';
     import Lineage from 'src/main';
 
     export let path: string;
@@ -12,7 +12,7 @@
     const openPath = () =>{
         const file = plugin.app.vault.getAbstractFileByPath(path);
         if (file && file instanceof TFile)
-            openFile(plugin, file, 'split', 'markdown');
+            openFile(plugin, file, 'split',);
     }
 </script>
 

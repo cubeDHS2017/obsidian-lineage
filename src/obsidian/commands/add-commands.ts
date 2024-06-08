@@ -1,31 +1,26 @@
-import { Command, MarkdownView, TFolder } from 'obsidian';
+import { Command } from 'obsidian';
 import Lineage from 'src/main';
 import { lang } from 'src/lang/lang';
 import { slugify } from 'src/helpers/slugify';
-import { toggleFileViewType } from 'src/obsidian/events/workspace/helpers/toggle-file-view-type';
+import { toggleFileViewType } from 'src/obsidian/events/workspace/effects/toggle-file-view-type';
 import { LineageView } from 'src/view/view';
-import { createNewFile } from 'src/obsidian/commands/helpers/create-new-file';
 import { exportDocument } from 'src/obsidian/commands/helpers/export-document/export-document';
-import { openFile } from 'src/obsidian/commands/helpers/open-file';
 import { extractBranch } from 'src/obsidian/commands/helpers/extract-branch/extract-branch';
 import { isActiveAndNotEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { onPluginError } from 'src/lib/store/on-plugin-error';
 import { customIcons } from 'src/helpers/load-custom-icons';
+import { getActiveFile } from 'src/obsidian/commands/helpers/get-active-file';
+import { createLineageDocument } from 'src/obsidian/events/workspace/effects/create-lineage-document';
+import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
+import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/maybe-get-document-format';
 
 const createCommands = (plugin: Lineage) => {
     const commands: Omit<Command, 'id'>[] = [];
 
-    const getActiveFile = () => {
-        return (
-            plugin.app.workspace.getActiveViewOfType(MarkdownView)?.file ||
-            plugin.app.workspace.getActiveViewOfType(LineageView)?.file
-        );
-    };
     commands.push({
         name: lang.toggle_lineage_view,
         icon: customIcons.cards.name,
         checkCallback: (checking) => {
-            const file = getActiveFile();
+            const file = getActiveFile(plugin);
             if (file) {
                 if (checking) return true;
                 else {
@@ -36,37 +31,49 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: lang.create_new_file,
+        name: lang.create_new_document,
         icon: customIcons.cards.name,
-        callback: async () => {
-            try {
-                const file = getActiveFile();
-                let folder: TFolder | null = null;
-                if (file) {
-                    folder = file.parent;
-                } else {
-                    folder = plugin.app.vault.getRoot();
-                }
-                if (folder) {
-                    const newFile = await createNewFile(plugin, folder);
-                    if (newFile) {
-                        await openFile(plugin, newFile, 'tab', 'lineage');
-                    }
-                }
-            } catch (e) {
-                onPluginError(e, 'command', lang.create_new_file);
-            }
-        },
+        callback: () => createLineageDocument(plugin, 'document'),
+    });
+    commands.push({
+        name: lang.create_new_outline,
+        icon: customIcons.cards.name,
+        callback: () => createLineageDocument(plugin, 'outline'),
     });
 
     commands.push({
-        name: lang.toggle_lineage_view,
+        name: lang.change_format_to_document,
         icon: customIcons.cards.name,
         checkCallback: (checking) => {
-            const file = getActiveFile();
-            if (file) {
-                if (checking) return true;
-                else toggleFileViewType(plugin, file, undefined);
+            const view = plugin.app.workspace.getActiveViewOfType(LineageView);
+            if (view && view.file) {
+                if (checking) {
+                    const preferences =
+                        plugin.settings.getValue().documents[view.file.path];
+                    return (
+                        preferences && preferences.documentFormat === 'outline'
+                    );
+                } else {
+                    setDocumentFormat(plugin, view.file.path, 'document');
+                }
+            }
+        },
+    });
+    commands.push({
+        name: lang.change_format_to_outline,
+        icon: customIcons.cards.name,
+        checkCallback: (checking) => {
+            const view = plugin.app.workspace.getActiveViewOfType(LineageView);
+            if (view && view.file) {
+                if (checking) {
+                    const preferences =
+                        plugin.settings.getValue().documents[view.file.path];
+                    return (
+                        preferences && preferences.documentFormat === 'document'
+                    );
+                } else {
+                    setDocumentFormat(plugin, view.file.path, 'outline');
+                }
             }
         },
     });
@@ -74,24 +81,13 @@ const createCommands = (plugin: Lineage) => {
         name: lang.export_document,
         icon: customIcons.cards.name,
         checkCallback: (checking) => {
-            const file = getActiveFile();
-            if (file) {
-                if (checking) return true;
-                else {
-                    exportDocument(plugin, file, 'markdown');
-                }
-            }
-        },
-    });
-    commands.push({
-        name: lang.export_document_outline,
-        icon: customIcons.cards.name,
-        checkCallback: (checking) => {
-            const file = getActiveFile();
-            if (file) {
-                if (checking) return true;
-                else {
-                    exportDocument(plugin, file, 'outline');
+            const view = plugin.app.workspace.getActiveViewOfType(LineageView);
+
+            if (view && view.file) {
+                if (checking) {
+                    return maybeGetDocumentFormat(view) === 'document';
+                } else {
+                    exportDocument(plugin, view.file, 'markdown');
                 }
             }
         },

@@ -225,6 +225,8 @@ export const viewSubscriptions = (view: LineageView) => {
                         state.view.zoomLevel,
                         true,
                     );
+                } else if (action.type === 'SET_DOCUMENT_TYPE') {
+                    view.saveDocument();
                 }
 
                 const shouldAlign =

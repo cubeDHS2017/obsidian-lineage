@@ -28,8 +28,21 @@ export type DocumentBackup = {
     content: string;
     created: number;
 };
+
+export type LineageDocumentFormat = 'outline' | 'document';
+
+export type ViewType = 'lineage' | 'markdown';
+export type DocumentPreferences = {
+    documentFormat: LineageDocumentFormat;
+    viewType: ViewType;
+};
+
+export type Settings_0_5_4 = Omit<Settings, 'documents'> & {
+    documents: Record<string, true | DocumentPreferences>;
+};
+
 export type Settings = {
-    documents: Record<string, true>;
+    documents: Record<string, DocumentPreferences>;
     hotkeys: {
         customHotkeys: CustomHotkeys;
     };

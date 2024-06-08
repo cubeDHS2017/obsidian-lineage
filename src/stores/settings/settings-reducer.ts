@@ -1,4 +1,11 @@
-import { CustomHotkeys, ScrollingMode, Settings } from './settings-type';
+import {
+    CustomHotkeys,
+    DocumentPreferences,
+    LineageDocumentFormat,
+    ScrollingMode,
+    Settings,
+    ViewType,
+} from './settings-type';
 import {
     changeZoomLevel,
     ChangeZoomLevelAction,
@@ -6,13 +13,21 @@ import {
 
 export type SettingsActions =
     | {
-          type: 'SET_DOCUMENT_TYPE_TO_TREE';
+          type: 'SET_DOCUMENT_TYPE';
           payload: {
               path: string;
+              format: LineageDocumentFormat;
           };
       }
     | {
-          type: 'SET_DOCUMENT_TYPE_TO_MARKDOWN';
+          type: 'SET_VIEW_TYPE';
+          payload: {
+              path: string;
+              type: ViewType;
+          };
+      }
+    | {
+          type: 'DELETE_DOCUMENT_PREFERENCES';
           payload: {
               path: string;
           };
@@ -95,19 +110,32 @@ export type SettingsActions =
     | {
           type: 'UPDATE_DOCUMENTS_DICTIONARY';
           payload: {
-              documents: Record<string, true>;
+              documents: Record<string, DocumentPreferences>;
           };
       }
     | ChangeZoomLevelAction;
 
 const updateState = (store: Settings, action: SettingsActions) => {
-    if (action.type === 'SET_DOCUMENT_TYPE_TO_MARKDOWN') {
+    if (action.type === 'DELETE_DOCUMENT_PREFERENCES') {
         delete store.documents[action.payload.path];
-    } else if (action.type === 'SET_DOCUMENT_TYPE_TO_TREE') {
-        store.documents[action.payload.path] = true;
+    } else if (action.type === 'SET_DOCUMENT_TYPE') {
+        if (!store.documents[action.payload.path]) {
+            store.documents[action.payload.path] = {
+                documentFormat: action.payload.format,
+                viewType: 'lineage',
+            };
+        } else {
+            store.documents[action.payload.path].documentFormat =
+                action.payload.format;
+        }
+    } else if (action.type === 'SET_VIEW_TYPE') {
+        if (store.documents[action.payload.path]) {
+            store.documents[action.payload.path].viewType = action.payload.type;
+        }
     } else if (action.type === 'HISTORY/UPDATE_DOCUMENT_PATH') {
+        const preferences = store.documents[action.payload.oldPath];
         delete store.documents[action.payload.oldPath];
-        store.documents[action.payload.newPath] = true;
+        store.documents[action.payload.newPath] = preferences;
     } else if (action.type === 'SET_CUSTOM_HOTKEYS') {
         store.hotkeys.customHotkeys = action.payload.customHotkeys;
     } else if (action.type === 'SET_FONT_SIZE') {

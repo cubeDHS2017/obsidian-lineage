@@ -29,6 +29,7 @@ import { registerWorkspaceResize } from 'src/obsidian/events/workspace/register-
 import { registerLayoutReady } from 'src/obsidian/events/workspace/register-layout-ready';
 import { loadCustomIcons } from 'src/helpers/load-custom-icons';
 import { setActiveLeaf } from 'src/obsidian/patches/set-active-leaf';
+import { migrateDocumentPreferences } from 'src/stores/settings/migrations/migrate-document-preferences';
 
 export type SettingsStore = Store<Settings, SettingsActions>;
 export type DocumentsStore = Store<DocumentsState, DocumentsStoreAction>;
@@ -62,9 +63,11 @@ export default class Lineage extends Plugin {
     }
 
     async loadSettings() {
-        const settings = (await this.loadData()) || {};
+        const rawSettings = (await this.loadData()) || {};
+        const settings = deepMerge(rawSettings, DEFAULT_SETTINGS());
+        migrateDocumentPreferences(settings);
         this.settings = new Store<Settings, SettingsActions>(
-            deepMerge(settings, DEFAULT_SETTINGS()),
+            settings,
             settingsReducer,
             onPluginError,
         );

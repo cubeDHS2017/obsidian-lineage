@@ -1,11 +1,13 @@
 import { LineageView } from 'src/view/view';
 import { getBranch } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/get-branch';
 import { branchToSection } from 'src/lib/data-conversion/branch-to-section';
-import { createNewFile } from 'src/obsidian/commands/helpers/create-new-file';
+import { createNewFile } from 'src/obsidian/events/workspace/effects/create-new-file';
 import invariant from 'tiny-invariant';
-import { openFile } from 'src/obsidian/commands/helpers/open-file';
+import { openFileInLineage } from 'src/obsidian/events/workspace/effects/open-file-in-lineage';
 import { getFileNameOfExtractedBranch } from 'src/obsidian/commands/helpers/extract-branch/helpers/get-file-name-of-extracted-branch/get-file-name-of-extracted-branch';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
+import { getDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-document-format';
+import { branchToOutline } from 'src/lib/data-conversion/branch-to-outline';
 
 export const extractBranch = async (view: LineageView) => {
     try {
@@ -20,7 +22,11 @@ export const extractBranch = async (view: LineageView) => {
             'copy',
         );
 
-        const text = branchToSection(branch);
+        const format = getDocumentFormat(view);
+        const text =
+            format === 'outline'
+                ? branchToOutline(branch)
+                : branchToSection(branch);
         const newFile = await createNewFile(
             view.plugin,
             view.file.parent,
@@ -31,7 +37,8 @@ export const extractBranch = async (view: LineageView) => {
                 documentState.sections.id_section[branch.nodeId],
             ),
         );
-        await openFile(view.plugin, newFile, 'split', 'lineage');
+        await openFileInLineage(view.plugin, newFile, format, 'split');
+
         view.documentStore.dispatch({
             type: 'DOCUMENT/EXTRACT_BRANCH',
             payload: {

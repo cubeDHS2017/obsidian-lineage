@@ -18,11 +18,12 @@
     import { historyStore } from 'src/stores/document/derived/history-store';
     import { Notice } from 'obsidian';
     import { LineageView } from '../../../view';
-    import { setFileViewType } from 'src/obsidian/events/workspace/helpers/set-file-view-type';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { writable } from 'svelte/store';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
     import Button from '../shared/button.svelte';
+    import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
+    import { setViewType } from 'src/obsidian/events/workspace/actions/set-view-type';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -57,7 +58,10 @@
     const openAsMarkdown = () => {
         const file =
             plugin.app.workspace.getActiveViewOfType(LineageView)?.file;
-        if (file) setFileViewType(plugin, file, view.leaf, 'markdown');
+        if (file) {
+            setViewType(plugin, file.path, "markdown");
+            toggleObsidianViewType(plugin, view.leaf, 'markdown');
+        }
     };
     const zoomIn = () => {
         view.plugin.settings.dispatch({
