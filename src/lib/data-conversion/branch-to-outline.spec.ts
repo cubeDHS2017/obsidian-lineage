@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { ClipboardBranch } from 'src/stores/document/document-state-type';
-import { branchToSection } from 'src/lib/data-conversion/branch-to-section';
+import { branchToOutline } from 'src/lib/data-conversion/branch-to-outline';
 
 describe('branch-to-section', () => {
     test('case 1', () => {
@@ -34,8 +34,15 @@ describe('branch-to-section', () => {
             nodeId: n1,
             mode: 'copy',
         };
-        const text = `\n<!--section: 1-->\n1\n\n<!--section: 1.1-->\n1.1\n\n<!--section: 1.1.1-->\n1.1.1\n\n<!--section: 1.1.2-->\n1.1.2\n\n<!--section: 1.1.2.1-->\n1.1.2.1\n\n<!--section: 1.2-->\n1.2\n\n<!--section: 1.2.1-->\n1.2.1\n\n<!--section: 1.2.2-->\n1.2.2`;
-        expect(branchToSection([branch])).toEqual(text);
+        const text = `- 1
+\t- 1.1
+\t\t- 1.1.1
+\t\t- 1.1.2
+\t\t\t- 1.1.2.1
+\t- 1.2
+\t\t- 1.2.1
+\t\t- 1.2.2`;
+        expect(branchToOutline([branch])).toEqual(text);
     });
     test('multiple branches', () => {
         const input = [
@@ -74,24 +81,12 @@ describe('branch-to-section', () => {
                 mode: 'copy',
             },
         ] as ClipboardBranch[];
-        const text = `
-<!--section: 1-->
-1
-
-<!--section: 1.1-->
-1.1
-
-<!--section: 1.2-->
-1.2
-
-<!--section: 2-->
-2
-
-<!--section: 2.1-->
-2.1
-
-<!--section: 2.2-->
-2.2`;
-        expect(branchToSection(input)).toEqual(text);
+        const text = `- 1
+\t- 1.1
+\t- 1.2
+- 2
+\t- 2.1
+\t- 2.2`;
+        expect(branchToOutline(input)).toEqual(text);
     });
 });

@@ -2,7 +2,10 @@ import {
     ClipboardBranch,
     Column,
 } from 'src/stores/document/document-state-type';
-import { columnsToJson } from 'src/lib/data-conversion/columns-to-json';
+import {
+    columnsToJson,
+    TreeNode,
+} from 'src/lib/data-conversion/columns-to-json';
 import { jsonToSections } from 'src/lib/data-conversion/json-to-sections';
 import { createColumn } from 'src/lib/tree-utils/create/create-column';
 import { createGroup } from 'src/lib/tree-utils/create/create-group';
@@ -21,10 +24,15 @@ const branchToColumns = (branch: ClipboardBranch) => {
     return columns;
 };
 
-export const branchToJson = (branch: ClipboardBranch) => {
-    return columnsToJson(branchToColumns(branch), branch.content);
+export const branchToJson = (branches: ClipboardBranch[]) => {
+    const trees: TreeNode[] = [];
+    for (const branch of branches) {
+        const tree = columnsToJson(branchToColumns(branch), branch.content);
+        trees.push(tree[0]);
+    }
+    return trees;
 };
 
-export const branchToSection = (branch: ClipboardBranch) => {
-    return jsonToSections(branchToJson(branch));
+export const branchToSection = (branches: ClipboardBranch[]) => {
+    return jsonToSections(branchToJson(branches));
 };

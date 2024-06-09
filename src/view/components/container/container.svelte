@@ -15,6 +15,7 @@
     import { idSectionStore } from 'src/stores/document/derived/id-section-store';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
     import { closeModalsWhenClickingOutside } from 'src/view/actions/close-modals-when-clicking-outside';
+    import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
 
     const view = getView();
     const columns = columnsStore(view);
@@ -22,6 +23,7 @@
     const dnd = dndStore(view);
     const activeBranch = activeBranchStore(view);
     const activeNode = activeNodeStore(view);
+    const selectedNodes = selectedNodesStore(view);
     const editing = documentStateStore(view);
     const search = searchStore(view);
     const limitPreviewHeight = limitPreviewHeightStore(view);
@@ -63,6 +65,7 @@
                 searchResults={$search.results}
                 searching={$search.searching}
                 idSection={$idSection}
+                selectedNodes={$selectedNodes}
             />
         {/each}
         {#if $scrolling === 'fixed-position' || $scrolling === 'keep-active-card-at-center'}

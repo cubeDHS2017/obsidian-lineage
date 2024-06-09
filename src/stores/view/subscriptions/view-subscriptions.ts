@@ -89,6 +89,22 @@ const viewEffectsAndActions = (
         if (type === 'DOCUMENT/INSERT_NODE' && view.isActive) {
             enableEditMode(viewStore, documentState);
         }
+        if (
+            (structuralChange && type !== 'DOCUMENT/MOVE_NODE') ||
+            (activeNodeChange &&
+                type !== 'DOCUMENT/NAVIGATE_USING_KEYBOARD' &&
+                type !== 'DOCUMENT/JUMP_TO_NODE')
+        ) {
+            const selectedNodes = viewState.document.selectedNodes;
+            if (selectedNodes.size > 1) {
+                const selectedNodeIsWithinSelection =
+                    action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
+                    selectedNodes.has(action.payload.id);
+                if (!selectedNodeIsWithinSelection) {
+                    viewStore.dispatch({ type: 'DOCUMENT/CLEAR_SELECTION' });
+                }
+            }
+        }
 
         if (
             type === 'DOCUMENT/DELETE_NODE' ||

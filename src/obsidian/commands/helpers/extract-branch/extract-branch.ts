@@ -25,8 +25,8 @@ export const extractBranch = async (view: LineageView) => {
         const format = getDocumentFormat(view);
         const text =
             format === 'outline'
-                ? branchToOutline(branch)
-                : branchToSection(branch);
+                ? branchToOutline([branch])
+                : branchToSection([branch]);
         const newFile = await createNewFile(
             view.plugin,
             view.file.parent,

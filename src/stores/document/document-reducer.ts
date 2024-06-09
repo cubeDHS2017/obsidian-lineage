@@ -47,6 +47,7 @@ const updateDocumentState = (
         newActiveNodeId = deleteNode(
             state.document,
             action.payload.activeNodeId,
+            action.payload.selectedNodes,
         );
         affectedNodeId = action.payload.activeNodeId;
     } else if (action.type === 'DOCUMENT/EXTRACT_BRANCH') {
@@ -97,7 +98,11 @@ const updateDocumentState = (
         newActiveNodeId = pasteNode(state.document, action);
     } else if (action.type === 'DOCUMENT/CUT_NODE') {
         affectedNodeContent = state.document.content[action.payload.nodeId];
-        newActiveNodeId = deleteNode(state.document, action.payload.nodeId);
+        newActiveNodeId = deleteNode(
+            state.document,
+            action.payload.nodeId,
+            action.payload.selectedNodes,
+        );
         affectedNodeId = action.payload.nodeId;
     }
 

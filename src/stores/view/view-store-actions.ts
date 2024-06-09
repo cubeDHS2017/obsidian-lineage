@@ -41,7 +41,8 @@ export type ViewDocumentAction =
       }
     | {
           type: 'DOCUMENT/RESET_DISABLE_EDIT_CONFIRMATION';
-      };
+      }
+    | { type: 'DOCUMENT/CLEAR_SELECTION' };
 type ToggleHistorySidebarAction = {
     type: 'UI/TOGGLE_HISTORY_SIDEBAR';
 };

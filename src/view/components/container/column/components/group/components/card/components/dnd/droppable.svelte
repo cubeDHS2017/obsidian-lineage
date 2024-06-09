@@ -12,7 +12,7 @@
     export let parentId: string;
     export let editing: boolean;
     export let disableEditConfirmation: boolean;
-
+    export let selected: boolean;
     // eslint-disable-next-line no-undef
     const setActive = (e: MouseEvent) => {
         if (!editing)
@@ -44,9 +44,11 @@
             ? 'node-border--discard'
             : editing
               ? 'node-border--editing'
-              : active === ActiveStatus.node
-                ? 'node-border--active'
-                : undefined,
+              : selected
+                ? 'node-border--selected'
+                : active === ActiveStatus.node
+                  ? 'node-border--active'
+                  : undefined,
     )}
     id={nodeId}
     on:click={setActive}
@@ -92,5 +94,9 @@
     }
     .node-border--discard {
         border-left: 5px var(--color-red) solid;
+    }
+
+    .node-border--selected {
+        border-left: 5px var(--lineage-color-selection) solid;
     }
 </style>

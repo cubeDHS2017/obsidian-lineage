@@ -11,24 +11,39 @@ export type DeleteNodeAction = {
     type: 'DOCUMENT/DELETE_NODE';
     payload: {
         activeNodeId: string;
+        selectedNodes?: Set<string>;
     };
 };
 
-export const deleteNode = (document: LineageDocument, nodeId: string) => {
+export const deleteNode = (
+    document: LineageDocument,
+    nodeId: string,
+    selectedNodes?: Set<string>,
+) => {
     invariant(nodeId);
 
-    const lastNode = isLastRootNode(document.columns, nodeId);
-    if (lastNode) throw new Error(lang.error_delete_last_node);
+    const isSelection = selectedNodes && selectedNodes.size > 1;
+    const nodes: string[] = isSelection ? [...selectedNodes] : [nodeId];
 
-    const nextNode = findNextActiveNode(document.columns, nodeId, {
-        type: 'DOCUMENT/DELETE_NODE',
-        payload: {
-            activeNodeId: nodeId,
-        },
-    });
+    let nextNode: string | undefined = undefined;
+    for (const nodeId of nodes) {
+        const lastNode = isLastRootNode(document.columns, nodeId);
+        if (lastNode) {
+            if (isSelection) break;
+            else throw new Error(lang.error_delete_last_node);
+        }
+
+        nextNode = findNextActiveNode(document.columns, nodeId, {
+            type: 'DOCUMENT/DELETE_NODE',
+            payload: {
+                activeNodeId: nodeId,
+            },
+        });
+        invariant(nextNode);
+        deleteChildNodes(document, nodeId);
+        deleteNodeById(document.columns, document.content, nodeId);
+        cleanAndSortColumns(document);
+    }
     invariant(nextNode);
-    deleteChildNodes(document, nodeId);
-    deleteNodeById(document.columns, document.content, nodeId);
-    cleanAndSortColumns(document);
     return nextNode;
 };

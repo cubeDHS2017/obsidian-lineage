@@ -65,5 +65,8 @@
         & .node-border--discard {
             border-left-color: #e8314660;
         }
+        & .node-border--selected {
+            border-left-color: var(--lineage-color-selection-faint);
+        }
     }
 </style>

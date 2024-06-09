@@ -2,6 +2,7 @@ import { Column } from 'src/stores/document/document-state-type';
 import { updateActiveNode } from 'src/stores/view/reducers/document/helpers/update-active-node';
 import { findNextActiveNode } from 'src/lib/tree-utils/find/find-next-active-node';
 import { DocumentViewState, ViewState } from 'src/stores/view/view-state-type';
+import { updateSelectionState } from 'src/stores/view/reducers/document/helpers/update-selection-state';
 
 export type JumpTarget =
     | 'start-of-group'
@@ -13,6 +14,9 @@ export type JumpToNodeAction = {
     payload: {
         target: JumpTarget;
         columns: Column[];
+    };
+    context?: {
+        shiftKey: boolean;
     };
 };
 
@@ -27,6 +31,7 @@ export const jumpToNode = (
         action,
     );
     if (nextNode) {
+        updateSelectionState(documentViewState, nextNode, action);
         updateActiveNode(documentViewState, nextNode, state);
     }
 };

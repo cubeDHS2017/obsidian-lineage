@@ -12,13 +12,18 @@ import { hasBulletList } from 'src/view/actions/context-menu/helpers/flags/has-b
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const menu = new Menu();
+
+    const multipleNodesAreSelected =
+        view.viewStore.getValue().document.selectedNodes.size > 1;
+
     menu.addItem((item) =>
         item
             .setTitle('Extract')
             .setIcon('file-symlink')
             .onClick(() => {
                 extractBranch(view);
-            }),
+            })
+            .setDisabled(multipleNodesAreSelected),
     );
 
     const input =
@@ -37,7 +42,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 splitNode(view, 'heading');
             })
-            .setDisabled(!_hasHeading),
+            .setDisabled(!_hasHeading || multipleNodesAreSelected),
     );
     menu.addItem((item) =>
         item
@@ -46,7 +51,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 splitNode(view, 'outline');
             })
-            .setDisabled(!_hasBulletList),
+            .setDisabled(!_hasBulletList || multipleNodesAreSelected),
     );
 
     menu.addSeparator();
@@ -57,7 +62,8 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .setIcon('merge')
             .onClick(() => {
                 mergeNode(view, 'up');
-            }),
+            })
+            .setDisabled(multipleNodesAreSelected),
     );
     menu.addItem((item) =>
         item
@@ -65,7 +71,8 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .setIcon('merge')
             .onClick(() => {
                 mergeNode(view, 'down');
-            }),
+            })
+            .setDisabled(multipleNodesAreSelected),
     );
     menu.addSeparator();
     menu.addItem((item) =>

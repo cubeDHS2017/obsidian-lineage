@@ -4,11 +4,14 @@ import { LineageView } from 'src/view/view';
 
 export const moveNode = (view: LineageView, direction: AllDirections) => {
     saveNodeContent(view);
+
+    const document = view.viewStore.getValue().document;
     view.documentStore.dispatch({
         type: 'DOCUMENT/MOVE_NODE',
         payload: {
             direction,
-            activeNodeId: view.viewStore.getValue().document.activeNode,
+            activeNodeId: document.activeNode,
+            selectedNodes: document.selectedNodes,
         },
     });
 };

@@ -5,8 +5,8 @@ import {
     commandsDictionary,
     updateCommandsDictionary,
 } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-commands-dictionary';
-import { Notice } from 'obsidian';
 import { handleEscapeKey } from 'src/view/actions/on-escape/helpers/handle-escape-key';
+import { onPluginError } from 'src/lib/store/on-plugin-error';
 
 /* using native obsidian hotkeys is not practical because (1) the plugin uses too many basic
  * hotkeys such as 'Arrow keys' and 'Enter' and (2) the plugin only listens to hotkeys in its
@@ -44,11 +44,7 @@ export const keyboardShortcuts = (
                 try {
                     command.callback(view, event);
                 } catch (error) {
-                    // eslint-disable-next-line no-console
-                    console.error(`[hotkey] command: `, command.name);
-                    // eslint-disable-next-line no-console
-                    console.error(`[hotkey] `, error);
-                    new Notice('Lineage plugin: ' + error.message);
+                    onPluginError(error, 'command', command);
                 }
             }
         }

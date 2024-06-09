@@ -65,6 +65,7 @@ export type CopyNodeAction = {
     type: 'DOCUMENT/COPY_NODE';
     payload: {
         nodeId: string;
+        selectedNodes?: Set<string>;
     };
 };
 
@@ -72,6 +73,7 @@ export type CutNodeAction = {
     type: 'DOCUMENT/CUT_NODE';
     payload: {
         nodeId: string;
+        selectedNodes?: Set<string>;
     };
 };
 
