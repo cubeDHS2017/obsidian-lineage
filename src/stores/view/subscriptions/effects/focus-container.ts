@@ -3,8 +3,11 @@ import { Platform } from 'obsidian';
 
 export const focusContainer = (view: LineageView) => {
     if (view.container) {
-        const isEditingOnMobile =
-            Platform.isMobile && Boolean(view.inlineEditor.activeNode);
-        if (!isEditingOnMobile) view.container.focus();
+        const isEditing = Boolean(view.inlineEditor.activeNode);
+        const isEditingOnMobile = Platform.isMobile && isEditing;
+        if (!isEditingOnMobile) {
+            if (isEditing) view.inlineEditor.focus();
+            else view.container.focus();
+        }
     }
 };

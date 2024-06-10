@@ -62,7 +62,7 @@ export class InlineEditor {
             );
         this.appliedExternalCursor = false;
         target.append(this.containerEl);
-        this.inlineView.editor.focus();
+        this.focus();
         AdjustHeight(target)();
         this.nodeId = nodeId;
         this.target = target;
@@ -72,6 +72,10 @@ export class InlineEditor {
         this.target.addEventListener('focusin', this.setActiveEditor);
         this.setActiveEditor();
     }
+
+    focus = () => {
+        this.inlineView.editor.focus();
+    };
 
     unloadNode() {
         this.nodeId = null;
