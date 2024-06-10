@@ -113,7 +113,16 @@ export type SettingsActions =
               documents: Record<string, DocumentPreferences>;
           };
       }
-    | ChangeZoomLevelAction;
+    | ChangeZoomLevelAction
+    | PersistActiveNodeAction;
+
+export type PersistActiveNodeAction = {
+    type: 'DOCUMENT/SET_ACTIVE_NODE';
+    payload: {
+        path: string;
+        sectionNumber: string;
+    };
+};
 
 const updateState = (store: Settings, action: SettingsActions) => {
     if (action.type === 'DELETE_DOCUMENT_PREFERENCES') {
@@ -123,6 +132,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
             store.documents[action.payload.path] = {
                 documentFormat: action.payload.format,
                 viewType: 'lineage',
+                activeSection: null,
             };
         } else {
             store.documents[action.payload.path].documentFormat =
@@ -131,6 +141,11 @@ const updateState = (store: Settings, action: SettingsActions) => {
     } else if (action.type === 'SET_VIEW_TYPE') {
         if (store.documents[action.payload.path]) {
             store.documents[action.payload.path].viewType = action.payload.type;
+        }
+    } else if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
+        if (store.documents[action.payload.path]) {
+            store.documents[action.payload.path].activeSection =
+                action.payload.sectionNumber;
         }
     } else if (action.type === 'HISTORY/UPDATE_DOCUMENT_PATH') {
         const preferences = store.documents[action.payload.oldPath];

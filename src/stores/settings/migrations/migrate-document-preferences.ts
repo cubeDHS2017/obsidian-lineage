@@ -1,4 +1,5 @@
-import { Settings, Settings_0_5_4 } from 'src/stores/settings/settings-type';
+import { Settings } from 'src/stores/settings/settings-type';
+import { Settings_0_5_4 } from 'src/stores/settings/migrations/old-settings-type';
 
 export const migrateDocumentPreferences = (
     settings: Settings | Settings_0_5_4,
@@ -8,6 +9,7 @@ export const migrateDocumentPreferences = (
             settings.documents[path] = {
                 documentFormat: 'document',
                 viewType: 'lineage',
+                activeSection: null,
             };
         }
     }

@@ -59,6 +59,7 @@ type SetActiveNodeAction = {
     };
     context?: {
         modKey: boolean;
+        source?: 'mouse';
     };
 };
 export type NodeSelectionAction =

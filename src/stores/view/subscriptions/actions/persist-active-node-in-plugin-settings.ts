@@ -1,0 +1,28 @@
+import { LineageView } from 'src/view/view';
+import { getSectionOfId } from 'src/stores/view/subscriptions/helpers/get-section-of-id';
+
+const state: {
+    [path: string]: string;
+} = {};
+
+export const persistActiveNodeInPluginSettings = (view: LineageView) => {
+    if (!view.file) return;
+    const documentState = view.documentStore.getValue();
+    const viewState = view.viewStore.getValue();
+    const sectionNumber = getSectionOfId(
+        documentState.sections,
+        viewState.document.activeNode,
+    );
+
+    const path = view.file?.path;
+
+    if (state[path] === sectionNumber) return;
+    state[path] = sectionNumber;
+    view.plugin.settings.dispatch({
+        type: 'DOCUMENT/SET_ACTIVE_NODE',
+        payload: {
+            sectionNumber: sectionNumber,
+            path: path,
+        },
+    });
+};

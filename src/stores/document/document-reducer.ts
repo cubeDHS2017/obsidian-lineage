@@ -24,9 +24,9 @@ import { defaultDocumentState } from 'src/stores/document/default-document-state
 import { formatHeadings } from 'src/stores/document/reducers/content/format-content/format-headings';
 import { pasteNode } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
 import { updateSectionsDictionary } from 'src/stores/document/reducers/state/update-sections-dictionary';
-import { getIdOfSection } from 'src/stores/view/subscriptions/actions/get-id-of-section';
+import { getIdOfSection } from 'src/stores/view/subscriptions/helpers/get-id-of-section';
 import { extractNode } from 'src/stores/document/reducers/extract-node/extract-node';
-import { getSectionOfId } from 'src/stores/view/subscriptions/actions/get-section-of-id';
+import { getSectionOfId } from 'src/stores/view/subscriptions/helpers/get-section-of-id';
 import { splitNode } from 'src/stores/document/reducers/split-node/split-node';
 
 const updateDocumentState = (

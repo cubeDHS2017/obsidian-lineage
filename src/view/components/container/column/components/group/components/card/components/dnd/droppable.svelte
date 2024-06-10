@@ -21,6 +21,7 @@
                 payload: { id: nodeId },
                 context:{
                     modKey: isMacLike ? e.metaKey : e.ctrlKey,
+                    source: "mouse"
                 }
             });
     };

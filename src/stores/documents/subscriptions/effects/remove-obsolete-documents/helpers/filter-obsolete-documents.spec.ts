@@ -9,6 +9,7 @@ type Settings = Pick<TSettings, 'documents'>;
 const sample: DocumentPreferences = {
     documentFormat: 'document',
     viewType: 'lineage',
+    activeSection: null,
 };
 describe('filterObsoleteDocuments', () => {
     it('should return 0 if allFiles is empty', () => {

@@ -35,10 +35,7 @@ export type ViewType = 'lineage' | 'markdown';
 export type DocumentPreferences = {
     documentFormat: LineageDocumentFormat;
     viewType: ViewType;
-};
-
-export type Settings_0_5_4 = Omit<Settings, 'documents'> & {
-    documents: Record<string, true | DocumentPreferences>;
+    activeSection: string | null;
 };
 
 export type Settings = {
