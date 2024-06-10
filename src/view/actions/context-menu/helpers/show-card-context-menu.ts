@@ -7,8 +7,8 @@ import { cutNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/co
 import { pasteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/paste-node';
 import { splitNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/split-node';
 import { customIcons } from 'src/helpers/load-custom-icons';
-import { hasHeading } from 'src/view/actions/context-menu/helpers/flags/has-heading';
-import { hasBulletList } from 'src/view/actions/context-menu/helpers/flags/has-bullet-list';
+import { hasNHeadings } from 'src/lib/format-detection/has-n-headings';
+import { isOutline } from 'src/lib/format-detection/is-outline';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const menu = new Menu();
@@ -33,8 +33,8 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
 
     menu.addSeparator();
 
-    const _hasHeading = hasHeading(input);
-    const _hasBulletList = !_hasHeading && hasBulletList(input);
+    const _hasHeading = hasNHeadings(input);
+    const _isOutline = !_hasHeading && isOutline(input);
     menu.addItem((item) =>
         item
             .setTitle('Split by headings')
@@ -51,7 +51,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 splitNode(view, 'outline');
             })
-            .setDisabled(!_hasBulletList || multipleNodesAreSelected),
+            .setDisabled(!_isOutline || multipleNodesAreSelected),
     );
 
     menu.addSeparator();
