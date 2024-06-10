@@ -1,12 +1,12 @@
+import { ViewState } from 'src/stores/view/view-state-type';
 import {
     AlignBranchState,
     alignElement,
 } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/align-element';
-import { getNodeElement } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-node-element';
-import { ViewState } from 'src/stores/view/view-state-type';
 import { Settings } from 'src/stores/settings/settings-type';
+import { getNodeElement } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-node-element';
 
-export const alignParentsAndActiveNode = (
+export const alignActiveNode = (
     viewState: ViewState,
     container: HTMLElement,
     localState: AlignBranchState,
@@ -29,17 +29,5 @@ export const alignParentsAndActiveNode = (
             childGroupElement,
         );
         if (columnId) localState.columns.add(columnId);
-    }
-    for (const id of viewState.document.activeBranch.sortedParentNodes) {
-        const element = getNodeElement(container, id);
-        if (element) {
-            const columnId = alignElement(
-                container,
-                element,
-                settings,
-                behavior,
-            );
-            if (columnId) localState.columns.add(columnId);
-        }
     }
 };

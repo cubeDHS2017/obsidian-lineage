@@ -13,7 +13,7 @@ import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/act
 import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-search-results/helpers/reset-search-fuse';
 import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranchDebounced } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export const onDocumentStateUpdate = (
     view: LineageView,
@@ -90,7 +90,7 @@ export const onDocumentStateUpdate = (
                 action.payload.direction === 'up')
                 ? 'instant'
                 : undefined;
-        alignBranchDebounced(
+        alignBranch(
             documentState,
             viewState,
             container,

@@ -6,7 +6,7 @@ import { detectDocumentFormat } from 'src/lib/format-detection/detect-document-f
 import { outlineToJson } from 'src/lib/data-conversion/outilne-to-json';
 
 export const textToBranches = (text: string) => {
-    const detectedFormat = detectDocumentFormat(text);
+    const detectedFormat = detectDocumentFormat(text, false);
     const tree =
         detectedFormat === 'outline'
             ? outlineToJson(text)

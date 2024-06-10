@@ -10,10 +10,7 @@ import { updateSearchResults } from 'src/stores/view/subscriptions/actions/updat
 import { updateConflictingHotkeys } from 'src/stores/view/subscriptions/actions/update-conflicting-hotkeys';
 import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-search-results/helpers/reset-search-fuse';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import {
-    alignBranch,
-    alignBranchDebounced,
-} from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
 
 export const onViewStateUpdate = (
@@ -80,19 +77,7 @@ export const onViewStateUpdate = (
             action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
             action.context?.modKey;
         if (!skipAligning) {
-            const userInteraction =
-                action.type === 'DOCUMENT/NAVIGATE_USING_KEYBOARD' ||
-                (action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
-                    action.context?.source === 'mouse');
-            if (userInteraction)
-                alignBranch(documentState, viewState, container, settings);
-            else
-                alignBranchDebounced(
-                    documentState,
-                    viewState,
-                    container,
-                    settings,
-                );
+            alignBranch(documentState, viewState, container, settings);
         }
     }
 };

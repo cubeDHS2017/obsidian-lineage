@@ -6,7 +6,7 @@ import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-vari
 import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
-import { alignBranchDebounced } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { Notice } from 'obsidian';
 
 export const onPluginSettingsUpdate = (
@@ -42,7 +42,7 @@ export const onPluginSettingsUpdate = (
         type === 'SET_CARD_WIDTH' ||
         type === 'SET_LIMIT_PREVIEW_HEIGHT';
     if (view.isActive && shouldAlign) {
-        alignBranchDebounced(
+        alignBranch(
             view.documentStore.getValue(),
             view.viewStore.getValue(),
             view.container,

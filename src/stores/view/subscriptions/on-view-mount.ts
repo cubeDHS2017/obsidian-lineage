@@ -4,7 +4,7 @@ import { isEmptyDocument } from 'src/stores/view/subscriptions/helpers/is-empty-
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranchDebounced } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-font-size';
 import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-container-bg';
 import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
@@ -50,7 +50,7 @@ export const onViewMount = (view: LineageView) => {
     // effects
     if (view.isActive && container) {
         focusContainer(view);
-        alignBranchDebounced(
+        alignBranch(
             documentState,
             viewState,
             container,

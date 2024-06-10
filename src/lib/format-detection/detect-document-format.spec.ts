@@ -63,4 +63,10 @@ describe('detectDocumentFormat', () => {
 
         expect(result).toBe('document');
     });
+    it('should detect single bullet text in non-strict mode', () => {
+        const text = '- 1';
+        const result = detectDocumentFormat(text, false);
+
+        expect(result).toBe('outline');
+    });
 });
