@@ -45,14 +45,15 @@ export const outlineToJson = (input: string): TreeNode[] => {
     };
 
     for (const line of lines) {
-        if (parseDelimiter(line)) throw new Error('input has a section');
+        if (parseDelimiter(line))
+            throw new Error('Outline has a section annotation');
 
         const outlineMatch = line.match(/^(\t*)- (.+)/);
         if (outlineMatch) {
             const level = outlineMatch[1].length + 1;
             addNewNode(state, level, outlineMatch[2]);
         } else {
-            updateCurrentNode(state, line);
+            updateCurrentNode(state, line.replace(/^\t* {2}|/g, ''));
         }
     }
 

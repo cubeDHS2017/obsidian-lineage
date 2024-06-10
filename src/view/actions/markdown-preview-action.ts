@@ -11,7 +11,7 @@ export const markdownPreviewAction = (element: HTMLElement, nodeId: string) => {
         if (view && element) {
             element.empty();
             // insert `&nbsp;` in empty lines
-            if (content.length > 0 && !/^> /.test(content)) {
+            if (content.length > 0 && !/^> /gm.test(content)) {
                 content = content.replace(/^$/gm, '&nbsp;');
             }
             MarkdownRenderer.render(
