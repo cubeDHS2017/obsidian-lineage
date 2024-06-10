@@ -24,6 +24,11 @@
     import Button from '../shared/button.svelte';
     import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
     import { setViewType } from 'src/obsidian/events/workspace/actions/set-view-type';
+    import { resetZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/reset-zoom';
+    import invariant from 'tiny-invariant';
+    import {
+        getCombinedBoundingClientRect
+    } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -83,16 +88,24 @@
         });
     };
 
-    const fitToScale = () => {
-        restoreZoom();
+    const fitDocumentHeightIntoView = () => {
+        invariant(view.container);
+        resetZoom(view.container);
         const columns = Array.from(
             view.containerEl.querySelectorAll('.column'),
         );
         if (columns.length) {
-            const scrolls = columns.map((c) => c.scrollHeight).sort();
-            const biggest = scrolls[scrolls.length - 1];
+            const groupHeights = columns
+                .map((c) => {
+                    return getCombinedBoundingClientRect(
+                        Array.from(c.querySelectorAll('.group')),
+                    ).height;
+                })
+                .sort((a,b)=>a-b);
+            const biggest = groupHeights[groupHeights.length-1];
             // eslint-disable-next-line no-undef
-            const scale = window.innerHeight / biggest;
+            const scale =
+                view.container.getBoundingClientRect().height / (biggest+ 100);
             view.plugin.settings.dispatch({
                 type: 'UI/CHANGE_ZOOM_LEVEL',
                 payload: { value: scale },
@@ -209,8 +222,8 @@
         </Button>
         <Button
             class="control-item"
-            label="Zoom to fit"
-            on:click={fitToScale}
+            label="Fit document height into view"
+            on:click={fitDocumentHeightIntoView}
             tooltipPosition="left"
         >
             <Maximize class="svg-icon" />

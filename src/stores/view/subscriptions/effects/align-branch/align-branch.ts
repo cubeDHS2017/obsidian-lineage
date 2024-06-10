@@ -8,6 +8,31 @@ import { resetZoom } from 'src/stores/view/subscriptions/effects/align-branch/he
 import { alignChildColumns } from 'src/stores/view/subscriptions/effects/align-branch/align-child-columns';
 import { alignActiveNode } from 'src/stores/view/subscriptions/effects/align-branch/align-active-node';
 
+const align = (
+    documentState: DocumentState,
+    viewState: ViewState,
+    container: HTMLElement,
+    settings: Settings,
+    behavior?: ScrollBehavior,
+    alignInactiveColumns = false,
+) => {
+    const localState: AlignBranchState = {
+        columns: new Set<string>(),
+    };
+    alignActiveNode(viewState, container, localState, settings, behavior);
+    alignParentsNodes(viewState, container, localState, settings, behavior);
+
+    alignChildColumns(
+        viewState,
+        documentState,
+        container,
+        localState,
+        settings,
+        behavior,
+        alignInactiveColumns,
+    );
+};
+
 export const alignBranch = (
     documentState: DocumentState,
     viewState: ViewState,
@@ -16,29 +41,34 @@ export const alignBranch = (
     behavior?: ScrollBehavior,
     alignInactiveColumns = false,
 ) => {
-    if (settings.view.zoomLevel !== 1) behavior = 'instant';
+    if (!viewState.document.activeNode) return;
     if (!container) return;
-    const nodeId = viewState.document.activeNode;
-    if (!nodeId) return;
-    const localState: AlignBranchState = {
-        columns: new Set<string>(),
-    };
+    const zooming = settings.view.zoomLevel !== 1;
+    if (zooming) behavior = 'instant';
 
-    requestAnimationFrame(() => {
-        resetZoom(container);
-        alignActiveNode(viewState, container, localState, settings, behavior);
-        alignParentsNodes(viewState, container, localState, settings, behavior);
-
-        alignChildColumns(
-            viewState,
-            documentState,
-            container,
-            localState,
-            settings,
-            behavior,
-            alignInactiveColumns,
-        );
-
-        applyZoom(viewState, container, settings.view.zoomLevel);
-    });
+    if (!zooming)
+        requestAnimationFrame(() => {
+            align(
+                documentState,
+                viewState,
+                container,
+                settings,
+                behavior,
+                alignInactiveColumns,
+            );
+        });
+    else {
+        setTimeout(() => {
+            resetZoom(container);
+            align(
+                documentState,
+                viewState,
+                container,
+                settings,
+                behavior,
+                alignInactiveColumns,
+            );
+            applyZoom(viewState, container, settings.view.zoomLevel);
+        });
+    }
 };
