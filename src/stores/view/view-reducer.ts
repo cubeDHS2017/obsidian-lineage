@@ -10,12 +10,13 @@ import { onDragEnd } from 'src/stores/view/reducers/document/on-drag-end';
 import { updateActiveBranch } from 'src/stores/view/reducers/document/helpers/update-active-branch';
 import { updateActiveNode } from 'src/stores/view/reducers/document/helpers/update-active-node';
 import { navigateUsingKeyboard } from 'src/stores/view/reducers/document/navigate-using-keyboard';
-import { navigateActiveNode } from 'src/stores/view/reducers/ui/navigate-active-node';
+import { navigateActiveNodeHistory } from 'src/stores/view/reducers/ui/navigate-active-node-history';
 import { jumpToNode } from 'src/stores/view/reducers/document/jump-to-node';
 
 import { removeDeletedNavigationItems } from 'src/stores/view/reducers/ui/helpers/remove-deleted-navigation-items';
 import { toggleFuzzySearch } from 'src/stores/view/reducers/search/toggle-fuzzy-search';
 import { resetSelectionState } from 'src/stores/view/reducers/document/helpers/reset-selection-state';
+import { navigateActiveNode } from 'src/stores/view/reducers/ui/navigate-active-node';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
@@ -82,9 +83,9 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             state.document.activeNodesOfColumn,
         );
     } else if (action.type === 'NAVIGATION/NAVIGATE_FORWARD') {
-        navigateActiveNode(state.document, state, true);
+        navigateActiveNodeHistory(state.document, state, true);
     } else if (action.type === 'NAVIGATION/NAVIGATE_BACK') {
-        navigateActiveNode(state.document, state);
+        navigateActiveNodeHistory(state.document, state);
     } else if (action.type === 'DOCUMENT/JUMP_TO_NODE') {
         jumpToNode(state.document, state, action);
     } else if (action.type === 'NAVIGATION/REMOVE_OBSOLETE') {
@@ -93,6 +94,8 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         toggleFuzzySearch(state);
     } else if (action.type === 'DOCUMENT/CLEAR_SELECTION') {
         resetSelectionState(state.document);
+    } else if (action.type === 'NAVIGATION/SELECT_NEXT_NODE') {
+        navigateActiveNode(state.document, state, action);
     }
 };
 export const viewReducer = (

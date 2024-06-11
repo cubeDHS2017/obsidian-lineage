@@ -8,15 +8,16 @@ import { SetDragCanceled } from 'src/stores/view/reducers/document/on-drag-end';
 import { UpdateActiveBranchAction } from 'src/stores/view/reducers/document/helpers/update-active-branch';
 import { JumpToNodeAction } from 'src/stores/view/reducers/document/jump-to-node';
 import { ChangeActiveNodeAction } from 'src/stores/view/reducers/document/navigate-using-keyboard';
-import { NavigationAction } from 'src/stores/view/reducers/ui/navigate-active-node';
+import { NodeHistoryNavigationAction } from 'src/stores/view/reducers/ui/navigate-active-node-history';
 import { ToggleFuzzySearchAction } from 'src/stores/view/reducers/search/toggle-fuzzy-search';
+import { NodeNavigationAction } from 'src/stores/view/reducers/ui/navigate-active-node';
 
 export type ViewStoreAction =
     | SearchAction
     | ViewUIAction
     | ViewDocumentAction
     | NodeSelectionAction
-    | NavigationAction;
+    | NodeHistoryNavigationAction;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -65,4 +66,5 @@ type SetActiveNodeAction = {
 export type NodeSelectionAction =
     | JumpToNodeAction
     | ChangeActiveNodeAction
-    | SetActiveNodeAction;
+    | SetActiveNodeAction
+    | NodeNavigationAction;

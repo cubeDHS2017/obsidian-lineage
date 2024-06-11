@@ -37,6 +37,8 @@ export const hotkeysLang = {
     paste_node: 'Paste branch',
     navigate_back: 'Navigate back',
     navigate_forward: 'Navigate forward',
+    navigate_to_next_node: 'Select next card',
+    navigate_to_previous_node: 'Select previous card',
     extend_select_up: 'Extend selection up',
     extend_select_down: 'Extend selection down',
     extend_select_to_start_of_group: 'Extend selection to start of group',
@@ -90,6 +92,8 @@ export const groupedHotkeys = {
         'go_to_end_of_column',
         'navigate_back',
         'navigate_forward',
+        'navigate_to_previous_node',
+        'navigate_to_next_node',
     ]),
     Selection: new Set([
         'extend_select_up',

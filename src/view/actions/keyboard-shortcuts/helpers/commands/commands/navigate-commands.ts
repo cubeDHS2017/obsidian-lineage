@@ -165,6 +165,36 @@ export const navigateCommands = () => {
             },
             hotkeys: [{ key: 'K', modifiers: ['Alt'] }],
         },
+        {
+            name: 'navigate_to_next_node',
+            check: isActive,
+            callback: (view, event) => {
+                event.preventDefault();
+                view.viewStore.dispatch({
+                    type: 'NAVIGATION/SELECT_NEXT_NODE',
+                    payload: {
+                        direction: 'forward',
+                        sections: view.documentStore.getValue().sections,
+                    },
+                });
+            },
+            hotkeys: [{ key: 'N', modifiers: [] }],
+        },
+        {
+            name: 'navigate_to_previous_node',
+            check: isActive,
+            callback: (view, event) => {
+                event.preventDefault();
+                view.viewStore.dispatch({
+                    type: 'NAVIGATION/SELECT_NEXT_NODE',
+                    payload: {
+                        direction: 'back',
+                        sections: view.documentStore.getValue().sections,
+                    },
+                });
+            },
+            hotkeys: [{ key: 'B', modifiers: [] }],
+        },
     );
     return commands;
 };

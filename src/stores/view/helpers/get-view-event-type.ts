@@ -4,6 +4,7 @@ type ActionType = ViewStoreAction['type'];
 const navigationEvents = new Set<ActionType>([
     'NAVIGATION/NAVIGATE_BACK',
     'NAVIGATION/NAVIGATE_FORWARD',
+    'NAVIGATION/SELECT_NEXT_NODE',
 ]);
 
 const searchEvents = new Set<ActionType>([
