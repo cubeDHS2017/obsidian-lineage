@@ -814,4 +814,37 @@ describe('headingsToSections', () => {
 ..`;
         expect(headingsToSections(input)).toEqual(output);
     });
+
+    test('first level is not h1', () => {
+        const input = [
+            '### 1',
+            '...',
+            '#### 1.1',
+            '...',
+            '### 2',
+            '...',
+            '#### 2.1',
+            '...',
+        ].join('\n');
+
+        const output = [
+            '',
+            '<!--section: 1-->',
+            '# 1',
+            '...',
+            '',
+            '<!--section: 1.1-->',
+            '## 1.1',
+            '...',
+            '',
+            '<!--section: 2-->',
+            '# 2',
+            '...',
+            '',
+            '<!--section: 2.1-->',
+            '## 2.1',
+            '...',
+        ].join('\n');
+        expect(headingsToSections(input)).toEqual(output);
+    });
 });
