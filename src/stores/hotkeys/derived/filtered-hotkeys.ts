@@ -29,6 +29,7 @@ export const filteredHotkeys = derivedOnAction(
             Clipboard: [],
             Navigation: [],
             Selection: [],
+            Scrolling: [],
             History: [],
             Search: [],
         } satisfies GroupedHotkeys);

@@ -43,6 +43,10 @@ export const hotkeysLang = {
     extend_select_to_end_of_group: 'Extend selection to end of group',
     extend_select_to_start_of_column: 'Extend selection to start of column',
     extend_select_to_end_of_column: 'Extend selection to end of column',
+    scroll_left: 'Scroll left',
+    scroll_right: 'Scroll right',
+    scroll_up: 'Scroll up',
+    scroll_down: 'Scroll down',
 };
 export type PluginCommand = {
     check: (view: LineageView) => boolean;
@@ -98,6 +102,12 @@ export const groupedHotkeys = {
     History: new Set(['undo_change', 'redo_change']),
     Search: new Set(['toggle_search_input']),
     Clipboard: new Set(['copy_node', 'cut_node', 'paste_node']),
+    Scrolling: new Set([
+        'scroll_left',
+        'scroll_right',
+        'scroll_up',
+        'scroll_down',
+    ]),
 } satisfies Record<string, Set<CommandName>>;
 
 export const hotkeysGroups: Record<CommandName, GroupName> = Object.fromEntries(

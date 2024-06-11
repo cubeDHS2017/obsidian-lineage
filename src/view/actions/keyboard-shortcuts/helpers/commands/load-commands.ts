@@ -11,6 +11,7 @@ import { historyCommands } from 'src/view/actions/keyboard-shortcuts/helpers/com
 import { clipboardCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/clipboard-commands';
 import { mapCtrlToMod } from 'src/stores/settings/migrations/map-ctrl-to-mod';
 import { selectionCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/selection-commands';
+import { scrollCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/scroll-commands';
 
 export const pluginCommands: {
     current: PluginCommand[] | null;
@@ -28,6 +29,7 @@ export const loadCommands = (plugin: Lineage) => {
         ...clipboardCommands(),
         ...historyCommands(),
         ...selectionCommands(),
+        ...scrollCommands(),
         {
             name: 'delete_card',
             check: isActiveAndNotEditing,
