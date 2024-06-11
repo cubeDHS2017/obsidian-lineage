@@ -20,11 +20,6 @@ export const onDocumentsStateUpdate = (
             action.type === 'WORKSPACE/RESIZE')
     ) {
         focusContainer(view);
-        alignBranch(
-            view.documentStore.getValue(),
-            view.viewStore.getValue(),
-            view.container,
-            view.plugin.settings.getValue(),
-        );
+        alignBranch(view);
     }
 };

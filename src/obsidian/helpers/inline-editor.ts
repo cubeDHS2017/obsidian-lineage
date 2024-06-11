@@ -15,11 +15,16 @@ export class InlineEditor {
     private target: HTMLElement | null = null;
     private appliedExternalCursor = false;
     private onChangeSubscriptions: Set<() => void> = new Set();
+    #mounting: Promise<void> = Promise.resolve();
 
     constructor(private view: LineageView) {}
 
     get activeNode() {
         return this.nodeId;
+    }
+
+    get mounting() {
+        return this.#mounting;
     }
 
     getContent() {
@@ -41,6 +46,10 @@ export class InlineEditor {
 
     loadNode(target: HTMLElement, nodeId: string) {
         if (!this.view.file) return;
+        let resolve = () => {};
+        this.#mounting = new Promise((_resolve) => {
+            resolve = _resolve;
+        });
         this.view.plugin.settings.dispatch({
             type: 'BACKUP/ADD_FILE',
             payload: {
@@ -71,6 +80,7 @@ export class InlineEditor {
         }
         this.target.addEventListener('focusin', this.setActiveEditor);
         this.setActiveEditor();
+        setTimeout(() => resolve(), 32);
     }
 
     focus = () => {

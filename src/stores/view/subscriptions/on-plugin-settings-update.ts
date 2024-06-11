@@ -42,13 +42,7 @@ export const onPluginSettingsUpdate = (
         type === 'SET_CARD_WIDTH' ||
         type === 'SET_LIMIT_PREVIEW_HEIGHT';
     if (view.isActive && shouldAlign) {
-        alignBranch(
-            view.documentStore.getValue(),
-            view.viewStore.getValue(),
-            view.container,
-            state,
-            'instant',
-        );
+        alignBranch(view, 'instant');
     }
     if (
         type === 'SET_HORIZONTAL_SCROLLING_MODE' &&

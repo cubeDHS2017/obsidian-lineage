@@ -21,7 +21,6 @@ export const onViewStateUpdate = (
     const documentState = documentStore.getValue();
     const viewStore = view.viewStore;
     const viewState = viewStore.getValue();
-    const settings = view.plugin.settings.getValue();
     const container = view.container;
 
     const type = action.type;
@@ -79,7 +78,7 @@ export const onViewStateUpdate = (
             action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
             action.context?.modKey;
         if (!skipAligning) {
-            alignBranch(documentState, viewState, container, settings);
+            alignBranch(view);
         }
     }
 };

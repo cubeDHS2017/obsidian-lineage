@@ -31,8 +31,6 @@ export const onViewMount = (view: LineageView) => {
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const viewStore = view.viewStore;
-    const viewState = viewStore.getValue();
-    const settings = view.plugin.settings.getValue();
     const container = view.container;
     // actions
     if (!view.file) return;
@@ -50,14 +48,7 @@ export const onViewMount = (view: LineageView) => {
     // effects
     if (view.isActive && container) {
         focusContainer(view);
-        alignBranch(
-            documentState,
-            viewState,
-            container,
-            settings,
-            undefined,
-            true,
-        );
+        alignBranch(view, undefined, true);
     }
 
     applySettingsToView(view);

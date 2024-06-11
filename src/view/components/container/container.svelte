@@ -112,5 +112,8 @@
         & .preview-container {
             max-height: 65vh;
         }
+        & .editor-container {
+            max-height: 65vh;
+        }
     }
 </style>

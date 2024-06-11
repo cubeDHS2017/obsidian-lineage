@@ -22,8 +22,6 @@ export const onDocumentStateUpdate = (
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const viewStore = view.viewStore;
-    const viewState = viewStore.getValue();
-    const settings = view.plugin.settings.getValue();
     const container = view.container;
 
     const type = action.type;
@@ -91,10 +89,7 @@ export const onDocumentStateUpdate = (
                 ? 'instant'
                 : undefined;
         alignBranch(
-            documentState,
-            viewState,
-            container,
-            settings,
+            view,
             scrollingBehavior,
             type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
         );
