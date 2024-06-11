@@ -4,7 +4,7 @@ export const isOutline = (text: string) => {
     let level = 0;
     for (const line of lines) {
         if (!line) continue;
-        const match = line.match(/^(\t*)- (.+)/);
+        const match = line.match(/^(\t*)- (.*)/);
         if (match) {
             const itemLevel = match[1].length + 1;
             if (itemLevel - level > 1) {

@@ -185,9 +185,39 @@ That's it! You can create more bullets or open a local directory to import some 
 You can also download our desktop app at https://github.com/logseq/logseq/releases`,
 };
 
+const exampleWithEmptyParent = {
+    outline: [
+        '- ', // 1
+        '\t- 1.1',
+        '\t- ', // 1.2
+        '\t\t- 1.2.1',
+        '\t\t  ...',
+        '- 2',
+    ].join('\n'),
+    sections: [
+        '',
+        '<!--section: 1-->',
+        '',
+        '',
+        '<!--section: 1.1-->',
+        '1.1',
+        '',
+        '<!--section: 1.2-->',
+        '',
+        '',
+        '<!--section: 1.2.1-->',
+        '1.2.1',
+        '...',
+        '',
+        '<!--section: 2-->',
+        '2',
+    ].join('\n'),
+};
+
 export const outlineExamples = {
     exampleWithSubtext,
     exampleWithSubText2,
     logseqDemo,
     simpleExample,
+    exampleWithEmptyParent,
 };
