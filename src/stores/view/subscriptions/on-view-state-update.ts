@@ -67,7 +67,9 @@ export const onViewStateUpdate = (
 
     if (
         action.type === 'DOCUMENT/DISABLE_EDIT_MODE' ||
-        action.type === 'SEARCH/TOGGLE_INPUT'
+        action.type === 'SEARCH/TOGGLE_INPUT' ||
+        action.type === 'NAVIGATION/NAVIGATE_FORWARD' ||
+        action.type === 'NAVIGATION/NAVIGATE_BACK'
     ) {
         focusContainer(view);
     }

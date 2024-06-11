@@ -152,7 +152,7 @@ export const navigateCommands = () => {
                     type: 'NAVIGATION/NAVIGATE_BACK',
                 });
             },
-            hotkeys: [{ key: 'ArrowLeft', modifiers: ['Mod', 'Alt'] }],
+            hotkeys: [{ key: 'J', modifiers: ['Alt'] }],
         },
         {
             name: 'navigate_forward',
@@ -163,7 +163,7 @@ export const navigateCommands = () => {
                     type: 'NAVIGATION/NAVIGATE_FORWARD',
                 });
             },
-            hotkeys: [{ key: 'ArrowRight', modifiers: ['Mod', 'Alt'] }],
+            hotkeys: [{ key: 'K', modifiers: ['Alt'] }],
         },
     );
     return commands;
