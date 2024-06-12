@@ -28,6 +28,10 @@ const examples = [
             .map(() => 'a')
             .join(''),
     },
+    {
+        input: `- text that has an 's' letter`,
+        output: "text that has an 's' letter",
+    },
 ];
 
 describe('get file name from content', () => {

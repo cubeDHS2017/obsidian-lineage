@@ -167,7 +167,7 @@ export const navigateCommands = () => {
         },
         {
             name: 'navigate_to_next_node',
-            check: isActive,
+            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
@@ -182,7 +182,7 @@ export const navigateCommands = () => {
         },
         {
             name: 'navigate_to_previous_node',
-            check: isActive,
+            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
