@@ -82,12 +82,15 @@ export const onDocumentStateUpdate = (
     }
 
     if (structuralChange || e.content) {
-        const scrollingBehavior =
-            action.type === 'DOCUMENT/MOVE_NODE' &&
-            (action.payload.direction === 'down' ||
-                action.payload.direction === 'up')
-                ? 'instant'
-                : undefined;
+        let scrollingBehavior: ScrollBehavior | undefined;
+        if (action.type === 'DOCUMENT/MOVE_NODE') {
+            const verticalMove =
+                action.payload.direction === 'down' ||
+                action.payload.direction === 'up';
+            if (verticalMove) scrollingBehavior = 'instant';
+        } else if (action.type === 'DOCUMENT/LOAD_FILE') {
+            scrollingBehavior = 'instant';
+        }
         alignBranch(
             view,
             scrollingBehavior,

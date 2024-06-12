@@ -12,6 +12,7 @@ export type LoadDocumentAction = {
     payload: {
         document: SavedDocument;
         format: LineageDocumentFormat;
+        activeSection: string | null;
     };
 };
 

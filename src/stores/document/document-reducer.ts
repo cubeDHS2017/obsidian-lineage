@@ -117,6 +117,17 @@ const updateDocumentState = (
         updateSectionsDictionary(state);
     }
 
+    // if file was modified externally, try to maintain active section
+    if (action.type === 'DOCUMENT/LOAD_FILE') {
+        const activeSection = action.payload.activeSection;
+        if (activeSection) {
+            const id = state.sections.section_id[activeSection];
+            if (id) {
+                newActiveNodeId = id;
+            }
+        }
+    }
+
     const contentShapeCreation = e.content || e.dropOrMove || e.createOrDelete;
     if (newActiveNodeId && (contentShapeCreation || e.clipboard)) {
         const newActiveSection = getSectionOfId(

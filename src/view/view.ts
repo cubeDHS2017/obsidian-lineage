@@ -252,10 +252,15 @@ export class LineageView extends TextFileView {
         const format = getOrDetectDocumentFormat(this);
         const existingData = stringifyDocument(state.document, format);
         if (!existingData || existingData !== data) {
+            const activeNode = this.viewStore.getValue().document.activeNode;
+            const activeSection = activeNode
+                ? this.documentStore.getValue().sections.id_section[activeNode]
+                : null;
             this.documentStore.dispatch({
                 payload: {
                     document: { data: data, frontmatter, position: null },
                     format,
+                    activeSection,
                 },
                 type: 'DOCUMENT/LOAD_FILE',
             });
