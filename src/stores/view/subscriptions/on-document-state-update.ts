@@ -83,6 +83,7 @@ export const onDocumentStateUpdate = (
 
     if (structuralChange || e.content) {
         let scrollingBehavior: ScrollBehavior | undefined;
+        let delay: number | undefined;
         if (action.type === 'DOCUMENT/MOVE_NODE') {
             const verticalMove =
                 action.payload.direction === 'down' ||
@@ -90,11 +91,14 @@ export const onDocumentStateUpdate = (
             if (verticalMove) scrollingBehavior = 'instant';
         } else if (action.type === 'DOCUMENT/LOAD_FILE') {
             scrollingBehavior = 'instant';
+        } else if (action.type === 'DOCUMENT/DROP_NODE') {
+            delay = 500;
         }
         alignBranch(
             view,
             scrollingBehavior,
             type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
+            delay,
         );
     }
 };

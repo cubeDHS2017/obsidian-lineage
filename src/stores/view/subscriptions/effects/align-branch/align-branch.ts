@@ -41,13 +41,14 @@ export const alignBranch = (
     view: LineageView,
     behavior?: ScrollBehavior,
     alignInactiveColumns = false,
+    delay = 0,
 ) => {
     const container = view.container;
     if (!container) return;
 
     const viewState = view.viewStore.getValue();
     const zoomLevel = view.plugin.settings.getValue().view.zoomLevel;
-    if (zoomLevel === 1) {
+    if (!delay && zoomLevel === 1) {
         requestAnimationFrame(() => {
             align(view, behavior, alignInactiveColumns);
         });
@@ -58,6 +59,6 @@ export const alignBranch = (
             align(view, behavior, alignInactiveColumns).finally(() => {
                 applyZoom(viewState, container, zoomLevel);
             });
-        }, 16);
+        }, delay || 16);
     }
 };
