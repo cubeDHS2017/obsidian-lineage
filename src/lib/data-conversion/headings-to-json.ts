@@ -5,9 +5,11 @@ import {
     State,
     updateCurrentNode,
 } from 'src/lib/data-conversion/outilne-to-json';
+import { findHighestHeadingLevel } from 'src/lib/data-conversion/helpers/find-highest-heading-level';
 
 export const headingsToJson = (input: string): TreeNode[] => {
     const lines = input.split('\n');
+    const highestHeadingLevel = findHighestHeadingLevel(lines);
     const state: State = {
         currentNodes: [],
         currentNode: null,
@@ -21,7 +23,7 @@ export const headingsToJson = (input: string): TreeNode[] => {
         if (match) {
             const level = match[1].length;
 
-            addNewNode(state, level, line);
+            addNewNode(state, level, line, highestHeadingLevel);
         } else {
             updateCurrentNode(state, line);
         }

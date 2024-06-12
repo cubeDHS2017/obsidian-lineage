@@ -7,17 +7,24 @@ export type State = {
     tree: TreeNode[];
 };
 
-export const addNewNode = (state: State, level: number, text: string) => {
+export const addNewNode = (
+    state: State,
+    level: number,
+    text: string,
+    root = 1,
+) => {
     state.currentNode = {
         content: text,
         children: [],
     };
-    if (level === 1) {
+    if (level === root) {
         state.tree.push(state.currentNode);
         state.currentNodes = [state.currentNode];
     } else {
-        if (state.currentNodes[level - 2]) {
-            state.currentNodes[level - 2].children.push(state.currentNode);
+        if (state.currentNodes[level - (1 + root)]) {
+            state.currentNodes[level - (1 + root)].children.push(
+                state.currentNode,
+            );
         }
         state.currentNodes[level - 1] = state.currentNode;
     }

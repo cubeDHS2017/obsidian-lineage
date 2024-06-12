@@ -830,21 +830,42 @@ describe('headingsToSections', () => {
         const output = [
             '',
             '<!--section: 1-->',
-            '# 1',
+            '### 1',
             '...',
             '',
             '<!--section: 1.1-->',
-            '## 1.1',
+            '#### 1.1',
             '...',
             '',
             '<!--section: 2-->',
-            '# 2',
+            '### 2',
             '...',
             '',
             '<!--section: 2.1-->',
-            '## 2.1',
+            '#### 2.1',
             '...',
         ].join('\n');
+        expect(headingsToSections(input)).toEqual(output);
+    });
+
+    test('first level is not h1 (2)', () => {
+        const input = `### H3
+###### H6 
+#### H4
+## H2`;
+
+        const output = `
+<!--section: 1-->
+## H3
+
+<!--section: 1.1-->
+### H6 
+
+<!--section: 1.2-->
+### H4
+
+<!--section: 2-->
+## H2`;
         expect(headingsToSections(input)).toEqual(output);
     });
 });

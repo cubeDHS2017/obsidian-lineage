@@ -131,11 +131,11 @@ text`;
 #### H4
 ###### H6`;
         const expected = `
-# H3
-## H5
-# H2
-## H4
-### H6`;
+## H3
+### H5
+## H2
+### H4
+#### H6`;
         expect(correctHeadings(markdown)).toBe(expected);
     });
 
@@ -146,13 +146,8 @@ text`;
 ## H2
 ### H3
 `;
-        const expected = `
-# H2
-## H3
-# H2
-## H3
-`;
-        expect(correctHeadings(markdown)).toBe(expected);
+
+        expect(correctHeadings(markdown)).toBe(markdown);
     });
 
     test('case 9: tag in title', () => {
@@ -204,7 +199,40 @@ This is another paragraph.
 
     test('case 13', () => {
         const markdown = `### H3`;
-        const expected = `# H3`;
+        expect(correctHeadings(markdown)).toBe(markdown);
+    });
+
+    test('case 14', () => {
+        const markdown = `
+# H1        
+## H2
+###### H6 
+#### H4
+## H2
+`;
+        const expected = `
+# H1        
+## H2
+### H6 
+### H4
+## H2
+`;
+        expect(correctHeadings(markdown)).toBe(expected);
+    });
+
+    test('case 15: maintain highest heading level', () => {
+        const markdown = `
+## H2
+###### H6 
+#### H4
+## H2
+`;
+        const expected = `
+## H2
+### H6 
+### H4
+## H2
+`;
         expect(correctHeadings(markdown)).toBe(expected);
     });
 });

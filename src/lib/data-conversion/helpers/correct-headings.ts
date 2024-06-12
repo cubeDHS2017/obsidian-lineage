@@ -1,7 +1,10 @@
+import { findHighestHeadingLevel } from 'src/lib/data-conversion/helpers/find-highest-heading-level';
+
 export const correctHeadings = (markdown: string): string => {
     const lines = markdown.split('\n');
     const headingRegex = /^(#+) +(.*)$/;
 
+    const highestHeadingLevel = findHighestHeadingLevel(lines);
     const state: {
         previousLevel: number;
         previousCorrectedLevel: number;
@@ -20,19 +23,21 @@ export const correctHeadings = (markdown: string): string => {
             const text = match[2];
 
             let correctedLevel: number;
-            if (level > state.previousLevel) {
+            const parentIndex = state.previousLevels.findLastIndex(
+                (l) => l.level < level,
+            );
+            const parent = state.previousLevels[parentIndex];
+            if (!parent) {
+                correctedLevel = highestHeadingLevel;
+            } else if (level > state.previousLevel) {
                 // make sure headings are incremented by 1
                 correctedLevel = state.previousCorrectedLevel + 1;
             } else if (level < state.previousLevel) {
                 correctedLevel = Math.min(
-                    1,
+                    highestHeadingLevel,
                     level,
                     state.previousCorrectedLevel - 1,
                 );
-                const parentIndex = state.previousLevels.findLastIndex(
-                    (l) => l.level < level,
-                );
-                const parent = state.previousLevels[parentIndex];
                 // make sure headings stay under their previous parent
                 if (parent) {
                     if (
