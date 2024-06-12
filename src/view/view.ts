@@ -251,7 +251,10 @@ export class LineageView extends TextFileView {
         const state = this.documentStore.getValue();
         const format = getOrDetectDocumentFormat(this);
         const existingData = stringifyDocument(state.document, format);
-        if (!existingData || existingData !== data) {
+        const bodyHasChanged = existingData !== data;
+        const frontmatterHasChanged =
+            !bodyHasChanged && frontmatter !== state.file.frontmatter;
+        if (!existingData || bodyHasChanged || frontmatterHasChanged) {
             const activeNode = this.viewStore.getValue().document.activeNode;
             const activeSection = activeNode
                 ? this.documentStore.getValue().sections.id_section[activeNode]
