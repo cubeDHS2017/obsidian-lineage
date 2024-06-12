@@ -2,7 +2,6 @@
     import { lang } from 'src/lang/lang';
     import { maxZoomLevel, minZoomLevel } from 'src/stores/settings/reducers/change-zoom-level';
     import {
-        FileText,
         HistoryIcon,
         Keyboard,
         Maximize,
@@ -17,13 +16,10 @@
     import { getPlugin, getView } from '../context';
     import { historyStore } from 'src/stores/document/derived/history-store';
     import { Notice } from 'obsidian';
-    import { LineageView } from '../../../view';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { writable } from 'svelte/store';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
     import Button from '../shared/button.svelte';
-    import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
-    import { setViewType } from 'src/obsidian/events/workspace/actions/set-view-type';
     import { resetZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/reset-zoom';
     import invariant from 'tiny-invariant';
     import {
@@ -60,14 +56,7 @@
     const toggleSettings = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_SETTINGS_SIDEBAR' });
     };
-    const openAsMarkdown = () => {
-        const file =
-            plugin.app.workspace.getActiveViewOfType(LineageView)?.file;
-        if (file) {
-            setViewType(plugin, file.path, "markdown");
-            toggleObsidianViewType(plugin, view.leaf, 'markdown');
-        }
-    };
+
     const zoomIn = () => {
         view.plugin.settings.dispatch({
             type: 'UI/CHANGE_ZOOM_LEVEL',
@@ -135,14 +124,7 @@
         class="buttons-group buttons-group--vertical"
         data-visible={$showControls}
     >
-        <Button
-            class="control-item"
-            label={lang.open_in_editor}
-            on:click={openAsMarkdown}
-            tooltipPosition="left"
-        >
-            <FileText class="svg-icon" />
-        </Button>
+
         <Button
             active={$controls.showSettingsSidebar}
             class="control-item"

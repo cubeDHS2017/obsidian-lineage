@@ -48,6 +48,6 @@ export const onPluginSettingsUpdate = (
         type === 'SET_HORIZONTAL_SCROLLING_MODE' &&
         state.view.scrolling.horizontalScrollingMode === 'fixed-position'
     ) {
-        new Notice('Hold space to change card position');
+        if (view.isActive) new Notice('Hold space to change card position');
     }
 };

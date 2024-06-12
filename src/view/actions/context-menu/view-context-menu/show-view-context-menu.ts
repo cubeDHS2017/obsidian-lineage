@@ -4,6 +4,7 @@ import { getDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-doc
 import { lang } from 'src/lang/lang';
 import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
 import { exportDocument } from 'src/obsidian/commands/helpers/export-document/export-document';
+import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 
 export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
     const file = view.file;
@@ -18,6 +19,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
             .setTitle(lang.format_headings)
             .setIcon('heading-1')
             .onClick(() => {
+                saveNodeContent(view);
                 view.documentStore.dispatch({
                     type: 'DOCUMENT/FORMAT_HEADINGS',
                 });
