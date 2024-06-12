@@ -1,4 +1,4 @@
-import { MarkdownView, TFile } from 'obsidian';
+import { EditorPosition, MarkdownView, TFile } from 'obsidian';
 import { LineageView } from 'src/view/view';
 import { AdjustHeight } from 'src/view/actions/inline-editor/expandable-textarea-action';
 import { vimEnterInsertMode } from 'src/obsidian/helpers/vim-enter-insert-mode';
@@ -13,7 +13,7 @@ export class InlineEditor {
     private containerEl: HTMLElement;
     private nodeId: string | null = null;
     private target: HTMLElement | null = null;
-    private appliedExternalCursor = false;
+    private appliedExternalCursor: EditorPosition | null = null;
     private onChangeSubscriptions: Set<() => void> = new Set();
     #mounting: Promise<void> = Promise.resolve();
 
@@ -35,9 +35,9 @@ export class InlineEditor {
         return this.inlineView.editor.getCursor();
     }
 
-    overrideCursor(line: number, ch: number) {
-        this.appliedExternalCursor = true;
-        this.setCursor(line, ch);
+    overrideCursor(cursor: EditorPosition) {
+        if (this.activeNode) this.setCursor(cursor.line, cursor.ch);
+        else this.appliedExternalCursor = cursor;
     }
 
     setContent(content: string) {
@@ -62,14 +62,20 @@ export class InlineEditor {
                 ?.content || '';
         this.setContent(content);
 
-        if (!this.appliedExternalCursor)
+        if (this.appliedExternalCursor) {
+            this.setCursor(
+                this.appliedExternalCursor.line,
+                this.appliedExternalCursor.ch,
+            );
+            this.appliedExternalCursor = null;
+        } else {
             this.setCursor(
                 this.inlineView.editor.lastLine(),
                 this.inlineView.editor.getLine(
                     this.inlineView.editor.lastLine(),
                 ).length,
             );
-        this.appliedExternalCursor = false;
+        }
         target.append(this.containerEl);
         this.focus();
         AdjustHeight(target)();

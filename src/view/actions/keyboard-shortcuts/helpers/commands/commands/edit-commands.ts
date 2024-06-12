@@ -27,7 +27,7 @@ export const editCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.inlineEditor.overrideCursor(0, 0);
+                view.inlineEditor.overrideCursor({ line: 0, ch: 0 });
                 view.viewStore.dispatch({
                     type: 'DOCUMENT/ENABLE_EDIT_MODE',
                     payload: {

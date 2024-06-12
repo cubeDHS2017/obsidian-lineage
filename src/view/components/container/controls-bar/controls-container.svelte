@@ -91,10 +91,15 @@
                     ).height;
                 })
                 .sort((a,b)=>a-b);
-            const biggest = groupHeights[groupHeights.length-1];
+            const height = groupHeights[groupHeights.length-1];
+            const width = getCombinedBoundingClientRect(columns).width;
+
             // eslint-disable-next-line no-undef
+            const heightScale = view.container.getBoundingClientRect().height / (height+ 100);
+            const widthScale = view.container.getBoundingClientRect().width / (width+ 100);
+
             const scale =
-                view.container.getBoundingClientRect().height / (biggest+ 100);
+                Math.min(heightScale,widthScale);
             view.plugin.settings.dispatch({
                 type: 'UI/CHANGE_ZOOM_LEVEL',
                 payload: { value: scale },
