@@ -11,8 +11,13 @@ export const markdownPreviewAction = (element: HTMLElement, nodeId: string) => {
         if (view && element) {
             element.empty();
             // insert `&nbsp;` in empty lines
-            if (content.length > 0 && !/^> /gm.test(content)) {
-                content = content.replace(/^$/gm, '&nbsp;');
+            if (content.length > 0) {
+                const hasCallout = /^> /gm.test(content);
+                if (!hasCallout) content = content.replace(/^$/gm, '&nbsp;');
+                content = content.replace(
+                    /\s+(\^[a-zA-Z0-9]{4,})$/gm,
+                    '<sup class="cm-blockid" data-block-id="$1">$1</sup>',
+                );
             }
             MarkdownRenderer.render(
                 plugin.app,

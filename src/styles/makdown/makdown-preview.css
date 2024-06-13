@@ -18,4 +18,12 @@
     & button.copy-code-button{
         display: none;
     }
+    & .cm-blockid {
+        display: inline-block;
+        font-size: 12px;
+        vertical-align: text-top;
+        margin-top: -0.2em;
+        color: var(--text-muted);
+        opacity: 0.5
+    }
 }
