@@ -44,7 +44,13 @@ export type DocumentAction =
     | FormatHeadingsAction
     | DocumentClipboardActions
     | ExtractNodeAction
-    | SplitNodeAction;
+    | SplitNodeAction
+    | {
+          type: 'FILE/UPDATE_FRONTMATTER';
+          payload: {
+              frontmatter: string;
+          };
+      };
 
 export type HistoryAction = UndoRedoAction | SelectSnapshotAction;
 export type UndoableAction =

@@ -255,21 +255,37 @@ export class LineageView extends TextFileView {
         const frontmatterHasChanged =
             !bodyHasChanged && frontmatter !== state.file.frontmatter;
         if (!existingData || bodyHasChanged || frontmatterHasChanged) {
-            const activeNode = this.viewStore.getValue().document.activeNode;
-            const activeSection = activeNode
-                ? this.documentStore.getValue().sections.id_section[activeNode]
-                : null;
-            this.documentStore.dispatch({
-                payload: {
-                    document: { data: data, frontmatter, position: null },
-                    format,
-                    activeSection,
-                },
-                type: 'DOCUMENT/LOAD_FILE',
-            });
-            if (!maybeGetDocumentFormat(this)) {
-                invariant(this.file);
-                setDocumentFormat(this.plugin, this.file.path, format);
+            const isEditing =
+                this.viewStore.getValue().document.editing.activeNodeId;
+            if (isEditing) {
+                if (frontmatterHasChanged) {
+                    this.documentStore.dispatch({
+                        type: 'FILE/UPDATE_FRONTMATTER',
+                        payload: {
+                            frontmatter,
+                        },
+                    });
+                }
+            } else {
+                const activeNode =
+                    this.viewStore.getValue().document.activeNode;
+                const activeSection = activeNode
+                    ? this.documentStore.getValue().sections.id_section[
+                          activeNode
+                      ]
+                    : null;
+                this.documentStore.dispatch({
+                    payload: {
+                        document: { data: data, frontmatter, position: null },
+                        format,
+                        activeSection,
+                    },
+                    type: 'DOCUMENT/LOAD_FILE',
+                });
+                if (!maybeGetDocumentFormat(this)) {
+                    invariant(this.file);
+                    setDocumentFormat(this.plugin, this.file.path, format);
+                }
             }
         }
     };

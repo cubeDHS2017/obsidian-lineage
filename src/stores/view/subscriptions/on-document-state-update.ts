@@ -32,7 +32,6 @@ export const onDocumentStateUpdate = (
     if (type === 'DOCUMENT/LOAD_FILE') {
         // needed when the file was modified externally
         // to prevent saving a node with an obsolete node-id
-        // ideally the user should confirm this
         discardChanges(view);
     }
 

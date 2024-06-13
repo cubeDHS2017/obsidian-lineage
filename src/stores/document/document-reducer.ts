@@ -104,6 +104,9 @@ const updateDocumentState = (
             action.payload.selectedNodes,
         );
         affectedNodeId = action.payload.nodeId;
+    } else if (action.type === 'FILE/UPDATE_FRONTMATTER') {
+        state.file.frontmatter = action.payload.frontmatter;
+        return;
     }
 
     const e = getDocumentEventType(action.type);

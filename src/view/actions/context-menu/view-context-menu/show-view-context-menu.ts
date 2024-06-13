@@ -40,7 +40,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
             })
             .setChecked(!isOutline),
     );
-    
+
     menu.addItem((item) =>
         item
             .setTitle(lang.change_format_to_outline)
@@ -50,7 +50,6 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
             })
             .setChecked(isOutline),
     );
-
 
     menu.addSeparator();
 
