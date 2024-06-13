@@ -9,6 +9,7 @@ import { splitNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/
 import { customIcons } from 'src/helpers/load-custom-icons';
 import { hasNHeadings } from 'src/lib/format-detection/has-n-headings';
 import { isOutline } from 'src/lib/format-detection/is-outline';
+import { copyLinkToBlock } from 'src/view/actions/context-menu/card-context-menu/helpers/copy-link-to-block';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const menu = new Menu();
@@ -74,6 +75,17 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             })
             .setDisabled(multipleNodesAreSelected),
     );
+
+    menu.addSeparator();
+    menu.addItem((item) =>
+        item
+            .setTitle('Copy link to block')
+            .setIcon('links-coming-in')
+            .onClick(() => {
+                copyLinkToBlock(view);
+            }),
+    );
+
     menu.addSeparator();
     menu.addItem((item) =>
         item
