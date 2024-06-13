@@ -7,7 +7,7 @@ import {
 
 type Settings = Pick<TSettings, 'documents'>;
 const sample: DocumentPreferences = {
-    documentFormat: 'document',
+    documentFormat: 'sections',
     viewType: 'lineage',
     activeSection: null,
 };

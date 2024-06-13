@@ -23,11 +23,11 @@
 
         const format = getDocumentFormat(view);
         const i =
-            format === 'document'
+            format === 'sections'
                 ? findSectionPosition(view, nodeId)
                 : findOutlinePosition(view, nodeId);
         if (typeof i === 'undefined') return;
-        const targetLine = i + (format === 'document' ? 1 : 0);
+        const targetLine = i + (format === 'sections' ? 1 : 0);
         const lines = view.data.split('\n');
         const nextLine = lines[targetLine] || '';
         await openFileAndJumpToLine(

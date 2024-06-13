@@ -27,12 +27,7 @@ const createCommands = (plugin: Lineage) => {
     commands.push({
         name: lang.create_new_document,
         icon: customIcons.cards.name,
-        callback: () => createLineageDocument(plugin, 'document'),
-    });
-    commands.push({
-        name: lang.create_new_outline,
-        icon: customIcons.cards.name,
-        callback: () => createLineageDocument(plugin, 'outline'),
+        callback: () => createLineageDocument(plugin),
     });
 
     return commands;

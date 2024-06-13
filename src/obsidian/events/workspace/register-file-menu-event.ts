@@ -33,16 +33,7 @@ const addFolderContextMenuItems = (
     menu.addItem((item) => {
         item.setTitle(lang.new_document);
         item.setIcon(customIcons.cards.name);
-        item.onClick(() =>
-            createLineageFileInFolder(plugin, folder, 'document'),
-        );
-    });
-    menu.addItem((item) => {
-        item.setTitle(lang.new_outline);
-        item.setIcon(customIcons.cards.name);
-        item.onClick(() =>
-            createLineageFileInFolder(plugin, folder, 'outline'),
-        );
+        item.onClick(() => createLineageFileInFolder(plugin, folder));
     });
 };
 

@@ -14,7 +14,7 @@ describe('detectDocumentFormat', () => {
 
         const result = detectDocumentFormat(text);
 
-        expect(result).toBe('document');
+        expect(result).toBe('sections');
     });
 
     it('should return "outline" when bullet points are found', () => {
@@ -61,7 +61,7 @@ describe('detectDocumentFormat', () => {
 
         const result = detectDocumentFormat(text);
 
-        expect(result).toBe('document');
+        expect(result).toBe('sections');
     });
     it('should detect single bullet text in non-strict mode', () => {
         const text = '- 1';

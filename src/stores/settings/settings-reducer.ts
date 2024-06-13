@@ -114,7 +114,13 @@ export type SettingsActions =
           };
       }
     | ChangeZoomLevelAction
-    | PersistActiveNodeAction;
+    | PersistActiveNodeAction
+    | {
+          type: 'GENERAL/SET_DEFAULT_DOCUMENT_FORMAT';
+          payload: {
+              format: LineageDocumentFormat;
+          };
+      };
 
 export type PersistActiveNodeAction = {
     type: 'DOCUMENT/SET_ACTIVE_NODE';
@@ -182,6 +188,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.documents = action.payload.documents;
     } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
         changeZoomLevel(store, action.payload);
+    } else if (action.type === 'GENERAL/SET_DEFAULT_DOCUMENT_FORMAT') {
+        store.general.defaultDocumentFormat = action.payload.format;
     }
 };
 export const settingsReducer = (

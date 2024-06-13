@@ -11,6 +11,9 @@ export const getOrDetectDocumentFormat = (
         return format;
     } else {
         const detected = detectDocumentFormat(view.data);
-        return detected || 'document';
+        return (
+            detected ||
+            view.plugin.settings.getValue().general.defaultDocumentFormat
+        );
     }
 };

@@ -108,7 +108,7 @@ export default class Lineage extends Plugin {
             () => {
                 const file = getActiveFile(this);
                 if (file) toggleFileViewType(this, file, undefined);
-                else createLineageDocument(this, 'document');
+                else createLineageDocument(this);
             },
         );
     }

@@ -7,7 +7,7 @@ export const migrateDocumentPreferences = (
     for (const [path, pref] of Object.entries(settings.documents)) {
         if (typeof pref === 'boolean') {
             settings.documents[path] = {
-                documentFormat: 'document',
+                documentFormat: 'sections',
                 viewType: 'lineage',
                 activeSection: null,
             };

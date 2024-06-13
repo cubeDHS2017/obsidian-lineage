@@ -5,6 +5,7 @@ import { ActiveBranchColor } from 'src/view/actions/settings/components/active-b
 import { CardWidth } from 'src/view/actions/settings/components/card-width';
 import { ScrollingBehavior } from 'src/view/actions/settings/components/scrolling-behavior';
 import { LimitCardHeight } from 'src/view/actions/settings/components/limit-card-height';
+import { DefaultDocumentFormat } from 'src/view/actions/settings/components/default-document-format';
 
 export const renderSettings = (element: HTMLElement) => {
     const view = getView();
@@ -16,6 +17,7 @@ export const renderSettings = (element: HTMLElement) => {
         CardWidth(element, settingsStore);
         LimitCardHeight(element, settingsStore);
         ScrollingBehavior(element, settingsStore);
+        DefaultDocumentFormat(element, settingsStore);
     };
     render();
     return {

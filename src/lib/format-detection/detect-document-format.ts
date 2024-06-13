@@ -6,7 +6,7 @@ import { hasNBulletListItems } from 'src/lib/format-detection/has-n-bullet-list-
 export const detectDocumentFormat = (text: string, strict = true) => {
     const { data } = extractFrontmatter(text);
 
-    if (hasNSections(data, 1)) return 'document';
+    if (hasNSections(data, 1)) return 'sections';
     if (isOutline(data)) return 'outline';
     if (!strict) {
         if (hasNBulletListItems(text, 1)) return 'outline';
