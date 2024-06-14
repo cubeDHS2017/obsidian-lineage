@@ -15,7 +15,7 @@
     & .callout {
         mix-blend-mode: initial;
     }
-    & button.copy-code-button{
+    & button.copy-code-button {
         display: none;
     }
     & .cm-blockid {
@@ -24,6 +24,11 @@
         vertical-align: text-top;
         margin-top: -0.2em;
         color: var(--text-muted);
-        opacity: 0.5
+        opacity: 0.5;
+    }
+    & .is-unresolved {
+        color: var(--link-unresolved-color);
+        opacity: var(--link-unresolved-opacity);
+        filter: var(--link-unresolved-filter);
     }
 }

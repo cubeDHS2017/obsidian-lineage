@@ -4,6 +4,7 @@ import { onViewStateUpdate } from 'src/stores/view/subscriptions/on-view-state-u
 import { onDocumentStateUpdate } from 'src/stores/view/subscriptions/on-document-state-update';
 import { onPluginSettingsUpdate } from 'src/stores/view/subscriptions/on-plugin-settings-update';
 import { onDocumentsStateUpdate } from 'src/stores/view/subscriptions/on-documents-state-update';
+import { onMetadataCache } from 'src/stores/view/subscriptions/on-metadata-cache';
 
 export const viewSubscriptions = (view: LineageView) => {
     const unsubFromDocument = view.documentStore.subscribe(
@@ -35,8 +36,11 @@ export const viewSubscriptions = (view: LineageView) => {
         },
     );
 
+    const unsubFromCache = onMetadataCache(view);
+
     return () => {
         unsubFromDocument();
+        unsubFromCache();
         unsubFromView();
         unsubFromSettings();
         unsubFromDocuments();

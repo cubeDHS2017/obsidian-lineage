@@ -11,6 +11,7 @@ import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-v
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
 import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-initial-active-node';
+import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -50,6 +51,6 @@ export const onViewMount = (view: LineageView) => {
         focusContainer(view);
         alignBranch(view, undefined, true);
     }
-
+    markUnresolvedLinks(view);
     applySettingsToView(view);
 };
