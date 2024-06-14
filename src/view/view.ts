@@ -257,16 +257,14 @@ export class LineageView extends TextFileView {
         if (!existingData || bodyHasChanged || frontmatterHasChanged) {
             const isEditing =
                 this.viewStore.getValue().document.editing.activeNodeId;
-            if (isEditing) {
-                if (frontmatterHasChanged) {
-                    this.documentStore.dispatch({
-                        type: 'FILE/UPDATE_FRONTMATTER',
-                        payload: {
-                            frontmatter,
-                        },
-                    });
-                }
-            } else {
+            if (frontmatterHasChanged) {
+                this.documentStore.dispatch({
+                    type: 'FILE/UPDATE_FRONTMATTER',
+                    payload: {
+                        frontmatter,
+                    },
+                });
+            } else if (!isEditing) {
                 const activeNode =
                     this.viewStore.getValue().document.activeNode;
                 const activeSection = activeNode

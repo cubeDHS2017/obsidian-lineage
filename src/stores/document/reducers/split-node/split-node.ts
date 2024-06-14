@@ -7,13 +7,19 @@ import { lang } from 'src/lang/lang';
 import { headingsToSections } from 'src/lib/data-conversion/headings-to-sections';
 import { outlineToSections } from 'src/lib/data-conversion/outline-to-sections';
 
-export type SplitNodeMode = 'heading' | 'outline';
+export type SplitNodeMode = 'headings' | 'outline';
 export type SplitNodeAction = {
     type: 'DOCUMENT/SPLIT_NODE';
     payload: {
         target: string;
         mode: SplitNodeMode;
     };
+};
+
+export const splitText = (text: string, mode: SplitNodeMode) => {
+    return mode === 'headings'
+        ? headingsToSections(text)
+        : outlineToSections(text);
 };
 
 export const splitNode = (
@@ -23,10 +29,7 @@ export const splitNode = (
     const targetNode = action.payload.target;
     const content = document.content[targetNode];
     if (!content?.content) throw new SilentError('empty node');
-    const sections =
-        action.payload.mode === 'heading'
-            ? headingsToSections(content.content)
-            : outlineToSections(content.content);
+    const sections = splitText(content?.content, action.payload.mode);
     if (sections === content.content)
         throw new Error(lang.cant_split_card_identical);
     const childGroup = findChildGroup(document.columns, targetNode);

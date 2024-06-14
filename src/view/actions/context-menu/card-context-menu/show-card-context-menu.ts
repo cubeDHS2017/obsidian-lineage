@@ -5,10 +5,8 @@ import { mergeNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/
 import { copyNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/copy-node';
 import { cutNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cut-node';
 import { pasteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/paste-node';
-import { splitNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/split-node';
+import { openSplitNodeModal } from 'src/view/modals/split-node-modal/open-split-node-modal';
 import { customIcons } from 'src/helpers/load-custom-icons';
-import { hasNHeadings } from 'src/lib/format-detection/has-n-headings';
-import { isOutline } from 'src/lib/format-detection/is-outline';
 import { copyLinkToBlock } from 'src/view/actions/context-menu/card-context-menu/helpers/copy-link-to-block';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
@@ -27,32 +25,15 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .setDisabled(multipleNodesAreSelected),
     );
 
-    const input =
-        view.documentStore.getValue().document.content[
-            view.viewStore.getValue().document.activeNode
-        ]?.content || '';
-
     menu.addSeparator();
 
-    const _hasHeading = hasNHeadings(input);
-    const _isOutline = !_hasHeading && isOutline(input);
     menu.addItem((item) =>
         item
-            .setTitle('Split by headings')
+            .setTitle('Split')
             .setIcon(customIcons.split.name)
             .onClick(() => {
-                splitNode(view, 'heading');
-            })
-            .setDisabled(!_hasHeading || multipleNodesAreSelected),
-    );
-    menu.addItem((item) =>
-        item
-            .setTitle('Split outline')
-            .setIcon(customIcons.split.name)
-            .onClick(() => {
-                splitNode(view, 'outline');
-            })
-            .setDisabled(!_isOutline || multipleNodesAreSelected),
+                openSplitNodeModal(view);
+            }),
     );
 
     menu.addSeparator();

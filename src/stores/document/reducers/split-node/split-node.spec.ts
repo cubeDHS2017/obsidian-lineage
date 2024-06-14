@@ -26,7 +26,7 @@ describe('split node', () => {
         };
         const action = {
             type: 'DOCUMENT/SPLIT_NODE',
-            payload: { target: 'nP3BBw00m', mode: 'heading' },
+            payload: { target: 'nP3BBw00m', mode: 'headings' },
         } as const;
         const output = {
             columns: [
@@ -229,7 +229,7 @@ describe('split node', () => {
         const inputClone = clone(input);
         const action = {
             type: 'DOCUMENT/SPLIT_NODE',
-            payload: { target: 'nO5aXT_Tq', mode: 'heading' },
+            payload: { target: 'nO5aXT_Tq', mode: 'headings' },
         } as const;
 
         expect(() => splitNode(input, action)).toThrow(
@@ -268,7 +268,7 @@ describe('split node', () => {
         };
         const action = {
             type: 'DOCUMENT/SPLIT_NODE',
-            payload: { target: 'nO5aXT_Tq', mode: 'heading' },
+            payload: { target: 'nO5aXT_Tq', mode: 'headings' },
         } as const;
         const output = {
             columns: [
@@ -322,7 +322,7 @@ describe('split node', () => {
         const inputClone = clone(input);
         const action = {
             type: 'DOCUMENT/SPLIT_NODE',
-            payload: { target: 'nVPwysBOU', mode: 'heading' },
+            payload: { target: 'nVPwysBOU', mode: 'headings' },
         } as const;
 
         expect(() => splitNode(input, action)).toThrow(
@@ -347,7 +347,7 @@ describe('split node', () => {
         const inputClone = clone(input);
         const action = {
             type: 'DOCUMENT/SPLIT_NODE',
-            payload: { target: 'nVPwysBOU', mode: 'heading' },
+            payload: { target: 'nVPwysBOU', mode: 'headings' },
         } as const;
 
         expect(() => splitNode(input, action)).toThrow('input has a section');

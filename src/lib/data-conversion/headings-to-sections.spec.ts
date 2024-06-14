@@ -868,4 +868,75 @@ describe('headingsToSections', () => {
 ## H2`;
         expect(headingsToSections(input)).toEqual(output);
     });
+
+    test('first level is not h1 (3)', () => {
+        const input = `## H2
+
+text 1
+#### H4
+
+
+text 2
+### H3
+
+text 3`;
+
+        const output = `
+<!--section: 1-->
+## H2
+
+text 1
+
+<!--section: 1.1-->
+### H4
+
+
+text 2
+
+<!--section: 1.2-->
+### H3
+
+text 3`;
+        expect(headingsToSections(input)).toEqual(output);
+    });
+
+    test('weird bug', () => {
+        const input = `## H2
+
+### H3
+
+text 1
+
+### H3
+
+text 2
+#### H4
+
+- item 1.
+- item 2
+- item 3`;
+        const output = `
+<!--section: 1-->
+## H2
+
+
+<!--section: 1.1-->
+### H3
+
+text 1
+
+
+<!--section: 1.2-->
+### H3
+
+text 2
+
+<!--section: 1.2.1-->
+#### H4
+
+- item 1.
+- item 2
+- item 3`;
+        expect(headingsToSections(input)).toEqual(output);
+    });
 });

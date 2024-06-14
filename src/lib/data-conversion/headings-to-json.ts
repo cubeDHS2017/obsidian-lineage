@@ -11,7 +11,7 @@ export const headingsToJson = (input: string): TreeNode[] => {
     const lines = input.split('\n');
     const highestHeadingLevel = findHighestHeadingLevel(lines);
     const state: State = {
-        currentNodes: [],
+        currentParents: {},
         currentNode: null,
         tree: [],
     };
