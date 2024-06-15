@@ -49,6 +49,7 @@ export const hotkeysLang = {
     scroll_right: 'Scroll right',
     scroll_up: 'Scroll up',
     scroll_down: 'Scroll down',
+    align_branch: 'Align active branch',
 };
 export type PluginCommand = {
     check: (view: LineageView) => boolean;
@@ -111,6 +112,7 @@ export const groupedHotkeys = {
         'scroll_right',
         'scroll_up',
         'scroll_down',
+        'align_branch',
     ]),
 } satisfies Record<string, Set<CommandName>>;
 

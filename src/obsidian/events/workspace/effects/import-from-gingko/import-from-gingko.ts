@@ -20,7 +20,9 @@ export const importFromGingko = async (plugin: Lineage, files: TFile[]) => {
             gingkoFiles,
             parentFolder,
         );
-        new Notice(`Imported ${gingkoFiles.length} Gingko files`);
+        new Notice(
+            `Imported ${gingkoFiles.length} Gingko file${gingkoFiles.length === 1 ? '' : 's'}`,
+        );
     } catch (e) {
         onPluginError(e, 'command', { files });
     }

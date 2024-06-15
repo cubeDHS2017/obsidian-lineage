@@ -46,4 +46,11 @@ Some text.`;
         const input = `# Heading 1 ## Heading 2`;
         expect(hasNHeadings(input)).toBe(false);
     });
+
+    it('should return true if the heading is in an outline', () => {
+        const input = `- # Heading 1
+  This is some text.
+\t- ## Heading 2`;
+        expect(hasNHeadings(input)).toBe(true);
+    });
 });

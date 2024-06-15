@@ -58,9 +58,8 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
             .setTitle(lang.export_document)
             .setIcon('file-symlink')
             .onClick(() => {
-                exportDocument(view.plugin, file, 'markdown');
-            })
-            .setDisabled(isOutline),
+                exportDocument(view);
+            }),
     );
 
     menu.showAtMouseEvent(event);

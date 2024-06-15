@@ -12,6 +12,7 @@
 }
 
 .lineage-card {
+    --p-spacing: 0px;
     & .callout {
         mix-blend-mode: initial;
     }
@@ -30,5 +31,9 @@
         color: var(--link-unresolved-color);
         opacity: var(--link-unresolved-opacity);
         filter: var(--link-unresolved-filter);
+    }
+    & ul,ol{
+        margin-block-start: 0;
+        margin-block-end: 0;
     }
 }

@@ -21,7 +21,7 @@
         display: flex;
         flex-direction: column;
         gap: var(--size-4-2);
-        max-height: 360px;
+        max-height: 70vh;
         overflow-y: auto;
     }
     @media (max-width: 720px) {

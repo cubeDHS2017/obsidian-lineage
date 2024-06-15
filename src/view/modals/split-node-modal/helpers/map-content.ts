@@ -1,6 +1,7 @@
 import { diffWords } from 'diff';
 import { SplitNodeMode } from 'src/stores/document/reducers/split-node/split-node';
 import { splitText } from 'src/stores/document/reducers/split-node/helpers/split-text';
+import { onPluginError } from 'src/lib/store/on-plugin-error';
 
 const escapeHtmlComment = (text: string): string => {
     return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -15,7 +16,11 @@ const makeNewlinesVisible = (text: string) => {
 export const mapContent = (text: string, mode: SplitNodeMode | null) => {
     let newContent = text;
     if (mode) {
-        newContent = splitText(text, mode);
+        try {
+            newContent = splitText(text, mode);
+        } catch (e) {
+            onPluginError(e, 'command', { text, mode });
+        }
     }
 
     const differences = diffWords(text, newContent);

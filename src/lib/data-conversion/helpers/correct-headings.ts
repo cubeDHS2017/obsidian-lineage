@@ -47,6 +47,8 @@ export const correctHeadings = (markdown: string): string => {
                         correctedLevel = parent.correctedLevel + 1;
                     }
                 }
+            } else if (level === state.previousLevel) {
+                correctedLevel = state.previousCorrectedLevel;
             } else {
                 correctedLevel = level;
             }
