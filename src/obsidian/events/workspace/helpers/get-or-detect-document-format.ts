@@ -11,9 +11,6 @@ export const getOrDetectDocumentFormat = (
         return format;
     } else {
         const detected = detectDocumentFormat(view.data);
-        return (
-            detected ||
-            view.plugin.settings.getValue().general.defaultDocumentFormat
-        );
+        return detected || 'sections';
     }
 };

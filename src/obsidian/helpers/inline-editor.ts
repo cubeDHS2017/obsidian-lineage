@@ -86,7 +86,7 @@ export class InlineEditor {
         }
         this.target.addEventListener('focusin', this.setActiveEditor);
         this.setActiveEditor();
-        setTimeout(() => resolve(), 32);
+        setTimeout(() => resolve(), Math.max(16, content.length / 60));
     }
 
     focus = () => {

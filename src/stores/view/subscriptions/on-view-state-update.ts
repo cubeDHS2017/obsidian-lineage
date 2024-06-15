@@ -73,7 +73,7 @@ export const onViewStateUpdate = (
         focusContainer(view);
     }
 
-    if (activeNodeChange || e.search) {
+    if (activeNodeChange || e.search || e.edit) {
         const skipAligning =
             action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
             action.context?.modKey;
