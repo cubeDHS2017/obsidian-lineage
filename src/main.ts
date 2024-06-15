@@ -33,6 +33,7 @@ import { migrateDocumentPreferences } from 'src/stores/settings/migrations/migra
 import { toggleFileViewType } from 'src/obsidian/events/workspace/effects/toggle-file-view-type';
 import { getActiveFile } from 'src/obsidian/commands/helpers/get-active-file';
 import { createLineageDocument } from 'src/obsidian/events/workspace/effects/create-lineage-document';
+import { registerFilesMenuEvent } from 'src/obsidian/events/workspace/register-files-menu-event';
 
 export type SettingsStore = Store<Settings, SettingsActions>;
 export type DocumentsStore = Store<DocumentsState, DocumentsStoreAction>;
@@ -83,6 +84,7 @@ export default class Lineage extends Plugin {
 
     private registerEvents() {
         registerFileMenuEvent(this);
+        registerFilesMenuEvent(this);
         registerFileRenameEvent(this);
         registerFileDeleteEvent(this);
         registerActiveLeafChange(this);

@@ -18,4 +18,5 @@ export const lang = {
     cant_merge_multiple_nodes: 'Cannot merge multiple cards',
     error_parent_not_found: (full: string) =>
         `Could not find the parent section of ${full}`,
+    import_from_gingko: 'Import from Gingko',
 };
