@@ -8,6 +8,7 @@ import { pasteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/
 import { openSplitNodeModal } from 'src/view/modals/split-node-modal/open-split-node-modal';
 import { customIcons } from 'src/helpers/load-custom-icons';
 import { copyLinkToBlock } from 'src/view/actions/context-menu/card-context-menu/helpers/copy-link-to-block';
+import { exportColumn } from 'src/view/actions/context-menu/card-context-menu/helpers/export-column';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const menu = new Menu();
@@ -17,10 +18,20 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
 
     menu.addItem((item) =>
         item
-            .setTitle('Extract')
-            .setIcon('file-symlink')
+            .setTitle('Extract branch')
+            .setIcon(customIcons.cards.name)
             .onClick(() => {
                 extractBranch(view);
+            })
+            .setDisabled(multipleNodesAreSelected),
+    );
+    menu.addSeparator();
+    menu.addItem((item) =>
+        item
+            .setTitle('Export column')
+            .setIcon('file-text')
+            .onClick(() => {
+                exportColumn(view);
             })
             .setDisabled(multipleNodesAreSelected),
     );
