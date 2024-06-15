@@ -10,32 +10,25 @@
     };
     const mode = state.mode;
     const disabledModes = state.disabledModes;
+
+    const modes: SplitNodeMode[] = ['headings', 'outline', 'paragraphs'];
 </script>
 
 <div class="split-content-footer">
     <div class="modes-container">
-        <label data-disabled={disabledModes.has('headings')}>
-            <input
-                checked={$mode === 'headings'}
-                disabled={disabledModes.has('headings')}
-                name="mode"
-                on:change={(e) => onModeChange(e.currentTarget.value)}
-                type="radio"
-                value="headings"
-            />
-            Headings
-        </label>
-        <label data-disabled={disabledModes.has('outline')}>
-            <input
-                checked={$mode === 'outline'}
-                disabled={disabledModes.has('outline')}
-                name="mode"
-                on:change={(e) => onModeChange(e.currentTarget.value)}
-                type="radio"
-                value="outline"
-            />
-            Outline
-        </label>
+        {#each modes as _mode}
+            <label data-disabled={disabledModes.has(_mode)}>
+                <input
+                    checked={$mode === _mode}
+                    disabled={disabledModes.has(_mode)}
+                    name="mode"
+                    on:change={(e) => onModeChange(e.currentTarget.value)}
+                    type="radio"
+                    value={_mode}
+                />
+                {_mode}
+            </label>
+        {/each}
     </div>
 
     <div class="buttons-container">
@@ -67,6 +60,7 @@
     }
     label {
         display: block;
+        text-transform: capitalize;
     }
     label[data-disabled='true'] {
         opacity: 0.6;

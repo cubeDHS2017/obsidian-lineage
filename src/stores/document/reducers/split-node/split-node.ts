@@ -4,22 +4,15 @@ import { pasteNode } from 'src/stores/document/reducers/clipboard/paste-node/pas
 import { deleteNode } from 'src/stores/document/reducers/delete-node/delete-node';
 import { findChildGroup } from 'src/lib/tree-utils/find/find-child-group';
 import { lang } from 'src/lang/lang';
-import { headingsToSections } from 'src/lib/data-conversion/headings-to-sections';
-import { outlineToSections } from 'src/lib/data-conversion/outline-to-sections';
+import { splitText } from 'src/stores/document/reducers/split-node/helpers/split-text';
 
-export type SplitNodeMode = 'headings' | 'outline';
+export type SplitNodeMode = 'headings' | 'outline' | 'paragraphs';
 export type SplitNodeAction = {
     type: 'DOCUMENT/SPLIT_NODE';
     payload: {
         target: string;
         mode: SplitNodeMode;
     };
-};
-
-export const splitText = (text: string, mode: SplitNodeMode) => {
-    return mode === 'headings'
-        ? headingsToSections(text)
-        : outlineToSections(text);
 };
 
 export const splitNode = (

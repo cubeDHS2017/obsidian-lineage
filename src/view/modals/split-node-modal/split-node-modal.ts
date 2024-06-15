@@ -6,6 +6,7 @@ import { hasNHeadings } from 'src/lib/format-detection/has-n-headings';
 import { isOutline } from 'src/lib/format-detection/is-outline';
 import { mapContent } from 'src/view/modals/split-node-modal/helpers/map-content';
 import { SplitNodeMode } from 'src/stores/document/reducers/split-node/split-node';
+import { hasNParagraph } from 'src/lib/format-detection/has-n-paragraph';
 
 export type SplitNodeCallbacks = {
     accept: () => void;
@@ -60,33 +61,39 @@ export class SplitNodeModal extends Modal {
     };
 
     initState = () => {
+        const content = this.props.nodeContent;
         this.state = {
-            content: writable(this.props.nodeContent),
+            content: writable(content),
             mode: writable(null),
             disabledModes: new Set(),
         };
 
-        if (hasNHeadings(this.props.nodeContent)) {
-            this.state.mode.set('headings');
-        } else {
+        const hasHeadings = hasNHeadings(content);
+        const _isOutline = isOutline(content);
+        const hasParagraphs = hasNParagraph(content);
+        if (!hasHeadings) {
             this.state.disabledModes.add('headings');
         }
-        if (isOutline(this.props.nodeContent)) {
-            this.state.mode.set('outline');
-        } else {
+        if (!_isOutline) {
             this.state.disabledModes.add('outline');
+        }
+        if (!hasParagraphs) {
+            this.state.disabledModes.add('paragraphs');
+        }
+
+        if (hasHeadings) {
+            this.state.mode.set('headings');
+        } else if (_isOutline) {
+            this.state.mode.set('outline');
+        } else if (hasParagraphs) {
+            this.state.mode.set('paragraphs');
         }
 
         const unsubFromMod = this.state.mode.subscribe((mode) => {
-            if (mode)
-                this.state.content.set(
-                    mapContent(this.props.nodeContent, mode),
-                );
+            if (mode) this.state.content.set(mapContent(content, mode));
         });
 
-        this.state.content.set(
-            mapContent(this.props.nodeContent, get(this.state.mode)),
-        );
+        this.state.content.set(mapContent(content, get(this.state.mode)));
 
         this.subscriptions.add(unsubFromMod);
     };

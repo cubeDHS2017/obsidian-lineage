@@ -1,8 +1,6 @@
 import { diffWords } from 'diff';
-import {
-    SplitNodeMode,
-    splitText,
-} from 'src/stores/document/reducers/split-node/split-node';
+import { SplitNodeMode } from 'src/stores/document/reducers/split-node/split-node';
+import { splitText } from 'src/stores/document/reducers/split-node/helpers/split-text';
 
 const escapeHtmlComment = (text: string): string => {
     return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
