@@ -249,7 +249,7 @@ export class LineageView extends TextFileView {
         const { data, frontmatter } = extractFrontmatter(this.data);
 
         const state = this.documentStore.getValue();
-        const format = getOrDetectDocumentFormat(this);
+        const format = getOrDetectDocumentFormat(this, data);
         const existingData = stringifyDocument(state.document, format);
         const bodyHasChanged = existingData !== data;
         const frontmatterHasChanged =

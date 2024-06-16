@@ -1,7 +1,4 @@
-import {
-    isActive,
-    isActiveAndNotEditing,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import { isActive } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 import { PluginCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
 import { scrollNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/scroll-node';
 import { Modifier } from 'obsidian';
@@ -44,11 +41,11 @@ export const scrollCommands = () => {
         },
         {
             name: 'align_branch',
-            check: isActiveAndNotEditing,
+            check: isActive,
             callback: (view) => {
                 alignBranch(view);
             },
-            hotkeys: [{ key: 'G', modifiers: [] }],
+            hotkeys: [{ key: 'G', modifiers: modifiers }],
         },
     ] satisfies PluginCommand[];
 };

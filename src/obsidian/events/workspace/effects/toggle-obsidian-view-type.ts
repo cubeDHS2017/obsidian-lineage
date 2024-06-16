@@ -14,6 +14,9 @@ export const toggleObsidianViewType = (
             state: leaf.view.getState(),
         } as ViewState);
         const activeLeaf = plugin.app.workspace.getLeaf();
-        if (activeLeaf !== leaf) plugin.app.workspace.revealLeaf(leaf);
+        if (activeLeaf !== leaf) {
+            plugin.app.workspace.revealLeaf(leaf);
+        }
+        plugin.app.workspace.setActiveLeaf(leaf);
     }, 0);
 };

@@ -5,6 +5,7 @@ export const handleEscapeKey = (view: LineageView) => {
     const value = viewStore.getValue();
     const search = value.search;
     const controls = value.ui.controls;
+    const selection = value.document.selectedNodes;
     if (search.query) {
         viewStore.dispatch({
             type: 'SEARCH/SET_QUERY',
@@ -28,6 +29,11 @@ export const handleEscapeKey = (view: LineageView) => {
             payload: {
                 closeAllModals: true,
             },
+        });
+        return true;
+    } else if (selection.size > 1) {
+        viewStore.dispatch({
+            type: 'DOCUMENT/CLEAR_SELECTION',
         });
         return true;
     }

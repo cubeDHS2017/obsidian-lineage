@@ -18,29 +18,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
 
     menu.addItem((item) =>
         item
-            .setTitle('Extract branch')
-            .setIcon(customIcons.cards.name)
-            .onClick(() => {
-                extractBranch(view);
-            })
-            .setDisabled(multipleNodesAreSelected),
-    );
-    menu.addSeparator();
-    menu.addItem((item) =>
-        item
-            .setTitle('Export column')
-            .setIcon('file-text')
-            .onClick(() => {
-                exportColumn(view);
-            })
-            .setDisabled(multipleNodesAreSelected),
-    );
-
-    menu.addSeparator();
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Split')
+            .setTitle('Split card')
             .setIcon(customIcons.split.name)
             .onClick(() => {
                 openSplitNodeModal(view);
@@ -104,6 +82,27 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 pasteNode(view);
             }),
+    );
+
+    menu.addSeparator();
+    menu.addItem((item) =>
+        item
+            .setTitle('Extract branch')
+            .setIcon(customIcons.cards.name)
+            .onClick(() => {
+                extractBranch(view);
+            })
+            .setDisabled(multipleNodesAreSelected),
+    );
+
+    menu.addItem((item) =>
+        item
+            .setTitle('Export column')
+            .setIcon('file-text')
+            .onClick(() => {
+                exportColumn(view);
+            })
+            .setDisabled(multipleNodesAreSelected),
     );
 
     menu.showAtMouseEvent(event);
