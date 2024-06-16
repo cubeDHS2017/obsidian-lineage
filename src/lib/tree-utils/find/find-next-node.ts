@@ -1,11 +1,12 @@
 import { Sections } from 'src/stores/document/document-state-type';
+import { sortKeys } from 'src/helpers/sort-keys';
 
 export const findNextNode = (
     sections: Sections,
     node: string,
     direction: 'back' | 'forward',
 ) => {
-    const sortedSections = Object.keys(sections.section_id).sort();
+    const sortedSections = sortKeys(sections.section_id);
     const currentSection = sections.id_section[node];
     const currentSectionIndex = sortedSections.findIndex(
         (section) => currentSection === section,

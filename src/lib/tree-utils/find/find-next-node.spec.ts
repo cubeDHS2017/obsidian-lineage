@@ -8,6 +8,14 @@ describe('find-next-node', () => {
     const n1_2_1 = 'n1_2_1';
     const n2 = 'n2';
     const n1_3 = 'n1_3';
+    const n3 = 'n3';
+    const n4 = 'n4';
+    const n5 = 'n5';
+    const n6 = 'n6';
+    const n7 = 'n7';
+    const n8 = 'n8';
+    const n9 = 'n9';
+    const n10 = 'n10';
     const sections = {
         id_section: {
             [n1]: '1',
@@ -16,6 +24,14 @@ describe('find-next-node', () => {
             [n1_2_1]: '1.2.1',
             [n1_3]: '1.3',
             [n2]: '2',
+            [n3]: '3',
+            [n4]: '4',
+            [n5]: '5',
+            [n6]: '6',
+            [n7]: '7',
+            [n8]: '8',
+            [n9]: '9',
+            [n10]: '10',
         },
         section_id: {
             '1': n1,
@@ -24,6 +40,14 @@ describe('find-next-node', () => {
             '1.2.1': n1_2_1,
             '1.3': n1_3,
             '2': n2,
+            '3': n3,
+            '4': n4,
+            '5': n5,
+            '6': n6,
+            '7': n7,
+            '8': n8,
+            '9': n9,
+            '10': n10,
         },
     };
 
@@ -44,6 +68,13 @@ describe('find-next-node', () => {
     }
     test('edges', () => {
         expect(findNextNode(sections, n1, 'back')).toBe(n1);
-        expect(findNextNode(sections, n2, 'forward')).toBe(n2);
+        expect(findNextNode(sections, n10, 'forward')).toBe(n10);
+    });
+
+    test('case: 1', () => {
+        expect(findNextNode(sections, n1_3, 'forward')).toBe(n2);
+    });
+    test('case: 2', () => {
+        expect(findNextNode(sections, n10, 'back')).toBe(n9);
     });
 });
