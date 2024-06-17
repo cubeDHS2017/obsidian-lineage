@@ -83,7 +83,6 @@ export class Store<T, U> implements Writable<T> {
     private readonly onError: OnError<U> = (error) => console.error(error);
 
     private notifySubscribers(action?: U): void {
-        // console.log('notifying ' + this.subscribers.size);
         for (const subscriber of this.subscribers) {
             try {
                 subscriber(this.value, action);

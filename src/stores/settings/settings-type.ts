@@ -28,8 +28,18 @@ export type DocumentBackup = {
     content: string;
     created: number;
 };
+
+export type LineageDocumentFormat = 'outline' | 'sections';
+
+export type ViewType = 'lineage' | 'markdown';
+export type DocumentPreferences = {
+    documentFormat: LineageDocumentFormat;
+    viewType: ViewType;
+    activeSection: string | null;
+};
+
 export type Settings = {
-    documents: Record<string, true>;
+    documents: Record<string, DocumentPreferences>;
     hotkeys: {
         customHotkeys: CustomHotkeys;
     };
@@ -41,6 +51,9 @@ export type Settings = {
         scrolling: ScrollingSettings;
         limitPreviewHeight: boolean;
         zoomLevel: number;
+    };
+    general: {
+        defaultDocumentFormat: LineageDocumentFormat;
     };
     // when view.inlineEditor is enabled, and the file is opened by another markdown view, inlineEditor overrides file.data with card.data
     // a copy of file.data is saved in case obsidian closes while file.data is set tod card.data

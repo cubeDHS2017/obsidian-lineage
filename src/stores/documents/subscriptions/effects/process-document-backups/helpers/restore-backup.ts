@@ -1,8 +1,8 @@
 import Lineage from 'src/main';
 import { DocumentBackup } from 'src/stores/settings/settings-type';
 import { TFolder } from 'obsidian';
-import { createNewFile } from 'src/obsidian/commands/helpers/create-new-file';
-import { openFile } from 'src/obsidian/commands/helpers/open-file';
+import { createNewFile } from 'src/obsidian/events/workspace/effects/create-new-file';
+import { openFile } from 'src/obsidian/events/workspace/effects/open-file';
 
 export const restoreBackup = async (
     plugin: Lineage,
@@ -28,5 +28,5 @@ export const restoreBackup = async (
         backup.content,
         fileName,
     );
-    await openFile(plugin, newFile, 'split', 'markdown');
+    await openFile(plugin, newFile, 'split');
 };

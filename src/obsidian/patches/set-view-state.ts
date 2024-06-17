@@ -9,7 +9,7 @@ export function setViewState(next: (...params: unknown[]) => unknown) {
         const path = state?.state?.file;
         if (
             isMarkdownView &&
-            fileViewTypeCache[path] &&
+            fileViewTypeCache[path]?.viewType === FILE_VIEW_TYPE &&
             !state.state.inlineEditor
         ) {
             const newState = {

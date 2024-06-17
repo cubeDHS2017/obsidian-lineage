@@ -2,7 +2,6 @@
     import { lang } from 'src/lang/lang';
     import { maxZoomLevel, minZoomLevel } from 'src/stores/settings/reducers/change-zoom-level';
     import {
-        FileText,
         HistoryIcon,
         Keyboard,
         Maximize,
@@ -17,12 +16,15 @@
     import { getPlugin, getView } from '../context';
     import { historyStore } from 'src/stores/document/derived/history-store';
     import { Notice } from 'obsidian';
-    import { LineageView } from '../../../view';
-    import { setFileViewType } from 'src/obsidian/events/workspace/helpers/set-file-view-type';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { writable } from 'svelte/store';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
     import Button from '../shared/button.svelte';
+    import { resetZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/reset-zoom';
+    import invariant from 'tiny-invariant';
+    import {
+        getCombinedBoundingClientRect
+    } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -54,11 +56,7 @@
     const toggleSettings = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_SETTINGS_SIDEBAR' });
     };
-    const openAsMarkdown = () => {
-        const file =
-            plugin.app.workspace.getActiveViewOfType(LineageView)?.file;
-        if (file) setFileViewType(plugin, file, view.leaf, 'markdown');
-    };
+
     const zoomIn = () => {
         view.plugin.settings.dispatch({
             type: 'UI/CHANGE_ZOOM_LEVEL',
@@ -79,16 +77,29 @@
         });
     };
 
-    const fitToScale = () => {
-        restoreZoom();
+    const fitDocumentHeightIntoView = () => {
+        invariant(view.container);
+        resetZoom(view.container);
         const columns = Array.from(
             view.containerEl.querySelectorAll('.column'),
         );
         if (columns.length) {
-            const scrolls = columns.map((c) => c.scrollHeight).sort();
-            const biggest = scrolls[scrolls.length - 1];
+            const groupHeights = columns
+                .map((c) => {
+                    return getCombinedBoundingClientRect(
+                        Array.from(c.querySelectorAll('.group')),
+                    ).height;
+                })
+                .sort((a,b)=>a-b);
+            const height = groupHeights[groupHeights.length-1];
+            const width = getCombinedBoundingClientRect(columns).width;
+
             // eslint-disable-next-line no-undef
-            const scale = window.innerHeight / biggest;
+            const heightScale = view.container.getBoundingClientRect().height / (height+ 100);
+            const widthScale = view.container.getBoundingClientRect().width / (width+ 100);
+
+            const scale =
+                Math.min(heightScale,widthScale);
             view.plugin.settings.dispatch({
                 type: 'UI/CHANGE_ZOOM_LEVEL',
                 payload: { value: scale },
@@ -118,14 +129,7 @@
         class="buttons-group buttons-group--vertical"
         data-visible={$showControls}
     >
-        <Button
-            class="control-item"
-            label={lang.open_in_editor}
-            on:click={openAsMarkdown}
-            tooltipPosition="left"
-        >
-            <FileText class="svg-icon" />
-        </Button>
+
         <Button
             active={$controls.showSettingsSidebar}
             class="control-item"
@@ -205,8 +209,8 @@
         </Button>
         <Button
             class="control-item"
-            label="Zoom to fit"
-            on:click={fitToScale}
+            label="Fit document height into view"
+            on:click={fitDocumentHeightIntoView}
             tooltipPosition="left"
         >
             <Maximize class="svg-icon" />

@@ -28,6 +28,8 @@ export const filteredHotkeys = derivedOnAction(
             'Delete cards': [],
             Clipboard: [],
             Navigation: [],
+            Selection: [],
+            Scrolling: [],
             History: [],
             Search: [],
         } satisfies GroupedHotkeys);

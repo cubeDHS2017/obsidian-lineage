@@ -24,9 +24,9 @@ import { defaultDocumentState } from 'src/stores/document/default-document-state
 import { formatHeadings } from 'src/stores/document/reducers/content/format-content/format-headings';
 import { pasteNode } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
 import { updateSectionsDictionary } from 'src/stores/document/reducers/state/update-sections-dictionary';
-import { getIdOfSection } from 'src/stores/view/subscriptions/actions/get-id-of-section';
+import { getIdOfSection } from 'src/stores/view/subscriptions/helpers/get-id-of-section';
 import { extractNode } from 'src/stores/document/reducers/extract-node/extract-node';
-import { getSectionOfId } from 'src/stores/view/subscriptions/actions/get-section-of-id';
+import { getSectionOfId } from 'src/stores/view/subscriptions/helpers/get-section-of-id';
 import { splitNode } from 'src/stores/document/reducers/split-node/split-node';
 
 const updateDocumentState = (
@@ -47,6 +47,7 @@ const updateDocumentState = (
         newActiveNodeId = deleteNode(
             state.document,
             action.payload.activeNodeId,
+            action.payload.selectedNodes,
         );
         affectedNodeId = action.payload.activeNodeId;
     } else if (action.type === 'DOCUMENT/EXTRACT_BRANCH') {
@@ -97,8 +98,15 @@ const updateDocumentState = (
         newActiveNodeId = pasteNode(state.document, action);
     } else if (action.type === 'DOCUMENT/CUT_NODE') {
         affectedNodeContent = state.document.content[action.payload.nodeId];
-        newActiveNodeId = deleteNode(state.document, action.payload.nodeId);
+        newActiveNodeId = deleteNode(
+            state.document,
+            action.payload.nodeId,
+            action.payload.selectedNodes,
+        );
         affectedNodeId = action.payload.nodeId;
+    } else if (action.type === 'FILE/UPDATE_FRONTMATTER') {
+        state.file.frontmatter = action.payload.frontmatter;
+        return;
     }
 
     const e = getDocumentEventType(action.type);
@@ -110,6 +118,17 @@ const updateDocumentState = (
     }
     if (e.dropOrMove || e.createOrDelete || e.changeHistory || e.clipboard) {
         updateSectionsDictionary(state);
+    }
+
+    // if file was modified externally, try to maintain active section
+    if (action.type === 'DOCUMENT/LOAD_FILE') {
+        const activeSection = action.payload.activeSection;
+        if (activeSection) {
+            const id = state.sections.section_id[activeSection];
+            if (id) {
+                newActiveNodeId = id;
+            }
+        }
     }
 
     const contentShapeCreation = e.content || e.dropOrMove || e.createOrDelete;

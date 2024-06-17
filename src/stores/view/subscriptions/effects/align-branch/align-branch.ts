@@ -1,85 +1,64 @@
-import { DocumentState } from 'src/stores/document/document-state-type';
-import {
-    AlignBranchState,
-    alignElement,
-} from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/align-element';
-import { alignParentsAndActiveNode } from 'src/stores/view/subscriptions/effects/align-branch/align-parents-and-active-node';
-import { alignChildGroupOfColumn } from 'src/stores/view/subscriptions/effects/align-branch/align-child-group-of-column';
-import { ViewState } from 'src/stores/view/view-state-type';
-import { debounce } from 'obsidian';
-import { getNodeElement } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-node-element';
-import { Settings } from 'src/stores/settings/settings-type';
-import { alignInactiveColumn } from 'src/stores/view/subscriptions/effects/align-branch/align-inactive-column';
+import { AlignBranchState } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/align-element';
+import { alignParentsNodes } from 'src/stores/view/subscriptions/effects/align-branch/align-parents-nodes';
 import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
 import { resetZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/reset-zoom';
+import { alignChildColumns } from 'src/stores/view/subscriptions/effects/align-branch/align-child-columns';
+import { alignActiveNode } from 'src/stores/view/subscriptions/effects/align-branch/align-active-node';
+import { LineageView } from 'src/view/view';
 
-export const alignBranch = (
-    documentState: DocumentState,
-    viewState: ViewState,
-    container: HTMLElement,
-    settings: Settings,
+const align = async (
+    view: LineageView,
     behavior?: ScrollBehavior,
     alignInactiveColumns = false,
 ) => {
-    if (settings.view.zoomLevel !== 1) behavior = 'instant';
+    const container = view.container;
     if (!container) return;
-    const nodeId = viewState.document.activeNode;
-    if (!nodeId) return;
+    const documentState = view.documentStore.getValue();
+    const viewState = view.viewStore.getValue();
+    const settings = view.plugin.settings.getValue();
+    const zooming = settings.view.zoomLevel !== 1;
+    if (zooming) behavior = 'instant';
     const localState: AlignBranchState = {
         columns: new Set<string>(),
     };
 
-    resetZoom(container);
-    alignParentsAndActiveNode(
+    await view.inlineEditor.mounting;
+    alignActiveNode(viewState, container, localState, settings, behavior);
+    alignParentsNodes(viewState, container, localState, settings, behavior);
+
+    alignChildColumns(
         viewState,
+        documentState,
         container,
         localState,
         settings,
         behavior,
+        alignInactiveColumns,
     );
-
-    let activeBranchNodeOfPreviousColumn: string | null =
-        viewState.document.activeNode;
-    for (const column of documentState.document.columns) {
-        if (localState.columns.has(column.id)) continue;
-
-        const activeNodesOfColumn =
-            viewState.document.activeNodesOfColumn[column.id];
-
-        const activeBranchNode: string | null =
-            activeNodesOfColumn && activeBranchNodeOfPreviousColumn
-                ? activeNodesOfColumn[activeBranchNodeOfPreviousColumn]
-                : null;
-        activeBranchNodeOfPreviousColumn = activeBranchNode;
-        if (activeBranchNode) {
-            const element = getNodeElement(container, activeBranchNode);
-            if (element) {
-                const columnId = alignElement(
-                    container,
-                    element,
-                    settings,
-                    behavior,
-                );
-                if (columnId) localState.columns.add(columnId);
-            }
-        } else {
-            const childGroup = column.groups.find((g) =>
-                viewState.document.activeBranch.childGroups.has(g.parentId),
-            );
-            if (childGroup) {
-                alignChildGroupOfColumn(
-                    viewState,
-                    container,
-                    column.id,
-                    settings,
-                    behavior,
-                );
-            } else if (alignInactiveColumns) {
-                alignInactiveColumn(column, container, settings, behavior);
-            }
-        }
-    }
-
-    applyZoom(viewState, container, settings.view.zoomLevel);
 };
-export const alignBranchDebounced = debounce(alignBranch, 32);
+
+export const alignBranch = (
+    view: LineageView,
+    behavior?: ScrollBehavior,
+    alignInactiveColumns = false,
+    delay = 0,
+) => {
+    const container = view.container;
+    if (!container) return;
+
+    const viewState = view.viewStore.getValue();
+    const zoomLevel = view.plugin.settings.getValue().view.zoomLevel;
+    if (!delay && zoomLevel === 1) {
+        requestAnimationFrame(() => {
+            align(view, behavior, alignInactiveColumns);
+        });
+    } else {
+        // using resetZoom in requestAnimationFrame results in transform:scale flashes
+        setTimeout(() => {
+            resetZoom(container);
+            align(view, behavior, alignInactiveColumns).finally(() => {
+                applyZoom(viewState, container, zoomLevel);
+            });
+        }, delay || 16);
+    }
+};

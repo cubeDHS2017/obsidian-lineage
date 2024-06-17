@@ -1,5 +1,6 @@
 .lineage-main {
     --lineage-accent: #55b1ae;
+    --lineage-color-selection: #418cff;
 }
 .theme-dark {
     --background-container: #373d4c;
@@ -7,6 +8,7 @@
     --background-active-parent: #5b637a;
     --background-inactive-node: var(--background-container);
     --lineage-accent-faint: #628c8c;
+    --lineage-color-selection-faint: #567aab;
 }
 .theme-light {
     --background-container: #899cb3;
@@ -14,6 +16,7 @@
     --background-active-parent: #cedbeb;
     --background-inactive-node: var(--background-container);
     --lineage-accent-faint: #adccca;
+    --lineage-color-selection-faint: #8eaedf;
 }
 
 /* node */

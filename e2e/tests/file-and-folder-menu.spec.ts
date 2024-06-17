@@ -7,7 +7,7 @@ import { createNewFolder } from '../helpers/interactions/obsidian-ui/create-new-
 import { getTextsOfColumns } from '../helpers/getters/lineage-view/card/get-texts-of-columns';
 import { text } from '../helpers/general/text';
 
-export const MI_NEW_LINEAGE_FILE = 'New lineage document';
+export const MI_NEW_LINEAGE_FILE = 'New document';
 
 test('should create file from context menu', async () => {
     await closeThisTabGroup();

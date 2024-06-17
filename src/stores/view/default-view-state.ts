@@ -33,6 +33,7 @@ export const defaultViewState = (): ViewState => ({
         },
         activeNode: '',
         activeNodesOfColumn: {},
+        selectedNodes: new Set<string>(),
     },
     navigationHistory: {
         items: [],

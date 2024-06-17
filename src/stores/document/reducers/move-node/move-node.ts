@@ -5,12 +5,14 @@ import { cleanAndSortColumns } from 'src/lib/tree-utils/sort/clean-and-sort-colu
 import invariant from 'tiny-invariant';
 import { SilentError } from 'src/lib/errors/errors';
 import { LineageDocument } from 'src/stores/document/document-state-type';
+import { findAdjacentNodeOfSelection } from 'src/lib/tree-utils/find/find-adjacent-node-of-selection';
 
 export type MoveNodeAction = {
     type: 'DOCUMENT/MOVE_NODE';
     payload: {
         direction: AllDirections;
         activeNodeId: string;
+        selectedNodes?: Set<string>;
     };
 };
 
@@ -18,21 +20,40 @@ export const moveNode = (
     document: Pick<LineageDocument, 'columns'>,
     action: Pick<MoveNodeAction, 'payload'>,
 ) => {
-    const nodeToMove = action.payload.activeNodeId;
-    invariant(nodeToMove);
+    const selectedNodes = action.payload.selectedNodes;
+    const isSelection = selectedNodes && selectedNodes.size > 1;
+    const nodes = isSelection
+        ? [...selectedNodes]
+        : [action.payload.activeNodeId];
 
-    const targetNode = findAdjacentNode(
-        document.columns,
-        nodeToMove,
-        action.payload.direction,
-    );
+    const shouldReverseOrder =
+        isSelection &&
+        (action.payload.direction === 'down' ||
+            action.payload.direction === 'left');
+    if (shouldReverseOrder) nodes.reverse();
+    invariant(action.payload.activeNodeId);
+
+    const targetNode = isSelection
+        ? findAdjacentNodeOfSelection(
+              document,
+              action.payload.activeNodeId,
+              selectedNodes,
+              action.payload.direction,
+          )
+        : findAdjacentNode(
+              document.columns,
+              action.payload.activeNodeId,
+              action.payload.direction,
+          );
     if (!targetNode) throw new SilentError('could not find adjacent node');
-    changeNodePosition(
-        document,
-        nodeToMove,
-        targetNode,
-        action.payload.direction,
-        'move',
-    );
-    cleanAndSortColumns(document);
+    for (const nodeToMove of nodes) {
+        changeNodePosition(
+            document,
+            nodeToMove,
+            targetNode,
+            action.payload.direction,
+            'move',
+        );
+        cleanAndSortColumns(document);
+    }
 };

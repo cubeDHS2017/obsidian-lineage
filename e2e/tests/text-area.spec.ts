@@ -44,6 +44,7 @@ test.describe('text should be saved', () => {
         // move card before saving
         await moveCardUsingHotkey('right');
 
+        await saveCardUsingHotkey();
         expect(await getTextsOfColumns()).toEqual([[n1], [n2]]);
     });
 

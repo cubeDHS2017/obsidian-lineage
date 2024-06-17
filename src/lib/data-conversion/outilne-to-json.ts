@@ -2,25 +2,39 @@ import { parseDelimiter } from 'src/lib/data-conversion/helpers/delimiter';
 import { TreeNode } from 'src/lib/data-conversion/columns-to-json';
 
 export type State = {
-    currentNodes: TreeNode[];
+    currentParents: Record<string, TreeNode>;
     currentNode: null | TreeNode;
     tree: TreeNode[];
 };
 
-export const addNewNode = (state: State, level: number, text: string) => {
+export const addNewNode = (
+    state: State,
+    level: number,
+    text: string,
+    root = 1,
+) => {
     state.currentNode = {
         content: text,
         children: [],
     };
-    if (level === 1) {
-        state.tree.push(state.currentNode);
-        state.currentNodes = [state.currentNode];
-    } else {
-        if (state.currentNodes[level - 2]) {
-            state.currentNodes[level - 2].children.push(state.currentNode);
+
+    // remove parents that have a higher level (e.g, when going from H4 to H2, H3-H6 are deleted)
+    for (const key of Object.keys(state.currentParents)) {
+        const parentLevel = +key;
+        if (parentLevel >= level) {
+            delete state.currentParents[key];
         }
-        state.currentNodes[level - 1] = state.currentNode;
     }
+
+    if (level === root) {
+        state.tree.push(state.currentNode);
+    }
+    state.currentParents[level] = state.currentNode;
+    const parent = state.currentParents[level - 1];
+    if (parent) {
+        parent.children.push(state.currentNode);
+    } else if (level > root)
+        throw new Error(`Item [${text}] does not have a parent`);
 };
 
 export const updateCurrentNode = (state: State, text: string) => {
@@ -39,20 +53,21 @@ export const updateCurrentNode = (state: State, text: string) => {
 export const outlineToJson = (input: string): TreeNode[] => {
     const lines = input.split('\n');
     const state: State = {
-        currentNodes: [],
+        currentParents: {},
         currentNode: null,
         tree: [],
     };
 
     for (const line of lines) {
-        if (parseDelimiter(line)) throw new Error('input has a section');
+        if (parseDelimiter(line))
+            throw new Error('Outline has a section annotation');
 
-        const outlineMatch = line.match(/^(\t*)- (.+)/);
+        const outlineMatch = line.match(/^(\t*)- (.*)/);
         if (outlineMatch) {
             const level = outlineMatch[1].length + 1;
             addNewNode(state, level, outlineMatch[2]);
         } else {
-            updateCurrentNode(state, line);
+            updateCurrentNode(state, line.replace(/^\t* {2}|/g, ''));
         }
     }
 

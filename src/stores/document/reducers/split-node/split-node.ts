@@ -4,10 +4,9 @@ import { pasteNode } from 'src/stores/document/reducers/clipboard/paste-node/pas
 import { deleteNode } from 'src/stores/document/reducers/delete-node/delete-node';
 import { findChildGroup } from 'src/lib/tree-utils/find/find-child-group';
 import { lang } from 'src/lang/lang';
-import { headingsToSections } from 'src/lib/data-conversion/headings-to-sections';
-import { outlineToSections } from 'src/lib/data-conversion/outline-to-sections';
+import { splitText } from 'src/stores/document/reducers/split-node/helpers/split-text';
 
-export type SplitNodeMode = 'heading' | 'outline';
+export type SplitNodeMode = 'headings' | 'outline' | 'paragraphs';
 export type SplitNodeAction = {
     type: 'DOCUMENT/SPLIT_NODE';
     payload: {
@@ -23,10 +22,7 @@ export const splitNode = (
     const targetNode = action.payload.target;
     const content = document.content[targetNode];
     if (!content?.content) throw new SilentError('empty node');
-    const sections =
-        action.payload.mode === 'heading'
-            ? headingsToSections(content.content)
-            : outlineToSections(content.content);
+    const sections = splitText(content?.content, action.payload.mode);
     if (sections === content.content)
         throw new Error(lang.cant_split_card_identical);
     const childGroup = findChildGroup(document.columns, targetNode);

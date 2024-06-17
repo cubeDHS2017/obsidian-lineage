@@ -27,8 +27,13 @@ import { onPluginError } from 'src/lib/store/on-plugin-error';
 import { registerActiveLeafChange } from 'src/obsidian/events/workspace/register-active-leaf-change';
 import { registerWorkspaceResize } from 'src/obsidian/events/workspace/register-workspace-resize';
 import { registerLayoutReady } from 'src/obsidian/events/workspace/register-layout-ready';
-import { loadCustomIcons } from 'src/helpers/load-custom-icons';
+import { customIcons, loadCustomIcons } from 'src/helpers/load-custom-icons';
 import { setActiveLeaf } from 'src/obsidian/patches/set-active-leaf';
+import { migrateDocumentPreferences } from 'src/stores/settings/migrations/migrate-document-preferences';
+import { toggleFileViewType } from 'src/obsidian/events/workspace/effects/toggle-file-view-type';
+import { getActiveFile } from 'src/obsidian/commands/helpers/get-active-file';
+import { createLineageDocument } from 'src/obsidian/events/workspace/effects/create-lineage-document';
+import { registerFilesMenuEvent } from 'src/obsidian/events/workspace/register-files-menu-event';
 
 export type SettingsStore = Store<Settings, SettingsActions>;
 export type DocumentsStore = Store<DocumentsState, DocumentsStoreAction>;
@@ -55,6 +60,7 @@ export default class Lineage extends Plugin {
         addCommands(this);
         loadCommands(this);
         this.statusBar = new StatusBar(this);
+        this.loadRibbonIcon();
     }
 
     async saveSettings() {
@@ -62,9 +68,11 @@ export default class Lineage extends Plugin {
     }
 
     async loadSettings() {
-        const settings = (await this.loadData()) || {};
+        const rawSettings = (await this.loadData()) || {};
+        const settings = deepMerge(rawSettings, DEFAULT_SETTINGS());
+        migrateDocumentPreferences(settings);
         this.settings = new Store<Settings, SettingsActions>(
-            deepMerge(settings, DEFAULT_SETTINGS()),
+            settings,
             settingsReducer,
             onPluginError,
         );
@@ -76,6 +84,7 @@ export default class Lineage extends Plugin {
 
     private registerEvents() {
         registerFileMenuEvent(this);
+        registerFilesMenuEvent(this);
         registerFileRenameEvent(this);
         registerFileDeleteEvent(this);
         registerActiveLeafChange(this);
@@ -92,5 +101,17 @@ export default class Lineage extends Plugin {
         this.register(around(this.app.workspace, { setActiveLeaf }));
         // @ts-ignore
         this.register(around(WorkspaceLeaf.prototype, { setViewState }));
+    }
+
+    private loadRibbonIcon() {
+        this.addRibbonIcon(
+            customIcons.cards.name,
+            'Toggle Lineage view',
+            () => {
+                const file = getActiveFile(this);
+                if (file) toggleFileViewType(this, file, undefined);
+                else createLineageDocument(this);
+            },
+        );
     }
 }

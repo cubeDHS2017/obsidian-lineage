@@ -1,47 +1,41 @@
 <script lang="ts">
-    import { getPlugin, getView } from '../../../../../../../context';
+    import { getView } from '../../../../../../../context';
     import { ActiveStatus } from 'src/view/components/container/column/components/group/components/active-status.enum';
-    import { parseDelimiter } from 'src/lib/data-conversion/helpers/delimiter';
-    import { get } from 'svelte/store';
-    import { MarkdownView, TFile } from 'obsidian';
+    import { getDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-document-format';
+    import {
+        findSectionPosition
+    } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/find-section-position';
+    import {
+        findOutlinePosition
+    } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/find-outline-position';
+    import {
+        openFileAndJumpToLine
+    } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/openFileAndJumpToLine';
 
-    const plugin = getPlugin();
     const view = getView();
-    const documentStore = view.documentStore;
     export let nodeId: string;
     export let activeStatus: ActiveStatus | null;
-    export let section: string
+    export let section: string;
 
-    const openFileAndJumpToLine = async (file: TFile, line: number,ch: number) => {
-        const leaf = plugin.app.workspace.getLeaf('split');
-        plugin.settings.dispatch({
-            type: 'SET_DOCUMENT_TYPE_TO_MARKDOWN',
-            payload: { path: file.path },
-        });
-        await leaf.openFile(file);
-        const markdownView = leaf.view as MarkdownView;
-        markdownView.editor.setCursor({ line, ch });
-        plugin.settings.dispatch({
-            type: 'SET_DOCUMENT_TYPE_TO_TREE',
-            payload: { path: file.path },
-        });
-    };
     // eslint-disable-next-line no-undef
     const openFile = async () => {
         if (!view.file) return;
-        const treeIndex = get(documentStore).sections.id_section[nodeId];
+
+        const format = getDocumentFormat(view);
+        const i =
+            format === 'sections'
+                ? findSectionPosition(view, nodeId)
+                : findOutlinePosition(view, nodeId);
+        if (typeof i === 'undefined') return;
+        const targetLine = i + (format === 'sections' ? 1 : 0);
         const lines = view.data.split('\n');
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i];
-            if (line.startsWith('<!--')) {
-                const section = parseDelimiter(line);
-                if (section && section[2] === treeIndex) {
-                    const nextLineIndex = i+1;
-                    const nextLine = lines[nextLineIndex]||"";
-                    await openFileAndJumpToLine(view.file, nextLineIndex,nextLine.length);
-                }
-            }
-        }
+        const nextLine = lines[targetLine] || '';
+        await openFileAndJumpToLine(
+            view.plugin,
+            view.file,
+            targetLine,
+            nextLine.length,
+        );
     };
     const classes: Partial<Record<ActiveStatus, string>> = {
         [ActiveStatus.node]: 'is-active',
@@ -49,13 +43,10 @@
         [ActiveStatus.parent]: 'is-active-parent',
         [ActiveStatus.sibling]: 'is-active-parent',
     };
-    // move this the fuck up
-
-
 </script>
 
 <div
-    aria-label="Jump to section"
+    aria-label="Reveal in editor"
     class={'tree-index ' + (activeStatus ? classes[activeStatus] : '')}
     on:click={openFile}
 >

@@ -22,7 +22,7 @@ export const saveNodeAndInsertNode = (
     });
     if (content) {
         if (direction === 'down' || direction === 'right') {
-            view.inlineEditor.overrideCursor(0, 0);
+            view.inlineEditor.overrideCursor({ line: 0, ch: 0 });
         }
     }
 };

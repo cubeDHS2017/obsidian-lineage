@@ -8,6 +8,7 @@
     export let groupId: string;
     export let columnId: string;
     export let activeChildGroups: Set<string>;
+    export let selectedNodes: Set<string>;
     export let parentNodes: Set<string>;
     export let activeGroup: string;
     export let activeNode: string;
@@ -16,7 +17,7 @@
     export let searchQuery: string;
     export let searchResults: Set<string>;
     export let searching: boolean;
-    export let idSection: Record<string,string>;
+    export let idSection: Record<string, string>;
 
     const view = getView();
     const nodes = nodesStore(view, columnId, groupId);
@@ -50,7 +51,7 @@
                     disableEditConfirmation={editedNode === node &&
                         disableEditConfirmation}
                     section={idSection[node]}
-
+                    selected={selectedNodes.has(node)}
                 />
             {/if}
         {/each}

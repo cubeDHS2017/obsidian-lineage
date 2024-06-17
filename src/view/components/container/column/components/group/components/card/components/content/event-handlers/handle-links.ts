@@ -1,5 +1,14 @@
 import { LineageView } from 'src/view/view';
 
+const selectCard = (view: LineageView, id: string) => {
+    view.viewStore.dispatch({
+        type: 'DOCUMENT/SET_ACTIVE_NODE',
+        payload: {
+            id: id,
+        },
+    });
+};
+
 const handleFile = (view: LineageView, link: string) => {
     const path = view.documentStore.getValue().file.path;
     if (link && path) {
@@ -20,13 +29,26 @@ const handleHeading = (view: LineageView, link: string) => {
             if (heading) {
                 const card = heading.closest('.lineage-card');
                 if (card && card.id) {
-                    view.viewStore.dispatch({
-                        type: 'DOCUMENT/SET_ACTIVE_NODE',
-                        payload: {
-                            id: card.id,
-                        },
-                    });
+                    selectCard(view, card.id);
                     break;
+                }
+            }
+        }
+    }
+};
+
+const handleBlockLink = (view: LineageView, link: string) => {
+    const match = /#\^([a-zA-Z0-9]{4,})$/.exec(link);
+    if (match) {
+        const id = match[1];
+        if (id) {
+            const element = view.containerEl.querySelector(
+                `[data-block-id="^${id}"`,
+            ) as HTMLElement;
+            if (element) {
+                const card = element.closest('.lineage-card');
+                if (card && card.id) {
+                    selectCard(view, card.id);
                 }
             }
         }
@@ -39,7 +61,10 @@ export const handleClick = (view: LineageView) => (e: MouseEvent) => {
     if (!e.target.hasClass('internal-link')) return;
     const link = e.target.dataset.href;
     if (!link) return;
-    if (link.startsWith('#')) {
+    if (link.contains('#^')) {
+        e.stopPropagation();
+        handleBlockLink(view, link);
+    } else if (link.startsWith('#')) {
         e.stopPropagation();
         handleHeading(view, link);
     } else {

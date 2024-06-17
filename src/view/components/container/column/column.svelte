@@ -7,6 +7,7 @@
     export let columnId: string;
     export let activeChildGroups: Set<string>;
     export let dndChildGroups: Set<string>;
+    export let selectedNodes: Set<string>;
     export let parentNodes: Set<string>;
     export let activeGroup: string;
     export let activeNode: string;
@@ -38,6 +39,7 @@
                 {activeChildGroups}
                 {activeNode}
                 {idSection}
+                {selectedNodes}
             />
         {/if}
     {/each}

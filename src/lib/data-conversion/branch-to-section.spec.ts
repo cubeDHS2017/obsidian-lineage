@@ -35,6 +35,63 @@ describe('branch-to-section', () => {
             mode: 'copy',
         };
         const text = `\n<!--section: 1-->\n1\n\n<!--section: 1.1-->\n1.1\n\n<!--section: 1.1.1-->\n1.1.1\n\n<!--section: 1.1.2-->\n1.1.2\n\n<!--section: 1.1.2.1-->\n1.1.2.1\n\n<!--section: 1.2-->\n1.2\n\n<!--section: 1.2.1-->\n1.2.1\n\n<!--section: 1.2.2-->\n1.2.2`;
-        expect(branchToSection(branch)).toEqual(text);
+        expect(branchToSection([branch])).toEqual(text);
+    });
+    test('multiple branches', () => {
+        const input = [
+            {
+                sortedChildGroups: [
+                    [
+                        {
+                            nodes: ['nX5FJMc4Q', 'nCs0uUHmh'],
+                            parentId: 'nVfOijYyQ',
+                        },
+                    ],
+                ],
+                content: {
+                    nX5FJMc4Q: { content: '1.1' },
+                    nCs0uUHmh: { content: '1.2' },
+                    nVfOijYyQ: { content: '1' },
+                },
+                nodeId: 'nVfOijYyQ',
+                mode: 'copy',
+            },
+            {
+                sortedChildGroups: [
+                    [
+                        {
+                            nodes: ['nrwDAxf7O', 'nG2BkexG0'],
+                            parentId: 'nbbfjtFUV',
+                        },
+                    ],
+                ],
+                content: {
+                    nrwDAxf7O: { content: '2.1' },
+                    nG2BkexG0: { content: '2.2' },
+                    nbbfjtFUV: { content: '2' },
+                },
+                nodeId: 'nbbfjtFUV',
+                mode: 'copy',
+            },
+        ] as ClipboardBranch[];
+        const text = `
+<!--section: 1-->
+1
+
+<!--section: 1.1-->
+1.1
+
+<!--section: 1.2-->
+1.2
+
+<!--section: 2-->
+2
+
+<!--section: 2.1-->
+2.1
+
+<!--section: 2.2-->
+2.2`;
+        expect(branchToSection(input)).toEqual(text);
     });
 });

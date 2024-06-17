@@ -20,6 +20,7 @@ export type DocumentViewState = {
     dnd: DNDState;
     activeNode: string;
     activeNodesOfColumn: ActiveNodesOfColumn;
+    selectedNodes: Set<string>;
 };
 export type ViewState = {
     search: {

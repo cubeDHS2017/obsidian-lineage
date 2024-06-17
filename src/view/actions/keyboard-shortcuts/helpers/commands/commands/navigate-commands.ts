@@ -152,7 +152,7 @@ export const navigateCommands = () => {
                     type: 'NAVIGATION/NAVIGATE_BACK',
                 });
             },
-            hotkeys: [{ key: 'ArrowLeft', modifiers: ['Mod', 'Alt'] }],
+            hotkeys: [{ key: 'J', modifiers: ['Alt'] }],
         },
         {
             name: 'navigate_forward',
@@ -163,7 +163,37 @@ export const navigateCommands = () => {
                     type: 'NAVIGATION/NAVIGATE_FORWARD',
                 });
             },
-            hotkeys: [{ key: 'ArrowRight', modifiers: ['Mod', 'Alt'] }],
+            hotkeys: [{ key: 'K', modifiers: ['Alt'] }],
+        },
+        {
+            name: 'navigate_to_next_node',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                view.viewStore.dispatch({
+                    type: 'NAVIGATION/SELECT_NEXT_NODE',
+                    payload: {
+                        direction: 'forward',
+                        sections: view.documentStore.getValue().sections,
+                    },
+                });
+            },
+            hotkeys: [{ key: 'N', modifiers: [] }],
+        },
+        {
+            name: 'navigate_to_previous_node',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                view.viewStore.dispatch({
+                    type: 'NAVIGATION/SELECT_NEXT_NODE',
+                    payload: {
+                        direction: 'back',
+                        sections: view.documentStore.getValue().sections,
+                    },
+                });
+            },
+            hotkeys: [{ key: 'B', modifiers: [] }],
         },
     );
     return commands;
