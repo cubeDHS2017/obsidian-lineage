@@ -1,5 +1,5 @@
 import { jsonToSections } from 'src/lib/data-conversion/json-to-sections';
-import { outlineToJson } from 'src/lib/data-conversion/outilne-to-json';
+import { outlineToJson } from 'src/lib/data-conversion/outline-to-json';
 
 export const outlineToSections = (input: string): string => {
     const tree = outlineToJson(input);

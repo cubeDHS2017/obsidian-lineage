@@ -2,7 +2,7 @@ import { extractFrontmatter } from 'src/view/helpers/extract-frontmatter';
 import { sectionsToJson } from 'src/lib/data-conversion/sections-to-json';
 import { jsonToText } from 'src/lib/data-conversion/json-to-text';
 import { LineageDocumentFormat } from 'src/stores/settings/settings-type';
-import { outlineToJson } from 'src/lib/data-conversion/outilne-to-json';
+import { outlineToJson } from 'src/lib/data-conversion/outline-to-json';
 
 export const prepareExportedDocument = (
     fileData: string,
