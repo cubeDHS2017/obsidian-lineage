@@ -9,10 +9,10 @@ import { showViewContextMenu } from 'src/view/actions/context-menu/view-context-
 export const contextMenu = (element: HTMLElement, view: LineageView) => {
     const listener = (e: MouseEvent | TouchEvent) => {
         if (cardContextMenuPredicate(e)) {
-            if (e instanceof MouseEvent) showCardContextMenu(e, view);
+            if (e.instanceOf(MouseEvent)) showCardContextMenu(e, view);
             else showCardContextMenu(new MouseEvent('contextmenu', e), view);
         } else if (viewContextMenuPredicate(e)) {
-            if (e instanceof MouseEvent) showViewContextMenu(e, view);
+            if (e.instanceOf(MouseEvent)) showViewContextMenu(e, view);
             else showViewContextMenu(new MouseEvent('contextmenu', e), view);
         }
     };
