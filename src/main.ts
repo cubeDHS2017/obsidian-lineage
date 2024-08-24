@@ -1,5 +1,5 @@
 import { Plugin, WorkspaceLeaf } from 'obsidian';
-import { FILE_VIEW_TYPE, LineageView } from './view/view';
+import { LINEAGE_VIEW_TYPE, LineageView } from './view/view';
 import { setViewState } from 'src/obsidian/patches/set-view-state';
 import { around } from 'monkey-around';
 import {
@@ -51,7 +51,7 @@ export default class Lineage extends Plugin {
         );
         loadCustomIcons();
         this.registerView(
-            FILE_VIEW_TYPE,
+            LINEAGE_VIEW_TYPE,
             (leaf) => new LineageView(leaf, this),
         );
         this.registerPatches();

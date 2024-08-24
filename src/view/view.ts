@@ -29,7 +29,7 @@ import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/ma
 import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
 import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
 
-export const FILE_VIEW_TYPE = 'lineage';
+export const LINEAGE_VIEW_TYPE = 'lineage';
 
 export type DocumentStore = Store<DocumentState, DocumentStoreAction>;
 export type ViewStore = Store<ViewState, ViewStoreAction>;
@@ -111,7 +111,7 @@ export class LineageView extends TextFileView {
     }
 
     getViewType() {
-        return FILE_VIEW_TYPE;
+        return LINEAGE_VIEW_TYPE;
     }
 
     getIcon(): IconName {

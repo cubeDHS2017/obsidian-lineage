@@ -1,5 +1,5 @@
 import { ViewState } from 'obsidian';
-import { FILE_VIEW_TYPE } from 'src/view/view';
+import { LINEAGE_VIEW_TYPE } from 'src/view/view';
 import { fileViewTypeCache } from 'src/stores/settings/subscriptions/effects/update-file-view-type-cache';
 
 export function setViewState(next: (...params: unknown[]) => unknown) {
@@ -9,12 +9,12 @@ export function setViewState(next: (...params: unknown[]) => unknown) {
         const path = state?.state?.file;
         if (
             isMarkdownView &&
-            fileViewTypeCache[path]?.viewType === FILE_VIEW_TYPE &&
+            fileViewTypeCache[path]?.viewType === LINEAGE_VIEW_TYPE &&
             !state.state.inlineEditor
         ) {
             const newState = {
                 ...state,
-                type: FILE_VIEW_TYPE,
+                type: LINEAGE_VIEW_TYPE,
             };
 
             return next.apply(this, [newState, ...rest]);
