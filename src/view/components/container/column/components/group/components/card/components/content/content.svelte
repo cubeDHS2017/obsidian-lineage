@@ -13,7 +13,7 @@
 </script>
 
 <div
-    class={'preview-container markdown-preview-view markdown-preview-section '
+    class={'preview-container markdown-preview-view markdown-preview-section markdown-rendered'
        }
     on:click={onClick}
     use:markdownPreviewAction={nodeId}
