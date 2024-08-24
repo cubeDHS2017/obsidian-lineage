@@ -3,7 +3,7 @@ import { jsonToColumns } from 'src/lib/data-conversion/json-to-columns';
 import { ClipboardBranch } from 'src/stores/document/document-state-type';
 import { getBranch } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/get-branch';
 import { detectDocumentFormat } from 'src/lib/format-detection/detect-document-format';
-import { outlineToJson } from 'src/lib/data-conversion/outilne-to-json';
+import { outlineToJson } from 'src/lib/data-conversion/outline-to-json';
 
 export const textToBranches = (text: string) => {
     const detectedFormat = detectDocumentFormat(text, false);

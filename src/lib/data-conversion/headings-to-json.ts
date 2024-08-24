@@ -4,7 +4,7 @@ import {
     addNewNode,
     State,
     updateCurrentNode,
-} from 'src/lib/data-conversion/outilne-to-json';
+} from 'src/lib/data-conversion/outline-to-json';
 import { findHighestHeadingLevel } from 'src/lib/data-conversion/helpers/find-highest-heading-level';
 
 export const headingsToJson = (input: string): TreeNode[] => {

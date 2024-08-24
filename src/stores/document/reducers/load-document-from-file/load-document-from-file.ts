@@ -5,7 +5,7 @@ import { SavedDocument } from 'src/stores/document/document-store-actions';
 import { insertFirstNode } from 'src/lib/tree-utils/insert/insert-first-node';
 import invariant from 'tiny-invariant';
 import { LineageDocumentFormat } from 'src/stores/settings/settings-type';
-import { outlineToJson } from 'src/lib/data-conversion/outilne-to-json';
+import { outlineToJson } from 'src/lib/data-conversion/outline-to-json';
 
 export type LoadDocumentAction = {
     type: 'DOCUMENT/LOAD_FILE';
