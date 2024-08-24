@@ -31,8 +31,8 @@ export const keyboardShortcuts = (
                 updateCommandsDictionary(state.hotkeys);
         },
     );
-    const keyboardEventHandler = (event: Event) => {
-        if (!(event instanceof KeyboardEvent)) return;
+    const keyboardEventHandler = (event: UIEvent) => {
+        if (!(event.instanceOf(KeyboardEvent))) return;
         if (event.key === 'Escape') {
             const contain = handleEscapeKey(view);
             if (contain) return;
