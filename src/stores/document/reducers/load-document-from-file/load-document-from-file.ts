@@ -1,11 +1,12 @@
-import { jsonToColumns } from 'src/lib/data-conversion/json-to-columns';
-import { sectionsToJson } from 'src/lib/data-conversion/sections-to-json';
+import { jsonToColumns } from 'src/lib/data-conversion/json-to-x/json-to-columns';
+import { htmlCommentToJson } from 'src/lib/data-conversion/x-to-json/html-comment-to-json';
 import { DocumentState } from 'src/stores/document/document-state-type';
 import { SavedDocument } from 'src/stores/document/document-store-actions';
 import { insertFirstNode } from 'src/lib/tree-utils/insert/insert-first-node';
 import invariant from 'tiny-invariant';
 import { LineageDocumentFormat } from 'src/stores/settings/settings-type';
-import { outlineToJson } from 'src/lib/data-conversion/outline-to-json';
+import { outlineToJson } from 'src/lib/data-conversion/x-to-json/outline-to-json';
+import { htmlElementToJson } from 'src/lib/data-conversion/x-to-json/html-element-to-json';
 
 export type LoadDocumentAction = {
     type: 'DOCUMENT/LOAD_FILE';
@@ -23,7 +24,9 @@ export const loadDocumentFromFile = (
     const tree =
         action.payload.format === 'outline'
             ? outlineToJson(action.payload.document.data)
-            : sectionsToJson(action.payload.document.data);
+            : action.payload.format === 'html-element'
+              ? htmlElementToJson(action.payload.document.data)
+              : htmlCommentToJson(action.payload.document.data);
     const document = jsonToColumns(tree);
     state.document.columns = document.columns;
     state.document.content = document.content;

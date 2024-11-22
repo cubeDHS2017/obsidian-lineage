@@ -2,7 +2,7 @@ import { LineageView } from 'src/view/view';
 import { LineageDocumentFormat } from 'src/stores/settings/settings-type';
 import { detectDocumentFormat } from 'src/lib/format-detection/detect-document-format';
 import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/maybe-get-document-format';
-import { outlineToJson } from 'src/lib/data-conversion/outline-to-json';
+import { outlineToJson } from 'src/lib/data-conversion/x-to-json/outline-to-json';
 
 export const getOrDetectDocumentFormat = (
     view: LineageView,

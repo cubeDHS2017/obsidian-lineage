@@ -13,8 +13,9 @@ export const DefaultDocumentFormat = (
         const value = settingsState.general.defaultDocumentFormat;
 
         cb.addOptions({
-            sections: 'Sections',
-            outline: 'Outline (experimental)',
+            'html-element': 'HTML elements',
+            sections: 'HTML comments',
+            outline: 'Outline',
         } satisfies Record<LineageDocumentFormat, string>)
             .setValue(value)
             .onChange((value) => {

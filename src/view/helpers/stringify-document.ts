@@ -1,8 +1,9 @@
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { LineageDocumentFormat } from 'src/stores/settings/settings-type';
-import { columnsToJson } from 'src/lib/data-conversion/columns-to-json';
-import { jsonToSections } from 'src/lib/data-conversion/json-to-sections';
-import { jsonToOutline } from 'src/lib/data-conversion/json-to-outline';
+import { columnsToJson } from 'src/lib/data-conversion/x-to-json/columns-to-json';
+import { jsonToHtmlComment } from 'src/lib/data-conversion/json-to-x/json-to-html-comment';
+import { jsonToOutline } from 'src/lib/data-conversion/json-to-x/json-to-outline';
+import { jsonToHtmlElement } from 'src/lib/data-conversion/json-to-x/json-to-html-element';
 
 export const stringifyDocument = (
     document: LineageDocument,
@@ -11,5 +12,9 @@ export const stringifyDocument = (
     const json = columnsToJson(document.columns, document.content);
     if (format === 'outline') {
         return jsonToOutline(json);
-    } else return jsonToSections(json);
+    } else if (format === 'html-element') {
+        return jsonToHtmlElement(json);
+    } else {
+        return jsonToHtmlComment(json);
+    }
 };

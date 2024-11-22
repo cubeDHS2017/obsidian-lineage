@@ -29,7 +29,7 @@ export type DocumentBackup = {
     created: number;
 };
 
-export type LineageDocumentFormat = 'outline' | 'sections';
+export type LineageDocumentFormat = 'outline' | 'sections' | 'html-element';
 
 export type ViewType = 'lineage' | 'markdown';
 export type DocumentPreferences = {

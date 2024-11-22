@@ -1,14 +1,14 @@
-import { headingsToSections } from 'src/lib/data-conversion/headings-to-sections';
-import { paragraphsToSections } from 'src/lib/data-conversion/paragraphs-to-sections';
-import { outlineToSections } from 'src/lib/data-conversion/outline-to-sections';
+import { headingsToHtmlComment } from 'src/lib/data-conversion/x-to-html-comment/headings-to-html-comment';
+import { paragraphsToHtmlComment } from 'src/lib/data-conversion/x-to-html-comment/paragraphs-to-html-comment';
+import { outlineToHtmlComment } from 'src/lib/data-conversion/x-to-html-comment/outline-to-html-comment';
 import { SplitNodeMode } from 'src/stores/document/reducers/split-node/split-node';
 
 export const splitText = (text: string, mode: SplitNodeMode) => {
     if (mode === 'headings') {
-        return headingsToSections(text);
+        return headingsToHtmlComment(text);
     } else if (mode === 'paragraphs') {
-        return paragraphsToSections(text);
+        return paragraphsToHtmlComment(text);
     } else {
-        return outlineToSections(text);
+        return outlineToHtmlComment(text);
     }
 };
