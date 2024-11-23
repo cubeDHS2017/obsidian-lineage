@@ -7,6 +7,9 @@ span[data-section] {
     border-radius: 5px;
     opacity: 0.5;
 
+    position: absolute;
+    left: -80px;
+
     &:hover{
         opacity: 1;
     }

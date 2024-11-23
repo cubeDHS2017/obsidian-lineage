@@ -1,4 +1,4 @@
-export const htmlCommentRegex = /\s*<span data-section="((\d\.?)*(\d))"\s*\/>/;
+export const htmlCommentRegex = /<span data-section="((\d\.?)*(\d))"\s*\/>/;
 export const parseHtmlElementMarker = (line: string) => {
     const results = htmlCommentRegex.exec(line);
     if (results) {

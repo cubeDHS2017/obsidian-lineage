@@ -4,6 +4,8 @@ import { createHtmlElementMarker } from 'src/lib/data-conversion/helpers/html-el
 import { jsonToHtmlElement } from 'src/lib/data-conversion/json-to-x/json-to-html-element';
 import { ginkgo_welcome } from 'src/lib/data-conversion/test-data/ginkgo_welcome';
 import { ginkgo_academic_paper } from 'src/lib/data-conversion/test-data/ginkgo_acedemic_paper';
+import { html_element_conflicting_elements } from 'src/lib/data-conversion/test-data/html-element-conflicting-elements';
+import { htmlCommentToJson } from 'src/lib/data-conversion/x-to-json/html-comment-to-json';
 
 describe('json to html element', () => {
     it('case 1', () => {
@@ -14,9 +16,9 @@ describe('json to html element', () => {
             },
         ];
         const output = [
-            'one' + createHtmlElementMarker('', 1),
+            createHtmlElementMarker('', 1) + 'one',
             '',
-            'one > one' + createHtmlElementMarker('1', 1),
+            createHtmlElementMarker('1', 1) + 'one > one',
         ];
         expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
     });
@@ -46,17 +48,17 @@ describe('json to html element', () => {
             },
         ];
         const output = [
-            'one' + createHtmlElementMarker('', 1),
+            createHtmlElementMarker('', 1) + 'one',
             '',
-            'one > one' + createHtmlElementMarker('1', 1),
+            createHtmlElementMarker('1', 1) + 'one > one',
             '',
-            'one > one > one' + createHtmlElementMarker('1.1', 1),
+            createHtmlElementMarker('1.1', 1) + 'one > one > one',
             '',
-            'two' + createHtmlElementMarker('', 2),
+            createHtmlElementMarker('', 2) + 'two',
             '',
-            'two > one' + createHtmlElementMarker('2', 1),
+            createHtmlElementMarker('2', 1) + 'two > one',
             '',
-            'two > one > one' + createHtmlElementMarker('2.1', 1),
+            createHtmlElementMarker('2.1', 1) + 'two > one > one',
         ];
         expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
     });
@@ -72,16 +74,16 @@ describe('json to html element', () => {
         ];
 
         const output = [
-            '1a' + createHtmlElementMarker('', 1),
+            createHtmlElementMarker('', 1) + '1a',
             '1b',
             '',
-            '1.1a' + createHtmlElementMarker('1', 1),
+            createHtmlElementMarker('1', 1) + '1.1a',
             '1.1b',
             '',
-            '2a' + createHtmlElementMarker('', 2),
+            createHtmlElementMarker('', 2) + '2a',
             '2b',
             '',
-            '3' + createHtmlElementMarker('', 3),
+            createHtmlElementMarker('', 3) + '3',
         ];
         expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
     });
@@ -95,6 +97,14 @@ describe('json to html element', () => {
     it('ginkgo_academic_paper', () => {
         const { mdWithHtmlElement, json } = ginkgo_academic_paper;
         const actual = jsonToHtmlElement(json);
+
+        expect(actual).toEqual(mdWithHtmlElement);
+    });
+
+    it('htmlElementConflictingElements', () => {
+        const { mdWithHtmlElement, mdWithHtmlComment } =
+            html_element_conflicting_elements;
+        const actual = jsonToHtmlElement(htmlCommentToJson(mdWithHtmlComment));
 
         expect(actual).toEqual(mdWithHtmlElement);
     });

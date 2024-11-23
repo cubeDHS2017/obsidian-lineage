@@ -68,8 +68,8 @@ describe('html element to json', () => {
         const actual = htmlElementToJson(
             [
                 `text 1`,
-                `text 2 <span data-section="1"/>`,
-                'text 3 <span data-section="2"/>',
+                `<span data-section="1"/>text 2`,
+                '<span data-section="2"/>text 3',
             ].join('\n'),
         );
 
@@ -83,9 +83,9 @@ describe('html element to json', () => {
         ];
         const input = [
             `text 1`,
-            `text 2a <span data-section="1"/>`,
+            `<span data-section="1"/>text 2a`,
             'text 2b',
-            'text 3 <span data-section="2"/>',
+            '<span data-section="2"/>text 3',
         ].join('\n');
 
         const actual = htmlElementToJson(input);
@@ -94,15 +94,15 @@ describe('html element to json', () => {
     });
     it('bug 24-02-28', () => {
         const input = `
-text 1 <span data-section="1"/>
+<span data-section="1"/>text 1
 
-text 2 <span data-section="1.1"/>
+<span data-section="1.1"/>text 2
 
-text 3 <span data-section="1.1.1"/>
+<span data-section="1.1.1"/>text 3
 
-text 6 <span data-section="1.2"/>
+<span data-section="1.2"/>text 6
 
-text 7 <span data-section="2"/>`;
+<span data-section="2"/>text 7`;
         const output = [
             {
                 content: 'text 1',

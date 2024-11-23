@@ -34,22 +34,22 @@ describe('branch-to-html-element', () => {
             nodeId: n1,
             mode: 'copy',
         };
-        const text = `1a <span data-section="1"/>
+        const text = `<span data-section="1"/>1a
 1b
 
-1.1 <span data-section="1.1"/>
+<span data-section="1.1"/>1.1
 
-1.1.1 <span data-section="1.1.1"/>
+<span data-section="1.1.1"/>1.1.1
 
-1.1.2 <span data-section="1.1.2"/>
+<span data-section="1.1.2"/>1.1.2
 
-1.1.2.1 <span data-section="1.1.2.1"/>
+<span data-section="1.1.2.1"/>1.1.2.1
 
-1.2 <span data-section="1.2"/>
+<span data-section="1.2"/>1.2
 
-1.2.1 <span data-section="1.2.1"/>
+<span data-section="1.2.1"/>1.2.1
 
-1.2.2 <span data-section="1.2.2"/>`;
+<span data-section="1.2.2"/>1.2.2`;
         expect(branchToHtmlElement([branch])).toEqual(text);
     });
     test('multiple branches', () => {
@@ -89,17 +89,17 @@ describe('branch-to-html-element', () => {
                 mode: 'copy',
             },
         ] as ClipboardBranch[];
-        const text = `1 <span data-section="1"/>
+        const text = `<span data-section="1"/>1
 
-1.1 <span data-section="1.1"/>
+<span data-section="1.1"/>1.1
 
-1.2 <span data-section="1.2"/>
+<span data-section="1.2"/>1.2
 
-2 <span data-section="2"/>
+<span data-section="2"/>2
 
-2.1 <span data-section="2.1"/>
+<span data-section="2.1"/>2.1
 
-2.2 <span data-section="2.2"/>`;
+<span data-section="2.2"/>2.2`;
         expect(branchToHtmlElement(input)).toEqual(text);
     });
 });
