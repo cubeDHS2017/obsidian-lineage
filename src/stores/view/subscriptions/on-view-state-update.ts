@@ -35,6 +35,7 @@ export const onViewStateUpdate = (
         // this should be handled internally
         updateActiveBranch(viewStore, documentState);
         persistActiveNodeInPluginSettings(view);
+        view.minimapStore.setActiveCardId(viewState.document.activeNode);
     }
 
     if (

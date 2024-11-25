@@ -11,6 +11,7 @@
         Redo2 as RedoIcon,
         RotateCcw,
         Settings,
+        SquareGantt,
         Undo2 as UndoIcon
     } from 'lucide-svelte';
     import { getPlugin, getView } from '../context';
@@ -25,6 +26,7 @@
     import {
         getCombinedBoundingClientRect
     } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
+    import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -112,6 +114,13 @@
     const toggleShowControls = () => {
         showControls.update((v) => !v);
     };
+    const showMinimap = showMinimapStore(view);
+    const toggleMinimap = () => {
+        view.plugin.settings.dispatch({
+            type: 'VIEW/TOGGLE_MINIMAP',
+
+        });
+    };
 </script>
 
 <div class="controls-container">
@@ -148,6 +157,22 @@
         >
             <Keyboard class="svg-icon" />
         </Button>
+    </div>
+    <div
+        class="buttons-group buttons-group--vertical"
+        data-visible={$showControls}
+    >
+
+        <Button
+            active={$showMinimap}
+            class="control-item"
+            label={'Toggle minimap'}
+            on:click={toggleMinimap}
+            tooltipPosition="left"
+        >
+            <SquareGantt class="svg-icon" />
+        </Button>
+
     </div>
     <div
         class="buttons-group buttons-group--vertical"

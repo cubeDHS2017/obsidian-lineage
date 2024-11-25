@@ -40,6 +40,9 @@ export const onDocumentStateUpdate = (
     if (structuralChange) {
         setActiveNode(viewStore, documentState);
         updateActiveBranch(viewStore, documentState);
+        view.minimapStore.setActiveCardId(
+            viewStore.getValue().document.activeNode,
+        );
     }
 
     if (structuralChange && type !== 'DOCUMENT/MOVE_NODE') {
@@ -71,6 +74,7 @@ export const onDocumentStateUpdate = (
 
     if (e.content || structuralChange) {
         resetSearchFuse(documentStore);
+        view.minimapStore.setDocument(documentState.document);
     }
     if (structuralChange) {
         updateStatusBar(view);

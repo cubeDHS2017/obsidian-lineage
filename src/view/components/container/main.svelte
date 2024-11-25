@@ -10,10 +10,11 @@
     import Lineage from '../../../main';
     import { setContext } from 'svelte';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
-    import { scrollingModeStore } from 'src/stores/settings/derived/scrolling-store';
+    import { scrollingModeStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import ScrollingAxis from 'src/view/components/container/scrolling-axis/scrolling-axis.svelte';
     import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
+    import Minimap from './minimap/minimap.svelte';
 
     export let plugin: Lineage;
     export let view: LineageView;
@@ -21,37 +22,43 @@
     setContext('view', view);
     const controls = uiControlsStore(view);
     const scrollingMode = scrollingModeStore(view);
+    const showMinimap = showMinimapStore(view);
 </script>
 
-<div
-    class={`lineage-main`}
-    use:keyboardShortcuts={{ view }}
-    use:mouseWheelZoom={view}
->
-    <Container />
-    <Toolbar />
-    <Breadcrumbs />
-    <ControlsBar />
-    {#if $controls.showHistorySidebar}
-        <FileHistory />
-    {:else if $controls.showHelpSidebar}
-        <Hotkeys />
-    {:else if $controls.showSettingsSidebar}
-        <Settings />
-    {/if}
-    {#if $scrollingMode === 'fixed-position'}
-        <ScrollingAxis />
+<div class="lineage-view">
+    <div
+        class={`lineage-main`}
+        use:keyboardShortcuts={{ view }}
+        use:mouseWheelZoom={view}
+    >
+        <Container />
+        <Toolbar />
+        <Breadcrumbs />
+        <ControlsBar />
+        {#if $controls.showHistorySidebar}
+            <FileHistory />
+        {:else if $controls.showHelpSidebar}
+            <Hotkeys />
+        {:else if $controls.showSettingsSidebar}
+            <Settings />
+        {/if}
+        {#if $scrollingMode === 'fixed-position'}
+            <ScrollingAxis />
+        {/if}
+    </div>
+    {#if $showMinimap}
+        <Minimap />
     {/if}
 </div>
 
 <style>
     .lineage-main {
-
         --z-index-breadcrumbs: 10;
         background-color: var(--background-container);
         display: flex;
         height: 100%;
-        width: 100%;
+        flex: 1 1 auto;
+        width: 0; /* ensures it shrinks properly when the minimap is visible */
         position: relative;
     }
 
@@ -68,5 +75,11 @@
         & .node-border--selected {
             border-left-color: var(--lineage-color-selection-faint);
         }
+    }
+
+    .lineage-view {
+        display: flex;
+        height: 100%;
+        width: 100%;
     }
 </style>

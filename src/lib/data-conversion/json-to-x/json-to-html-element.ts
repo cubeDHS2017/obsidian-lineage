@@ -15,7 +15,7 @@ export const jsonToHtmlElement = (
 
         let content = node.content.trimStart();
 
-        if (content.startsWith('#')) {
+        if (content.match(/^#+ /)) {
             const headingLevel = content.match(/^#+/)?.[0];
             content = `${headingLevel} ${createHtmlElementMarker(parentNumber, index)}${content.slice(headingLevel!.length).trim()}`;
         } else if (content.startsWith('>')) {

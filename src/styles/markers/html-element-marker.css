@@ -1,6 +1,8 @@
 span[data-section] {
     color: var(--text-normal);
-    font-size: 14px;
+    font-size: 12px;
+    font-weight: normal;
+    line-height:var(--line-height-tight);
     background-color: var(--color-base-30);
     cursor: pointer;
     padding: 5px;
@@ -8,9 +10,10 @@ span[data-section] {
     opacity: 0.5;
 
     position: absolute;
-    left: -80px;
+    left: 0;
+    transform: translateX(calc(-100% - 50px)); /* Adjust dynamically based on width */
 
-    &:hover{
+    &:hover {
         opacity: 1;
     }
 }
@@ -19,4 +22,3 @@ span[data-section]::before {
     content: attr(data-section);
     color: var(--text-muted);
 }
-

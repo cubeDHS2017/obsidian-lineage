@@ -51,6 +51,7 @@ export type Settings = {
         scrolling: ScrollingSettings;
         limitPreviewHeight: boolean;
         zoomLevel: number;
+        showMinimap: boolean;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

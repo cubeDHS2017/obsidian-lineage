@@ -120,6 +120,9 @@ export type SettingsActions =
           payload: {
               format: LineageDocumentFormat;
           };
+      }
+    | {
+          type: 'VIEW/TOGGLE_MINIMAP';
       };
 
 export type PersistActiveNodeAction = {
@@ -190,6 +193,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         changeZoomLevel(store, action.payload);
     } else if (action.type === 'GENERAL/SET_DEFAULT_DOCUMENT_FORMAT') {
         store.general.defaultDocumentFormat = action.payload.format;
+    } else if (action.type === 'VIEW/TOGGLE_MINIMAP') {
+        store.view.showMinimap = !store.view.showMinimap;
     }
 };
 export const settingsReducer = (

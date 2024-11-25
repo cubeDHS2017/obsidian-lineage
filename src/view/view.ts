@@ -28,6 +28,7 @@ import { getOrDetectDocumentFormat } from 'src/obsidian/events/workspace/helpers
 import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/maybe-get-document-format';
 import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
 import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
+import { Minimap } from 'src/view/actions/minimap/minimap';
 
 export const LINEAGE_VIEW_TYPE = 'lineage';
 
@@ -38,6 +39,7 @@ export class LineageView extends TextFileView {
     component: Component;
     documentStore: DocumentStore;
     viewStore: ViewStore;
+    minimapStore: Minimap;
     container: HTMLElement | null;
     inlineEditor: InlineEditor;
     id: string;
@@ -58,6 +60,7 @@ export class LineageView extends TextFileView {
             viewReducer,
             this.onViewStoreError as OnError<ViewStoreAction>,
         );
+        this.minimapStore = new Minimap(this);
         this.id = id.view();
     }
 

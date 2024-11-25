@@ -16,3 +16,6 @@ export const verticalOffsetStore = (view: LineageView) =>
         view.plugin.settings,
         (state) => state.view.scrolling.verticalOffset,
     );
+
+export const showMinimapStore = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.showMinimap);

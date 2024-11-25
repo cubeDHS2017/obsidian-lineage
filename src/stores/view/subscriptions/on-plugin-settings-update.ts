@@ -40,7 +40,8 @@ export const onPluginSettingsUpdate = (
         type === 'UPDATE_AXIS_OFFSET' ||
         type === 'UI/CHANGE_ZOOM_LEVEL' ||
         type === 'SET_CARD_WIDTH' ||
-        type === 'SET_LIMIT_PREVIEW_HEIGHT';
+        type === 'SET_LIMIT_PREVIEW_HEIGHT' ||
+        type === 'VIEW/TOGGLE_MINIMAP';
     if (view.isActive && shouldAlign) {
         alignBranch(view, 'instant');
     }
