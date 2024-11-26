@@ -21,6 +21,7 @@ import {
 } from 'src/view/actions/minimap/worker-instances';
 import { WordBlock } from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
 import { IndentationLine } from 'src/view/actions/minimap/positioning/calculate-indentation-lines';
+import { createOnCanvasMousemove } from 'src/view/actions/minimap/event-handlers/create-on-canvas-mousemove';
 
 export type MinimapProps = {
     activeCardId: string;
@@ -114,8 +115,11 @@ export class Minimap {
         };
         const onWheel = (e: WheelEvent) => onCanvasWheel(e, this.view);
 
+        const onMousemove = createOnCanvasMousemove(this.view);
+
         canvas.addEventListener('click', onClick);
         container.addEventListener('wheel', onWheel);
+        container.addEventListener('mousemove', onMousemove);
 
         this.setDocument(this.view.documentStore.getValue().document);
         this.setActiveCardId(
@@ -124,6 +128,7 @@ export class Minimap {
         this.subscriptions.add(() => {
             canvas.removeEventListener('click', onClick);
             container.removeEventListener('wheel', onWheel);
+            container.removeEventListener('mousemove', onMousemove);
             drawMinimapWorker.run({
                 canvasId: this.state.canvasId,
                 event: 'destroy',
