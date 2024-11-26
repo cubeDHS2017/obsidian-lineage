@@ -1,17 +1,17 @@
 import { findCardAtPosition } from 'src/view/actions/minimap/event-handlers/helpers/find-card-at-position';
 import {
-    CANVAS_DOM_WIDTH,
-    N_PIXELS_OF_CANVAS,
+    CANVAS_WIDTH_CPX,
+    CANVAS_WIDTH_DPX,
 } from 'src/view/actions/minimap/constants';
 import { LineageView } from 'src/view/view';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 
 export const dpx_to_cpx = (px: number) =>
-    px * (N_PIXELS_OF_CANVAS / CANVAS_DOM_WIDTH);
+    px * (CANVAS_WIDTH_CPX / CANVAS_WIDTH_DPX);
 
 /** c stands for canvas, d stands for dom **/
 export const cpx_to_dpx = (px: number) =>
-    px * (CANVAS_DOM_WIDTH / N_PIXELS_OF_CANVAS);
+    px * (CANVAS_WIDTH_DPX / CANVAS_WIDTH_CPX);
 
 export const onCanvasClick = (e: MouseEvent, view: LineageView) => {
     const minimapStore = view.minimapStore;

@@ -18,16 +18,16 @@
     .minimap-container {
         position: relative;
         height: 100%;
-        width: 130px;
-        padding: 5px;
+        width: 184px;
+        padding: 4px;
         background: var(--background-primary);
         overflow: hidden;
         flex: 0 1 auto;
     }
 
     canvas {
-        width: 120px;
-        margin-right: 5px;
+        width: 176px;
+        margin-right: 4px;
         transition: transform 0.1s ease-out;
     }
 

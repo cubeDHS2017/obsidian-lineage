@@ -1,4 +1,7 @@
-import { N_PIXELS_OF_LINE_HEIGHT } from 'src/view/actions/minimap/constants';
+import {
+    CANVAS_WIDTH_CPX,
+    LINE_HEIGHT_CPX,
+} from 'src/view/actions/minimap/constants';
 import { debouncedRenderMinimap } from 'src/view/actions/minimap/render-minimap/render-minimap';
 import { debouncedUpdateScrollIndicator } from 'src/view/actions/minimap/scroll-indicator/update-scroll-indicator';
 import {
@@ -99,6 +102,7 @@ export class Minimap {
             '#scrollIndicator',
         ) as HTMLElement;
         const canvas = container.querySelector('canvas');
+        canvas.width = CANVAS_WIDTH_CPX;
         invariant(canvas);
         invariant(scrollIndicator);
         refreshMinimapTheme();
@@ -117,6 +121,7 @@ export class Minimap {
 
         const onMousemove = createOnCanvasMousemove(this.view);
 
+        this.view.contentEl.addClass('lineage-view__content-el--minimap-on');
         canvas.addEventListener('click', onClick);
         container.addEventListener('wheel', onWheel);
         container.addEventListener('mousemove', onMousemove);
@@ -141,6 +146,7 @@ export class Minimap {
             unsub();
         }
         this.props.dom = null;
+        this.view.contentEl.removeClass('lineage-view__content-el--minimap-on');
     }
 
     public async setDocument(lineageDocument: LineageDocument) {
@@ -160,8 +166,7 @@ export class Minimap {
             this.state.shapes.wordBlocks,
         );
 
-        this.state.totalDrawnHeight_cpx =
-            blocks.totalLines * N_PIXELS_OF_LINE_HEIGHT;
+        this.state.totalDrawnHeight_cpx = blocks.totalLines * LINE_HEIGHT_CPX;
         this.render();
     }
 

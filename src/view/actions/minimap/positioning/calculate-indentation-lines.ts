@@ -1,8 +1,8 @@
 import {
-    INDENT_BLOCK_TOTAL_WIDTH,
-    INDENT_BLOCK_WIDTH,
-    N_PIXELS_OF_LINE_GAP,
-    N_PIXELS_OF_LINE_HEIGHT,
+    INDENT_BLOCK_TOTAL_WIDTH_CPX,
+    INDENT_BLOCK_WIDTH_CPX,
+    LINE_GAP_CPX,
+    LINE_HEIGHT_CPX,
 } from 'src/view/actions/minimap/constants';
 import { WordBlock } from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
 
@@ -26,7 +26,7 @@ export const calculateIndentationLines = (wordBlocks: WordBlock[]) => {
 
     for (let i = 0; i < lineNumber_wordBlocks.length; i++) {
         const [lineNumber, lineWordBlocks] = lineNumber_wordBlocks[i];
-        const y = +lineNumber * N_PIXELS_OF_LINE_HEIGHT;
+        const y = +lineNumber * LINE_HEIGHT_CPX;
         const lineDepth = lineWordBlocks[0].depth;
         const next_lineNumber_WordBlocks = lineNumber_wordBlocks[i + 1];
         let lastLineOfCard = true;
@@ -38,15 +38,14 @@ export const calculateIndentationLines = (wordBlocks: WordBlock[]) => {
         }
 
         for (let depth = 0; depth < lineDepth; depth++) {
-            const x = depth * INDENT_BLOCK_TOTAL_WIDTH;
+            const x = depth * INDENT_BLOCK_TOTAL_WIDTH_CPX;
 
             lines.push({
                 x_px: x,
                 y_px: y,
                 height_px:
-                    N_PIXELS_OF_LINE_HEIGHT -
-                    (lastLineOfCard ? N_PIXELS_OF_LINE_GAP : 0),
-                width_px: INDENT_BLOCK_WIDTH,
+                    LINE_HEIGHT_CPX - (lastLineOfCard ? LINE_GAP_CPX : 0),
+                width_px: INDENT_BLOCK_WIDTH_CPX,
             });
         }
     }

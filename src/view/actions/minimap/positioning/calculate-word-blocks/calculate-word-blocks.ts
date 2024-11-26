@@ -1,11 +1,11 @@
 import { calculateWordPositions } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-word-positions';
 import {
-    INDENT_BLOCK_TOTAL_WIDTH,
+    CHAR_WIDTH_CPX,
+    INDENT_BLOCK_TOTAL_WIDTH_CPX,
+    LINE_GAP_CPX,
+    LINE_HEIGHT_CPX,
     N_CHARS_OF_INDENT,
     N_CHARS_PER_LINE,
-    N_PIXELS_OF_LINE_GAP,
-    N_PIXELS_OF_LINE_HEIGHT,
-    N_PIXELS_OF_WORD_CHAR,
 } from 'src/view/actions/minimap/constants';
 import { ExtendedTreeNode } from 'src/lib/data-conversion/x-to-json/columns-to-extended-json';
 
@@ -22,7 +22,7 @@ export type WordBlock = {
 
 const calculateWordBlocksOfCard = (
     node: ExtendedTreeNode,
-    state: { nextLineOffset: number; nextNodeIndex: number; depth: number },
+    state: { nextLineOffset: number; depth: number },
 ) => {
     const wordBlocks: WordBlock[] = [];
     const availableLineCharacters =
@@ -37,20 +37,17 @@ const calculateWordBlocksOfCard = (
             cardId: node.id,
             line: state.nextLineOffset + wordPos.lineNumber,
             depth: state.depth,
-            height_px: N_PIXELS_OF_LINE_HEIGHT - N_PIXELS_OF_LINE_GAP,
-            width_px: wordPos.lengthInChars * N_PIXELS_OF_WORD_CHAR,
+            height_px: LINE_HEIGHT_CPX - LINE_GAP_CPX,
+            width_px: wordPos.lengthInChars * CHAR_WIDTH_CPX,
             x_px:
-                state.depth * INDENT_BLOCK_TOTAL_WIDTH +
-                wordPos.xInChars * N_PIXELS_OF_WORD_CHAR,
-            y_px:
-                N_PIXELS_OF_LINE_HEIGHT *
-                (state.nextLineOffset + wordPos.lineNumber),
+                state.depth * INDENT_BLOCK_TOTAL_WIDTH_CPX +
+                wordPos.xInChars * CHAR_WIDTH_CPX,
+            y_px: LINE_HEIGHT_CPX * (state.nextLineOffset + wordPos.lineNumber),
             empty: wordPositions.empty,
         });
     }
 
-    state.nextLineOffset = state.nextLineOffset + wordPositions.totalLines + 1;
-    state.nextNodeIndex = state.nextNodeIndex + 1;
+    state.nextLineOffset = state.nextLineOffset + wordPositions.totalLines + 2;
 
     const currentDepth = state.depth;
     state.depth = currentDepth + 1;
@@ -69,7 +66,6 @@ export const calculateWordBlocks: (
     const wordBlocks: WordBlock[] = [];
     const state = {
         nextLineOffset: 0,
-        nextNodeIndex: 0,
         depth: 0,
     };
     for (const node of nodes) {

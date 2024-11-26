@@ -1,12 +1,13 @@
-export const CANVAS_DOM_WIDTH = 120;
-export const N_PIXELS_OF_CANVAS = 300;
-export const N_PIXELS_OF_WORD_CHAR = 10;
-export const N_PIXELS_OF_LINE_HEIGHT = 10;
-export const N_PIXELS_OF_LINE_GAP = 2;
-export const N_CHARS_PER_LINE = N_PIXELS_OF_CANVAS / N_PIXELS_OF_WORD_CHAR; // 30
+export const CANVAS_WIDTH_DPX = 176;
+export const CANVAS_WIDTH_CPX = CANVAS_WIDTH_DPX * 2;
+export const CHAR_WIDTH_CPX = 6;
+export const LINE_HEIGHT_CPX = 10;
+export const LINE_GAP_CPX = 4;
+export const N_CHARS_PER_LINE = CANVAS_WIDTH_CPX / CHAR_WIDTH_CPX; // 30
 export const N_CHARS_OF_INDENT = 2;
 export const N_CHARS_OF_SPACE = 1;
 
-export const INDENT_BLOCK_TOTAL_WIDTH = 10;
-export const INDENT_BLOCK_WIDTH = 8;
-export const INDENT_BLOCK_SPACE_WIDTH = 2;
+export const INDENT_BLOCK_TOTAL_WIDTH_CPX = CHAR_WIDTH_CPX;
+export const INDENT_BLOCK_WIDTH_CPX = 4;
+export const INDENT_BLOCK_SPACE_WIDTH_CPX =
+    INDENT_BLOCK_TOTAL_WIDTH_CPX - INDENT_BLOCK_WIDTH_CPX;
