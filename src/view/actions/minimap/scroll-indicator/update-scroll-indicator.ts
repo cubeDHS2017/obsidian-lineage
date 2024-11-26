@@ -43,5 +43,5 @@ const updateScrollIndicator = (
 
 export const debouncedUpdateScrollIndicator = debounce(
     updateScrollIndicator,
-    50,
+    16,
 );

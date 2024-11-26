@@ -20,10 +20,10 @@ export type WordBlock = {
     empty: boolean;
 };
 
-function calculateWordBlocksOfCard(
+const calculateWordBlocksOfCard = (
     node: ExtendedTreeNode,
     state: { nextLineOffset: number; nextNodeIndex: number; depth: number },
-) {
+) => {
     const wordBlocks: WordBlock[] = [];
     const availableLineCharacters =
         N_CHARS_PER_LINE - state.depth * N_CHARS_OF_INDENT;
@@ -60,9 +60,12 @@ function calculateWordBlocksOfCard(
     }
     state.depth = currentDepth;
     return wordBlocks;
-}
+};
 
-export const calculateWordBlocks = (nodes: ExtendedTreeNode[]) => {
+export type WordBlocksResult = { totalLines: number; wordBlocks: WordBlock[] };
+export const calculateWordBlocks: (
+    nodes: ExtendedTreeNode[],
+) => WordBlocksResult = (nodes: ExtendedTreeNode[]) => {
     const wordBlocks: WordBlock[] = [];
     const state = {
         nextLineOffset: 0,

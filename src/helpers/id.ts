@@ -7,4 +7,5 @@ export const id = {
     column: () => 'c' + nanoid(id_size),
     snapshot: () => 's' + nanoid(id_size),
     view: () => 'v' + nanoid(id_size),
+    canvas: () => 'canvas-' + nanoid(id_size),
 };

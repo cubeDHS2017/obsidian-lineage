@@ -1,5 +1,13 @@
 import { getTheme } from 'src/obsidian/helpers/get-theme';
 
+export type MinimapTheme = {
+    wordBlockEmptyInactive: string;
+    wordBlockEmptyActive: string;
+    wordBlockInactive: string;
+    indentLine: string;
+    wordBlockActive: string;
+};
+
 const themes = {
     dark: {
         wordBlockActive: '#999999',
@@ -17,10 +25,10 @@ const themes = {
     },
 };
 
-export const minimapColors = {
+export const minimapTheme = {
     current: themes.light,
 };
 
-export const updateMinimapColors = () => {
-    minimapColors.current = themes[getTheme()];
+export const refreshMinimapTheme = () => {
+    minimapTheme.current = themes[getTheme()];
 };

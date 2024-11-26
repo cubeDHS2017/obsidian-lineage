@@ -1,7 +1,3 @@
-import {
-    calculateWordBlocks,
-    WordBlock,
-} from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
 import { N_PIXELS_OF_LINE_HEIGHT } from 'src/view/actions/minimap/constants';
 import { debouncedRenderMinimap } from 'src/view/actions/minimap/render-minimap/render-minimap';
 import { debouncedUpdateScrollIndicator } from 'src/view/actions/minimap/scroll-indicator/update-scroll-indicator';
@@ -10,17 +6,21 @@ import {
     ExtendedTreeNode,
 } from 'src/lib/data-conversion/x-to-json/columns-to-extended-json';
 import { LineageDocument } from 'src/stores/document/document-state-type';
-import {
-    calculateIndentationLines,
-    IndentationLine,
-} from 'src/view/actions/minimap/positioning/calculate-indentation-lines';
-import { createYRangeMap } from 'src/view/actions/minimap/event-handlers/helpers/create-y-range-map';
 import { calculateScrollDeltaToActiveCard } from 'src/view/actions/minimap/scroll-indicator/calculate-scroll-delta-to-active-card';
 import invariant from 'tiny-invariant';
-import { updateMinimapColors } from 'src/view/actions/minimap/minimap-colors';
+import { refreshMinimapTheme } from 'src/view/actions/minimap/minimap-theme';
 import { onCanvasClick } from 'src/view/actions/minimap/event-handlers/on-canvas-click';
 import { onCanvasWheel } from 'src/view/actions/minimap/event-handlers/on-canvas-wheel';
 import { LineageView } from 'src/view/view';
+import { id } from 'src/helpers/id';
+import {
+    createYRangeMapWorker,
+    drawMinimapWorker,
+    lineIndentationWorker,
+    wordBlockWorker,
+} from 'src/view/actions/minimap/worker-instances';
+import { WordBlock } from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
+import { IndentationLine } from 'src/view/actions/minimap/positioning/calculate-indentation-lines';
 
 export type MinimapProps = {
     activeCardId: string;
@@ -40,6 +40,7 @@ export type MinimapState = {
     scrollPosition_cpx: number;
     totalDrawnHeight_cpx: number;
     totalLines: number;
+    canvasId: string;
     shapes: {
         wordBlocks: WordBlock[];
         indentationLines: IndentationLine[];
@@ -51,8 +52,8 @@ export type MinimapState = {
 
 export type MinimapDomElements = {
     canvas: HTMLCanvasElement;
-    ctx: CanvasRenderingContext2D;
     scrollIndicator: HTMLElement;
+    offscreen: OffscreenCanvas;
 };
 
 export class Minimap {
@@ -66,6 +67,7 @@ export class Minimap {
         scrollPosition_cpx: 0,
         totalDrawnHeight_cpx: 0,
         totalLines: 0,
+        canvasId: '',
         shapes: {
             wordBlocks: [],
             indentationLines: [],
@@ -98,14 +100,14 @@ export class Minimap {
         const canvas = container.querySelector('canvas');
         invariant(canvas);
         invariant(scrollIndicator);
-        const ctx = canvas.getContext('2d');
-        invariant(ctx);
-        updateMinimapColors();
+        refreshMinimapTheme();
+        const offscreen = canvas.transferControlToOffscreen();
         this.props.dom = {
-            ctx,
+            offscreen,
             canvas,
             scrollIndicator,
         };
+        this.state.canvasId = id.canvas();
 
         const onClick = (e: MouseEvent) => {
             onCanvasClick(e, this.view);
@@ -122,6 +124,10 @@ export class Minimap {
         this.subscriptions.add(() => {
             canvas.removeEventListener('click', onClick);
             container.removeEventListener('wheel', onWheel);
+            drawMinimapWorker.run({
+                canvasId: this.state.canvasId,
+                event: 'destroy',
+            });
         });
     }
 
@@ -132,21 +138,22 @@ export class Minimap {
         this.props.dom = null;
     }
 
-    public setDocument(lineageDocument: LineageDocument): void {
+    public async setDocument(lineageDocument: LineageDocument) {
         if (!this.enabled) return;
         const tree = columnsToExtendedJson(
             lineageDocument.columns,
             lineageDocument.content,
         );
-        const blocks = calculateWordBlocks(tree);
-
+        const blocks = await wordBlockWorker.run(tree);
         this.state.shapes.wordBlocks = blocks.wordBlocks;
         this.state.totalLines = blocks.totalLines;
-        this.state.shapes.indentationLines = calculateIndentationLines(
+        this.state.shapes.indentationLines = await lineIndentationWorker.run(
             blocks.wordBlocks,
         );
 
-        this.state.ranges.cards = createYRangeMap(this.state.shapes.wordBlocks);
+        this.state.ranges.cards = await createYRangeMapWorker.run(
+            this.state.shapes.wordBlocks,
+        );
 
         this.state.totalDrawnHeight_cpx =
             blocks.totalLines * N_PIXELS_OF_LINE_HEIGHT;

@@ -1,23 +1,35 @@
-import { drawIndentGuides } from 'src/view/actions/minimap/render-minimap/helpers/draw-indent-guides';
 import {
     MinimapDomElements,
     MinimapProps,
     MinimapState,
 } from 'src/view/actions/minimap/minimap';
 import { debounce } from 'obsidian';
-import { drawWordBlocks } from 'src/view/actions/minimap/render-minimap/helpers/draw-word-blocks';
+import { drawMinimapWorker } from 'src/view/actions/minimap/worker-instances';
+import { minimapTheme } from 'src/view/actions/minimap/minimap-theme';
 
-const renderMinimap = (
+// offscreen canvas can only be passed to a worker once
+const transferred: { [canvasId: string]: true } = {};
+
+const renderMinimap = async (
     state: MinimapState,
     props: MinimapProps,
     dom: MinimapDomElements,
-): void => {
-    dom.canvas.height = state.totalDrawnHeight_cpx;
-
-    dom.ctx.clearRect(0, 0, dom.canvas.width, dom.canvas.height);
-
-    drawIndentGuides(dom.ctx, state.shapes.indentationLines);
-    drawWordBlocks(dom.ctx, state.shapes.wordBlocks, props.activeCardId);
+) => {
+    if (!transferred[state.canvasId]) {
+        await drawMinimapWorker.run(
+            { canvas: dom.offscreen, canvasId: state.canvasId },
+            dom.offscreen,
+        );
+        transferred[state.canvasId] = true;
+    }
+    await drawMinimapWorker.run({
+        wordBlocks: state.shapes.wordBlocks,
+        activeCardId: props.activeCardId,
+        canvasId: state.canvasId,
+        canvasHeight: state.totalDrawnHeight_cpx,
+        lines: state.shapes.indentationLines,
+        theme: minimapTheme.current,
+    });
 };
 
-export const debouncedRenderMinimap = debounce(renderMinimap, 50);
+export const debouncedRenderMinimap = debounce(renderMinimap, 16);
