@@ -1,6 +1,8 @@
 import { MinimapTheme } from 'src/view/actions/minimap/minimap-theme';
 import { WordBlock } from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
 import { IndentationLine } from 'src/view/actions/minimap/positioning/calculate-indentation-lines';
+import { CardRange } from 'src/view/actions/minimap/minimap';
+import { LINE_HEIGHT_CPX } from 'src/view/actions/minimap/constants';
 
 export type DrawWordMinimapProps = {
     wordBlocks: WordBlock[];
@@ -9,6 +11,7 @@ export type DrawWordMinimapProps = {
     canvasHeight: number;
     lines: IndentationLine[];
     theme: MinimapTheme;
+    activeCardRange: CardRange;
 };
 
 export const drawMinimap = (
@@ -48,5 +51,19 @@ export const drawMinimap = (
         ctx.fillStyle = props.theme.indentLine;
         ctx.roundRect(line.x_px, line.y_px, line.width_px, line.height_px, 1);
         ctx.fill();
+    }
+
+    if (props.activeCardRange) {
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = props.theme.wordBlockActive;
+        ctx.fillRect(
+            0,
+            props.activeCardRange.y_start - LINE_HEIGHT_CPX,
+            canvas.width,
+            LINE_HEIGHT_CPX * 2 +
+                (props.activeCardRange.y_end - props.activeCardRange.y_start),
+        );
+
+        ctx.globalAlpha = 1.0;
     }
 };

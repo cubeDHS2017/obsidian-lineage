@@ -32,12 +32,13 @@ export type MinimapProps = {
     dom: MinimapDomElements | null;
 };
 
+export type CardRange = {
+    y_start: number;
+    y_end: number;
+    cardId: string;
+};
 export type CardRanges = {
-    [cardId: string]: {
-        y_start: number;
-        y_end: number;
-        cardId: string;
-    };
+    [cardId: string]: CardRange;
 };
 
 export type MinimapState = {

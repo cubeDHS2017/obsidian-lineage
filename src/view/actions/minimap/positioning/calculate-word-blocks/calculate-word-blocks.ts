@@ -30,7 +30,7 @@ const calculateWordBlocksOfCard = (
 ) => {
     const wordBlocks: WordBlock[] = [];
     const availableLineCharacters =
-        N_CHARS_PER_LINE - state.depth * N_CHARS_OF_INDENT;
+        N_CHARS_PER_LINE - state.depth * N_CHARS_OF_INDENT * 2;
     const wordPositions = calculateWordPositions(
         node.content,
         availableLineCharacters,
@@ -52,7 +52,7 @@ const calculateWordBlocksOfCard = (
         });
     }
 
-    state.nextLineOffset = state.nextLineOffset + wordPositions.totalLines + 2;
+    state.nextLineOffset = state.nextLineOffset + wordPositions.totalLines + 1;
 
     const currentDepth = state.depth;
     state.depth = currentDepth + 1;
@@ -70,11 +70,14 @@ export const calculateWordBlocks: (
 ) => WordBlocksResult = (nodes: ExtendedTreeNode[]) => {
     const wordBlocks: WordBlock[] = [];
     const state = {
-        nextLineOffset: 0,
+        nextLineOffset: 1, // keep an empty line at the start for card focus rectangle
         depth: 0,
     };
     for (const node of nodes) {
         wordBlocks.push(...calculateWordBlocksOfCard(node, state));
     }
-    return { wordBlocks, totalLines: state.nextLineOffset + 1 };
+    return {
+        wordBlocks,
+        totalLines: state.nextLineOffset + 2, // add an additional line for card focus rectangle
+    };
 };

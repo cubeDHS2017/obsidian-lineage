@@ -29,6 +29,7 @@ const renderMinimap = async (
         canvasHeight: state.totalDrawnHeight_cpx,
         lines: state.shapes.indentationLines,
         theme: minimapTheme.current,
+        activeCardRange: state.ranges.cards[props.activeCardId],
     });
 };
 

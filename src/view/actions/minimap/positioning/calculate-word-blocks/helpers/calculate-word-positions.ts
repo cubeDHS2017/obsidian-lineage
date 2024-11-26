@@ -136,10 +136,8 @@ export const calculateWordPositions = (
                         chunks[i + 1] === ' '
                     ) {
                         wrappingCharType = charType;
-                    }
-                    // temporary solution
-                    else if (chunk === '/') {
-                        wrappingCharType = charType;
+                    } else if (chunk === '/') {
+                        charType = null;
                     }
                 }
 
