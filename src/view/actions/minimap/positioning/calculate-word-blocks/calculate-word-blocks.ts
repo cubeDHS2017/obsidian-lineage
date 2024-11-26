@@ -1,4 +1,7 @@
-import { calculateWordPositions } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-word-positions';
+import {
+    calculateWordPositions,
+    ChunkType,
+} from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-word-positions';
 import {
     CHAR_WIDTH_CPX,
     INDENT_BLOCK_TOTAL_WIDTH_CPX,
@@ -18,6 +21,7 @@ export type WordBlock = {
     width_px: number;
     height_px: number;
     empty: boolean;
+    chunkType: ChunkType | null;
 };
 
 const calculateWordBlocksOfCard = (
@@ -44,6 +48,7 @@ const calculateWordBlocksOfCard = (
                 wordPos.xInChars * CHAR_WIDTH_CPX,
             y_px: LINE_HEIGHT_CPX * (state.nextLineOffset + wordPos.lineNumber),
             empty: wordPositions.empty,
+            chunkType: wordPos.chunkType,
         });
     }
 

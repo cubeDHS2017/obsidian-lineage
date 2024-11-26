@@ -24,12 +24,16 @@ export const drawMinimap = (
         if (isActive) {
             if (word.empty) {
                 ctx.fillStyle = props.theme.wordBlockEmptyActive;
+            } else if (word.chunkType) {
+                ctx.fillStyle = props.theme.chars.active[word.chunkType];
             } else {
                 ctx.fillStyle = props.theme.wordBlockActive;
             }
         } else {
             if (word.empty) {
                 ctx.fillStyle = props.theme.wordBlockEmptyInactive;
+            } else if (word.chunkType) {
+                ctx.fillStyle = props.theme.chars.inactive[word.chunkType];
             } else {
                 ctx.fillStyle = props.theme.wordBlockInactive;
             }

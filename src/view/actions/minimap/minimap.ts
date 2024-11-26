@@ -102,9 +102,9 @@ export class Minimap {
             '#scrollIndicator',
         ) as HTMLElement;
         const canvas = container.querySelector('canvas');
-        canvas.width = CANVAS_WIDTH_CPX;
         invariant(canvas);
         invariant(scrollIndicator);
+        canvas.width = CANVAS_WIDTH_CPX;
         refreshMinimapTheme();
         const offscreen = canvas.transferControlToOffscreen();
         this.props.dom = {
