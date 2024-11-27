@@ -30,6 +30,7 @@ const renderMinimap = async (
         lines: state.shapes.indentationLines,
         theme: minimapTheme.current,
         activeCardRange: state.ranges.cards[props.activeCardId],
+        isLightTheme: props.isLightTheme,
     });
 };
 

@@ -2,65 +2,53 @@ import { getTheme } from 'src/obsidian/helpers/get-theme';
 import { ChunkType } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-word-positions';
 
 export type MinimapTheme = {
-    wordBlockEmptyInactive: string;
-    wordBlockEmptyActive: string;
-    wordBlockInactive: string;
+    wordBlock: string;
     indentLine: string;
-    wordBlockActive: string;
-    chars: ThemeChunkColors;
-};
-type ChunkColors = {
-    [key in ChunkType]: string;
-};
-type ThemeChunkColors = {
-    inactive: ChunkColors;
-    active: ChunkColors;
-};
-
-const themeChunkColors: ThemeChunkColors = {
-    active: {
-        [ChunkType.highlight]: '#FFFF00', // yellow
-        [ChunkType.wikilink]: '#800080', // purple
-        [ChunkType.bold_italic]: '#FFC0CB', // pink
-        [ChunkType.heading]: '#008000', // green
-        [ChunkType.period]: '#ffffff', // blue
-        [ChunkType.bullet]: '#FFA500aa', // orange
-        [ChunkType.tag]: '#fb464c', // red
-        [ChunkType.other]: '#800080', // purple
-    },
-    inactive: {
-        [ChunkType.heading]: '#00800080', // green
-        [ChunkType.period]: '#ffffff70', // blue
-        [ChunkType.bullet]: '#FFA50080', // orange
-        [ChunkType.bold_italic]: '#FFC0CB80', // pink
-        [ChunkType.highlight]: '#FFFF0080', // yellow
-        [ChunkType.other]: '#80008080', // purple
-        [ChunkType.tag]: '#fb464c', // red
-        [ChunkType.wikilink]: '#800080', // purple
-    },
+    chars: {
+        [ChunkType.heading]: string;
+        [ChunkType.period]: string;
+        [ChunkType.bullet]: string;
+        [ChunkType.highlight]: string;
+        [ChunkType.bold_italic]: string;
+        [ChunkType.wikilink]: string;
+        [ChunkType.tag]: string;
+        [ChunkType.strikethrough]: string;
+    };
 };
 
 const themes = {
     dark: {
-        wordBlockActive: '#999999',
-        wordBlockInactive: '#99999966',
-        wordBlockEmptyActive: '#027affaa',
-        wordBlockEmptyInactive: '#027aff55',
+        wordBlock: '#999999aa',
         indentLine: 'rgba(83, 223, 221, 0.5)',
-        chars: themeChunkColors,
+        chars: {
+            [ChunkType.highlight]: '#e0de71', // obsidian yellow
+            [ChunkType.wikilink]: '#027aff', // obsidian blue
+            [ChunkType.bold_italic]: '#a882ff', // obsidian purple
+            [ChunkType.heading]: '#44cf6e', // obsidian green
+            [ChunkType.bullet]: '#fa99cd', // obsidian pink
+            [ChunkType.tag]: '#e9973f', // obsidian orange
+            [ChunkType.period]: '#ffffff', // white
+            [ChunkType.strikethrough]: '#fb464c', // obsidian red
+        },
     },
     light: {
-        wordBlockActive: '#70707099',
-        wordBlockInactive: '#70707050',
-        wordBlockEmptyActive: '#086dddaa',
-        wordBlockEmptyInactive: '#086ddd55',
-        indentLine: 'rgba(83, 223, 221, 0.7)',
-        chars: themeChunkColors,
+        wordBlock: '#707070cc',
+        indentLine: 'rgba(83, 223, 221,1)',
+        chars: {
+            [ChunkType.highlight]: '#e0ac00', // obsidian yellow
+            [ChunkType.wikilink]: '#086ddd', // obsidian blue
+            [ChunkType.bold_italic]: '#7852ee', // obsidian purple
+            [ChunkType.heading]: '#08b94e', // obsidian green
+            [ChunkType.bullet]: '#d53984', // obsidian pink
+            [ChunkType.tag]: '#ec7500', // obsidian orange
+            [ChunkType.period]: '#777', // gray
+            [ChunkType.strikethrough]: '#e93147', // obsidian red
+        },
     },
 };
 
 export const minimapTheme = {
-    current: themes.light,
+    current: themes.dark,
 };
 
 export const refreshMinimapTheme = () => {

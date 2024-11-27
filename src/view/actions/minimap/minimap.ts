@@ -25,11 +25,13 @@ import {
 import { WordBlock } from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
 import { IndentationLine } from 'src/view/actions/minimap/positioning/calculate-indentation-lines';
 import { createOnCanvasMousemove } from 'src/view/actions/minimap/event-handlers/create-on-canvas-mousemove';
+import { getTheme } from 'src/obsidian/helpers/get-theme';
 
 export type MinimapProps = {
     activeCardId: string;
     tree: ExtendedTreeNode[];
     dom: MinimapDomElements | null;
+    isLightTheme: boolean;
 };
 
 export type CardRange = {
@@ -66,6 +68,7 @@ export class Minimap {
         tree: [],
         activeCardId: '',
         dom: null,
+        isLightTheme: false,
     };
 
     private state: MinimapState = {
@@ -113,6 +116,7 @@ export class Minimap {
             canvas,
             scrollIndicator,
         };
+        this.props.isLightTheme = getTheme() === 'light';
         this.state.canvasId = id.canvas();
 
         const onClick = (e: MouseEvent) => {

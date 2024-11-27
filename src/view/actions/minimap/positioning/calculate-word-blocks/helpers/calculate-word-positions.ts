@@ -1,6 +1,6 @@
 import { splitLineIntoChunks } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/split-line-into-chunks';
 
-const chars = new Set(['#', '*', '-', '>', '/', '~', '[', ']', '.', '=']);
+const chars = new Set(['#', '*', '-' /*'>', '/' ,*/, '~', '[', ']', '.', '=']);
 
 export enum ChunkType {
     heading = 1,
@@ -10,7 +10,7 @@ export enum ChunkType {
     bold_italic = 5,
     wikilink = 6,
     tag = 8,
-    other = 9,
+    strikethrough = 9,
 }
 
 const chunksWithoutSpaces = new Set([
@@ -18,6 +18,7 @@ const chunksWithoutSpaces = new Set([
     ChunkType.highlight,
     ChunkType.bold_italic,
     ChunkType.wikilink,
+    ChunkType.strikethrough,
 ]);
 
 const charToChunkType: Record<string, ChunkType> = {
@@ -26,11 +27,13 @@ const charToChunkType: Record<string, ChunkType> = {
     '.': ChunkType.period,
     '=': ChunkType.highlight,
     '*': ChunkType.bold_italic,
-    '>': ChunkType.other,
-    '/': ChunkType.other,
-    '~': ChunkType.other,
     '[': ChunkType.wikilink,
     ']': ChunkType.wikilink,
+    '~': ChunkType.strikethrough,
+    /*
+    '>': ChunkType.other,
+    '/': ChunkType.other,
+    */
 };
 
 type WordPosition = {
@@ -97,9 +100,10 @@ export const calculateWordPositions = (
             } else {
                 const isChar = chars.has(chunk);
                 let charType = isChar ? charToChunkType[chunk] : null;
-                if (isChar) {
+                if (isChar && wrappingCharType !== ChunkType.heading) {
                     if (
                         (chunk === '=' && chunks[i + 1] === '=') ||
+                        (chunk === '~' && chunks[i + 1] === '~') ||
                         (chunk === '[' && chunks[i + 1] === '[') ||
                         // **text**
                         (chunk === '*' && chunks[i + 1] === '*') ||
@@ -130,14 +134,10 @@ export const calculateWordPositions = (
                         wrappingCharType = charType;
                     }
                     // bullet point
-                    else if (
-                        chunk === '-' &&
-                        i === 0 &&
-                        chunks[i + 1] === ' '
-                    ) {
-                        wrappingCharType = charType;
-                    } else if (chunk === '/') {
-                        charType = null;
+                    else if (chunk === '-') {
+                        if (i === 0 && chunks[i + 1] === ' ')
+                            wrappingCharType = charType;
+                        else charType = null;
                     }
                 }
 
