@@ -1,7 +1,7 @@
 import {
-    calculateWordPositions,
+    calculateChunkPositions,
     ChunkType,
-} from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-word-positions';
+} from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-chunk-positions';
 import {
     CHAR_WIDTH_CPX,
     INDENT_BLOCK_TOTAL_WIDTH_CPX,
@@ -31,24 +31,24 @@ const calculateWordBlocksOfCard = (
     const wordBlocks: WordBlock[] = [];
     const availableLineCharacters =
         N_CHARS_PER_LINE - state.depth * N_CHARS_OF_INDENT * 2;
-    const wordPositions = calculateWordPositions(
+    const wordPositions = calculateChunkPositions(
         node.content,
         availableLineCharacters,
     );
 
-    for (const wordPos of wordPositions.words) {
+    for (const wordPos of wordPositions.chunks) {
         wordBlocks.push({
             cardId: node.id,
-            line: state.nextLineOffset + wordPos.lineNumber,
+            line: state.nextLineOffset + wordPos.line,
             depth: state.depth,
             height_px: LINE_HEIGHT_CPX - LINE_GAP_CPX,
-            width_px: wordPos.lengthInChars * CHAR_WIDTH_CPX,
+            width_px: wordPos.length_chars * CHAR_WIDTH_CPX,
             x_px:
                 state.depth * INDENT_BLOCK_TOTAL_WIDTH_CPX +
-                wordPos.xInChars * CHAR_WIDTH_CPX,
-            y_px: LINE_HEIGHT_CPX * (state.nextLineOffset + wordPos.lineNumber),
+                wordPos.x_chars * CHAR_WIDTH_CPX,
+            y_px: LINE_HEIGHT_CPX * (state.nextLineOffset + wordPos.line),
             empty: wordPositions.empty,
-            chunkType: wordPos.chunkType,
+            chunkType: wordPos.type,
         });
     }
 

@@ -1,5 +1,5 @@
 import { getTheme } from 'src/obsidian/helpers/get-theme';
-import { ChunkType } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-word-positions';
+import { ChunkType } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-chunk-positions';
 
 export type MinimapTheme = {
     wordBlock: string;
@@ -23,12 +23,12 @@ const themes = {
         chars: {
             [ChunkType.highlight]: '#e0de71', // obsidian yellow
             [ChunkType.wikilink]: '#027aff', // obsidian blue
-            [ChunkType.bold_italic]: '#a882ff', // obsidian purple
+            [ChunkType.bold_italic]: '#fb464c', // obsidian red
             [ChunkType.heading]: '#44cf6e', // obsidian green
             [ChunkType.bullet]: '#fa99cd', // obsidian pink
             [ChunkType.tag]: '#e9973f', // obsidian orange
             [ChunkType.period]: '#ffffff', // white
-            [ChunkType.strikethrough]: '#fb464c', // obsidian red
+            [ChunkType.strikethrough]: '#a882ff', // obsidian purple
         },
     },
     light: {
@@ -37,12 +37,12 @@ const themes = {
         chars: {
             [ChunkType.highlight]: '#e0ac00', // obsidian yellow
             [ChunkType.wikilink]: '#086ddd', // obsidian blue
-            [ChunkType.bold_italic]: '#7852ee', // obsidian purple
+            [ChunkType.bold_italic]: '#e93147', // obsidian red
             [ChunkType.heading]: '#08b94e', // obsidian green
             [ChunkType.bullet]: '#d53984', // obsidian pink
             [ChunkType.tag]: '#ec7500', // obsidian orange
             [ChunkType.period]: '#777', // gray
-            [ChunkType.strikethrough]: '#e93147', // obsidian red
+            [ChunkType.strikethrough]: '#7852ee', // obsidian purple
         },
     },
 };
