@@ -13,6 +13,7 @@ export type DrawWordMinimapProps = {
     theme: MinimapTheme;
     activeCardRange: CardRange;
     isLightTheme: boolean;
+    searchResults: CardRange[];
 };
 
 export const drawMinimap = (
@@ -52,9 +53,9 @@ export const drawMinimap = (
         ctx.fill();
     }
 
+    ctx.globalAlpha = 0.3;
     if (props.activeCardRange) {
-        ctx.globalAlpha = 0.3;
-        ctx.fillStyle = props.theme.wordBlock;
+        ctx.fillStyle = props.theme.card_active;
         ctx.fillRect(
             0,
             props.activeCardRange.y_start - LINE_HEIGHT_CPX,
@@ -62,7 +63,18 @@ export const drawMinimap = (
             LINE_HEIGHT_CPX * 2 +
                 (props.activeCardRange.y_end - props.activeCardRange.y_start),
         );
-
-        ctx.globalAlpha = 1.0;
     }
+    if (props.searchResults.length > 0) {
+        ctx.fillStyle = props.theme.card_searchResult;
+        for (const card of props.searchResults) {
+            ctx.fillRect(
+                0,
+                card.y_start - LINE_HEIGHT_CPX,
+                canvas.width,
+                LINE_HEIGHT_CPX * 2 + (card.y_end - card.y_start),
+            );
+        }
+    }
+
+    ctx.globalAlpha = 1.0;
 };

@@ -30,7 +30,7 @@ const calculateWordBlocksOfCard = (
 ) => {
     const wordBlocks: WordBlock[] = [];
     const availableLineCharacters =
-        N_CHARS_PER_LINE - state.depth * N_CHARS_OF_INDENT * 2;
+        N_CHARS_PER_LINE - state.depth * N_CHARS_OF_INDENT;
     const wordPositions = calculateChunkPositions(
         node.content,
         availableLineCharacters,

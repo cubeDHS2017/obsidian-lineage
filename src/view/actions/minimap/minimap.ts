@@ -32,6 +32,7 @@ export type MinimapProps = {
     tree: ExtendedTreeNode[];
     dom: MinimapDomElements | null;
     isLightTheme: boolean;
+    searchResults: CardRange[];
 };
 
 export type CardRange = {
@@ -69,6 +70,7 @@ export class Minimap {
         activeCardId: '',
         dom: null,
         isLightTheme: false,
+        searchResults: [],
     };
 
     private state: MinimapState = {
@@ -185,6 +187,13 @@ export class Minimap {
     public setScrollPosition(cpx: number): void {
         this.state.scrollPosition_cpx = cpx;
         this.updateScrollIndicator();
+    }
+
+    public setSearchResults(searchResults: string[]) {
+        this.props.searchResults = searchResults.map((id) => {
+            return this.state.ranges.cards[id];
+        });
+        this.render();
     }
 
     private render(): void {

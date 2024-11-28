@@ -82,4 +82,12 @@ export const onViewStateUpdate = (
             alignBranch(view);
         }
     }
+    if (
+        action.type === 'SEARCH/SET_RESULTS' ||
+        action.type === 'SEARCH/TOGGLE_INPUT'
+    ) {
+        view.minimapStore.setSearchResults(
+            Array.from(viewState.search.results),
+        );
+    }
 };

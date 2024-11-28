@@ -4,6 +4,8 @@ import { ChunkType } from 'src/view/actions/minimap/positioning/calculate-word-b
 export type MinimapTheme = {
     wordBlock: string;
     indentLine: string;
+    card_active: string;
+    card_searchResult: string;
     chars: {
         [ChunkType.heading]: string;
         [ChunkType.period]: string;
@@ -18,8 +20,10 @@ export type MinimapTheme = {
 
 const themes = {
     dark: {
+        card_active: '#a9a9a9a',
+        card_searchResult: '#e0de71', // obsidian yellow
         wordBlock: '#999999aa',
-        indentLine: 'rgba(83, 223, 221, 0.5)',
+        indentLine: '#ffffff55',
         chars: {
             [ChunkType.highlight]: '#e0de71', // obsidian yellow
             [ChunkType.wikilink]: '#027aff', // obsidian blue
@@ -27,13 +31,15 @@ const themes = {
             [ChunkType.heading]: '#44cf6e', // obsidian green
             [ChunkType.bullet]: '#fa99cd', // obsidian pink
             [ChunkType.tag]: '#e9973f', // obsidian orange
-            [ChunkType.period]: '#ffffff', // white
+            [ChunkType.period]: '#ffffff88', // white
             [ChunkType.strikethrough]: '#a882ff', // obsidian purple
         },
     },
     light: {
         wordBlock: '#707070cc',
-        indentLine: 'rgba(83, 223, 221,1)',
+        card_active: '#aaaaaa',
+        card_searchResult: '#e0ac00', // obsidian yellow
+        indentLine: '#77777750',
         chars: {
             [ChunkType.highlight]: '#e0ac00', // obsidian yellow
             [ChunkType.wikilink]: '#086ddd', // obsidian blue
