@@ -3,12 +3,12 @@
     import Item from './breadcrumbs-item.svelte';
     import { activeBranchStore } from 'src/stores/view/derived/active-branch-store';
     import { documentContentStore } from 'src/stores/document/derived/content-store';
-    import { idSectionStore } from 'src/stores/document/derived/id-section-store';
+    import { IdSectionStore } from 'src/stores/document/derived/id-section-store';
 
     const view = getView();
     const activeBranch = activeBranchStore(view);
     const contents = documentContentStore(view);
-    const sections = idSectionStore(view)
+    const sections = IdSectionStore(view)
 </script>
 
 <div class="breadcrumbs-container">

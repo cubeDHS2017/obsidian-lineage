@@ -51,6 +51,18 @@ export const onViewMount = (view: LineageView) => {
         focusContainer(view);
         alignBranch(view, undefined, true);
     }
+    if (documentState.bookmarks.Ids.size === 0 && documentState.file.path) {
+        const documents = view.plugin.settings.getValue().documents;
+        const document = documents[documentState.file.path];
+        if (document.bookmarks && document.bookmarks.sections.length > 0) {
+            documentStore.dispatch({
+                type: 'BOOKMARKS/LOAD',
+                payload: {
+                    sections: document.bookmarks.sections,
+                },
+            });
+        }
+    }
     markUnresolvedLinks(view);
     applySettingsToView(view);
 };

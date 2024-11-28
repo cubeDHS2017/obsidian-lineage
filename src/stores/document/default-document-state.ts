@@ -24,4 +24,7 @@ export const defaultDocumentState = (): DocumentState => ({
             activeSection: '',
         },
     },
+    bookmarks: {
+        Ids: new Set(),
+    },
 });

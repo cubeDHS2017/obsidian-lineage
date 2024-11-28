@@ -123,6 +123,16 @@ export type SettingsActions =
       }
     | {
           type: 'VIEW/TOGGLE_MINIMAP';
+      }
+    | {
+          type: 'VIEW/TOGGLE_BOOKMARKS';
+      }
+    | {
+          type: 'BOOKMARKS/UPDATE';
+          payload: {
+              filePath: string;
+              sections: string[];
+          };
       };
 
 export type PersistActiveNodeAction = {
@@ -142,6 +152,9 @@ const updateState = (store: Settings, action: SettingsActions) => {
                 documentFormat: action.payload.format,
                 viewType: 'lineage',
                 activeSection: null,
+                bookmarks: {
+                    sections: [],
+                },
             };
         } else {
             store.documents[action.payload.path].documentFormat =
@@ -195,6 +208,16 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.general.defaultDocumentFormat = action.payload.format;
     } else if (action.type === 'VIEW/TOGGLE_MINIMAP') {
         store.view.showMinimap = !store.view.showMinimap;
+    } else if (action.type === 'VIEW/TOGGLE_BOOKMARKS') {
+        store.view.showBookmarks = !store.view.showBookmarks;
+    } else if (action.type === 'BOOKMARKS/UPDATE') {
+        const document = store.documents[action.payload.filePath];
+        if (!document.bookmarks) {
+            document.bookmarks = {
+                sections: [],
+            };
+        }
+        document.bookmarks.sections = action.payload.sections;
     }
 };
 export const settingsReducer = (

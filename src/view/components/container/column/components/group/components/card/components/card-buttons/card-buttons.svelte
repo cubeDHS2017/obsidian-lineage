@@ -4,11 +4,13 @@
     import EditNodeButton from './edit-node-button.svelte';
     import CreateCardButton from './create-card-button.svelte';
     import TreeIndex from './tree-index-button.svelte';
+    import BookmarkIndicator from './bookmark-indicator.svelte';
 
     export let editing: boolean;
     export let active: ActiveStatus | null;
-	export let nodeId: string
+    export let nodeId: string;
     export let section: string;
+    export let bookmarked: boolean;
 </script>
 
 {#if active === ActiveStatus.node}
@@ -16,8 +18,11 @@
         <CreateCardButton position="up" />
         <CreateCardButton position="right" />
         <CreateCardButton position="down" />
-        <DeleteNodeButton {nodeId}/>
+        <DeleteNodeButton {nodeId} />
     {/if}
     <EditNodeButton {editing} {nodeId} />
 {/if}
-    <TreeIndex activeStatus={active} {nodeId} {section}/>
+<TreeIndex activeStatus={active} {nodeId} {section} />
+{#if bookmarked}
+    <BookmarkIndicator />
+{/if}

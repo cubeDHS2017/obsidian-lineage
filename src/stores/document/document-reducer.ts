@@ -28,6 +28,10 @@ import { getIdOfSection } from 'src/stores/view/subscriptions/helpers/get-id-of-
 import { extractNode } from 'src/stores/document/reducers/extract-node/extract-node';
 import { getSectionOfId } from 'src/stores/view/subscriptions/helpers/get-section-of-id';
 import { splitNode } from 'src/stores/document/reducers/split-node/split-node';
+import { bookmarkNode } from 'src/stores/document/reducers/bookmarks/bookmark-node';
+import { removeNodeBookmark } from 'src/stores/document/reducers/bookmarks/remove-node-bookmark';
+import { refreshBookmarks } from 'src/stores/document/reducers/bookmarks/refresh-bookmarks';
+import { loadBookmarks } from 'src/stores/document/reducers/bookmarks/load-bookmarks';
 
 const updateDocumentState = (
     state: DocumentState,
@@ -106,6 +110,18 @@ const updateDocumentState = (
         affectedNodeId = action.payload.nodeId;
     } else if (action.type === 'FILE/UPDATE_FRONTMATTER') {
         state.file.frontmatter = action.payload.frontmatter;
+        return;
+    } else if (action.type === 'BOOKMARKS/ADD') {
+        bookmarkNode(state.bookmarks, action.payload.id);
+        return;
+    } else if (action.type === 'BOOKMARKS/REMOVE') {
+        removeNodeBookmark(state.bookmarks, action.payload.id);
+        return;
+    } else if (action.type === 'BOOKMARKS/REFRESH') {
+        refreshBookmarks(state.bookmarks, state.document.content);
+        return;
+    } else if (action.type === 'BOOKMARKS/LOAD') {
+        loadBookmarks(state.bookmarks, state.sections, action.payload.sections);
         return;
     }
 

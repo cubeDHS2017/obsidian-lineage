@@ -36,6 +36,9 @@ export type DocumentPreferences = {
     documentFormat: LineageDocumentFormat;
     viewType: ViewType;
     activeSection: string | null;
+    bookmarks: {
+        sections: string[];
+    } | null;
 };
 
 export type Settings = {
@@ -52,6 +55,7 @@ export type Settings = {
         limitPreviewHeight: boolean;
         zoomLevel: number;
         showMinimap: boolean;
+        showBookmarks: boolean;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

@@ -10,6 +10,7 @@ const sample: DocumentPreferences = {
     documentFormat: 'sections',
     viewType: 'lineage',
     activeSection: null,
+    bookmarks: null,
 };
 describe('filterObsoleteDocuments', () => {
     it('should return 0 if allFiles is empty', () => {

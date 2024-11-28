@@ -12,10 +12,11 @@
     import { searchStore } from 'src/stores/view/derived/search-store';
     import { NodeId } from 'src/stores/document/document-state-type';
     import { limitPreviewHeightStore } from 'src/stores/settings/derived/limit-preview-height-store';
-    import { idSectionStore } from 'src/stores/document/derived/id-section-store';
+    import { IdSectionStore } from 'src/stores/document/derived/id-section-store';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
     import { closeModalsWhenClickingOutside } from 'src/view/actions/close-modals-when-clicking-outside';
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
+    import { BookmarksStore } from 'src/stores/document/derived/bookmarks-store';
 
     const view = getView();
     const columns = columnsStore(view);
@@ -26,8 +27,9 @@
     const selectedNodes = selectedNodesStore(view);
     const editing = documentStateStore(view);
     const search = searchStore(view);
+    const bookmarks = BookmarksStore(view)
     const limitPreviewHeight = limitPreviewHeightStore(view);
-    const idSection = idSectionStore(view,);
+    const idSection = IdSectionStore(view,);
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
 
@@ -66,6 +68,7 @@
                 searching={$search.searching}
                 idSection={$idSection}
                 selectedNodes={$selectedNodes}
+                bookmarks={$bookmarks}
             />
         {/each}
         {#if $scrolling === 'fixed-position' || $scrolling === 'keep-active-card-at-center'}

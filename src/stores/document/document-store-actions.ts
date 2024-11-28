@@ -12,6 +12,10 @@ import { FormatHeadingsAction } from 'src/stores/document/reducers/content/forma
 import { PasteNodeAction } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
 import { ExtractNodeAction } from 'src/stores/document/reducers/extract-node/extract-node';
 import { SplitNodeAction } from 'src/stores/document/reducers/split-node/split-node';
+import { BookmakNodeAction } from 'src/stores/document/reducers/bookmarks/bookmark-node';
+import { RemoveNodeBookmarkAction } from 'src/stores/document/reducers/bookmarks/remove-node-bookmark';
+import { RefreshBookmarksAction } from 'src/stores/document/reducers/bookmarks/refresh-bookmarks';
+import { LoadBookmarksAction } from 'src/stores/document/reducers/bookmarks/load-bookmarks';
 
 export type VerticalDirection = 'up' | 'down';
 export type Direction = VerticalDirection | 'right';
@@ -50,7 +54,8 @@ export type DocumentAction =
           payload: {
               frontmatter: string;
           };
-      };
+      }
+    | BookmarkActions;
 
 export type HistoryAction = UndoRedoAction | SelectSnapshotAction;
 export type UndoableAction =
@@ -87,3 +92,9 @@ export type DocumentClipboardActions =
     | CopyNodeAction
     | PasteNodeAction
     | CutNodeAction;
+
+export type BookmarkActions =
+    | BookmakNodeAction
+    | RemoveNodeBookmarkAction
+    | RefreshBookmarksAction
+    | LoadBookmarksAction;

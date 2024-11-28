@@ -20,6 +20,7 @@ export type DocumentState = {
     };
 
     history: DocumentHistory;
+    bookmarks: DocumentBookmarks;
 };
 
 // document
@@ -82,4 +83,9 @@ export type History<T, U = undefined> = {
     items: T[];
     state: HistoryState;
     context: U;
+};
+
+// bookmarks
+export type DocumentBookmarks = {
+    Ids: Set<string>;
 };

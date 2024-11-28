@@ -14,6 +14,7 @@ import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-se
 import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { persistBookmarks } from 'src/stores/view/subscriptions/effects/persist-bookmarks';
 
 export const onDocumentStateUpdate = (
     view: LineageView,
@@ -43,6 +44,7 @@ export const onDocumentStateUpdate = (
         view.minimapStore.setActiveCardId(
             viewStore.getValue().document.activeNode,
         );
+        documentStore.dispatch({ type: 'BOOKMARKS/REFRESH' });
     }
 
     if (structuralChange && type !== 'DOCUMENT/MOVE_NODE') {
@@ -103,5 +105,13 @@ export const onDocumentStateUpdate = (
             type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
             delay,
         );
+    }
+
+    if (
+        type === 'BOOKMARKS/REFRESH' ||
+        type === 'BOOKMARKS/ADD' ||
+        type === 'BOOKMARKS/REMOVE'
+    ) {
+        persistBookmarks(view);
     }
 };

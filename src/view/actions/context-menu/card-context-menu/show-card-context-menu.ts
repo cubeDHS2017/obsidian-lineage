@@ -13,8 +13,8 @@ import { exportColumn } from 'src/view/actions/context-menu/card-context-menu/he
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const menu = new Menu();
 
-    const multipleNodesAreSelected =
-        view.viewStore.getValue().document.selectedNodes.size > 1;
+    const viewState = view.viewStore.getValue();
+    const multipleNodesAreSelected = viewState.document.selectedNodes.size > 1;
 
     menu.addItem((item) =>
         item
@@ -84,6 +84,22 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             }),
     );
 
+    menu.addSeparator();
+    const documentStore = view.documentStore;
+    const documentState = documentStore.getValue();
+    const activeNode = viewState.document.activeNode;
+    const isBookmarked = documentState.bookmarks.Ids.has(activeNode);
+    menu.addItem((item) =>
+        item
+            .setTitle(isBookmarked ? 'Remove from bookmarks' : 'Bookmark')
+            .setIcon(isBookmarked ? 'bookmark-minus' : 'bookmark-plus')
+            .onClick(() => {
+                documentStore.dispatch({
+                    type: isBookmarked ? 'BOOKMARKS/REMOVE' : 'BOOKMARKS/ADD',
+                    payload: { id: activeNode },
+                });
+            }),
+    );
     menu.addSeparator();
     menu.addItem((item) =>
         item

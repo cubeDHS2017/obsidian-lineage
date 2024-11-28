@@ -16,6 +16,7 @@
     export let disableEditConfirmation: boolean;
     export let searchQuery: string;
     export let searchResults: Set<string>;
+    export let bookmarks: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string, string>;
 
@@ -52,6 +53,7 @@
                         disableEditConfirmation}
                     section={idSection[node]}
                     selected={selectedNodes.has(node)}
+                    bookmarked={bookmarks.has(node)}
                 />
             {/if}
         {/each}
