@@ -20,4 +20,5 @@ export const lang = {
     error_parent_not_found: (full: string) =>
         `Could not find the parent section of ${full}`,
     import_from_gingko: 'Import from Gingko',
+    toggle_scrolling_mode: 'Toggle scrolling mode',
 };

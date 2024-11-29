@@ -14,7 +14,7 @@
         SquareGantt,
         Undo2 as UndoIcon
     } from 'lucide-svelte';
-    import { getPlugin, getView } from '../context';
+    import { getView } from '../context';
     import { historyStore } from 'src/stores/document/derived/history-store';
     import { Notice } from 'obsidian';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
@@ -26,7 +26,8 @@
     import {
         getCombinedBoundingClientRect
     } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
-    import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
+    import { ScrollSettingsStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
+    import { customIcons } from 'src/helpers/load-custom-icons';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -50,7 +51,6 @@
                 type: 'HISTORY/APPLY_PREVIOUS_SNAPSHOT',
             });
     };
-    const plugin = getPlugin();
 
     const toggleHelp = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_HELP_SIDEBAR' });
@@ -121,6 +121,13 @@
 
         });
     };
+    const toggleScrollMode = () => {
+        view.plugin.settings.dispatch({
+            type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE',
+        });
+    };
+
+    const scrollSettingsStore = ScrollSettingsStore(view);
 </script>
 
 <div class="controls-container">
@@ -162,7 +169,15 @@
         class="buttons-group buttons-group--vertical"
         data-visible={$showControls}
     >
-
+        <Button
+            active={$scrollSettingsStore.horizontalScrollingMode==="keep-active-card-at-center"}
+            class="control-item"
+            label={lang.toggle_scrolling_mode}
+            on:click={toggleScrollMode}
+            tooltipPosition="left"
+        >
+            {@html customIcons.align.svg}
+        </Button>
         <Button
             active={$showMinimap}
             class="control-item"

@@ -1,32 +1,27 @@
 import { SettingsStore } from 'src/main';
 import { Setting } from 'obsidian';
-import { ScrollingMode } from 'src/stores/settings/settings-type';
 
 export const ScrollingBehavior = (
     element: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
     const settingsState = settingsStore.getValue();
-    const setting = new Setting(element).setName('Scrolling behavior');
+    const setting = new Setting(element)
+        .setName('Scroll to reveal child cards')
+        .setDesc(
+            "Applicable when scrolling mode is set to 'reveal active card'",
+        );
 
-    setting.addDropdown((cb) => {
-        const value = settingsState.view.scrolling.horizontalScrollingMode;
-
-        cb.addOptions({
-            'reveal-active-card': 'Reveal active card',
-            'reveal-active-card-and-direct-child':
-                'Reveal active card and its children',
-            'keep-active-card-at-center': 'Keep active card in the center',
-            'fixed-position': 'Keep active card in a fixed position',
-        } satisfies Record<ScrollingMode, string>)
-            .setValue(value)
-            .onChange((mode) => {
+    setting.addToggle((tg) => {
+        tg.setValue(settingsState.view.scrolling.revealChildren).onChange(
+            (v) => {
                 settingsStore.dispatch({
-                    type: 'SET_HORIZONTAL_SCROLLING_MODE',
+                    type: 'VIEW/SCROLLING/SET_REVEAL_CHILDREN',
                     payload: {
-                        mode: mode as ScrollingMode,
+                        reveal: v,
                     },
                 });
-            });
+            },
+        );
     });
 };

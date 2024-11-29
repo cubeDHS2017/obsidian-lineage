@@ -7,7 +7,6 @@ import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-v
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
-import { Notice } from 'obsidian';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -36,19 +35,13 @@ export const onPluginSettingsUpdate = (
     }
 
     const shouldAlign =
-        type === 'SET_HORIZONTAL_SCROLLING_MODE' ||
-        type === 'UPDATE_AXIS_OFFSET' ||
         type === 'UI/CHANGE_ZOOM_LEVEL' ||
         type === 'SET_CARD_WIDTH' ||
         type === 'SET_LIMIT_PREVIEW_HEIGHT' ||
-        type === 'VIEW/TOGGLE_MINIMAP';
+        type === 'VIEW/TOGGLE_MINIMAP' ||
+        type === 'VIEW/SCROLLING/SET_REVEAL_CHILDREN' ||
+        type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE';
     if (view.isActive && shouldAlign) {
         alignBranch(view, 'instant');
-    }
-    if (
-        type === 'SET_HORIZONTAL_SCROLLING_MODE' &&
-        state.view.scrolling.horizontalScrollingMode === 'fixed-position'
-    ) {
-        if (view.isActive) new Notice('Hold space to change card position');
     }
 };

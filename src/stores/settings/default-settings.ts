@@ -11,9 +11,8 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         theme: {},
         cardWidth: DEFAULT_CARD_WIDTH,
         scrolling: {
-            horizontalOffset: 0,
-            verticalOffset: 0,
-            horizontalScrollingMode: 'keep-active-card-at-center',
+            revealChildren: false,
+            horizontalScrollingMode: 'reveal-active-card',
         },
         limitPreviewHeight: true,
         zoomLevel: 1,

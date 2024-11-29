@@ -11,13 +11,13 @@ export const renderSettings = (element: HTMLElement) => {
     const view = getView();
     const settingsStore = view.plugin.settings;
     const render = () => {
+        DefaultDocumentFormat(element, settingsStore);
         BackgroundColor(element, settingsStore);
         ActiveBranchColor(element, settingsStore);
         FontSize(element, settingsStore);
         CardWidth(element, settingsStore);
         LimitCardHeight(element, settingsStore);
         ScrollingBehavior(element, settingsStore);
-        DefaultDocumentFormat(element, settingsStore);
     };
     render();
     return {

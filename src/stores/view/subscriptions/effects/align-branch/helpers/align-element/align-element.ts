@@ -47,11 +47,7 @@ export const alignElement = (
         }
 
         if (mode === 'vertical' || mode === 'both') {
-            const scrollTop = calculateScrollTop(
-                elementRect,
-                containerRect,
-                settings.view.scrolling,
-            );
+            const scrollTop = calculateScrollTop(elementRect, containerRect);
             if (Math.abs(scrollTop) > THRESHOLD)
                 column.scrollBy({
                     top: scrollTop * -1,

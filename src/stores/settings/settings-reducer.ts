@@ -2,7 +2,6 @@ import {
     CustomHotkeys,
     DocumentPreferences,
     LineageDocumentFormat,
-    ScrollingMode,
     Settings,
     ViewType,
 } from './settings-type';
@@ -76,16 +75,12 @@ export type SettingsActions =
           };
       }
     | {
-          type: 'SET_HORIZONTAL_SCROLLING_MODE';
-          payload: {
-              mode: ScrollingMode;
-          };
+          type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE';
       }
     | {
-          type: 'UPDATE_AXIS_OFFSET';
+          type: 'VIEW/SCROLLING/SET_REVEAL_CHILDREN';
           payload: {
-              relativeClientX: number;
-              relativeClientY: number;
+              reveal: boolean;
           };
       }
     | {
@@ -185,11 +180,6 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.cardWidth = action.payload.width;
     } else if (action.type === 'SET_MIN_CARD_HEIGHT') {
         store.view.minimumCardHeight = action.payload.height;
-    } else if (action.type === 'SET_HORIZONTAL_SCROLLING_MODE') {
-        store.view.scrolling.horizontalScrollingMode = action.payload.mode;
-    } else if (action.type === 'UPDATE_AXIS_OFFSET') {
-        store.view.scrolling.horizontalOffset = action.payload.relativeClientX;
-        store.view.scrolling.verticalOffset = action.payload.relativeClientY;
     } else if (action.type === 'SET_LIMIT_PREVIEW_HEIGHT') {
         store.view.limitPreviewHeight = action.payload.limit;
     } else if (action.type === 'BACKUP/ADD_FILE') {
@@ -218,6 +208,20 @@ const updateState = (store: Settings, action: SettingsActions) => {
             };
         }
         document.bookmarks.sections = action.payload.sections;
+    } else if (action.type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE') {
+        store.view.scrolling.horizontalScrollingMode =
+            store.view.scrolling.horizontalScrollingMode ===
+            'reveal-active-card'
+                ? 'keep-active-card-at-center'
+                : 'reveal-active-card';
+        store.view.scrolling = {
+            ...store.view.scrolling,
+        };
+    } else if (action.type === 'VIEW/SCROLLING/SET_REVEAL_CHILDREN') {
+        store.view.scrolling.revealChildren = action.payload.reveal;
+        store.view.scrolling = {
+            ...store.view.scrolling,
+        };
     }
 };
 export const settingsReducer = (

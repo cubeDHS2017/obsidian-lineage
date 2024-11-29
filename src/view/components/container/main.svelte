@@ -10,8 +10,7 @@
     import Lineage from '../../../main';
     import { setContext } from 'svelte';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
-    import { scrollingModeStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
-    import ScrollingAxis from 'src/view/components/container/scrolling-axis/scrolling-axis.svelte';
+    import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
     import Minimap from './minimap/minimap.svelte';
@@ -21,7 +20,7 @@
     setContext('plugin', plugin);
     setContext('view', view);
     const controls = uiControlsStore(view);
-    const scrollingMode = scrollingModeStore(view);
+
     const showMinimap = showMinimapStore(view);
 </script>
 
@@ -42,9 +41,7 @@
         {:else if $controls.showSettingsSidebar}
             <Settings />
         {/if}
-        {#if $scrollingMode === 'fixed-position'}
-            <ScrollingAxis />
-        {/if}
+
     </div>
     {#if $showMinimap}
         <Minimap />

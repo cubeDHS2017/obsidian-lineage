@@ -6,6 +6,7 @@ import { toggleFileViewType } from 'src/obsidian/events/workspace/effects/toggle
 import { customIcons } from 'src/helpers/load-custom-icons';
 import { getActiveFile } from 'src/obsidian/commands/helpers/get-active-file';
 import { createLineageDocument } from 'src/obsidian/events/workspace/effects/create-lineage-document';
+import { getActiveLineageView } from 'src/obsidian/commands/helpers/get-active-lineage-view';
 
 const createCommands = (plugin: Lineage) => {
     const commands: Omit<Command, 'id'>[] = [];
@@ -28,6 +29,19 @@ const createCommands = (plugin: Lineage) => {
         name: lang.create_new_document,
         icon: customIcons.cards.name,
         callback: () => createLineageDocument(plugin),
+    });
+
+    commands.push({
+        name: lang.toggle_scrolling_mode,
+        icon: customIcons.align.name,
+        checkCallback: (checking) => {
+            if (checking) {
+                return Boolean(getActiveLineageView(plugin));
+            }
+            plugin.settings.dispatch({
+                type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE',
+            });
+        },
     });
 
     return commands;

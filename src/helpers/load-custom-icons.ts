@@ -26,10 +26,16 @@ const split: Icon = {
     mode: 'stroke',
 };
 
-export const customIcons = { cards, split };
+const align: Icon = {
+    name: 'lineage-align',
+    svg: `<g> <rect width="20" height="12" x="2" y="6" rx="2"/> <line x1="12" y1="0" x2="12" y2="24" stroke-dasharray="4 3" /></g> `,
+    mode: 'stroke',
+};
+export const customIcons = { cards, split, align };
 
 export const loadCustomIcons = () => {
     for (const icon of Object.values(customIcons)) {
-        addIcon(icon.name, svgWrapper(icon.svg, icon.mode));
+        icon.svg = svgWrapper(icon.svg, icon.mode);
+        addIcon(icon.name, icon.svg);
     }
 };

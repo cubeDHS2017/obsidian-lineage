@@ -4,7 +4,7 @@
     import { scrollOnDndX } from 'src/view/actions/dnd/scroll-on-dnd-x';
     import { columnsStore } from 'src/stores/document/derived/columns-store';
     import ColumnsBuffer from './buffers/columns-buffer.svelte';
-    import { scrollingModeStore } from 'src/stores/settings/derived/scrolling-store';
+    import { ScrollSettingsStore } from 'src/stores/settings/derived/scrolling-store';
     import { dndStore } from 'src/stores/view/derived/dnd-store';
     import { activeBranchStore } from 'src/stores/view/derived/active-branch-store';
     import { activeNodeStore } from 'src/stores/view/derived/active-node-store';
@@ -20,25 +20,23 @@
 
     const view = getView();
     const columns = columnsStore(view);
-    const scrolling = scrollingModeStore(view);
+    const scrolling = ScrollSettingsStore(view);
     const dnd = dndStore(view);
     const activeBranch = activeBranchStore(view);
     const activeNode = activeNodeStore(view);
     const selectedNodes = selectedNodesStore(view);
     const editing = documentStateStore(view);
     const search = searchStore(view);
-    const bookmarks = BookmarksStore(view)
+    const bookmarks = BookmarksStore(view);
     const limitPreviewHeight = limitPreviewHeightStore(view);
-    const idSection = IdSectionStore(view,);
+    const idSection = IdSectionStore(view);
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
-
 </script>
 
 <div
     class={'columns-container ' +
-        ($scrolling === 'fixed-position' ||
-        $scrolling === 'keep-active-card-at-center'
+        ($scrolling.horizontalScrollingMode === 'keep-active-card-at-center'
             ? 'hide-scrollbars'
             : '') +
         ($limitPreviewHeight ? ' limit-card-height' : '')}
@@ -46,11 +44,10 @@
     tabindex="0"
     use:closeModalsWhenClickingOutside={view}
     use:contextMenu={view}
-
     use:scrollOnDndX
 >
     <div class="columns">
-        {#if $scrolling === 'fixed-position' || $scrolling === 'keep-active-card-at-center'}
+        {#if  $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
             <ColumnsBuffer />
         {/if}
         {#each $columns as column (column.id)}
@@ -71,7 +68,7 @@
                 bookmarks={$bookmarks}
             />
         {/each}
-        {#if $scrolling === 'fixed-position' || $scrolling === 'keep-active-card-at-center'}
+        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
             <ColumnsBuffer />
         {:else}
             <div style="min-width: 50px;min-height: 10px"></div>
