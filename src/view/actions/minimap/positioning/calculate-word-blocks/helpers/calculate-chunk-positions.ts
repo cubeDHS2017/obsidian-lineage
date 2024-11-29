@@ -7,6 +7,7 @@ export enum ChunkType {
     wikilink = 'wikilink',
     tag = 'tag',
     strikethrough = 'strikethrough',
+    task = 'task',
 }
 
 export enum Category {
@@ -53,6 +54,7 @@ type State = {
     previousType: ChunkType | null;
     isSpace: boolean;
     isAfterOpeningElement: boolean;
+    lineType: ChunkType | null;
 };
 
 const abbrevRegex =
@@ -83,12 +85,14 @@ export const calculateChunkPositions = (
         category: null,
         isSpace: false,
         isAfterOpeningElement: false,
+        lineType: null,
     };
 
     for (let i = 0; i < content.length; i++) {
         const chunk = content[i];
         if (chunk === '\n') {
             state.line++;
+            state.lineType = null;
             state.x = 0;
             if (
                 state.category === Category.full_line ||
@@ -142,20 +146,27 @@ export const calculateChunkPositions = (
                     (nextChunk === ' ' || nextChunk === '#')
                 ) {
                     state.category = Category.full_line;
+                    state.lineType = state.type;
                 }
                 // tag
                 else if (chunk === '#') {
+                    // switch from "heading" to "tag"
                     state.type = ChunkType.tag;
                     state.category = Category.block_without_space;
                 }
 
                 // bullet point
-                else if (chunk === '-') {
-                    if (state.x === 0 && nextChunk === ' ') {
-                        state.category = Category.full_line_container;
-                    } else {
-                        state.type = state.previousType;
+                else if (chunk === '-' && state.x === 0) {
+                    state.category = Category.full_line_container;
+                    if (
+                        nextChunk === ' ' &&
+                        content[i + 2] === '[' &&
+                        content[i + 4] === ']'
+                    ) {
+                        // switch from "bullet" to "task"
+                        state.type = ChunkType.task;
                     }
+                    state.lineType = state.type;
                 } else if (chunk === '.') {
                     const previousChunk =
                         (content[i - 3] || '') +
@@ -171,14 +182,20 @@ export const calculateChunkPositions = (
                     ) {
                         state.category = Category.single_character;
                     } else {
-                        state.type = null;
+                        state.type = state.previousType;
                     }
+                } else {
+                    state.type = state.previousType;
                 }
             }
         }
         if (state.x + 1 > availableLineCharacters) {
             state.line++;
             state.x = 0;
+            state.lineType = null;
+        } else if (!state.type && state.lineType) {
+            // fallback to heading/task/bullet point types
+            state.type = state.lineType;
         }
         if (state.line !== state.previousLine) {
             state.chunk.length_chars = state.chunk.chunk.length;
@@ -204,7 +221,7 @@ export const calculateChunkPositions = (
                 line: state.line,
                 x_chars: state.x + 1,
                 length_chars: -1,
-                type: null,
+                type: state.type,
             };
             state.isSpace = false;
             state.category = null;

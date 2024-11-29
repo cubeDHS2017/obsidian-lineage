@@ -1027,6 +1027,111 @@ describe('calculate-chunk-position', () => {
         const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
         expect(actual).toEqual(output);
     });
+
+    test('case: single special character ', () => {
+        const input = `- [99-07-12 17:28] Set "created" to "1999-06-12T08:38"`;
+        const output = {
+            chunks: [
+                {
+                    chunk: '- [99-07-12 17:28] Set "created" to "1999-06-12T08:38"',
+                    line: 0,
+                    x_chars: 0,
+                    length_chars: 54,
+                    type: 'bullet',
+                },
+            ],
+            totalLines: 1,
+            empty: false,
+        };
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        expect(actual).toEqual(output);
+    });
+
+    test('case: tasks', () => {
+        const input = [
+            `- [x] task 1 #important text. text`,
+            '- [ ] task 2 [[attachment]] #medium',
+            'description.',
+        ].join('\n');
+        const output = {
+            chunks: [
+                {
+                    chunk: '- [x] task 1 ',
+                    line: 0,
+                    x_chars: 0,
+                    length_chars: 13,
+                    type: 'task',
+                },
+                {
+                    chunk: '#important',
+                    line: 0,
+                    x_chars: 13,
+                    length_chars: 10,
+                    type: 'tag',
+                },
+                {
+                    chunk: 'text',
+                    line: 0,
+                    x_chars: 24,
+                    length_chars: 4,
+                    type: 'task',
+                },
+                {
+                    chunk: '.',
+                    line: 0,
+                    x_chars: 28,
+                    length_chars: 1,
+                    type: 'period',
+                },
+                {
+                    chunk: 'text',
+                    line: 0,
+                    x_chars: 30,
+                    length_chars: 4,
+                    type: 'task',
+                },
+                {
+                    chunk: '- [ ] task 2 ',
+                    line: 1,
+                    x_chars: 0,
+                    length_chars: 13,
+                    type: 'task',
+                },
+                {
+                    chunk: '[[attachment]]',
+                    line: 1,
+                    x_chars: 13,
+                    length_chars: 14,
+                    type: 'wikilink',
+                },
+                {
+                    chunk: '#medium',
+                    line: 1,
+                    x_chars: 28,
+                    length_chars: 7,
+                    type: 'tag',
+                },
+                {
+                    chunk: 'description',
+                    line: 2,
+                    x_chars: 0,
+                    length_chars: 11,
+                    type: null,
+                },
+                {
+                    chunk: '.',
+                    line: 2,
+                    x_chars: 11,
+                    length_chars: 1,
+                    type: 'period',
+                },
+            ],
+            totalLines: 3,
+            empty: false,
+        };
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        expect(actual).toEqual(output);
+    });
 });
 
 describe('performance-test: calculate-chunk-position', () => {

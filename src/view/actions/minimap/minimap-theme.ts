@@ -15,6 +15,7 @@ export type MinimapTheme = {
         [ChunkType.wikilink]: string;
         [ChunkType.tag]: string;
         [ChunkType.strikethrough]: string;
+        [ChunkType.task]: string;
     };
 };
 
@@ -33,6 +34,7 @@ const themes = {
             [ChunkType.tag]: '#e9973f', // obsidian orange
             [ChunkType.period]: '#ffffff88', // white
             [ChunkType.strikethrough]: '#a882ff', // obsidian purple
+            [ChunkType.task]: '#17e7e0', // cyan
         },
     },
     light: {
@@ -49,6 +51,7 @@ const themes = {
             [ChunkType.tag]: '#ec7500', // obsidian orange
             [ChunkType.period]: '#777', // gray
             [ChunkType.strikethrough]: '#7852ee', // obsidian purple
+            [ChunkType.task]: '#17e7e0', // cyan
         },
     },
 };
