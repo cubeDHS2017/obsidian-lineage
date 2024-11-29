@@ -12,6 +12,7 @@ import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variab
 import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
 import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-initial-active-node';
 import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links';
+import { attachHoverPreviewListener } from 'src/stores/view/subscriptions/effects/attach-hover-preview-listener';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -65,4 +66,5 @@ export const onViewMount = (view: LineageView) => {
     }
     markUnresolvedLinks(view);
     applySettingsToView(view);
+    attachHoverPreviewListener(view);
 };
