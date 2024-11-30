@@ -3,7 +3,7 @@ import { formatText } from 'src/view/actions/markdown-preview/helpers/format-tex
 import { generateLoremIpsumWithMarkdown } from 'src/helpers/test-helpers/generate-lorem-ipsum-with.markdown';
 
 describe('format-text', () => {
-    test('case 1', () => {
+    test('case 1: empty line', () => {
         const input = ['text', '', 'text'].join('\n');
         const output = ['text', '&nbsp;', 'text'].join('\n');
 
@@ -57,13 +57,59 @@ describe('format-text', () => {
         const actual = formatText(input);
         expect(actual).toEqual(output);
     });
+
+    test('case 4: has obsidian comments', () => {
+        const input = [
+            'text',
+            '%% text % %%',
+            '> text',
+            '%% start %',
+            'end %%',
+            '% text %',
+            '',
+        ].join('\n');
+        const output = [
+            'text',
+            '<div class="cm-comment">%% text % %%</div>',
+            '> text',
+            '<div class="cm-comment">%% start %',
+            'end %%</div>',
+            '% text %',
+            '&nbsp;',
+        ].join('\n');
+
+        const actual = formatText(input);
+        expect(actual).toEqual(output);
+    });
+
+    test('case 5: has html comments', () => {
+        const input = [
+            '<!-- text -->',
+            '> text',
+            '<!-- start',
+            'end -->',
+            '% text %',
+            '',
+        ].join('\n');
+        const output = [
+            '<div class="cm-comment">&lt;!-- text --&gt;</div>',
+
+            '> text',
+            '<div class="cm-comment">&lt;!-- start\nend --&gt;</div>',
+            '% text %',
+            '&nbsp;',
+        ].join('\n');
+
+        const actual = formatText(input);
+        expect(actual).toEqual(output);
+    });
 });
 
 describe('performance-test: format-text', () => {
     test('performance: n iterations of random markdown text', () => {
         const loremIpsumLength = 10000;
 
-        const texts = Array.from({ length: 1 }).map(() => {
+        const texts = Array.from({ length: 10 }).map(() => {
             return generateLoremIpsumWithMarkdown(loremIpsumLength);
         });
         // eslint-disable-next-line no-console

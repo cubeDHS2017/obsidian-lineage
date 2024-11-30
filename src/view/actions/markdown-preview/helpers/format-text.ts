@@ -16,10 +16,24 @@ const applyNbsp = (text: string) => {
 };
 
 export const formatText = (text: string) => {
-    text = text.replace(
-        /\s+(\^[a-zA-Z0-9]{4,})$/gm,
-        ' <sup class="cm-blockid" data-block-id="$1">$1</sup>',
-    );
+    if (/\s+(\^[a-zA-Z0-9]{4,})$/.test(text)) {
+        text = text.replace(
+            /\s+(\^[a-zA-Z0-9]{4,})$/gm,
+            ' <sup class="cm-blockid" data-block-id="$1">$1</sup>',
+        );
+    }
+    if (/%%/.test(text)) {
+        text = text.replace(/(%%.*?%%)/gms, '<div class="cm-comment">$1</div>');
+    }
+    if (/<!--/.test(text)) {
+        text = text.replace(
+            /<!--(.*?)-->/gms,
+            '<div class="cm-comment">&lt;!--$1--&gt;</div>',
+        );
+    }
 
-    return applyNbsp(text);
+    if (/^\s*$/gm.test(text)) {
+        text = applyNbsp(text);
+    }
+    return text;
 };
