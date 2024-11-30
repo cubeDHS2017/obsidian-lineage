@@ -1,6 +1,7 @@
 import { MarkdownRenderer } from 'obsidian';
 import { getPlugin, getView } from 'src/view/components/container/context';
 import { contentStore } from 'src/stores/document/derived/content-store';
+import { formatText } from 'src/view/actions/markdown-preview/helpers/format-text';
 
 export const markdownPreviewAction = (element: HTMLElement, nodeId: string) => {
     const plugin = getPlugin();
@@ -10,14 +11,8 @@ export const markdownPreviewAction = (element: HTMLElement, nodeId: string) => {
     const render = (content: string) => {
         if (view && element) {
             element.empty();
-            // insert `&nbsp;` in empty lines
             if (content.length > 0) {
-                const hasCallout = /^> /gm.test(content);
-                if (!hasCallout) content = content.replace(/^$/gm, '&nbsp;');
-                content = content.replace(
-                    /\s+(\^[a-zA-Z0-9]{4,})$/gm,
-                    '<sup class="cm-blockid" data-block-id="$1">$1</sup>',
-                );
+                content = formatText(content);
             }
             MarkdownRenderer.render(
                 plugin.app,
