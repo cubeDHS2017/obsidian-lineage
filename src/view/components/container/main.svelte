@@ -14,13 +14,13 @@
     import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
     import Minimap from './minimap/minimap.svelte';
+    import { dragToPan } from 'src/view/actions/drag-to-pan/drag-to-pan';
 
     export let plugin: Lineage;
     export let view: LineageView;
     setContext('plugin', plugin);
     setContext('view', view);
     const controls = uiControlsStore(view);
-
     const showMinimap = showMinimapStore(view);
 </script>
 
@@ -29,6 +29,7 @@
         class={`lineage-main`}
         use:keyboardShortcuts={{ view }}
         use:mouseWheelZoom={view}
+        use:dragToPan="{view}"
     >
         <Container />
         <Toolbar />

@@ -13,19 +13,22 @@
     export let editing: boolean;
     export let disableEditConfirmation: boolean;
     export let selected: boolean;
+    const view = getView();
     // eslint-disable-next-line no-undef
     const setActive = (e: MouseEvent) => {
-        if (!editing)
-            viewStore.dispatch({
-                type: 'DOCUMENT/SET_ACTIVE_NODE',
-                payload: { id: nodeId },
-                context:{
-                    modKey: isMacLike ? e.metaKey : e.ctrlKey,
-                    source: "mouse"
-                }
-            });
+        if (editing) return;
+        const cursor = view.container!.style.cursor;
+        if (cursor === 'grab') return;
+
+        viewStore.dispatch({
+            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            payload: { id: nodeId },
+            context: {
+                modKey: isMacLike ? e.metaKey : e.ctrlKey,
+                source: 'mouse',
+            },
+        });
     };
-    const view = getView();
     const documentStore = view.documentStore;
     const viewStore = view.viewStore;
 
@@ -82,7 +85,6 @@
         font-size: 16px;
         --scrollbar-thumb-bg: var(--color-base-30);
         --scrollbar-active-thumb-bg: var(--color-base-40);
-
     }
     .lineage-card::-webkit-scrollbar {
         display: initial;
