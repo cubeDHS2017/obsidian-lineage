@@ -16,6 +16,7 @@ import { BookmakNodeAction } from 'src/stores/document/reducers/bookmarks/bookma
 import { RemoveNodeBookmarkAction } from 'src/stores/document/reducers/bookmarks/remove-node-bookmark';
 import { RefreshBookmarksAction } from 'src/stores/document/reducers/bookmarks/refresh-bookmarks';
 import { LoadBookmarksAction } from 'src/stores/document/reducers/bookmarks/load-bookmarks';
+import { RefreshGroupParentIdsAction } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
 
 export type VerticalDirection = 'up' | 'down';
 export type Direction = VerticalDirection | 'right';
@@ -55,7 +56,8 @@ export type DocumentAction =
               frontmatter: string;
           };
       }
-    | BookmarkActions;
+    | BookmarkActions
+    | MetaActions;
 
 export type HistoryAction = UndoRedoAction | SelectSnapshotAction;
 export type UndoableAction =
@@ -98,3 +100,5 @@ export type BookmarkActions =
     | RemoveNodeBookmarkAction
     | RefreshBookmarksAction
     | LoadBookmarksAction;
+
+export type MetaActions = RefreshGroupParentIdsAction;

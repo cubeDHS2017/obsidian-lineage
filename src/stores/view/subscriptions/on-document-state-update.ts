@@ -45,6 +45,7 @@ export const onDocumentStateUpdate = (
             viewStore.getValue().document.activeNode,
         );
         documentStore.dispatch({ type: 'BOOKMARKS/REFRESH' });
+        documentStore.dispatch({ type: 'META/REFRESH_GROUP_PARENT_IDS' });
     }
 
     if (structuralChange && type !== 'DOCUMENT/MOVE_NODE') {

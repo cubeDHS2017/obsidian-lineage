@@ -19,7 +19,7 @@
     export let bookmarks: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string, string>;
-
+    export let groupParentIds: Set<string>;
     const view = getView();
     const nodes = nodesStore(view, columnId, groupId);
 </script>
@@ -47,7 +47,8 @@
                               ? ActiveStatus.sibling
                               : null}
                     editing={editedNode === node}
-                    hasChildren={activeChildGroups.size > 0}
+                    hasActiveChildren={activeChildGroups.size > 0}
+                    hasChildren={groupParentIds.has(node)}
                     parentId={groupId}
                     disableEditConfirmation={editedNode === node &&
                         disableEditConfirmation}

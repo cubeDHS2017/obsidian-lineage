@@ -32,6 +32,7 @@ import { bookmarkNode } from 'src/stores/document/reducers/bookmarks/bookmark-no
 import { removeNodeBookmark } from 'src/stores/document/reducers/bookmarks/remove-node-bookmark';
 import { refreshBookmarks } from 'src/stores/document/reducers/bookmarks/refresh-bookmarks';
 import { loadBookmarks } from 'src/stores/document/reducers/bookmarks/load-bookmarks';
+import { refreshGroupParentIds } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
 
 const updateDocumentState = (
     state: DocumentState,
@@ -122,6 +123,9 @@ const updateDocumentState = (
         return;
     } else if (action.type === 'BOOKMARKS/LOAD') {
         loadBookmarks(state.bookmarks, state.sections, action.payload.sections);
+        return;
+    } else if (action.type === 'META/REFRESH_GROUP_PARENT_IDS') {
+        refreshGroupParentIds(state.document.columns, state.meta);
         return;
     }
 

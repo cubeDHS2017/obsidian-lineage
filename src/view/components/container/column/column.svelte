@@ -16,6 +16,7 @@
     export let searchQuery: string;
     export let searchResults: Set<string>;
     export let bookmarks: Set<string>;
+    export let groupParentIds: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string,string>;
 
@@ -42,6 +43,7 @@
                 {idSection}
                 {selectedNodes}
                 {bookmarks}
+                {groupParentIds}
             />
         {/if}
     {/each}

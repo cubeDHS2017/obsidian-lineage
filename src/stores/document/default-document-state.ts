@@ -27,4 +27,7 @@ export const defaultDocumentState = (): DocumentState => ({
     bookmarks: {
         Ids: new Set(),
     },
+    meta: {
+        groupParentIds: new Set(),
+    },
 });

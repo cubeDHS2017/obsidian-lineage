@@ -69,4 +69,5 @@ export const onViewMount = (view: LineageView) => {
     applySettingsToView(view);
     attachHoverPreviewListener(view);
     attachWheelScrollListener(view);
+    documentStore.dispatch({ type: 'META/REFRESH_GROUP_PARENT_IDS' });
 };

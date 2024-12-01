@@ -16,6 +16,7 @@
     export let nodeId: string;
     export let activeStatus: ActiveStatus | null;
     export let section: string;
+    export let hasChildren: boolean;
 
     // eslint-disable-next-line no-undef
     const openFile = async () => {
@@ -51,6 +52,11 @@
     on:click={openFile}
 >
     {section}
+    {#if hasChildren}
+       <span class="has-children">
+           •
+       </span>
+    {/if}
 </div>
 
 <style>
@@ -72,5 +78,11 @@
 
     .is-active-parent {
         opacity: 0.6;
+    }
+
+    .has-children{
+        position: absolute;
+        bottom: 0.5px;
+        right: -7px;
     }
 </style>

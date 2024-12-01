@@ -11,6 +11,7 @@
     export let nodeId: string;
     export let section: string;
     export let bookmarked: boolean;
+    export let hasChildren: boolean;
 </script>
 
 {#if active === ActiveStatus.node}
@@ -22,7 +23,7 @@
     {/if}
     <EditNodeButton {editing} {nodeId} />
 {/if}
-<TreeIndex activeStatus={active} {nodeId} {section} />
+<TreeIndex activeStatus={active} {nodeId} {section} {hasChildren}/>
 {#if bookmarked}
     <BookmarkIndicator />
 {/if}

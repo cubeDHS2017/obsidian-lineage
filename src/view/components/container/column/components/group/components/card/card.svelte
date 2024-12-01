@@ -11,6 +11,7 @@
     export let node: NodeId;
     export let editing: boolean;
     export let active: ActiveStatus | null;
+    export let hasActiveChildren: boolean;
     export let hasChildren: boolean;
     export let parentId: string;
     export let disableEditConfirmation: boolean
@@ -19,7 +20,7 @@
     export let bookmarked: boolean;
 </script>
 
-<Droppable {active}{disableEditConfirmation} {editing} {hasChildren} nodeId={node} {parentId} {selected}>
+<Droppable {active} {disableEditConfirmation} {editing} {hasActiveChildren} nodeId={node} {parentId} {selected}>
     {#if active===ActiveStatus.node && editing}
         <InlineEditor nodeId={node} />
     {:else}
@@ -27,7 +28,7 @@
             <Content nodeId={node} />
         </Draggable>
     {/if}
-    <CardButtons {active} {editing} nodeId={node} {section} {bookmarked}/>
+    <CardButtons {active} {editing} nodeId={node} {section} {bookmarked} {hasChildren}/>
 </Droppable>
 
 

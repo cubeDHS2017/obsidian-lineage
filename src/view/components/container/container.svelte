@@ -17,6 +17,7 @@
     import { closeModalsWhenClickingOutside } from 'src/view/actions/close-modals-when-clicking-outside';
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
     import { BookmarksStore } from 'src/stores/document/derived/bookmarks-store';
+    import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
 
     const view = getView();
     const columns = columnsStore(view);
@@ -32,6 +33,7 @@
     const idSection = IdSectionStore(view);
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
+    const groupParentIds = GroupParentIdsStore(view);
 </script>
 
 <div
@@ -47,7 +49,7 @@
     use:scrollOnDndX
 >
     <div class="columns">
-        {#if  $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
+        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
             <ColumnsBuffer />
         {/if}
         {#each $columns as column (column.id)}
@@ -66,6 +68,7 @@
                 idSection={$idSection}
                 selectedNodes={$selectedNodes}
                 bookmarks={$bookmarks}
+                groupParentIds={$groupParentIds}
             />
         {/each}
         {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}

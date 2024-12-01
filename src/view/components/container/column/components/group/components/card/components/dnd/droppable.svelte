@@ -8,7 +8,7 @@
 
     export let nodeId: string;
     export let active: ActiveStatus | null;
-    export let hasChildren: boolean;
+    export let hasActiveChildren: boolean;
     export let parentId: string;
     export let editing: boolean;
     export let disableEditConfirmation: boolean;
@@ -68,7 +68,7 @@
     use:droppable={{ viewStore, documentStore }}
 >
     <slot />
-    <Bridges {active} {editing} {hasChildren} {parentId} />
+    <Bridges {active} {editing} {hasActiveChildren} {parentId} />
 </div>
 
 <style>
