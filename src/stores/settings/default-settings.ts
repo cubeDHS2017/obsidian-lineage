@@ -1,6 +1,8 @@
 import { Settings } from './settings-type';
 
 export const DEFAULT_CARD_WIDTH = 550;
+export const DEFAULT_COLUMNS_GAP = 0;
+export const DEFAULT_CARDS_GAP = 5;
 export const DEFAULT_SETTINGS = (): Settings => ({
     documents: {},
     hotkeys: {
@@ -10,6 +12,8 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         fontSize: 16,
         theme: {},
         cardWidth: DEFAULT_CARD_WIDTH,
+        columnsGap: DEFAULT_COLUMNS_GAP,
+        cardsGap: DEFAULT_CARDS_GAP,
         scrolling: {
             revealChildren: false,
             horizontalScrollingMode: 'reveal-active-card',

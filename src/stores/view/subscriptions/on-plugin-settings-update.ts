@@ -7,6 +7,8 @@ import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-v
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
+import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -23,6 +25,10 @@ export const onPluginSettingsUpdate = (
         applyActiveBranchBg(view, state.view.theme.activeBranchBg);
     } else if (type === 'SET_CARD_WIDTH') {
         applyCardWidth(view, state.view.cardWidth);
+    } else if (type === 'SET_COLUMNS_GAP') {
+        applyColumnsGap(view, state.view.columnsGap);
+    } else if (type === 'SET_CARDS_GAP') {
+        applyCardsGap(view, state.view.cardsGap);
     } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
         applyZoom(
             view.viewStore.getValue(),
@@ -40,7 +46,9 @@ export const onPluginSettingsUpdate = (
         type === 'SET_LIMIT_PREVIEW_HEIGHT' ||
         type === 'VIEW/TOGGLE_MINIMAP' ||
         type === 'VIEW/SCROLLING/SET_REVEAL_CHILDREN' ||
-        type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE';
+        type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE' ||
+        type === 'SET_CARDS_GAP' ||
+        type === 'SET_COLUMNS_GAP';
     if (view.isActive && shouldAlign) {
         alignBranch(view, 'instant');
     }

@@ -14,6 +14,8 @@ import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-
 import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links';
 import { attachHoverPreviewListener } from 'src/stores/view/subscriptions/event-listeners/attach-hover-preview-listener';
 import { attachWheelScrollListener } from 'src/stores/view/subscriptions/event-listeners/attach-wheel-scroll-listener';
+import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
+import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -21,6 +23,8 @@ const applySettingsToView = (view: LineageView) => {
     applyContainerBg(view, state.view.theme.containerBg);
     applyActiveBranchBg(view, state.view.theme.activeBranchBg);
     applyCardWidth(view, state.view.cardWidth);
+    applyColumnsGap(view, state.view.columnsGap);
+    applyCardsGap(view, state.view.cardsGap);
     if (!view.container) return;
     applyZoom(
         view.viewStore.getValue(),

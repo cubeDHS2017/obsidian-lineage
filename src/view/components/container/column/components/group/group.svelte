@@ -66,7 +66,7 @@
         display: flex;
         flex-direction: column;
         width: fit-content;
-        gap: 4px;
+        gap: var(--cards-gap);
         padding: 8px;
         margin-bottom: 2px;
     }

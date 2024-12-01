@@ -45,6 +45,8 @@ export type Settings = {
         fontSize: number;
         theme: Theme;
         cardWidth: number;
+        columnsGap: number;
+        cardsGap: number;
         minimumCardHeight?: number;
         scrolling: ScrollingSettings;
         limitPreviewHeight: boolean;

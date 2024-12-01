@@ -69,6 +69,16 @@ export type SettingsActions =
           };
       }
     | {
+          type: 'SET_COLUMNS_GAP';
+          payload: {
+              gap: number;
+          };
+      }
+    | {
+          type: 'SET_CARDS_GAP';
+          payload: { gap: number };
+      }
+    | {
           type: 'SET_MIN_CARD_HEIGHT';
           payload: {
               height: number | undefined;
@@ -222,6 +232,10 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.scrolling = {
             ...store.view.scrolling,
         };
+    } else if (action.type === 'SET_COLUMNS_GAP') {
+        store.view.columnsGap = action.payload.gap;
+    } else if (action.type === 'SET_CARDS_GAP') {
+        store.view.cardsGap = action.payload.gap;
     }
 };
 export const settingsReducer = (

@@ -18,6 +18,8 @@
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
     import { BookmarksStore } from 'src/stores/document/derived/bookmarks-store';
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
+    import { CardsGapStore } from 'src/stores/settings/derived/cards-gap-store';
+    import { DEFAULT_CARDS_GAP } from 'src/stores/settings/default-settings';
 
     const view = getView();
     const columns = columnsStore(view);
@@ -34,6 +36,7 @@
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
     const groupParentIds = GroupParentIdsStore(view);
+    const cardsGap = CardsGapStore(view);
 </script>
 
 <div
@@ -41,7 +44,8 @@
         ($scrolling.horizontalScrollingMode === 'keep-active-card-at-center'
             ? 'hide-scrollbars'
             : '') +
-        ($limitPreviewHeight ? ' limit-card-height' : '')}
+        ($limitPreviewHeight ? ' limit-card-height' : '') +
+        ($cardsGap > DEFAULT_CARDS_GAP ? ' transparent-group-bg' : '')}
     id="columns-container"
     tabindex="0"
     use:closeModalsWhenClickingOutside={view}
@@ -102,6 +106,7 @@
         display: flex;
         align-items: center;
         width: 100%;
+        gap: var(--columns-gap);
     }
     .hide-scrollbars {
         --scrollbar-thumb-bg: transparent;
@@ -117,6 +122,13 @@
         }
         & .editor-container {
             max-height: 65vh;
+        }
+    }
+
+    .transparent-group-bg {
+        & .group {
+            background-color: transparent ;
+
         }
     }
 </style>
