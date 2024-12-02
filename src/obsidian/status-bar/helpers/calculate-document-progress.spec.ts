@@ -223,4 +223,30 @@ describe('calculateDocumentProgress', () => {
         const actual = calculateDocumentProgress(input);
         expect(actual).toEqual(100);
     });
+
+    test('empty tree', () => {
+        const input = {
+            document: {
+                columns: [
+                    {
+                        id: 'cKybSePCm',
+                        groups: [
+                            {
+                                parentId: 'rmeeoRvgr',
+                                nodes: ['nrnLOPNip'],
+                            },
+                        ],
+                    },
+                ],
+                content: {
+                    nrnLOPNip: {
+                        content: '',
+                    },
+                },
+            },
+            activeNode: 'nrnLOPNip',
+        };
+        const actual = calculateDocumentProgress(input);
+        expect(actual).toEqual(0);
+    });
 });

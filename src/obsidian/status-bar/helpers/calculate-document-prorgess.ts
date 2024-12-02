@@ -30,6 +30,7 @@ export const calculateDocumentProgress = (payload: DocumentProgressProps) => {
     );
     const flatTree = flattenTree(tree);
     const totalContentLength = calculateFlatTreeContentLength(flatTree);
+    if (totalContentLength === 0) return 0;
     const targetNodeIndex = flatTree.findIndex(
         (node) => node.id === payload.activeNode,
     );
