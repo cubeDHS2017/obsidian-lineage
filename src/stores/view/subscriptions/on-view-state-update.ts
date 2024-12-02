@@ -16,6 +16,7 @@ import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions
 export const onViewStateUpdate = (
     view: LineageView,
     action: ViewStoreAction,
+    localState: { previousActiveNode: string },
 ) => {
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
@@ -30,16 +31,27 @@ export const onViewStateUpdate = (
     );
 
     const activeNodeChange = e.activeNode || e.activeNodeHistory;
-
-    if (activeNodeChange) {
+    const activeNodeHasChanged =
+        localState.previousActiveNode !== viewState.document.activeNode;
+    if (activeNodeHasChanged) {
+        localState.previousActiveNode = viewState.document.activeNode;
+    }
+    if (activeNodeChange && activeNodeHasChanged) {
         // this should be handled internally
         updateActiveBranch(viewStore, documentState);
         persistActiveNodeInPluginSettings(view);
         view.minimapStore.setActiveCardId(viewState.document.activeNode);
+        view.plugin.statusBar.update({
+            type: 'DOCUMENT_PROGRESS',
+            payload: {
+                view,
+            },
+        });
     }
 
     if (
         activeNodeChange &&
+        activeNodeHasChanged &&
         type !== 'DOCUMENT/NAVIGATE_USING_KEYBOARD' &&
         type !== 'DOCUMENT/JUMP_TO_NODE'
     ) {

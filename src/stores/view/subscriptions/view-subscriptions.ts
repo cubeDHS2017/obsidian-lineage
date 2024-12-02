@@ -14,12 +14,15 @@ export const viewSubscriptions = (view: LineageView) => {
         },
     );
 
+    const localState = {
+        previousActiveNode: '',
+    };
     const unsubFromView = view.viewStore.subscribe(
         (viewState, action, initialRun) => {
             if (initialRun) {
                 onViewMount(view);
             } else if (action) {
-                onViewStateUpdate(view, action);
+                onViewStateUpdate(view, action, localState);
             }
         },
     );

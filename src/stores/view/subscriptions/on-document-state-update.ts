@@ -78,6 +78,12 @@ export const onDocumentStateUpdate = (
     if (e.content || structuralChange) {
         resetSearchFuse(documentStore);
         view.minimapStore.setDocument(documentState.document);
+        view.plugin.statusBar.update({
+            type: 'DOCUMENT_PROGRESS',
+            payload: {
+                view,
+            },
+        });
     }
     if (structuralChange) {
         updateStatusBar(view);
