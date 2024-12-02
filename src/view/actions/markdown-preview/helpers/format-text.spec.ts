@@ -70,10 +70,10 @@ describe('format-text', () => {
         ].join('\n');
         const output = [
             'text',
-            '<div class="cm-comment">%% text % %%</div>',
+            '<span class="cm-comment">%% text % %%</span>',
             '> text',
-            '<div class="cm-comment">%% start %',
-            'end %%</div>',
+            '<span class="cm-comment">%% start %',
+            'end %%</span>',
             '% text %',
             '&nbsp;',
         ].join('\n');
@@ -92,14 +92,27 @@ describe('format-text', () => {
             '',
         ].join('\n');
         const output = [
-            '<div class="cm-comment">&lt;!-- text --&gt;</div>',
+            '<span class="cm-comment">&lt;!-- text --&gt;</span>',
 
             '> text',
-            '<div class="cm-comment">&lt;!-- start\nend --&gt;</div>',
+            '<span class="cm-comment">&lt;!-- start\nend --&gt;</span>',
             '% text %',
             '&nbsp;',
         ].join('\n');
 
+        const actual = formatText(input);
+        expect(actual).toEqual(output);
+    });
+
+    test('bug with html comments', () => {
+        const input = [
+            '<!-- note: text-->',
+            '« text » ([author, 2010](zotero://select/library/items/xxx))',
+        ].join('\n');
+        const output = [
+            '<span class="cm-comment">&lt;!-- note: text--&gt;</span>',
+            '« text » ([author, 2010](zotero://select/library/items/xxx))',
+        ].join('\n');
         const actual = formatText(input);
         expect(actual).toEqual(output);
     });
