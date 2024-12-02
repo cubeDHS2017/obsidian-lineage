@@ -34,7 +34,7 @@ export const actionInfo: Partial<
         icon: FileOutput,
     }),
     'DOCUMENT/LOAD_FILE': () => ({
-        label: 'Loaded document',
+        label: 'Document loaded',
         icon: FileUp,
     }),
     'DOCUMENT/DELETE_NODE': (snapshot) => ({

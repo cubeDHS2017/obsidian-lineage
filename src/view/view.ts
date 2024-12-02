@@ -1,4 +1,4 @@
-import { IconName, TextFileView, WorkspaceLeaf } from 'obsidian';
+import { IconName, Notice, TextFileView, WorkspaceLeaf } from 'obsidian';
 
 import Component from './components/container/main.svelte';
 import Lineage from '../main';
@@ -203,7 +203,7 @@ export class LineageView extends TextFileView {
         } else {
             this.createStore();
         }
-        this.loadDocumentToStore();
+        this.loadDocumentToStore(true);
         if (!this.inlineEditor) {
             this.inlineEditor = new InlineEditor(this);
             await this.inlineEditor.onload();
@@ -248,7 +248,7 @@ export class LineageView extends TextFileView {
             ].documentStore;
     };
 
-    private loadDocumentToStore = () => {
+    private loadDocumentToStore = (isInitialLoad = false) => {
         const { data, frontmatter } = extractFrontmatter(this.data);
 
         const state = this.documentStore.getValue();
@@ -283,6 +283,9 @@ export class LineageView extends TextFileView {
                     },
                     type: 'DOCUMENT/LOAD_FILE',
                 });
+                if (!isInitialLoad && existingData && bodyHasChanged) {
+                    new Notice('Document reloaded due to external changes');
+                }
                 if (!maybeGetDocumentFormat(this)) {
                     invariant(this.file);
                     setDocumentFormat(this.plugin, this.file.path, format);
