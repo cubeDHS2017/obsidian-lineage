@@ -5,7 +5,7 @@ import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variabl
 import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-container-bg';
 import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
-import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
+import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
@@ -31,12 +31,7 @@ export const onPluginSettingsUpdate = (
     } else if (type === 'SET_CARDS_GAP') {
         applyCardsGap(view, state.view.cardsGap);
     } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
-        applyZoom(
-            view.viewStore.getValue(),
-            view.container,
-            state.view.zoomLevel,
-            true,
-        );
+        applyZoomLevel(view, state.view.zoomLevel);
     } else if (action.type === 'SET_DOCUMENT_TYPE') {
         view.saveDocument();
     }

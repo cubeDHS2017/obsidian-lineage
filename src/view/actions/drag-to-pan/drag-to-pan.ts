@@ -15,6 +15,7 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
     let container_startX = 0;
     let container_scrollLeft = 0;
     let container_rectLeft = 0;
+    let zoomLevel = 1;
     const columns_startY: number[] = [];
     const columns_scrollTop: number[] = [];
     const columns_rectTop: number[] = [];
@@ -36,7 +37,7 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
                 columns_startY[i] = e.clientY - rect.top;
                 columns_rectTop[i] = rect.top;
             }
-
+            zoomLevel = view.plugin.settings.getValue().view.zoomLevel;
             initializedValues = true;
         }
 
@@ -49,7 +50,7 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
             for (let i = 0; i < columns.length; i++) {
                 const dy = e.clientY - _columns_rectTop[i] - _columns_startY[i];
                 const column = columns[i];
-                column.scrollTop = _columns_scrollTop[i] - dy;
+                column.scrollTop = _columns_scrollTop[i] - dy / zoomLevel;
             }
         });
     };

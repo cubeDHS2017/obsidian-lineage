@@ -9,7 +9,7 @@ import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variabl
 import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-container-bg';
 import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
-import { applyZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/apply-zoom';
+import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-initial-active-node';
 import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links';
 import { attachHoverPreviewListener } from 'src/stores/view/subscriptions/event-listeners/attach-hover-preview-listener';
@@ -27,12 +27,7 @@ const applySettingsToView = (view: LineageView) => {
     applyColumnsGap(view, state.view.columnsGap);
     applyCardsGap(view, state.view.cardsGap);
     if (!view.container) return;
-    applyZoom(
-        view.viewStore.getValue(),
-        view.container,
-        state.view.zoomLevel,
-        true,
-    );
+    applyZoomLevel(view, state.view.zoomLevel);
 };
 
 export const onViewMount = (view: LineageView) => {

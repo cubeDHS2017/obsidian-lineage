@@ -50,7 +50,7 @@ export const alignElement = (
             const scrollTop = calculateScrollTop(elementRect, containerRect);
             if (Math.abs(scrollTop) > THRESHOLD)
                 column.scrollBy({
-                    top: scrollTop * -1,
+                    top: (scrollTop * -1) / settings.view.zoomLevel,
                     behavior,
                 });
         }

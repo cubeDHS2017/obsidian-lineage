@@ -53,7 +53,7 @@
 <style>
     .column {
         min-width: fit-content;
-        height: 100vh;
+        height: calc(1/var(--zoom-level) * 100vh);
         overflow-y: scroll;
         overflow-x: hidden;
     }

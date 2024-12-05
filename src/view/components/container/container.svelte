@@ -20,8 +20,10 @@
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
     import { CardsGapStore } from 'src/stores/settings/derived/cards-gap-store';
     import { DEFAULT_CARDS_GAP } from 'src/stores/settings/default-settings';
+    import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
 
     const view = getView();
+    const zoomLevel = zoomLevelStore(view);
     const columns = columnsStore(view);
     const scrolling = ScrollSettingsStore(view);
     const dnd = dndStore(view);
@@ -42,9 +44,6 @@
 
 <div
     class={'columns-container ' +
-        ($scrolling.horizontalScrollingMode === 'keep-active-card-at-center'
-            ? 'hide-scrollbars'
-            : '') +
         ($limitPreviewHeight ? ' limit-card-height' : '') +
         ($cardsGap > DEFAULT_CARDS_GAP ? ' transparent-group-bg' : '')}
     id="columns-container"
@@ -54,7 +53,7 @@
     use:scrollOnDndX
 >
     <div class="columns">
-        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
+        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center' }
             <ColumnsBuffer />
         {/if}
         {#each $columns as column,i  (column.id)}
@@ -99,6 +98,9 @@
         padding-left: var(--container-left-padding);
         overflow-y: hidden;
         overflow-x: auto;
+        --scrollbar-thumb-bg: transparent;
+        --scrollbar-active-thumb-bg: transparent;
+        --scrollbar-bg: transparent;
     }
     :global(.is-mobile) {
         --container-left-padding: 10px;
@@ -106,15 +108,13 @@
     .columns {
         display: flex;
         align-items: center;
-        width: 100%;
         gap: var(--columns-gap);
+        transform: scale(var(--zoom-level));
+        height: calc(1/var(--zoom-level) * 100vh);
+        width: calc(1/var(--zoom-level) * 100vw);
     }
-    .hide-scrollbars {
-        --scrollbar-thumb-bg: transparent;
-        --scrollbar-active-thumb-bg: transparent;
-        --scrollbar-bg: transparent;
-    }
-    .hide-scrollbars::-webkit-scrollbar {
+
+    .columns-container::-webkit-scrollbar {
         display: none;
     }
     .limit-card-height {

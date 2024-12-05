@@ -21,7 +21,6 @@
     import { writable } from 'svelte/store';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
     import Button from '../shared/button.svelte';
-    import { resetZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/reset-zoom';
     import invariant from 'tiny-invariant';
     import {
         getCombinedBoundingClientRect
@@ -81,7 +80,6 @@
 
     const fitDocumentHeightIntoView = () => {
         invariant(view.container);
-        resetZoom(view.container);
         const columns = Array.from(
             view.containerEl.querySelectorAll('.column'),
         );

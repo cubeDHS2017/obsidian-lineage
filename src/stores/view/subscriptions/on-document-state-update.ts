@@ -100,7 +100,7 @@ export const onDocumentStateUpdate = (
 
     if (structuralChange || e.content) {
         let scrollingBehavior: ScrollBehavior | undefined;
-        let delay: number | undefined;
+        let delay = 0;
         if (action.type === 'DOCUMENT/MOVE_NODE') {
             const verticalMove =
                 action.payload.direction === 'down' ||
@@ -111,12 +111,21 @@ export const onDocumentStateUpdate = (
         } else if (action.type === 'DOCUMENT/DROP_NODE') {
             delay = 500;
         }
-        alignBranch(
-            view,
-            scrollingBehavior,
-            type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
-            delay,
-        );
+        if (delay > 0) {
+            setTimeout(() => {
+                alignBranch(
+                    view,
+                    scrollingBehavior,
+                    type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
+                );
+            }, delay);
+        } else {
+            alignBranch(
+                view,
+                scrollingBehavior,
+                type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
+            );
+        }
     }
 
     const pinnedNodesUpdate =

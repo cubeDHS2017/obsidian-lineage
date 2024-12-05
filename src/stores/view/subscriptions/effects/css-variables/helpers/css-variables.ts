@@ -6,4 +6,5 @@ export const cssVariables = {
     columnsGap: '--columns-gap',
     cardsGap: '--cards-gap',
     minCardHeight: '--min-node-height',
+    zoomLevel: '--zoom-level',
 };
