@@ -31,8 +31,9 @@ export type DocumentPreferences = {
     documentFormat: LineageDocumentFormat;
     viewType: ViewType;
     activeSection: string | null;
-    bookmarks: {
+    pinnedSections: {
         sections: string[];
+        activeSection: string | null;
     } | null;
 };
 
@@ -52,7 +53,8 @@ export type Settings = {
         limitPreviewHeight: boolean;
         zoomLevel: number;
         showMinimap: boolean;
-        showBookmarks: boolean;
+        showLeftSidebar: boolean;
+        leftSidebarWidth: number;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

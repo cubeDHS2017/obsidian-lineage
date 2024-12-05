@@ -16,6 +16,7 @@ import { attachHoverPreviewListener } from 'src/stores/view/subscriptions/event-
 import { attachWheelScrollListener } from 'src/stores/view/subscriptions/event-listeners/attach-wheel-scroll-listener';
 import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
+import { loadPinnedNodesToDocument } from 'src/stores/view/subscriptions/actions/load-pinned-nodes-to-document';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -57,18 +58,8 @@ export const onViewMount = (view: LineageView) => {
         focusContainer(view);
         alignBranch(view, undefined, true);
     }
-    if (documentState.bookmarks.Ids.size === 0 && documentState.file.path) {
-        const documents = view.plugin.settings.getValue().documents;
-        const document = documents[documentState.file.path];
-        if (document.bookmarks && document.bookmarks.sections.length > 0) {
-            documentStore.dispatch({
-                type: 'BOOKMARKS/LOAD',
-                payload: {
-                    sections: document.bookmarks.sections,
-                },
-            });
-        }
-    }
+
+    loadPinnedNodesToDocument(view);
     markUnresolvedLinks(view);
     applySettingsToView(view);
     attachHoverPreviewListener(view);

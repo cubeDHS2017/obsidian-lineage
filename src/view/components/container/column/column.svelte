@@ -3,6 +3,7 @@
     import { getView } from 'src/view/components/container/context';
     import { scrollOnDndY } from 'src/view/actions/dnd/scroll-on-dnd-y';
     import { groupsStore } from 'src/stores/document/derived/groups-store';
+    import { EditingState } from 'src/stores/view/default-view-state';
 
     export let columnId: string;
     export let activeChildGroups: Set<string>;
@@ -11,15 +12,14 @@
     export let parentNodes: Set<string>;
     export let activeGroup: string;
     export let activeNode: string;
-    export let editedNode: string;
-    export let disableEditConfirmation: boolean;
+    export let editedNodeState: EditingState;
     export let searchQuery: string;
     export let searchResults: Set<string>;
-    export let bookmarks: Set<string>;
+    export let pinnedNodes: Set<string>;
     export let groupParentIds: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string,string>;
-
+    export let firstColumn: boolean;
     const view = getView();
     const groups = groupsStore(view, columnId);
 </script>
@@ -33,8 +33,7 @@
                 {columnId}
                 {parentNodes}
                 {activeGroup}
-                {editedNode}
-                {disableEditConfirmation}
+                {editedNodeState}
                 {searchQuery}
                 {searchResults}
                 {searching}
@@ -42,8 +41,9 @@
                 {activeNode}
                 {idSection}
                 {selectedNodes}
-                {bookmarks}
+                {pinnedNodes}
                 {groupParentIds}
+                {firstColumn}
             />
         {/if}
     {/each}

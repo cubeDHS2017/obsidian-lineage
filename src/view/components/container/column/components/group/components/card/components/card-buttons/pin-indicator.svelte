@@ -1,16 +1,16 @@
 <script lang="ts">
-    import { Bookmark } from 'lucide-svelte';
+    import { Pin } from 'lucide-svelte';
 </script>
 
-<span class="bookmark-indicator">
-    <Bookmark class="svg-icon" size="12" />
+<span class="pin-indicator">
+    <Pin class="svg-icon" size="12" />
 </span>
 
 <style>
-    .bookmark-indicator {
+    .pin-indicator {
         position: absolute;
-        top: -3px;
-        left: 2px;
+        top:0;
+        left: 0;
        & svg {
             fill: var(--text-muted);
             color: var(--text-muted);

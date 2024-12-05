@@ -4,7 +4,7 @@ import {
     DocumentEventType,
     getDocumentEventType,
 } from 'src/stores/view/helpers/get-document-event-type';
-import { discardChanges } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
+import { unloadInlineEditor } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
 import { setActiveNode } from 'src/stores/view/subscriptions/actions/set-active-node';
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { clearSelectedNodes } from 'src/stores/view/subscriptions/actions/clear-selected-nodes';
@@ -14,7 +14,10 @@ import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-se
 import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
-import { persistBookmarks } from 'src/stores/view/subscriptions/effects/persist-bookmarks';
+import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persist-pinned-nodes';
+import { alignActivePinnedNode } from 'src/stores/view/subscriptions/effects/align-active-pinned-node/align-active-pinned-node';
+import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
+import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
 
 export const onDocumentStateUpdate = (
     view: LineageView,
@@ -33,7 +36,7 @@ export const onDocumentStateUpdate = (
     if (type === 'DOCUMENT/LOAD_FILE') {
         // needed when the file was modified externally
         // to prevent saving a node with an obsolete node-id
-        discardChanges(view);
+        unloadInlineEditor(view);
     }
 
     const structuralChange =
@@ -44,7 +47,9 @@ export const onDocumentStateUpdate = (
         view.minimapStore.setActiveCardId(
             viewStore.getValue().document.activeNode,
         );
-        documentStore.dispatch({ type: 'BOOKMARKS/REFRESH' });
+        documentStore.dispatch({
+            type: 'document/pinned-nodes/remove-stale-nodes',
+        });
         documentStore.dispatch({ type: 'META/REFRESH_GROUP_PARENT_IDS' });
     }
 
@@ -114,11 +119,23 @@ export const onDocumentStateUpdate = (
         );
     }
 
+    const pinnedNodesUpdate =
+        type === 'document/pinned-nodes/remove-stale-nodes' ||
+        type === 'document/pinned-nodes/pin' ||
+        type === 'document/pinned-nodes/unpin';
+
+    if (pinnedNodesUpdate) {
+        persistPinnedNodes(view);
+    }
     if (
-        type === 'BOOKMARKS/REFRESH' ||
-        type === 'BOOKMARKS/ADD' ||
-        type === 'BOOKMARKS/REMOVE'
+        pinnedNodesUpdate ||
+        type === 'document/pinned-nodes/load-from-settings'
     ) {
-        persistBookmarks(view);
+        alignActivePinnedNode(view);
+        if (type === 'document/pinned-nodes/pin') {
+            setActivePinnedNode(view, action.payload.id);
+        } else {
+            updateStaleActivePinnedNode(view);
+        }
     }
 };

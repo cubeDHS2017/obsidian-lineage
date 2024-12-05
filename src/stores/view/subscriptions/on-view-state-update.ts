@@ -12,6 +12,8 @@ import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-se
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
+import { alignActivePinnedNode } from 'src/stores/view/subscriptions/effects/align-active-pinned-node/align-active-pinned-node';
+import { persistActivePinnedNode } from 'src/stores/view/subscriptions/actions/persist-active-pinned-node';
 
 export const onViewStateUpdate = (
     view: LineageView,
@@ -101,5 +103,10 @@ export const onViewStateUpdate = (
         view.minimapStore.setSearchResults(
             Array.from(viewState.search.results),
         );
+    }
+
+    if (type === 'view/pinned-nodes/set-active-node') {
+        alignActivePinnedNode(view);
+        persistActivePinnedNode(view);
     }
 };

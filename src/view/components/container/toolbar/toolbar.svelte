@@ -4,28 +4,19 @@
     import { getView } from 'src/view/components/container/context';
     import { searchStore } from 'src/stores/view/derived/search-store';
     import SearchInput from './components/search-input.svelte';
-    import BookmarksToggle from './components/bookmarks-toggle.svelte';
-    import Bookmarks from '../bookmarks/bookmarks.svelte';
-    import { BookmarksStore } from 'src/stores/document/derived/bookmarks-store';
-    import { ShowBookmarksStore } from 'src/stores/settings/derived/view-settings-store';
+    import LeftSidebarToggle from './components/left-sidebar-toggle.svelte';
 
     const view = getView();
-    const bookmarks = BookmarksStore(view);
+
     const search = searchStore(view);
-    const showBookmarks = ShowBookmarksStore(view);
 </script>
 
 <div class="navigation-history-container">
+    <LeftSidebarToggle />
     <NavigationHistory />
     <SearchToggle />
     {#if $search.showInput}
         <SearchInput />
-    {/if}
-    {#if $bookmarks.size>0}
-        <BookmarksToggle />
-    {/if}
-    {#if $showBookmarks}
-        <Bookmarks />
     {/if}
 </div>
 <style>

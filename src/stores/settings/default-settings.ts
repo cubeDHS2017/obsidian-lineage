@@ -21,7 +21,8 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         limitPreviewHeight: true,
         zoomLevel: 1,
         showMinimap: false,
-        showBookmarks: false,
+        showLeftSidebar: false,
+        leftSidebarWidth: 500,
     },
     general: {
         defaultDocumentFormat: 'sections',

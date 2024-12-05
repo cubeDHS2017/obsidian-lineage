@@ -1,18 +1,17 @@
 import { LineageView } from 'src/view/view';
 
-export const persistBookmarks = (view: LineageView) => {
+export const persistActivePinnedNode = (view: LineageView) => {
     const documentState = view.documentStore.getValue();
     if (!documentState.file.path) return;
-    const bookmarks = documentState.bookmarks;
     const sections = documentState.sections;
-    const bookmarkedSections = Array.from(bookmarks.Ids).map(
-        (id) => sections.id_section[id],
-    );
+
+    const viewState = view.viewStore.getValue();
+    const section = sections.id_section[viewState.pinnedNodes.activeNode];
     view.plugin.settings.dispatch({
-        type: 'BOOKMARKS/UPDATE',
+        type: 'settings/pinned-nodes/persist-active-node',
         payload: {
-            sections: bookmarkedSections,
             filePath: documentState.file.path,
+            section,
         },
     });
 };

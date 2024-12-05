@@ -22,7 +22,7 @@
         padding: 4px;
         background: var(--background-primary);
         overflow: hidden;
-        flex: 0 1 auto;
+        flex: 0 0 auto;
     }
 
     canvas {

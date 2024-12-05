@@ -2,20 +2,18 @@
     import { getView } from '../../../../../../../context';
     import { draggable } from 'src/view/actions/dnd/draggable';
 
+    export let isInSidebar: boolean;
     export let nodeId: string;
     const view = getView();
     const documentStore = view.documentStore;
     const viewStore = view.viewStore
 </script>
 
-<div class="draggable" use:draggable={{ id: nodeId, documentStore, viewStore }}>
-    <div class="drag-handle"></div>
-    <div
-        class="content"
-        on:dblclick={() => {
-            viewStore.dispatch({ type: 'DOCUMENT/ENABLE_EDIT_MODE',payload:{nodeId} });
-        }}
-    >
+<div class="draggable" use:draggable={{ id: nodeId, documentStore, viewStore,isInSidebar }}>
+    {#if !isInSidebar}
+        <div class="drag-handle"></div>
+    {/if}
+    <div class="content">
         <slot />
     </div>
 </div>

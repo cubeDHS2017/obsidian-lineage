@@ -1,13 +1,11 @@
 import { LineageView } from 'src/view/view';
-import { discardChanges } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
-import invariant from 'tiny-invariant';
+import { unloadInlineEditor } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
 
 export const saveNodeContent = (view: LineageView) => {
     if (view.inlineEditor.activeNode) {
         const content = view.inlineEditor.getContent();
         const nodeId = view.inlineEditor.activeNode;
-        invariant(nodeId);
-        discardChanges(view);
+        unloadInlineEditor(view);
         view.viewStore.dispatch({
             type: 'DOCUMENT/DISABLE_EDIT_MODE',
         });

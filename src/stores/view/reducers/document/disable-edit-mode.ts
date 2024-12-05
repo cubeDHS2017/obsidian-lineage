@@ -7,5 +7,6 @@ export const disableEditMode = (state: Pick<DocumentViewState, 'editing'>) => {
     state.editing = {
         activeNodeId: '',
         disableEditConfirmation: false,
+        isInSidebar: false,
     };
 };

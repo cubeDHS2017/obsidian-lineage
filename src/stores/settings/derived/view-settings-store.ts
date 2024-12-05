@@ -4,5 +4,8 @@ import { derived } from 'src/lib/store/derived';
 export const ViewSettingsStore = (view: LineageView) =>
     derived(view.plugin.settings, (state) => state.view);
 
-export const ShowBookmarksStore = (view: LineageView) =>
-    derived(view.plugin.settings, (state) => state.view.showBookmarks);
+export const ShowLeftSidebarStore = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.showLeftSidebar);
+
+export const LeftSidebarWidthStore = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.leftSidebarWidth);

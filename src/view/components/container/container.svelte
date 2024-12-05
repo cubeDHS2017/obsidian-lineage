@@ -16,7 +16,7 @@
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
     import { closeModalsWhenClickingOutside } from 'src/view/actions/close-modals-when-clicking-outside';
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
-    import { BookmarksStore } from 'src/stores/document/derived/bookmarks-store';
+    import { PinnedNodesStore } from 'src/stores/document/derived/pinned-nodes-store';
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
     import { CardsGapStore } from 'src/stores/settings/derived/cards-gap-store';
     import { DEFAULT_CARDS_GAP } from 'src/stores/settings/default-settings';
@@ -30,13 +30,14 @@
     const selectedNodes = selectedNodesStore(view);
     const editing = documentStateStore(view);
     const search = searchStore(view);
-    const bookmarks = BookmarksStore(view);
     const limitPreviewHeight = limitPreviewHeightStore(view);
     const idSection = IdSectionStore(view);
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
     const groupParentIds = GroupParentIdsStore(view);
     const cardsGap = CardsGapStore(view);
+    const pinnedNodesArray = PinnedNodesStore(view);
+    $: pinnedNodes = new Set($pinnedNodesArray)
 </script>
 
 <div
@@ -56,7 +57,7 @@
         {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
             <ColumnsBuffer />
         {/if}
-        {#each $columns as column (column.id)}
+        {#each $columns as column,i  (column.id)}
             <Column
                 columnId={column.id}
                 dndChildGroups={$dnd.childGroups}
@@ -64,15 +65,15 @@
                 activeGroup={$activeBranch.group}
                 activeChildGroups={$activeBranch.childGroups}
                 activeNode={$activeNode}
-                editedNode={$editing.activeNodeId}
-                disableEditConfirmation={$editing.disableEditConfirmation}
+                editedNodeState={$editing}
                 searchQuery={$search.query}
                 searchResults={$search.results}
                 searching={$search.searching}
                 idSection={$idSection}
                 selectedNodes={$selectedNodes}
-                bookmarks={$bookmarks}
+                pinnedNodes={pinnedNodes}
                 groupParentIds={$groupParentIds}
+                firstColumn={i===0}
             />
         {/each}
         {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}

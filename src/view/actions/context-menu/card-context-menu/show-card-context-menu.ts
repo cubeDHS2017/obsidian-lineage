@@ -88,14 +88,16 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const activeNode = viewState.document.activeNode;
-    const isBookmarked = documentState.bookmarks.Ids.has(activeNode);
+    const isPinned = documentState.pinnedNodes.Ids.contains(activeNode);
     menu.addItem((item) =>
         item
-            .setTitle(isBookmarked ? 'Remove from bookmarks' : 'Bookmark')
-            .setIcon(isBookmarked ? 'bookmark-minus' : 'bookmark-plus')
+            .setTitle(isPinned ? 'Unpin' : 'Pin')
+            .setIcon(isPinned ? 'pin-off' : 'pin')
             .onClick(() => {
                 documentStore.dispatch({
-                    type: isBookmarked ? 'BOOKMARKS/REMOVE' : 'BOOKMARKS/ADD',
+                    type: isPinned
+                        ? 'document/pinned-nodes/unpin'
+                        : 'document/pinned-nodes/pin',
                     payload: { id: activeNode },
                 });
             }),

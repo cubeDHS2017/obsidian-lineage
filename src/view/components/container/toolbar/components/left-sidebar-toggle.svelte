@@ -1,32 +1,29 @@
 <script lang="ts">
     import Button from '../../shared/button.svelte';
-    import { BookMarked } from 'lucide-svelte';
+    import { PanelLeftDashed } from 'lucide-svelte';
     import { getView } from 'src/view/components/container/context';
-    import { ShowBookmarksStore } from 'src/stores/settings/derived/view-settings-store';
-    import { BookmarksStore } from 'src/stores/document/derived/bookmarks-store';
+    import { ShowLeftSidebarStore } from 'src/stores/settings/derived/view-settings-store';
 
     const view = getView();
 
-    const show = ShowBookmarksStore(view);
-    const bookmarks = BookmarksStore(view);
-    const toggleBookmarks = () => {
-        view.plugin.settings.dispatch({ type: 'VIEW/TOGGLE_BOOKMARKS' });
+
+    const show = ShowLeftSidebarStore(view);
+    const toggleLeftSidebar = () => {
+        view.plugin.settings.dispatch({ type: 'view/left-sidebar/toggle' });
     };
 </script>
 
 <div class="buttons-group" style="overflow: inherit">
     <div class="badge-container">
         <Button
-            on:click={toggleBookmarks}
+            on:click={toggleLeftSidebar}
             active={$show}
-            label={'Toggle bookmarks'}
+            label={'Toggle sidebar'}
             tooltipPosition="bottom"
         >
-            <BookMarked class="svg-icon" size="32" />
+            <PanelLeftDashed class="svg-icon" size="32" />
         </Button>
-        {#if !$show}
-            <span class="badge">{$bookmarks.size}</span>
-        {/if}
+
     </div>
 </div>
 

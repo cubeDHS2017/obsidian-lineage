@@ -1,5 +1,5 @@
-export const sortKeys = (obj: { [key: string]: string }): string[] => {
-    return Object.keys(obj).sort((a, b) => {
+export const sortSections = (keys: string[]): string[] => {
+    return keys.sort((a, b) => {
         const aParts = a.split('.');
         const bParts = b.split('.');
 

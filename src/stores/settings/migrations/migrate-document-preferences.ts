@@ -10,7 +10,7 @@ export const migrateDocumentPreferences = (
                 documentFormat: 'sections',
                 viewType: 'lineage',
                 activeSection: null,
-                bookmarks: null,
+                pinnedSections: null,
             };
         }
     }

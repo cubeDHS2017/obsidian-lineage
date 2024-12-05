@@ -4,6 +4,7 @@
     import { getView } from 'src/view/components/container/context';
     import clx from 'classnames';
     import { nodesStore } from 'src/stores/document/derived/nodes-store';
+    import { EditingState } from 'src/stores/view/default-view-state';
 
     export let groupId: string;
     export let columnId: string;
@@ -12,14 +13,14 @@
     export let parentNodes: Set<string>;
     export let activeGroup: string;
     export let activeNode: string;
-    export let editedNode: string;
-    export let disableEditConfirmation: boolean;
+    export let editedNodeState: EditingState;
     export let searchQuery: string;
     export let searchResults: Set<string>;
-    export let bookmarks: Set<string>;
+    export let pinnedNodes: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string, string>;
     export let groupParentIds: Set<string>;
+    export let firstColumn: boolean;
     const view = getView();
     const nodes = nodesStore(view, columnId, groupId);
 </script>
@@ -46,15 +47,17 @@
                             : activeGroup === groupId
                               ? ActiveStatus.sibling
                               : null}
-                    editing={editedNode === node}
+                    editing={editedNodeState.activeNodeId === node &&
+                        !editedNodeState.isInSidebar}
+                    disableEditConfirmation={editedNodeState.activeNodeId === node &&
+                        editedNodeState.disableEditConfirmation &&
+                        !editedNodeState.isInSidebar}
                     hasActiveChildren={activeChildGroups.size > 0}
                     hasChildren={groupParentIds.has(node)}
-                    parentId={groupId}
-                    disableEditConfirmation={editedNode === node &&
-                        disableEditConfirmation}
                     section={idSection[node]}
                     selected={selectedNodes.has(node)}
-                    bookmarked={bookmarks.has(node)}
+                    pinned={pinnedNodes.has(node)}
+                    {firstColumn}
                 />
             {/if}
         {/each}

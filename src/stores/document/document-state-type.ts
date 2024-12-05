@@ -23,7 +23,7 @@ export type DocumentState = {
     };
     meta: DocumentMeta;
     history: DocumentHistory;
-    bookmarks: DocumentBookmarks;
+    pinnedNodes: PinnedNodesState;
 };
 
 // document
@@ -88,7 +88,6 @@ export type History<T, U = undefined> = {
     context: U;
 };
 
-// bookmarks
-export type DocumentBookmarks = {
-    Ids: Set<string>;
+export type PinnedNodesState = {
+    Ids: string[];
 };

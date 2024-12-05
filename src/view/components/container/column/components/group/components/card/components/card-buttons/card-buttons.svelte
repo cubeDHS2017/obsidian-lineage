@@ -4,26 +4,34 @@
     import EditNodeButton from './edit-node-button.svelte';
     import CreateCardButton from './create-card-button.svelte';
     import TreeIndex from './tree-index-button.svelte';
-    import BookmarkIndicator from './bookmark-indicator.svelte';
+    import Pin from './pin-indicator.svelte';
+    import FocusCardButton from './focus-card-button.svelte';
 
     export let editing: boolean;
     export let active: ActiveStatus | null;
     export let nodeId: string;
     export let section: string;
-    export let bookmarked: boolean;
+    export let pinned: boolean;
     export let hasChildren: boolean;
+    export let isInSidebar = false;
 </script>
 
 {#if active === ActiveStatus.node}
     {#if !editing}
-        <CreateCardButton position="up" />
-        <CreateCardButton position="right" />
-        <CreateCardButton position="down" />
-        <DeleteNodeButton {nodeId} />
+        {#if !isInSidebar}
+            <CreateCardButton position="up" />
+            <CreateCardButton position="right" />
+            <CreateCardButton position="down" />
+
+            <DeleteNodeButton {nodeId} />
+        {:else}
+            <FocusCardButton {nodeId} />
+        {/if}
     {/if}
-    <EditNodeButton {editing} {nodeId} />
+
+    <EditNodeButton {editing} {nodeId} {isInSidebar} />
 {/if}
-<TreeIndex activeStatus={active} {nodeId} {section} {hasChildren}/>
-{#if bookmarked}
-    <BookmarkIndicator />
+<TreeIndex activeStatus={active} {nodeId} {section} {hasChildren} />
+{#if pinned}
+    <Pin />
 {/if}

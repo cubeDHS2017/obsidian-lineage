@@ -130,13 +130,22 @@ export type SettingsActions =
           type: 'VIEW/TOGGLE_MINIMAP';
       }
     | {
-          type: 'VIEW/TOGGLE_BOOKMARKS';
+          type: 'view/left-sidebar/toggle';
       }
+    | { type: 'view/left-sidebar/set-width'; payload: { width: number } }
     | {
-          type: 'BOOKMARKS/UPDATE';
+          type: 'settings/pinned-nodes/persist';
           payload: {
               filePath: string;
               sections: string[];
+              section: string;
+          };
+      }
+    | {
+          type: 'settings/pinned-nodes/persist-active-node';
+          payload: {
+              filePath: string;
+              section: string;
           };
       };
 
@@ -157,8 +166,9 @@ const updateState = (store: Settings, action: SettingsActions) => {
                 documentFormat: action.payload.format,
                 viewType: 'lineage',
                 activeSection: null,
-                bookmarks: {
+                pinnedSections: {
                     sections: [],
+                    activeSection: null,
                 },
             };
         } else {
@@ -208,16 +218,27 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.general.defaultDocumentFormat = action.payload.format;
     } else if (action.type === 'VIEW/TOGGLE_MINIMAP') {
         store.view.showMinimap = !store.view.showMinimap;
-    } else if (action.type === 'VIEW/TOGGLE_BOOKMARKS') {
-        store.view.showBookmarks = !store.view.showBookmarks;
-    } else if (action.type === 'BOOKMARKS/UPDATE') {
+    } else if (action.type === 'view/left-sidebar/toggle') {
+        store.view.showLeftSidebar = !store.view.showLeftSidebar;
+    } else if (action.type === 'settings/pinned-nodes/persist') {
         const document = store.documents[action.payload.filePath];
-        if (!document.bookmarks) {
-            document.bookmarks = {
+        if (!document.pinnedSections) {
+            document.pinnedSections = {
                 sections: [],
+                activeSection: null,
             };
         }
-        document.bookmarks.sections = action.payload.sections;
+        document.pinnedSections.sections = action.payload.sections;
+        document.pinnedSections.activeSection = action.payload.section;
+    } else if (action.type === 'settings/pinned-nodes/persist-active-node') {
+        const document = store.documents[action.payload.filePath];
+        if (!document.pinnedSections) {
+            document.pinnedSections = {
+                sections: [],
+                activeSection: null,
+            };
+        }
+        document.pinnedSections.activeSection = action.payload.section;
     } else if (action.type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE') {
         store.view.scrolling.horizontalScrollingMode =
             store.view.scrolling.horizontalScrollingMode ===
@@ -236,6 +257,10 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.columnsGap = action.payload.gap;
     } else if (action.type === 'SET_CARDS_GAP') {
         store.view.cardsGap = action.payload.gap;
+    } else if (action.type === 'view/left-sidebar/set-width') {
+        if (action.payload.width > 0) {
+            store.view.leftSidebarWidth = action.payload.width;
+        }
     }
 };
 export const settingsReducer = (

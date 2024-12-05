@@ -28,10 +28,10 @@ import { getIdOfSection } from 'src/stores/view/subscriptions/helpers/get-id-of-
 import { extractNode } from 'src/stores/document/reducers/extract-node/extract-node';
 import { getSectionOfId } from 'src/stores/view/subscriptions/helpers/get-section-of-id';
 import { splitNode } from 'src/stores/document/reducers/split-node/split-node';
-import { bookmarkNode } from 'src/stores/document/reducers/bookmarks/bookmark-node';
-import { removeNodeBookmark } from 'src/stores/document/reducers/bookmarks/remove-node-bookmark';
-import { refreshBookmarks } from 'src/stores/document/reducers/bookmarks/refresh-bookmarks';
-import { loadBookmarks } from 'src/stores/document/reducers/bookmarks/load-bookmarks';
+import { pinNode } from 'src/stores/document/reducers/pinned-nodes/pin-node';
+import { unpinNode } from 'src/stores/document/reducers/pinned-nodes/unpin-node';
+import { removeStalePinnedNodes } from 'src/stores/document/reducers/pinned-nodes/remove-stale-pinned-nodes';
+import { loadPinnedNodes } from 'src/stores/document/reducers/pinned-nodes/load-pinned-nodes';
 import { refreshGroupParentIds } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
 
 const updateDocumentState = (
@@ -112,17 +112,21 @@ const updateDocumentState = (
     } else if (action.type === 'FILE/UPDATE_FRONTMATTER') {
         state.file.frontmatter = action.payload.frontmatter;
         return;
-    } else if (action.type === 'BOOKMARKS/ADD') {
-        bookmarkNode(state.bookmarks, action.payload.id);
+    } else if (action.type === 'document/pinned-nodes/pin') {
+        pinNode(state.sections, state.pinnedNodes, action.payload.id);
         return;
-    } else if (action.type === 'BOOKMARKS/REMOVE') {
-        removeNodeBookmark(state.bookmarks, action.payload.id);
+    } else if (action.type === 'document/pinned-nodes/unpin') {
+        unpinNode(state.pinnedNodes, action.payload.id);
         return;
-    } else if (action.type === 'BOOKMARKS/REFRESH') {
-        refreshBookmarks(state.bookmarks, state.document.content);
+    } else if (action.type === 'document/pinned-nodes/remove-stale-nodes') {
+        removeStalePinnedNodes(state.pinnedNodes, state.document.content);
         return;
-    } else if (action.type === 'BOOKMARKS/LOAD') {
-        loadBookmarks(state.bookmarks, state.sections, action.payload.sections);
+    } else if (action.type === 'document/pinned-nodes/load-from-settings') {
+        loadPinnedNodes(
+            state.pinnedNodes,
+            state.sections,
+            action.payload.sections,
+        );
         return;
     } else if (action.type === 'META/REFRESH_GROUP_PARENT_IDS') {
         refreshGroupParentIds(state.document.columns, state.meta);

@@ -5,29 +5,35 @@
     import Bridges from '../bridges/bridges.svelte';
     import clx from 'classnames';
     import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
+    import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
 
     export let nodeId: string;
     export let active: ActiveStatus | null;
     export let hasActiveChildren: boolean;
-    export let parentId: string;
+    export let firstColumn: boolean;
     export let editing: boolean;
     export let disableEditConfirmation: boolean;
     export let selected: boolean;
+    export let isInSidebar = false;
     const view = getView();
     // eslint-disable-next-line no-undef
     const setActive = (e: MouseEvent) => {
         if (editing) return;
         const cursor = view.container!.style.cursor;
         if (cursor === 'grab') return;
+        if (isInSidebar) {
+            setActivePinnedNode(view,nodeId);
 
-        viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
-            payload: { id: nodeId },
-            context: {
-                modKey: isMacLike ? e.metaKey : e.ctrlKey,
-                source: 'mouse',
-            },
-        });
+        } else {
+            viewStore.dispatch({
+                type: 'DOCUMENT/SET_ACTIVE_NODE',
+                payload: { id: nodeId },
+                context: {
+                    modKey: isMacLike ? e.metaKey : e.ctrlKey,
+                    source: 'mouse',
+                },
+            });
+        }
     };
     const documentStore = view.documentStore;
     const viewStore = view.viewStore;
@@ -58,17 +64,21 @@
     on:click={setActive}
     on:dblclick={(e) => {
         setActive(e);
+        const editingState = viewStore.getValue().document.editing;
+        const editedNodeId = editingState.activeNodeId;
+        if (editedNodeId === nodeId) return;
         viewStore.dispatch({
             type: 'DOCUMENT/ENABLE_EDIT_MODE',
             payload: {
                 nodeId,
+                isInSidebar
             },
         });
     }}
     use:droppable={{ viewStore, documentStore }}
 >
     <slot />
-    <Bridges {active} {editing} {hasActiveChildren} {parentId} />
+    <Bridges {active} {editing} {hasActiveChildren} {firstColumn} />
 </div>
 
 <style>

@@ -12,10 +12,10 @@ import { FormatHeadingsAction } from 'src/stores/document/reducers/content/forma
 import { PasteNodeAction } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
 import { ExtractNodeAction } from 'src/stores/document/reducers/extract-node/extract-node';
 import { SplitNodeAction } from 'src/stores/document/reducers/split-node/split-node';
-import { BookmakNodeAction } from 'src/stores/document/reducers/bookmarks/bookmark-node';
-import { RemoveNodeBookmarkAction } from 'src/stores/document/reducers/bookmarks/remove-node-bookmark';
-import { RefreshBookmarksAction } from 'src/stores/document/reducers/bookmarks/refresh-bookmarks';
-import { LoadBookmarksAction } from 'src/stores/document/reducers/bookmarks/load-bookmarks';
+import { PinNodeAction } from 'src/stores/document/reducers/pinned-nodes/pin-node';
+import { UnpinNodeAction } from 'src/stores/document/reducers/pinned-nodes/unpin-node';
+import { RemoveStalePinnedNodesAction } from 'src/stores/document/reducers/pinned-nodes/remove-stale-pinned-nodes';
+import { LoadPinnedNodesAction } from 'src/stores/document/reducers/pinned-nodes/load-pinned-nodes';
 import { RefreshGroupParentIdsAction } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
 
 export type VerticalDirection = 'up' | 'down';
@@ -56,7 +56,7 @@ export type DocumentAction =
               frontmatter: string;
           };
       }
-    | BookmarkActions
+    | PinnedNodesActions
     | MetaActions;
 
 export type HistoryAction = UndoRedoAction | SelectSnapshotAction;
@@ -95,10 +95,10 @@ export type DocumentClipboardActions =
     | PasteNodeAction
     | CutNodeAction;
 
-export type BookmarkActions =
-    | BookmakNodeAction
-    | RemoveNodeBookmarkAction
-    | RefreshBookmarksAction
-    | LoadBookmarksAction;
+export type PinnedNodesActions =
+    | PinNodeAction
+    | UnpinNodeAction
+    | RemoveStalePinnedNodesAction
+    | LoadPinnedNodesAction;
 
 export type MetaActions = RefreshGroupParentIdsAction;

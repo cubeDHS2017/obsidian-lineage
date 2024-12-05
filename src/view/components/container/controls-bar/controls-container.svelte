@@ -128,6 +128,8 @@
     };
 
     const scrollSettingsStore = ScrollSettingsStore(view);
+
+
 </script>
 
 <div class="controls-container">

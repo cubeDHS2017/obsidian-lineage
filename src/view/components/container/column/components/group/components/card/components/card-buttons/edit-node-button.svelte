@@ -8,18 +8,22 @@
 
     export let editing: boolean;
     export let nodeId: string;
+    export let isInSidebar: boolean;
     const view = getView();
     const viewStore = view.viewStore;
     // eslint-disable-next-line no-undef
     const toggleEdit = (e: MouseEvent) => {
         e.stopPropagation();
-        if (editing) {
+        const editingState = viewStore.getValue().document.editing;
+        const editedNodeId = editingState.activeNodeId;
+        if (editedNodeId) {
             saveNodeContent(view);
         } else {
             viewStore.dispatch({
                 type: 'DOCUMENT/ENABLE_EDIT_MODE',
                 payload: {
                     nodeId,
+                    isInSidebar: isInSidebar,
                 },
             });
         }
