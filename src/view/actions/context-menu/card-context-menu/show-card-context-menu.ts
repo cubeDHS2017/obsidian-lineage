@@ -12,6 +12,10 @@ import { exportColumn } from 'src/view/actions/context-menu/card-context-menu/he
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const menu = new Menu();
+    const target = event.target as HTMLElement;
+    const isInSidebar = Boolean(target.closest('.sidebar'));
+    const isInRecentCardsList =
+        isInSidebar && Boolean(target.closest('.recent-cards-container'));
 
     const viewState = view.viewStore.getValue();
     const multipleNodesAreSelected = viewState.document.selectedNodes.size > 1;
@@ -22,7 +26,8 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .setIcon(customIcons.split.name)
             .onClick(() => {
                 openSplitNodeModal(view);
-            }),
+            })
+            .setDisabled(isInSidebar),
     );
 
     menu.addSeparator();
@@ -34,7 +39,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 mergeNode(view, 'up');
             })
-            .setDisabled(multipleNodesAreSelected),
+            .setDisabled(multipleNodesAreSelected || isInSidebar),
     );
     menu.addItem((item) =>
         item
@@ -43,7 +48,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 mergeNode(view, 'down');
             })
-            .setDisabled(multipleNodesAreSelected),
+            .setDisabled(multipleNodesAreSelected || isInSidebar),
     );
 
     menu.addSeparator();
@@ -72,7 +77,8 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .setIcon('scissors')
             .onClick(() => {
                 cutNode(view);
-            }),
+            })
+            .setDisabled(isInSidebar),
     );
 
     menu.addItem((item) =>
@@ -81,14 +87,17 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .setIcon('paste')
             .onClick(() => {
                 pasteNode(view);
-            }),
+            })
+            .setDisabled(isInSidebar),
     );
 
     menu.addSeparator();
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const activeNode = viewState.document.activeNode;
-    const isPinned = documentState.pinnedNodes.Ids.contains(activeNode);
+    const isPinned =
+        (isInSidebar && !isInRecentCardsList) ||
+        documentState.pinnedNodes.Ids.includes(activeNode);
     menu.addItem((item) =>
         item
             .setTitle(isPinned ? 'Unpin' : 'Pin')
@@ -100,7 +109,8 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
                         : 'document/pinned-nodes/pin',
                     payload: { id: activeNode },
                 });
-            }),
+            })
+            .setDisabled(isInRecentCardsList),
     );
     menu.addSeparator();
     menu.addItem((item) =>
@@ -110,7 +120,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 extractBranch(view);
             })
-            .setDisabled(multipleNodesAreSelected),
+            .setDisabled(multipleNodesAreSelected || isInSidebar),
     );
 
     menu.addItem((item) =>
@@ -120,7 +130,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             .onClick(() => {
                 exportColumn(view);
             })
-            .setDisabled(multipleNodesAreSelected),
+            .setDisabled(multipleNodesAreSelected || isInSidebar),
     );
 
     menu.showAtMouseEvent(event);

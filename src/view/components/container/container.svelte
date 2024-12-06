@@ -13,8 +13,6 @@
     import { NodeId } from 'src/stores/document/document-state-type';
     import { limitPreviewHeightStore } from 'src/stores/settings/derived/limit-preview-height-store';
     import { IdSectionStore } from 'src/stores/document/derived/id-section-store';
-    import { contextMenu } from 'src/view/actions/context-menu/context-menu';
-    import { closeModalsWhenClickingOutside } from 'src/view/actions/close-modals-when-clicking-outside';
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
     import { PinnedNodesStore } from 'src/stores/document/derived/pinned-nodes-store';
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
@@ -48,8 +46,7 @@
         ($cardsGap > DEFAULT_CARDS_GAP ? ' transparent-group-bg' : '')}
     id="columns-container"
     tabindex="0"
-    use:closeModalsWhenClickingOutside={view}
-    use:contextMenu={view}
+
     use:scrollOnDndX
 >
     <div class="columns">
