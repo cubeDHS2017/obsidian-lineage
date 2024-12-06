@@ -11,6 +11,9 @@
     import {
         openFileAndJumpToLine
     } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/openFileAndJumpToLine';
+    import {
+        findHtmlElementPosition
+    } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/find-html-element-position';
 
     const view = getView();
     export let nodeId: string;
@@ -26,14 +29,15 @@
         const i =
             format === 'sections'
                 ? findSectionPosition(view, nodeId)
-                : findOutlinePosition(view, nodeId);
+                : format === 'html-element'
+                  ? findHtmlElementPosition(view, nodeId)
+                  : findOutlinePosition(view, nodeId);
         if (typeof i === 'undefined') return;
         const targetLine = i + (format === 'sections' ? 1 : 0);
         const lines = view.data.split('\n');
         const nextLine = lines[targetLine] || '';
         await openFileAndJumpToLine(
-            view.plugin,
-            view.file,
+            view,
             targetLine,
             nextLine.length,
         );
