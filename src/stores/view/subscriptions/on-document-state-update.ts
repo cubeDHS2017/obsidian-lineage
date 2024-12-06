@@ -15,7 +15,6 @@ import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-st
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persist-pinned-nodes';
-import { alignActivePinnedNode } from 'src/stores/view/subscriptions/effects/align-active-pinned-node/align-active-pinned-node';
 import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
 import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
 
@@ -140,7 +139,6 @@ export const onDocumentStateUpdate = (
         pinnedNodesUpdate ||
         type === 'document/pinned-nodes/load-from-settings'
     ) {
-        alignActivePinnedNode(view);
         if (type === 'document/pinned-nodes/pin') {
             setActivePinnedNode(view, action.payload.id);
         } else {

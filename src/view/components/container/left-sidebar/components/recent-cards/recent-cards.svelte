@@ -76,8 +76,5 @@
     /* .recent-cards-container::-webkit-scrollbar {
         display: none;
     }*/
-    .sidebar-buffer {
-        min-height: 90%;
-        min-width: var(--node-width);
-    }
+
 </style>

@@ -6,7 +6,12 @@
     import { documentStateStore } from '../../../../../../stores/view/derived/editing-store';
     import { IdSectionStore } from '../../../../../../stores/document/derived/id-section-store';
     import { ActivePinnedCardStore } from '../../../../../../stores/view/derived/pinned-cards-sidebar';
+    import {
+        scrollCardIntoView
+    } from 'src/view/components/container/left-sidebar/components/recent-cards/helpers/scroll-card-into-view';
+    import { onDestroy } from 'svelte';
 
+    let containerRef: HTMLElement | null = null;
     const view = getView();
     const pinnedNodesArray = PinnedNodesStore(view);
 
@@ -14,10 +19,35 @@
     const editingStateStore = documentStateStore(view);
 
     const activePinnedCard = ActivePinnedCardStore(view);
+
+    const subscriptions: (() => void)[] = [];
+    subscriptions.push(
+        ActivePinnedCardStore(view).subscribe((activeNodeId) => {
+            setTimeout(() => {
+                if (!containerRef) return;
+                if (!activeNodeId) return;
+                scrollCardIntoView(containerRef, activeNodeId);
+            }, 200);
+        }),
+    );
+    subscriptions.push(
+        PinnedNodesStore(view).subscribe(() => {
+            setTimeout(() => {
+                if (!containerRef) return;
+                const activeNodeId = view.viewStore.getValue().pinnedNodes.activeNode;
+                if (!activeNodeId) return;
+                scrollCardIntoView(containerRef, activeNodeId);
+            }, 200);
+        }),
+    );
+    onDestroy(() => {
+        for (const unsub of subscriptions) {
+            unsub();
+        }
+    });
 </script>
 
-<div class="pinned-cards-container">
-    <div class="sidebar-buffer" />
+<div class="pinned-cards-container"  bind:this={containerRef}>
     {#each $pinnedNodesArray as node (node)}
         <Node
             {node}
@@ -38,7 +68,6 @@
             pinned={false}
         />
     {/each}
-    <div class="sidebar-buffer" />
 </div>
 
 <style>
@@ -51,12 +80,9 @@
         flex-direction: column;
         align-items: center;
         gap: 10px;
+        flex: 1 1 auto;
+        padding-bottom: 10px;
     }
-    .pinned-cards-container::-webkit-scrollbar {
-        display: none;
-    }
-    .sidebar-buffer {
-        min-height: 90%;
-        min-width: var(--node-width);
-    }
+
+
 </style>

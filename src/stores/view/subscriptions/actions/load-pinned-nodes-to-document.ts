@@ -9,7 +9,7 @@ export const loadPinnedNodesToDocument = (view: LineageView) => {
     const persistedDocuments = settingsState.documents;
     const persistedDocument = persistedDocuments[documentState.file.path!];
 
-    if (!persistedDocument!.pinnedSections) return;
+    if (!persistedDocument?.pinnedSections) return;
 
     if (persistedDocument.pinnedSections.sections.length === 0) {
         const activeLeftSideTab = settingsState.view.leftSidebarActiveTab;

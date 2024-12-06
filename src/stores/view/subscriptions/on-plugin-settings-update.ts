@@ -9,7 +9,6 @@ import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
-import { alignActivePinnedNode } from 'src/stores/view/subscriptions/effects/align-active-pinned-node/align-active-pinned-node';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -49,12 +48,5 @@ export const onPluginSettingsUpdate = (
         type === 'SET_COLUMNS_GAP';
     if (view.isActive && shouldAlign) {
         alignBranch(view, 'instant');
-    }
-
-    if (
-        type === 'view/left-sidebar/toggle' ||
-        type === 'view/left-sidebar/set-width'
-    ) {
-        if (state.view.showLeftSidebar) alignActivePinnedNode(view);
     }
 };
