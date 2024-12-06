@@ -10,6 +10,7 @@
         scrollCardIntoView
     } from 'src/view/components/container/left-sidebar/components/recent-cards/helpers/scroll-card-into-view';
     import { onDestroy } from 'svelte';
+    import NoItems from '../no-items/no-items.svelte';
 
     let containerRef: HTMLElement | null = null;
     const view = getView();
@@ -34,7 +35,8 @@
         PinnedNodesStore(view).subscribe(() => {
             setTimeout(() => {
                 if (!containerRef) return;
-                const activeNodeId = view.viewStore.getValue().pinnedNodes.activeNode;
+                const activeNodeId =
+                    view.viewStore.getValue().pinnedNodes.activeNode;
                 if (!activeNodeId) return;
                 scrollCardIntoView(containerRef, activeNodeId);
             }, 200);
@@ -47,27 +49,32 @@
     });
 </script>
 
-<div class="pinned-cards-container"  bind:this={containerRef}>
-    {#each $pinnedNodesArray as node (node)}
-        <Node
-            {node}
-            active={$activePinnedCard === node
-                ? ActiveStatus.node
-                : ActiveStatus.sibling}
-            editing={$editingStateStore.activeNodeId === node &&
-                $editingStateStore.isInSidebar === true}
-            disableEditConfirmation={$editingStateStore.activeNodeId === node &&
-                $editingStateStore.disableEditConfirmation &&
-                $editingStateStore.isInSidebar === true}
-            isInSidebar={true}
-            firstColumn={true}
-            section={$idSection[node]}
-            hasActiveChildren={false}
-            hasChildren={false}
-            selected={false}
-            pinned={false}
-        />
-    {/each}
+<div class="pinned-cards-container" bind:this={containerRef}>
+    {#if $pinnedNodesArray.length > 0}
+        {#each $pinnedNodesArray as node (node)}
+            <Node
+                {node}
+                active={$activePinnedCard === node
+                    ? ActiveStatus.node
+                    : ActiveStatus.sibling}
+                editing={$editingStateStore.activeNodeId === node &&
+                    $editingStateStore.isInSidebar === true}
+                disableEditConfirmation={$editingStateStore.activeNodeId ===
+                    node &&
+                    $editingStateStore.disableEditConfirmation &&
+                    $editingStateStore.isInSidebar === true}
+                isInSidebar={true}
+                firstColumn={true}
+                section={$idSection[node]}
+                hasActiveChildren={false}
+                hasChildren={false}
+                selected={false}
+                pinned={false}
+            />
+        {/each}
+    {:else}
+        <NoItems variant="pinned" />
+    {/if}
 </div>
 
 <style>
@@ -83,6 +90,4 @@
         flex: 1 1 auto;
         padding-bottom: 10px;
     }
-
-
 </style>

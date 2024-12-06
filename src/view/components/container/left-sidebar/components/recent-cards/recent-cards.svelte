@@ -9,6 +9,7 @@
     import {
         scrollCardIntoView
     } from 'src/view/components/container/left-sidebar/components/recent-cards/helpers/scroll-card-into-view';
+    import NoItems from '../no-items/no-items.svelte';
 
     const view = getView();
     const recentNodes = RecentNodesStore(view);
@@ -38,26 +39,31 @@
 </script>
 
 <div class="recent-cards-container" bind:this={containerRef}>
-    {#each $recentNodes as node (node)}
-        <Node
-            {node}
-            active={$activePinnedCard === node
-                ? ActiveStatus.node
-                : ActiveStatus.sibling}
-            editing={$editingStateStore.activeNodeId === node &&
-                $editingStateStore.isInSidebar === true}
-            disableEditConfirmation={$editingStateStore.activeNodeId === node &&
-                $editingStateStore.disableEditConfirmation &&
-                $editingStateStore.isInSidebar === true}
-            isInSidebar={true}
-            firstColumn={true}
-            section={$idSection[node]}
-            hasActiveChildren={false}
-            hasChildren={false}
-            selected={false}
-            pinned={false}
-        />
-    {/each}
+    {#if $recentNodes.length > 0}
+        {#each $recentNodes as node (node)}
+            <Node
+                {node}
+                active={$activePinnedCard === node
+                    ? ActiveStatus.node
+                    : ActiveStatus.sibling}
+                editing={$editingStateStore.activeNodeId === node &&
+                    $editingStateStore.isInSidebar === true}
+                disableEditConfirmation={$editingStateStore.activeNodeId ===
+                    node &&
+                    $editingStateStore.disableEditConfirmation &&
+                    $editingStateStore.isInSidebar === true}
+                isInSidebar={true}
+                firstColumn={true}
+                section={$idSection[node]}
+                hasActiveChildren={false}
+                hasChildren={false}
+                selected={false}
+                pinned={false}
+            />
+        {/each}
+    {:else}
+        <NoItems variant="recent" />
+    {/if}
 </div>
 
 <style>
@@ -76,5 +82,4 @@
     /* .recent-cards-container::-webkit-scrollbar {
         display: none;
     }*/
-
 </style>
