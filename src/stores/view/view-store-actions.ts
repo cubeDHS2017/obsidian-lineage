@@ -11,7 +11,8 @@ import { ChangeActiveNodeAction } from 'src/stores/view/reducers/document/naviga
 import { NodeHistoryNavigationAction } from 'src/stores/view/reducers/ui/navigate-active-node-history';
 import { ToggleFuzzySearchAction } from 'src/stores/view/reducers/search/toggle-fuzzy-search';
 import { NodeNavigationAction } from 'src/stores/view/reducers/ui/navigate-active-node';
-import { SetActivePinnedNodeAction } from 'src/stores/view/reducers/pinned-cards-sidebar/set-active-pinned-node';
+import { SetActivePinnedNodeAction } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
+import { SetActiveRecentNodeAction } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 
 export type ViewStoreAction =
     | SearchAction
@@ -19,7 +20,8 @@ export type ViewStoreAction =
     | ViewDocumentAction
     | NodeSelectionAction
     | NodeHistoryNavigationAction
-    | PinnedNodesActions;
+    | PinnedNodesActions
+    | RecentNodesActions;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -72,3 +74,4 @@ export type NodeSelectionAction =
     | NodeNavigationAction;
 
 export type PinnedNodesActions = SetActivePinnedNodeAction;
+export type RecentNodesActions = SetActiveRecentNodeAction;

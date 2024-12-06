@@ -48,6 +48,9 @@ export const defaultViewState = (): ViewState => ({
     pinnedNodes: {
         activeNode: '',
     },
+    recentNodes: {
+        activeNode: '',
+    },
 });
 export type ActiveBranch = {
     childGroups: Set<string>;

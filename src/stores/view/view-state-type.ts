@@ -25,6 +25,9 @@ export type DocumentViewState = {
 export type PinnedNodes = {
     activeNode: string;
 };
+export type RecentNodes = {
+    activeNode: string;
+};
 export type ViewState = {
     search: {
         query: string;
@@ -43,4 +46,5 @@ export type ViewState = {
     document: DocumentViewState;
     navigationHistory: NavigationHistory;
     pinnedNodes: PinnedNodes;
+    recentNodes: RecentNodes;
 };

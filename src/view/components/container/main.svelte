@@ -15,8 +15,7 @@
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
     import Minimap from './minimap/minimap.svelte';
     import { dragToPan } from 'src/view/actions/drag-to-pan/drag-to-pan';
-    import LeftSidebar from './pinned-cards-sidebar/left-sidebar.svelte';
-    import PinnedCards from './pinned-cards-sidebar/pinned-cards-sidebar.svelte';
+    import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
 
     export let plugin: Lineage;
     export let view: LineageView;
@@ -27,9 +26,8 @@
 </script>
 
 <div class="lineage-view" use:keyboardShortcuts={{ view }} tabindex="0">
-    <LeftSidebar >
-        <PinnedCards/>
-    </LeftSidebar>
+    <LeftSidebar/>
+
     <div class={`lineage-main`} use:mouseWheelZoom={view} use:dragToPan={view}>
         <Container />
         <Toolbar />

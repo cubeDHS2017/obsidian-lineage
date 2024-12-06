@@ -1,6 +1,7 @@
 import {
     CustomHotkeys,
     DocumentPreferences,
+    LeftSidebarActiveTab,
     LineageDocumentFormat,
     Settings,
     ViewType,
@@ -134,6 +135,10 @@ export type SettingsActions =
       }
     | { type: 'view/left-sidebar/set-width'; payload: { width: number } }
     | {
+          type: 'view/left-sidebar/set-active-tab';
+          payload: { tab: LeftSidebarActiveTab };
+      }
+    | {
           type: 'settings/pinned-nodes/persist';
           payload: {
               filePath: string;
@@ -261,6 +266,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         if (action.payload.width > 0) {
             store.view.leftSidebarWidth = action.payload.width;
         }
+    } else if (action.type === 'view/left-sidebar/set-active-tab') {
+        store.view.leftSidebarActiveTab = action.payload.tab;
     }
 };
 export const settingsReducer = (

@@ -23,6 +23,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         showMinimap: false,
         showLeftSidebar: false,
         leftSidebarWidth: 500,
+        leftSidebarActiveTab: 'pinned-cards',
     },
     general: {
         defaultDocumentFormat: 'sections',

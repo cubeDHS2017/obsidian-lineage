@@ -1,11 +1,14 @@
 <script lang="ts">
     import { getView } from 'src/view/components/container/context';
-    import { get } from 'svelte/store';
     import {
-        LeftSidebarWidthStore,
+        LeftSidebarActiveTabStore,
         ShowLeftSidebarStore,
     } from 'src/stores/settings/derived/view-settings-store';
+    import TabHeader from './components/tab-header/tab-header.svelte';
     import { onDestroy } from 'svelte';
+    import PinnedCards from 'src/view/components/container/left-sidebar/components/pinned-cards/pinned-cards-sidebar.svelte';
+    import RecentCards from 'src/view/components/container/left-sidebar/components/recent-cards/recent-cards.svelte';
+    import { limitPreviewHeightStore } from 'src/stores/settings/derived/limit-preview-height-store';
 
     const MIN_WIDTH = 250;
     // used to animate using CSS transition width, can go to 0
@@ -16,6 +19,7 @@
     let startX = 0;
 
     const view = getView();
+    const limitPreviewHeight = limitPreviewHeightStore(view);
     const showSidebarStore = ShowLeftSidebarStore(view);
 
     const unsub = showSidebarStore.subscribe((show) => {
@@ -54,7 +58,6 @@
         view.contentEl.removeEventListener('mousemove', onResize);
         view.contentEl.removeEventListener('mouseup', onStopResize);
 
-
         if (animatedSidebarWidth < MIN_WIDTH) {
             animatedSidebarWidth = MIN_WIDTH;
         }
@@ -66,25 +69,38 @@
             },
         });
     };
+    const activeTab = LeftSidebarActiveTabStore(view);
 </script>
 
 <div
-    class={'sidebar' + (isResizing ? '' : ' width-transition')}
+    class={'sidebar' +
+        (isResizing ? '' : ' width-transition') +
+        ($limitPreviewHeight ? ' limit-card-height' : '')}
     style="--animated-sidebar-width: {animatedSidebarWidth}px; --sidebar-width: {sidebarWidth}px; }"
 >
+    <TabHeader />
     <div class="resizer" on:mousedown={onStartResize} />
+    {#if $activeTab === 'pinned-cards'}
+        <PinnedCards />
+    {:else if $activeTab === 'recent-cards'}
+        <RecentCards />
+    {/if}
     <slot />
     {#if animatedSidebarWidth > 0}{/if}
 </div>
 
 <style>
     .sidebar {
-        --node-width: calc(var(--sidebar-width) - 50px);
+        --node-width: calc(var(--sidebar-width) - 30px);
         flex: 0 0 auto;
         width: var(--animated-sidebar-width);
         position: relative;
         overflow: hidden;
         background-color: var(--color-base-20);
+        display: flex;
+        flex-direction: column;
+        padding: 10px 0;
+        gap: 10px;
     }
     .width-transition {
         transition: width 0.3s ease;
@@ -104,5 +120,14 @@
 
     .resizer:hover {
         background-color: var(--color-accent);
+    }
+
+    .limit-card-height {
+        & .preview-container {
+            max-height: 65vh;
+        }
+        & .editor-container {
+            max-height: 65vh;
+        }
     }
 </style>

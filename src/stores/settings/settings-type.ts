@@ -37,6 +37,8 @@ export type DocumentPreferences = {
     } | null;
 };
 
+export type LeftSidebarActiveTab = 'pinned-cards' | 'recent-cards';
+
 export type Settings = {
     documents: Record<string, DocumentPreferences>;
     hotkeys: {
@@ -55,6 +57,7 @@ export type Settings = {
         showMinimap: boolean;
         showLeftSidebar: boolean;
         leftSidebarWidth: number;
+        leftSidebarActiveTab: LeftSidebarActiveTab;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

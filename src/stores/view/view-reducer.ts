@@ -17,7 +17,8 @@ import { removeDeletedNavigationItems } from 'src/stores/view/reducers/ui/helper
 import { toggleFuzzySearch } from 'src/stores/view/reducers/search/toggle-fuzzy-search';
 import { resetSelectionState } from 'src/stores/view/reducers/document/helpers/reset-selection-state';
 import { navigateActiveNode } from 'src/stores/view/reducers/ui/navigate-active-node';
-import { setActivePinnedNode } from 'src/stores/view/reducers/pinned-cards-sidebar/set-active-pinned-node';
+import { setActivePinnedNode } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
+import { setActiveRecentNode } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
@@ -101,6 +102,12 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         setActivePinnedNode(
             state.document,
             state.pinnedNodes,
+            action.payload.id,
+        );
+    } else if (action.type === 'view/recent-nodes/set-active-node') {
+        setActiveRecentNode(
+            state.document,
+            state.recentNodes,
             action.payload.id,
         );
     }

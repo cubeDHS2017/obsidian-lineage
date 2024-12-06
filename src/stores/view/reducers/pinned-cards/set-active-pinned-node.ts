@@ -10,6 +10,7 @@ export type SetActivePinnedNodeAction = {
         id: string;
     };
 };
+
 export const setActivePinnedNode = (
     documentState: DocumentViewState,
     state: PinnedNodes,

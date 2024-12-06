@@ -5,7 +5,7 @@
     import Bridges from '../bridges/bridges.svelte';
     import clx from 'classnames';
     import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
-    import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
+    import { setActiveSidebarNode } from 'src/stores/view/subscriptions/actions/set-active-sidebar-node';
 
     export let nodeId: string;
     export let active: ActiveStatus | null;
@@ -22,7 +22,7 @@
         const cursor = view.container!.style.cursor;
         if (cursor === 'grab') return;
         if (isInSidebar) {
-            setActivePinnedNode(view,nodeId);
+            setActiveSidebarNode(view,nodeId);
 
         } else {
             viewStore.dispatch({

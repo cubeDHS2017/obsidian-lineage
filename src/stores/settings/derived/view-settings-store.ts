@@ -9,3 +9,6 @@ export const ShowLeftSidebarStore = (view: LineageView) =>
 
 export const LeftSidebarWidthStore = (view: LineageView) =>
     derived(view.plugin.settings, (state) => state.view.leftSidebarWidth);
+
+export const LeftSidebarActiveTabStore = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.leftSidebarActiveTab);

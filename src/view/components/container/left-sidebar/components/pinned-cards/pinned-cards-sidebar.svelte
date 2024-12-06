@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { PinnedNodesStore } from '../../../../stores/document/derived/pinned-nodes-store';
-    import { getView } from '../context';
-    import { ActiveStatus } from 'src/view/components/container/column/components/group/components/active-status.enum';
-    import Node from 'src/view/components/container/column/components/group/components/card/card.svelte';
-    import { documentStateStore } from 'src/stores/view/derived/editing-store';
-    import { IdSectionStore } from 'src/stores/document/derived/id-section-store';
-    import { ActivePinnedCardStore } from 'src/stores/view/derived/pinned-cards-sidebar';
+    import { PinnedNodesStore } from '../../../../../../stores/document/derived/pinned-nodes-store';
+    import { getView } from '../../../context';
+    import { ActiveStatus } from '../../../column/components/group/components/active-status.enum';
+    import Node from '../../../column/components/group/components/card/card.svelte';
+    import { documentStateStore } from '../../../../../../stores/view/derived/editing-store';
+    import { IdSectionStore } from '../../../../../../stores/document/derived/id-section-store';
+    import { ActivePinnedCardStore } from '../../../../../../stores/view/derived/pinned-cards-sidebar';
 
     const view = getView();
     const pinnedNodesArray = PinnedNodesStore(view);
