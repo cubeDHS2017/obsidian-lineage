@@ -16,6 +16,7 @@ export const alignBranch = async (
         const documentState = view.documentStore.getValue();
         const viewState = view.viewStore.getValue();
         const settings = view.plugin.settings.getValue();
+        if (!viewState.document.activeNode) return;
         const localState: AlignBranchState = {
             columns: new Set<string>(),
         };
