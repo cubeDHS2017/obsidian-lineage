@@ -64,6 +64,7 @@
                 editedNodeState={$editing}
                 searchQuery={$search.query}
                 searchResults={$search.results}
+                showAllNodes={$search.showAllNodes}
                 searching={$search.searching}
                 idSection={$idSection}
                 selectedNodes={$selectedNodes}

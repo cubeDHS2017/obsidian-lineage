@@ -13,6 +13,7 @@ import { ToggleFuzzySearchAction } from 'src/stores/view/reducers/search/toggle-
 import { NodeNavigationAction } from 'src/stores/view/reducers/ui/navigate-active-node';
 import { SetActivePinnedNodeAction } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
 import { SetActiveRecentNodeAction } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
+import { ToggleShowAllNodesAction } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
 
 export type ViewStoreAction =
     | SearchAction
@@ -27,7 +28,8 @@ export type SearchAction =
     | SetSearchQueryAction
     | SetSearchResultsAction
     | ToggleSearchInputAction
-    | ToggleFuzzySearchAction;
+    | ToggleFuzzySearchAction
+    | ToggleShowAllNodesAction;
 
 export type ViewUIAction =
     | ToggleHelpSidebarAction

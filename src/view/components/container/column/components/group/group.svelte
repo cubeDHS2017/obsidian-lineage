@@ -16,6 +16,7 @@
     export let editedNodeState: EditingState;
     export let searchQuery: string;
     export let searchResults: Set<string>;
+    export let showAllNodes: boolean;
     export let pinnedNodes: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string, string>;
@@ -25,7 +26,7 @@
     const nodes = nodesStore(view, columnId, groupId);
 </script>
 
-{#if $nodes.length > 0 && (searchQuery.length === 0 || $nodes.some( (n) => searchResults.has(n), ))}
+{#if $nodes.length > 0 && (searchQuery.length === 0 || showAllNodes || $nodes.some( (n) => searchResults.has(n), ))}
     <div
         class={clx(
             'group',
@@ -35,7 +36,7 @@
         id={'group-' + groupId}
     >
         {#each $nodes as node (node)}
-            {#if searchQuery.length === 0 || (!searching && searchResults.has(node))}
+            {#if searchQuery.length === 0 || showAllNodes||  (!searching && searchResults.has(node))}
                 <Node
                     {node}
                     active={node === activeNode
@@ -57,6 +58,7 @@
                     section={idSection[node]}
                     selected={selectedNodes.has(node)}
                     pinned={pinnedNodes.has(node)}
+                    isSearchMatch={searchResults.has(node)}
                     {firstColumn}
                 />
             {/if}

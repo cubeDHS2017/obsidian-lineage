@@ -19,6 +19,7 @@
     export let selected: boolean;
     export let pinned: boolean;
     export let isInSidebar = false;
+    export let isSearchMatch = false
 
 </script>
 
@@ -31,6 +32,7 @@
     {firstColumn}
     {selected}
     {isInSidebar}
+    {isSearchMatch}
 >
     {#if active === ActiveStatus.node && editing }
         <InlineEditor nodeId={node} />

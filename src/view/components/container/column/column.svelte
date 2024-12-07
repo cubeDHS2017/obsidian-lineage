@@ -13,6 +13,7 @@
     export let activeGroup: string;
     export let activeNode: string;
     export let editedNodeState: EditingState;
+    export let showAllNodes: boolean;
     export let searchQuery: string;
     export let searchResults: Set<string>;
     export let pinnedNodes: Set<string>;
@@ -36,6 +37,7 @@
                 {editedNodeState}
                 {searchQuery}
                 {searchResults}
+                {showAllNodes}
                 {searching}
                 {activeChildGroups}
                 {activeNode}

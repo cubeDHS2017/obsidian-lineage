@@ -36,7 +36,7 @@
         right: 0;
         top: 0;
         width: 4px;
-        background: var(--color-base-30);
+        background: var(--color-base-50);
         border-radius: 2px;
         transition: transform 0.1s ease-out;
     }

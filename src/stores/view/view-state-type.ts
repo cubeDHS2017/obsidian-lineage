@@ -35,6 +35,7 @@ export type ViewState = {
         searching: boolean;
         showInput: boolean;
         fuzzySearch: boolean;
+        showAllNodes: boolean;
     };
     ui: {
         controls: {

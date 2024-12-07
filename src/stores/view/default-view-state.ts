@@ -8,6 +8,7 @@ export const defaultViewState = (): ViewState => ({
         searching: false,
         showInput: false,
         fuzzySearch: false,
+        showAllNodes: true,
     },
     ui: {
         controls: {

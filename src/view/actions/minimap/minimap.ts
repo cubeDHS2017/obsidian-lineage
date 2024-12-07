@@ -134,9 +134,9 @@ export class Minimap {
         container.addEventListener('mousemove', onMousemove);
 
         this.setDocument(this.view.documentStore.getValue().document);
-        this.setActiveCardId(
-            this.view.viewStore.getValue().document.activeNode,
-        );
+        const viewState = this.view.viewStore.getValue();
+        this.setSearchResults(Array.from(viewState.search.results));
+        this.setActiveCardId(viewState.document.activeNode);
         this.subscriptions.add(() => {
             canvas.removeEventListener('click', onClick);
             container.removeEventListener('wheel', onWheel);

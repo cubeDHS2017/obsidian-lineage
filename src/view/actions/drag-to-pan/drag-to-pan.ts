@@ -57,7 +57,9 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
 
     const onKeyDown = (e: KeyboardEvent) => {
         if (e.key === ' ' && !pressed) {
-            const enabled = !isEditing(view);
+            const enabled =
+                !isEditing(view) &&
+                (e.target as HTMLElement).tagName !== 'INPUT';
             if (enabled) {
                 pressed = true;
                 container.style.cursor = 'grab';

@@ -15,6 +15,7 @@
     export let disableEditConfirmation: boolean;
     export let selected: boolean;
     export let isInSidebar = false;
+    export let isSearchMatch = false;
     const view = getView();
     // eslint-disable-next-line no-undef
     const setActive = (e: MouseEvent) => {
@@ -22,8 +23,7 @@
         const cursor = view.container!.style.cursor;
         if (cursor === 'grab') return;
         if (isInSidebar) {
-            setActiveSidebarNode(view,nodeId);
-
+            setActiveSidebarNode(view, nodeId);
         } else {
             viewStore.dispatch({
                 type: 'DOCUMENT/SET_ACTIVE_NODE',
@@ -56,9 +56,11 @@
               ? 'node-border--editing'
               : selected
                 ? 'node-border--selected'
-                : active === ActiveStatus.node
-                  ? 'node-border--active'
-                  : undefined,
+                : isSearchMatch
+                  ? 'node-border--search-match'
+                  : active === ActiveStatus.node
+                    ? 'node-border--active'
+                    : undefined,
     )}
     id={nodeId}
     on:click={setActive}
@@ -71,7 +73,7 @@
             type: 'DOCUMENT/ENABLE_EDIT_MODE',
             payload: {
                 nodeId,
-                isInSidebar
+                isInSidebar,
             },
         });
     }}
@@ -111,5 +113,8 @@
 
     .node-border--selected {
         border-left: 5px var(--lineage-color-selection) solid;
+    }
+    .node-border--search-match {
+        border-left: 5px var(--color-yellow) solid;
     }
 </style>

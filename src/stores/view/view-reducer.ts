@@ -19,6 +19,7 @@ import { resetSelectionState } from 'src/stores/view/reducers/document/helpers/r
 import { navigateActiveNode } from 'src/stores/view/reducers/ui/navigate-active-node';
 import { setActivePinnedNode } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
 import { setActiveRecentNode } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
+import { toggleShowAllNodes } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
@@ -110,6 +111,8 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             state.recentNodes,
             action.payload.id,
         );
+    } else if (action.type === 'search/toggle-show-all-nodes') {
+        toggleShowAllNodes(state);
     }
 };
 export const viewReducer = (
