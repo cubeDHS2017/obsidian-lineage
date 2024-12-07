@@ -10,6 +10,7 @@ const navigationEvents = new Set<ActionType>([
 const searchEvents = new Set<ActionType>([
     'SEARCH/SET_QUERY',
     'SEARCH/SET_RESULTS',
+    'SEARCH/TOGGLE_INPUT',
 ]);
 
 const stateEvents = new Set<ActionType>([
