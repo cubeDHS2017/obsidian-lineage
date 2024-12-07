@@ -70,6 +70,9 @@
     >
         <ChevronRight class="svg-icon" size="12" />
     </Button>
+    <div class="search-stats">
+        {`${results.indexOf($activeNode) + 1} / ${results.length}`}
+    </div>
 </div>
 
 <style>
@@ -77,6 +80,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: var(--size-4-2);
+    }
+
+    .search-stats {
+        color: var(--text-muted);
+        font-size: var(--status-bar-font-size);
+        font-variant-numeric: tabular-nums;
+        padding: 5px 10px;
+        border-left: 1px solid var(--text-faint);
     }
 </style>
