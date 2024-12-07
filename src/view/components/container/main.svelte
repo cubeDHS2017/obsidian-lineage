@@ -17,7 +17,6 @@
     import { dragToPan } from 'src/view/actions/drag-to-pan/drag-to-pan';
     import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
-    import { closeModalsWhenClickingOutside } from 'src/view/actions/close-modals-when-clicking-outside';
 
     export let plugin: Lineage;
     export let view: LineageView;
@@ -30,7 +29,6 @@
 <div
     class="lineage-view"
     use:keyboardShortcuts={{ view }}
-    use:closeModalsWhenClickingOutside={view}
     use:contextMenu={view}
     tabindex="0"
 >
