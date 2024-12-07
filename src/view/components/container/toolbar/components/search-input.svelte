@@ -89,7 +89,7 @@
 <style>
     .search-input-element {
         height: 34px;
-        padding-right: 64px;
+        padding-right: 74px;
         padding-left: 12px;
         min-width: 250px;
     }

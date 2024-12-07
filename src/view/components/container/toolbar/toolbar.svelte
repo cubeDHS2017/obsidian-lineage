@@ -5,6 +5,7 @@
     import { searchStore } from 'src/stores/view/derived/search-store';
     import SearchInput from './components/search-input.svelte';
     import LeftSidebarToggle from './components/left-sidebar-toggle.svelte';
+    import SearchNavigationButtons from './components/search/search-navigation-buttons.svelte';
 
     const view = getView();
 
@@ -17,6 +18,9 @@
     <SearchToggle />
     {#if $search.showInput}
         <SearchInput />
+    {/if}
+    {#if $search.results.size > 0}
+        <SearchNavigationButtons />
     {/if}
 </div>
 <style>

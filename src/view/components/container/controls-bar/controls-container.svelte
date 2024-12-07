@@ -242,6 +242,7 @@
             class="control-item"
             disabled={$zoomLevel===1}
             label="Restore zoom level"
+            active={$zoomLevel !==1}
             on:click={restoreZoom}
             tooltipPosition="left"
         >
