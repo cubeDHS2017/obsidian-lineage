@@ -10,13 +10,61 @@ import { customIcons } from 'src/helpers/load-custom-icons';
 import { copyLinkToBlock } from 'src/view/actions/context-menu/card-context-menu/helpers/copy-link-to-block';
 import { exportColumn } from 'src/view/actions/context-menu/card-context-menu/helpers/export-column';
 
+const selectInactiveCard = (
+    view: LineageView,
+    closestCardElement: HTMLElement,
+    isInSidebar: boolean,
+    isInRecentCardsList: boolean,
+) => {
+    const id = closestCardElement?.id;
+    if (!isInSidebar) {
+        view.viewStore.dispatch({
+            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            payload: {
+                id,
+            },
+            // to prevent scrolling
+            context: { modKey: true },
+        });
+    } else if (isInRecentCardsList) {
+        view.viewStore.dispatch({
+            type: 'view/recent-nodes/set-active-node',
+            payload: {
+                id,
+            },
+        });
+    } else {
+        view.viewStore.dispatch({
+            type: 'view/pinned-nodes/set-active-node',
+            payload: {
+                id,
+            },
+        });
+    }
+};
+
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const menu = new Menu();
     const target = event.target as HTMLElement;
+    const closestCardElement = target.closest(
+        '.lineage-card',
+    ) as HTMLElement | null;
+
+    if (!closestCardElement) return;
+
     const isInSidebar = Boolean(target.closest('.sidebar'));
     const isInRecentCardsList =
         isInSidebar && Boolean(target.closest('.recent-cards-container'));
 
+    const targetIsActive = closestCardElement.hasClass('active-node');
+    if (!targetIsActive) {
+        selectInactiveCard(
+            view,
+            closestCardElement,
+            isInSidebar,
+            isInRecentCardsList,
+        );
+    }
     const viewState = view.viewStore.getValue();
     const multipleNodesAreSelected = viewState.document.selectedNodes.size > 1;
 

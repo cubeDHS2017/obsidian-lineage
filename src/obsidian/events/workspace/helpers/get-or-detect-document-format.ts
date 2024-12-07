@@ -11,24 +11,23 @@ export const getOrDetectDocumentFormat = (
     const format = maybeGetDocumentFormat(view);
     if (format) {
         return format;
-    } else {
-        const detected = detectDocumentFormat(view.data);
-        if (detected) return detected;
-        else {
-            const defaultFormat =
-                view.plugin.settings.getValue().general.defaultDocumentFormat;
-            if (defaultFormat === 'outline') {
-                if (!data.trim()) return 'outline';
-                // has a single item
-                try {
-                    const tree = outlineToJson(data);
-                    if (tree.length <= 1 && tree[0]?.children?.length === 0)
-                        return 'outline';
-                } catch {
-                    /* empty */
-                }
-            }
-            return 'sections';
+    }
+
+    const detected = detectDocumentFormat(view.data);
+    if (detected) return detected;
+
+    const defaultFormat =
+        view.plugin.settings.getValue().general.defaultDocumentFormat;
+    if (defaultFormat === 'outline') {
+        if (!data.trim()) return 'outline';
+        // has a single item
+        try {
+            const tree = outlineToJson(data);
+            if (tree.length <= 1 && tree[0]?.children?.length === 0)
+                return 'outline';
+        } catch {
+            /* empty */
         }
     }
+    return defaultFormat;
 };

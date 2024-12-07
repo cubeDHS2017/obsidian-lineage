@@ -5,6 +5,6 @@
 
 <div class="pane-empty">
     {variant === 'pinned'
-        ? "No pinned nodes found"
-        : "No recent nodes found"}
+        ? "No pinned cards found"
+        : "No recent cards found"}
 </div>
