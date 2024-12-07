@@ -71,9 +71,9 @@
         display: flex;
         flex-direction: column;
         width: fit-content;
-        gap: var(--cards-gap);
+        gap: var(--node-gap);
         padding: 8px;
-        margin-bottom: 2px;
+        margin-bottom: var(--group-gap);
     }
     .group:last-child {
         margin-bottom: 0;

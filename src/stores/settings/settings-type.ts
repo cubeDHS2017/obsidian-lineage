@@ -58,6 +58,7 @@ export type Settings = {
         showLeftSidebar: boolean;
         leftSidebarWidth: number;
         leftSidebarActiveTab: LeftSidebarActiveTab;
+        applyGapBetweenCards: boolean;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

@@ -152,7 +152,8 @@ export type SettingsActions =
               filePath: string;
               section: string;
           };
-      };
+      }
+    | { type: 'view/modes/gap-between-cards/toggle' };
 
 export type PersistActiveNodeAction = {
     type: 'DOCUMENT/SET_ACTIVE_NODE';
@@ -268,6 +269,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         }
     } else if (action.type === 'view/left-sidebar/set-active-tab') {
         store.view.leftSidebarActiveTab = action.payload.tab;
+    } else if (action.type === 'view/modes/gap-between-cards/toggle') {
+        store.view.applyGapBetweenCards = !store.view.applyGapBetweenCards;
     }
 };
 export const settingsReducer = (

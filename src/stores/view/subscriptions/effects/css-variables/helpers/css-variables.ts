@@ -3,8 +3,8 @@ export const cssVariables = {
     containerBg: '--background-container',
     inactiveNodeBg: '--background-inactive-node',
     cardWidth: '--node-width',
-    columnsGap: '--columns-gap',
-    cardsGap: '--cards-gap',
+    columnGap: '--column-gap-setting',
+    nodeGap: '--node-gap-setting',
     minCardHeight: '--min-node-height',
     zoomLevel: '--zoom-level',
 };

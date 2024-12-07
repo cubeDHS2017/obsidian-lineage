@@ -27,6 +27,7 @@
     } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
     import { ScrollSettingsStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { customIcons } from 'src/helpers/load-custom-icons';
+    import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -127,7 +128,12 @@
 
     const scrollSettingsStore = ScrollSettingsStore(view);
 
-
+    const applyGapBetweenCards = ApplyGapBetweenCardsStore(view);
+    const toggleGap = () => {
+        view.plugin.settings.dispatch({
+            type: 'view/modes/gap-between-cards/toggle',
+        });
+    };
 </script>
 
 <div class="controls-container">
@@ -177,6 +183,36 @@
             tooltipPosition="left"
         >
             {@html customIcons.align.svg}
+        </Button>
+        <Button
+            active={$applyGapBetweenCards}
+            class="control-item"
+            label={'Gap between cards'}
+            on:click={toggleGap}
+            tooltipPosition="left"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                class="svg-icon"
+                stroke="currentColor"
+                fill="transparent"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <rect
+                    width="20"
+                    height="12"
+                    x="-11.600009"
+                    y="6"
+                    rx="2"
+                    />
+                <rect
+                    width="20"
+                    height="12"
+                    x="16.534304"
+                    y="5.9783392"
+                    rx="2"
+                     />
+            </svg>
         </Button>
         <Button
             active={$showMinimap}

@@ -1,8 +1,8 @@
 import { Settings } from './settings-type';
 
 export const DEFAULT_CARD_WIDTH = 550;
-export const DEFAULT_COLUMNS_GAP = 0;
-export const DEFAULT_CARDS_GAP = 5;
+export const DEFAULT_COLUMNS_GAP = 150;
+export const DEFAULT_CARDS_GAP = 150;
 export const DEFAULT_SETTINGS = (): Settings => ({
     documents: {},
     hotkeys: {
@@ -24,6 +24,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         showLeftSidebar: false,
         leftSidebarWidth: 500,
         leftSidebarActiveTab: 'pinned-cards',
+        applyGapBetweenCards: false,
     },
     general: {
         defaultDocumentFormat: 'sections',

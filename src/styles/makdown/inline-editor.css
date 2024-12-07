@@ -11,6 +11,7 @@
     }
     & .cm-editor .cm-scroller {
         padding: 6px !important;
+        padding-bottom: 10px !important;
         padding-left: 12px !important;
     }
     & .cm-contentContainer div {

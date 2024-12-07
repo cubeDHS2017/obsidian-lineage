@@ -12,3 +12,6 @@ export const LeftSidebarWidthStore = (view: LineageView) =>
 
 export const LeftSidebarActiveTabStore = (view: LineageView) =>
     derived(view.plugin.settings, (state) => state.view.leftSidebarActiveTab);
+
+export const ApplyGapBetweenCardsStore = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.applyGapBetweenCards);

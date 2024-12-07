@@ -9,6 +9,7 @@ import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
+import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -45,8 +46,12 @@ export const onPluginSettingsUpdate = (
         type === 'VIEW/SCROLLING/SET_REVEAL_CHILDREN' ||
         type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE' ||
         type === 'SET_CARDS_GAP' ||
-        type === 'SET_COLUMNS_GAP';
+        type === 'SET_COLUMNS_GAP' ||
+        type === 'view/modes/gap-between-cards/toggle';
     if (view.isActive && shouldAlign) {
         alignBranch(view, 'instant');
+    }
+    if (view.isActive && type === 'UI/CHANGE_ZOOM_LEVEL') {
+        focusContainer(view);
     }
 };

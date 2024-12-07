@@ -16,9 +16,8 @@
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
     import { PinnedNodesStore } from 'src/stores/document/derived/pinned-nodes-store';
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
-    import { CardsGapStore } from 'src/stores/settings/derived/cards-gap-store';
-    import { DEFAULT_CARDS_GAP } from 'src/stores/settings/default-settings';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
+    import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
 
     const view = getView();
     const zoomLevel = zoomLevelStore(view);
@@ -35,15 +34,16 @@
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
     const groupParentIds = GroupParentIdsStore(view);
-    const cardsGap = CardsGapStore(view);
     const pinnedNodesArray = PinnedNodesStore(view);
-    $: pinnedNodes = new Set($pinnedNodesArray)
+    $: pinnedNodes = new Set($pinnedNodesArray);
+
+    const applyGap = ApplyGapBetweenCardsStore(view);
 </script>
 
 <div
     class={'columns-container ' +
         ($limitPreviewHeight ? ' limit-card-height' : '') +
-        ($cardsGap > DEFAULT_CARDS_GAP ? ' transparent-group-bg' : '')}
+        ($applyGap ? ' gap-between-cards' : '')}
     id="columns-container"
     tabindex="0"
 
@@ -84,6 +84,9 @@
 <style>
     :root {
         --container-left-padding: 100px;
+        --column-gap: 0;
+        --node-gap: 4px;
+        --group-gap: 2px;
     }
     .columns-container {
         position: relative;
@@ -106,7 +109,7 @@
     .columns {
         display: flex;
         align-items: center;
-        gap: var(--columns-gap);
+        gap: var(--column-gap);
         transform: scale(var(--zoom-level));
         height: calc(1/var(--zoom-level) * 100vh);
         width: calc(1/var(--zoom-level) * 100vw);
@@ -124,10 +127,25 @@
         }
     }
 
-    .transparent-group-bg {
+    .gap-between-cards {
         & .group {
-            background-color: transparent ;
-
+            background-color: transparent;
         }
+        --node-gap: var(--node-gap-setting);
+        --column-gap: var(--column-gap-setting);
+        --group-gap: var(--node-gap-setting);
+
+        & .active-parent-bridge-right {
+          display: none;
+        }
+
+        & .active-parent-bridge-left {
+            display: none;
+        }
+        & .active-node-bridge {
+            display: none;
+        }
+
+
     }
 </style>

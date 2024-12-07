@@ -25,7 +25,7 @@
         min-height: var(--min-node-height);
 
         font-size: var(--font-text-size);
-        padding: 6px 6px 6px 12px;
+        padding: 6px 6px 10px 12px;
         color-scheme: light;
     }
 

@@ -3,5 +3,5 @@ import { cssVariables } from 'src/stores/view/subscriptions/effects/css-variable
 
 export const applyColumnsGap = (view: LineageView, value: number) => {
     if (typeof value !== 'number') return;
-    view.containerEl.style.setProperty(cssVariables.columnsGap, `${value}px`);
+    view.containerEl.style.setProperty(cssVariables.columnGap, `${value}px`);
 };

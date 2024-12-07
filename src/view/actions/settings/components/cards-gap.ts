@@ -16,7 +16,7 @@ export const CardsGap = (
         .setName('Gap between cards')
         .addSlider((cb) => {
             input = cb;
-            cb.setLimits(DEFAULT_CARDS_GAP, 500, 5);
+            cb.setLimits(0, 500, 10);
             cb.onChange((gap) => {
                 settingsStore.dispatch({
                     type: 'SET_CARDS_GAP',
