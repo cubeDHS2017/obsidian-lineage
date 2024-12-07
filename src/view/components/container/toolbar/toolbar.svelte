@@ -18,8 +18,6 @@
     <SearchToggle />
     {#if $search.showInput}
         <SearchInput />
-    {/if}
-    {#if $search.results.size > 0}
         <SearchNavigationButtons />
     {/if}
 </div>

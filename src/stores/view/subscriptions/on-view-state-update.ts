@@ -80,11 +80,15 @@ export const onViewStateUpdate = (
 
     if (
         action.type === 'DOCUMENT/DISABLE_EDIT_MODE' ||
-        action.type === 'SEARCH/TOGGLE_INPUT' ||
         action.type === 'NAVIGATION/NAVIGATE_FORWARD' ||
         action.type === 'NAVIGATION/NAVIGATE_BACK'
     ) {
         focusContainer(view);
+    }
+    if (action.type === 'SEARCH/TOGGLE_INPUT') {
+        if (!viewState.search.showInput) {
+            focusContainer(view);
+        }
     }
 
     if (activeNodeChange || e.search || e.edit) {

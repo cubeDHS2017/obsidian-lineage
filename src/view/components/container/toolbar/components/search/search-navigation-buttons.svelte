@@ -53,7 +53,7 @@
 
 <div class="search-container buttons-group">
     <Button
-        disabled={results.indexOf($activeNode) === 0}
+        disabled={results.length===0||results.indexOf($activeNode) === 0}
         label={'Previous result'}
         on:click={selectPreviousResult}
         tooltipPosition="bottom"
@@ -63,7 +63,7 @@
 
 
     <Button
-        disabled={results.indexOf($activeNode) === results.length - 1}
+        disabled={results.length===0||results.indexOf($activeNode) === results.length - 1}
         label={'Next result'}
         on:click={selectNextResult}
         tooltipPosition="bottom"

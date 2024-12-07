@@ -18,10 +18,6 @@
                 query: e.currentTarget.value,
             },
         });
-        clearTimeout(focusTimeout);
-        focusTimeout = setTimeout(() => {
-            if (e.currentTarget) e.currentTarget.focus();
-        }, 500);
     };
 </script>
 
