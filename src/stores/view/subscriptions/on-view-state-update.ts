@@ -6,9 +6,8 @@ import {
 } from 'src/stores/view/helpers/get-view-event-type';
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe-clear-selection';
-import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results/update-search-results';
+import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
 import { updateConflictingHotkeys } from 'src/stores/view/subscriptions/actions/update-conflicting-hotkeys';
-import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-search-results/helpers/reset-search-fuse';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
@@ -60,7 +59,7 @@ export const onViewStateUpdate = (
     }
 
     if (action.type === 'SEARCH/SET_QUERY') {
-        updateSearchResults(documentStore, viewStore);
+        updateSearchResults(view);
     }
     if (action.type === 'UI/TOGGLE_HELP_SIDEBAR') {
         if (viewState.ui.controls.showHelpSidebar)
@@ -75,7 +74,7 @@ export const onViewStateUpdate = (
         view.saveDocument(maybeViewIsClosing, postInlineEditor);
     }
     if (type === 'SEARCH/TOGGLE_FUZZY_MODE') {
-        resetSearchFuse(documentStore);
+        view.documentSearch.resetIndex();
     }
 
     if (

@@ -10,7 +10,6 @@ import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update
 import { clearSelectedNodes } from 'src/stores/view/subscriptions/actions/clear-selected-nodes';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/actions/remove-obsolete-navigation-items';
-import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-search-results/helpers/reset-search-fuse';
 import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
@@ -80,7 +79,7 @@ export const onDocumentStateUpdate = (
     }
 
     if (e.content || structuralChange) {
-        resetSearchFuse(documentStore);
+        view.documentSearch.resetIndex();
         view.minimapStore.setDocument(documentState.document);
         view.plugin.statusBar.update({
             type: 'DOCUMENT_PROGRESS',
