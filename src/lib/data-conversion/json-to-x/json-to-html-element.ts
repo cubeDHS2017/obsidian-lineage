@@ -20,6 +20,10 @@ export const jsonToHtmlElement = (
             content = `${headingLevel} ${createHtmlElementMarker(parentNumber, index)}${content.slice(headingLevel!.length).trim()}`;
         } else if (content.startsWith('>')) {
             content = `> ${createHtmlElementMarker(parentNumber, index)}${content.slice(1).trim()}`;
+        } else if (content.match(/^[-*+]\s\[.\]\s/)) {
+            // tasks
+            const taskPrefix = content.match(/^[-*+]\s\[.\]\s/)?.[0];
+            content = `${taskPrefix}${createHtmlElementMarker(parentNumber, index)}${content.slice(taskPrefix!.length).trim()}`;
         } else if (content.match(/^[-*+]\s/)) {
             const bullet = content.match(/^[-*+]\s/)?.[0];
             content = `${bullet}${createHtmlElementMarker(parentNumber, index)}${content.slice(bullet!.length).trim()}`;

@@ -108,4 +108,34 @@ describe('json to html element', () => {
 
         expect(actual).toEqual(mdWithHtmlElement);
     });
+
+    it('case: tasks', () => {
+        const input: TreeNode[] = [
+            {
+                content: '- [x] task',
+                children: [
+                    {
+                        content: '- [ ] sub task',
+                        children: [],
+                    },
+                ],
+            },
+            {
+                content: '* [x] [[task]]',
+                children: [],
+            },
+            { content: '+ [/] [[task]]', children: [] },
+        ];
+
+        const output = [
+            '- [x] ' + createHtmlElementMarker('', 1) + 'task',
+            '',
+            '- [ ] ' + createHtmlElementMarker('1', 1) + 'sub task',
+            '',
+            '* [x] ' + createHtmlElementMarker('', 2) + '[[task]]',
+            '',
+            '+ [/] ' + createHtmlElementMarker('', 3) + '[[task]]',
+        ];
+        expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
+    });
 });
