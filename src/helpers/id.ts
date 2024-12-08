@@ -9,3 +9,7 @@ export const id = {
     view: () => 'v' + nanoid(id_size),
     canvas: () => 'canvas-' + nanoid(id_size),
 };
+
+export const isId = {
+    node: (text: string) => text.length === 9 && text.startsWith('n'),
+};
