@@ -7,11 +7,11 @@
         Maximize,
         Minus as ZoomOut,
         MoreVertical,
+        PanelRightInactive as PanelRight,
         Plus as ZoomIn,
         Redo2 as RedoIcon,
         RotateCcw,
         Settings,
-        SquareGantt,
         Undo2 as UndoIcon
     } from 'lucide-svelte';
     import { getView } from '../context';
@@ -36,7 +36,7 @@
     const history = historyStore(view);
     const handleNextClick = () => {
         if (viewStore.getValue().document.editing.activeNodeId)
-            new Notice(lang.error_apply_snapshot_while_editing );
+            new Notice(lang.error_apply_snapshot_while_editing);
         else
             documentStore.dispatch({
                 type: 'HISTORY/APPLY_NEXT_SNAPSHOT',
@@ -91,16 +91,17 @@
                         Array.from(c.querySelectorAll('.group')),
                     ).height;
                 })
-                .sort((a,b)=>a-b);
-            const height = groupHeights[groupHeights.length-1];
+                .sort((a, b) => a - b);
+            const height = groupHeights[groupHeights.length - 1];
             const width = getCombinedBoundingClientRect(columns).width;
 
             // eslint-disable-next-line no-undef
-            const heightScale = view.container.getBoundingClientRect().height / (height+ 100);
-            const widthScale = view.container.getBoundingClientRect().width / (width+ 100);
+            const heightScale =
+                view.container.getBoundingClientRect().height / (height + 100);
+            const widthScale =
+                view.container.getBoundingClientRect().width / (width + 100);
 
-            const scale =
-                Math.min(heightScale,widthScale);
+            const scale = Math.min(heightScale, widthScale);
             view.plugin.settings.dispatch({
                 type: 'UI/CHANGE_ZOOM_LEVEL',
                 payload: { value: scale },
@@ -117,7 +118,6 @@
     const toggleMinimap = () => {
         view.plugin.settings.dispatch({
             type: 'VIEW/TOGGLE_MINIMAP',
-
         });
     };
     const toggleScrollMode = () => {
@@ -147,11 +147,20 @@
             <MoreVertical class="svg-icon" />
         </Button>
     </div>
+
     <div
         class="buttons-group buttons-group--vertical"
         data-visible={$showControls}
     >
-
+        <Button
+            active={$showMinimap}
+            class="control-item"
+            label={'Toggle minimap'}
+            on:click={toggleMinimap}
+            tooltipPosition="left"
+        >
+            <PanelRight class="svg-icon" />
+        </Button>
         <Button
             active={$controls.showSettingsSidebar}
             class="control-item"
@@ -176,7 +185,8 @@
         data-visible={$showControls}
     >
         <Button
-            active={$scrollSettingsStore.horizontalScrollingMode==="keep-active-card-at-center"}
+            active={$scrollSettingsStore.horizontalScrollingMode ===
+                'keep-active-card-at-center'}
             class="control-item"
             label={lang.toggle_scrolling_mode}
             on:click={toggleScrollMode}
@@ -198,32 +208,16 @@
                 fill="transparent"
                 xmlns="http://www.w3.org/2000/svg"
             >
-                <rect
-                    width="20"
-                    height="12"
-                    x="-11.600009"
-                    y="6"
-                    rx="2"
-                    />
+                <rect width="20" height="12" x="-11.600009" y="6" rx="2" />
                 <rect
                     width="20"
                     height="12"
                     x="16.534304"
                     y="5.9783392"
                     rx="2"
-                     />
+                />
             </svg>
         </Button>
-        <Button
-            active={$showMinimap}
-            class="control-item"
-            label={'Toggle minimap'}
-            on:click={toggleMinimap}
-            tooltipPosition="left"
-        >
-            <SquareGantt class="svg-icon" />
-        </Button>
-
     </div>
     <div
         class="buttons-group buttons-group--vertical"
@@ -276,9 +270,9 @@
         </Button>
         <Button
             class="control-item"
-            disabled={$zoomLevel===1}
+            disabled={$zoomLevel === 1}
             label="Restore zoom level"
-            active={$zoomLevel !==1}
+            active={$zoomLevel !== 1}
             on:click={restoreZoom}
             tooltipPosition="left"
         >
@@ -318,7 +312,7 @@
     .controls-toggle {
         display: none;
     }
-    :global(.is-mobile){
+    :global(.is-mobile) {
         & .controls-toggle {
             display: block;
         }
