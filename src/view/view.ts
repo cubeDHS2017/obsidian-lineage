@@ -286,7 +286,12 @@ export class LineageView extends TextFileView {
                     },
                     type: 'DOCUMENT/LOAD_FILE',
                 });
-                if (!isInitialLoad && existingData && bodyHasChanged) {
+                if (
+                    this.isActive &&
+                    !isInitialLoad &&
+                    existingData &&
+                    bodyHasChanged
+                ) {
                     new Notice('Document reloaded due to external changes');
                 }
                 if (!maybeGetDocumentFormat(this)) {

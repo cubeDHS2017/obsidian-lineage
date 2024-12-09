@@ -40,7 +40,7 @@ export const onDocumentStateUpdate = (
     const structuralChange =
         e.createOrDelete || e.dropOrMove || e.changeHistory || e.clipboard;
     if (structuralChange) {
-        setActiveNode(viewStore, documentState);
+        setActiveNode(view, action);
         updateActiveBranch(viewStore, documentState);
         view.minimapStore.setActiveCardId(
             viewStore.getValue().document.activeNode,
