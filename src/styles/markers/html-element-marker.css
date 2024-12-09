@@ -11,11 +11,16 @@ span[data-section] {
 
     position: absolute;
     left: 0;
-    transform: translateX(calc(-100% - 50px)); /* Adjust dynamically based on width */
 
     &:hover {
         opacity: 1;
     }
+}
+
+.markdown-source-view span[data-section] {
+    transform: translateX(
+        calc(-100% - 50px)
+    );
 }
 
 span[data-section]::before {
