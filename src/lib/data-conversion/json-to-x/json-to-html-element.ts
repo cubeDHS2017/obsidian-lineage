@@ -15,29 +15,33 @@ export const jsonToHtmlElement = (
 
         let content = node.content.trimStart();
 
+        const marker = createHtmlElementMarker(parentNumber, index);
         if (content.match(/^#+ /)) {
             const headingLevel = content.match(/^#+/)?.[0];
-            content = `${headingLevel} ${createHtmlElementMarker(parentNumber, index)}${content.slice(headingLevel!.length).trim()}`;
+            content = `${headingLevel} ${marker}${content.slice(headingLevel!.length).trim()}`;
+        } else if (content.match(/^#[^\s#]/)) {
+            // tag
+            content = `${marker} ${content}`;
         } else if (content.startsWith('>')) {
-            content = `> ${createHtmlElementMarker(parentNumber, index)}${content.slice(1).trim()}`;
+            content = `> ${marker}${content.slice(1).trim()}`;
         } else if (content.match(/^[-*+]\s\[.\]\s/)) {
             // tasks
             const taskPrefix = content.match(/^[-*+]\s\[.\]\s/)?.[0];
-            content = `${taskPrefix}${createHtmlElementMarker(parentNumber, index)}${content.slice(taskPrefix!.length).trim()}`;
+            content = `${taskPrefix}${marker}${content.slice(taskPrefix!.length).trim()}`;
         } else if (content.match(/^[-*+]\s/)) {
             const bullet = content.match(/^[-*+]\s/)?.[0];
-            content = `${bullet}${createHtmlElementMarker(parentNumber, index)}${content.slice(bullet!.length).trim()}`;
+            content = `${bullet}${marker}${content.slice(bullet!.length).trim()}`;
         } else if (content.match(/^\d+\.\s/)) {
             // numbered list
             const number = content.match(/^\d+\.\s/)?.[0];
-            content = `${number} ${createHtmlElementMarker(parentNumber, index)}${content.slice(number!.length).trim()}`;
+            content = `${number} ${marker}${content.slice(number!.length).trim()}`;
         } else if (content.startsWith('```')) {
-            content = `${createHtmlElementMarker(parentNumber, index)}\n${content}`;
+            content = `${marker}\n${content}`;
         } else if (content.startsWith('|')) {
             // table
-            content = `${createHtmlElementMarker(parentNumber, index)}\n\n${content}`;
+            content = `${marker}\n\n${content}`;
         } else {
-            content = `${createHtmlElementMarker(parentNumber, index)}${content}`;
+            content = `${marker}${content}`;
         }
 
         text += content;

@@ -138,4 +138,16 @@ describe('json to html element', () => {
         ];
         expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
     });
+
+    it('case: tags', () => {
+        const input: TreeNode[] = [
+            {
+                content: '#🙄',
+                children: [],
+            },
+        ];
+
+        const output = [createHtmlElementMarker('', 1) + ' #🙄'];
+        expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
+    });
 });
