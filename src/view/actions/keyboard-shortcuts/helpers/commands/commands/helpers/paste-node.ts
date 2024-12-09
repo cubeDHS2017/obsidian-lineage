@@ -13,6 +13,8 @@ export const pasteNode = async (view: LineageView) => {
             },
         });
     } else {
-        new Notice('Lineage: paste action failed. Try pasting inside a card.');
+        new Notice(
+            'Lineage: paste action failed. Try pasting directly into a card.',
+        );
     }
 };

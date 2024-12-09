@@ -6,8 +6,7 @@ export const attachWheelScrollListener = (view: LineageView) => {
         if (evt.deltaY === 0) return;
         const target = evt.target as HTMLElement;
         const targetIsACard =
-            target.hasClass('preview-container') ||
-            target.closest('.preview-container');
+            target.hasClass('lng-prev') || target.closest('.lng-prev');
         if (!targetIsACard) return;
 
         const column = target.closest('.column') as HTMLElement | null;

@@ -13,14 +13,14 @@
 </script>
 
 <div
-    class={'preview-container markdown-preview-view markdown-preview-section markdown-rendered'
+    class={'lng-prev markdown-preview-view markdown-preview-section markdown-rendered'
        }
     on:click={onClick}
     use:markdownPreviewAction={nodeId}
 ></div>
 
 <style>
-    .preview-container {
+    .lng-prev {
         width: 100%;
         min-height: var(--min-node-height);
 

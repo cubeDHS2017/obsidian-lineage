@@ -123,7 +123,7 @@
     }
 
     .limit-card-height {
-        & .preview-container {
+        & .lng-prev {
             max-height: 65vh;
         }
         & .editor-container {

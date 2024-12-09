@@ -1,4 +1,6 @@
 export const removeHtmlElementMarkerInPreviewMode = (el: HTMLElement) => {
+    if (el.classList.contains('lng-prev')) return;
+
     const spans = el.querySelectorAll('span[data-section]');
     for (let i = 0; i < spans.length; i++) {
         const span = spans[i];
