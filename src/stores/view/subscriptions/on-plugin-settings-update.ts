@@ -48,7 +48,7 @@ export const onPluginSettingsUpdate = (
         type === 'SET_CARDS_GAP' ||
         type === 'SET_COLUMNS_GAP' ||
         type === 'view/modes/gap-between-cards/toggle';
-    if (view.isActive && shouldAlign) {
+    if (shouldAlign) {
         alignBranch(view, 'instant');
     }
     if (view.isActive && type === 'UI/CHANGE_ZOOM_LEVEL') {

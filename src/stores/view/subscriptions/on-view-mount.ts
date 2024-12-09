@@ -35,7 +35,6 @@ export const onViewMount = (view: LineageView) => {
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const viewStore = view.viewStore;
-    const container = view.container;
     // actions
     if (!view.file) return;
     setInitialActiveNode(
@@ -50,10 +49,8 @@ export const onViewMount = (view: LineageView) => {
     }
     updateStatusBar(view);
     // effects
-    if (view.isActive && container) {
-        focusContainer(view);
-        alignBranch(view, undefined, true);
-    }
+    if (view.isActive) focusContainer(view);
+    alignBranch(view, undefined, true);
 
     loadPinnedNodesToDocument(view);
     markUnresolvedLinks(view);

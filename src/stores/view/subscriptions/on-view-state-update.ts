@@ -68,6 +68,14 @@ export const onViewStateUpdate = (
     }
 
     // effects
+    if (activeNodeChange || e.search || e.edit) {
+        const skipAligning =
+            action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
+            action.context?.modKey;
+        if (!skipAligning) {
+            alignBranch(view);
+        }
+    }
     if (!container || !view.isViewOfFile) return;
     const postInlineEditor = type === 'DOCUMENT/CONFIRM_DISABLE_EDIT';
     if (postInlineEditor) {
@@ -91,14 +99,6 @@ export const onViewStateUpdate = (
         }
     }
 
-    if (activeNodeChange || e.search || e.edit) {
-        const skipAligning =
-            action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
-            action.context?.modKey;
-        if (!skipAligning) {
-            alignBranch(view);
-        }
-    }
     if (
         action.type === 'SEARCH/SET_RESULTS' ||
         action.type === 'SEARCH/TOGGLE_INPUT' ||

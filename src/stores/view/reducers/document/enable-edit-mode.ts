@@ -20,7 +20,7 @@ export const enableEditMode = (
         if (!isSameNode) {
             throw new Error('Another card is being edited');
         } else if (isSameNodeInDifferentSplit) {
-            throw new Error(
+            throw new SilentError(
                 `This card is being edited in the ${state.editing.isInSidebar ? 'sidebar' : 'main view'}`,
             );
         } else {

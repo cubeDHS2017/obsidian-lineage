@@ -71,31 +71,6 @@ export const onDocumentStateUpdate = (
     }
 
     // effects
-    if (!container || !view.isViewOfFile) return;
-
-    if (e.content || structuralChange) {
-        const maybeViewIsClosing = !view.isActive;
-        view.saveDocument(maybeViewIsClosing);
-    }
-
-    if (e.content || structuralChange) {
-        view.documentSearch.resetIndex();
-        view.minimapStore.setDocument(documentState.document);
-        view.plugin.statusBar.update({
-            type: 'DOCUMENT_PROGRESS',
-            payload: {
-                view,
-            },
-        });
-    }
-    if (structuralChange) {
-        updateStatusBar(view);
-    }
-
-    if (e.content || structuralChange) {
-        focusContainer(view);
-    }
-
     if (structuralChange || e.content) {
         let scrollingBehavior: ScrollBehavior | undefined;
         let delay = 0;
@@ -124,6 +99,31 @@ export const onDocumentStateUpdate = (
                 type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
             );
         }
+    }
+
+    if (!container || !view.isViewOfFile) return;
+
+    if (e.content || structuralChange) {
+        const maybeViewIsClosing = !view.isActive;
+        view.saveDocument(maybeViewIsClosing);
+    }
+
+    if (e.content || structuralChange) {
+        view.documentSearch.resetIndex();
+        view.minimapStore.setDocument(documentState.document);
+        view.plugin.statusBar.update({
+            type: 'DOCUMENT_PROGRESS',
+            payload: {
+                view,
+            },
+        });
+    }
+    if (structuralChange) {
+        updateStatusBar(view);
+    }
+
+    if (e.content || structuralChange) {
+        focusContainer(view);
     }
 
     const pinnedNodesUpdate =
