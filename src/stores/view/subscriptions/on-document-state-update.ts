@@ -123,7 +123,7 @@ export const onDocumentStateUpdate = (
     }
 
     if (e.content || structuralChange) {
-        focusContainer(view);
+        if (view.isActive) focusContainer(view);
     }
 
     const pinnedNodesUpdate =
