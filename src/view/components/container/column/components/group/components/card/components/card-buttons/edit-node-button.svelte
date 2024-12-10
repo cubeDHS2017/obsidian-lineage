@@ -19,13 +19,21 @@
         if (editedNodeId) {
             saveNodeContent(view);
         } else {
-            viewStore.dispatch({
-                type: 'DOCUMENT/ENABLE_EDIT_MODE',
-                payload: {
-                    nodeId,
-                    isInSidebar: isInSidebar,
-                },
-            });
+            if (isInSidebar) {
+                viewStore.dispatch({
+                    type: 'view/sidebar/enable-edit',
+                    payload: {
+                        id: nodeId,
+                    },
+                });
+            } else {
+                viewStore.dispatch({
+                    type: 'view/main/enable-edit',
+                    payload: {
+                        nodeId,
+                    },
+                });
+            }
         }
     };
 </script>

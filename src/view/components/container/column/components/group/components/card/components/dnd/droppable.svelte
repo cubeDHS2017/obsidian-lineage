@@ -35,6 +35,28 @@
             });
         }
     };
+
+    const enableEditMode = (e: MouseEvent) => {
+        setActive(e);
+        const editingState = viewStore.getValue().document.editing;
+        const editedNodeId = editingState.activeNodeId;
+        if (editedNodeId === nodeId) return;
+        if (isInSidebar) {
+            viewStore.dispatch({
+                type: 'view/sidebar/enable-edit',
+                payload: {
+                    id: nodeId,
+                },
+            });
+        } else {
+            viewStore.dispatch({
+                type: 'view/main/enable-edit',
+                payload: {
+                    nodeId,
+                },
+            });
+        }
+    }
     const documentStore = view.documentStore;
     const viewStore = view.viewStore;
 
@@ -64,19 +86,7 @@
     )}
     id={nodeId}
     on:click={setActive}
-    on:dblclick={(e) => {
-        setActive(e);
-        const editingState = viewStore.getValue().document.editing;
-        const editedNodeId = editingState.activeNodeId;
-        if (editedNodeId === nodeId) return;
-        viewStore.dispatch({
-            type: 'DOCUMENT/ENABLE_EDIT_MODE',
-            payload: {
-                nodeId,
-                isInSidebar,
-            },
-        });
-    }}
+    on:dblclick={enableEditMode}
     use:droppable={{ viewStore, documentStore }}
 >
     <slot />

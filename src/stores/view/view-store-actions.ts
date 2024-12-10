@@ -1,8 +1,6 @@
 import { SetSearchQueryAction } from 'src/stores/view/reducers/search/set-search-query';
 import { SetSearchResultsAction } from 'src/stores/view/reducers/search/set-search-results';
 import { ToggleSearchInputAction } from 'src/stores/view/reducers/search/toggle-search-input';
-import { DisableEditModeAction } from 'src/stores/view/reducers/document/disable-edit-mode';
-import { ToggleEditModeAction } from 'src/stores/view/reducers/document/enable-edit-mode';
 import { SetDragStartedAction } from 'src/stores/view/reducers/document/on-drag-start';
 import { SetDragCanceled } from 'src/stores/view/reducers/document/on-drag-end';
 import { UpdateActiveBranchAction } from 'src/stores/view/reducers/document/helpers/update-active-branch';
@@ -21,8 +19,7 @@ export type ViewStoreAction =
     | ViewDocumentAction
     | NodeSelectionAction
     | NodeHistoryNavigationAction
-    | PinnedNodesActions
-    | RecentNodesActions;
+    | SidebarActions;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -36,6 +33,17 @@ export type ViewUIAction =
     | ToggleHistorySidebarAction
     | ToggleSettingsSidebarAction
     | { type: 'CLOSE_MODALS'; payload?: { closeAllModals: boolean } };
+
+export type ToggleEditModeAction = {
+    type: 'view/main/enable-edit';
+    payload: {
+        nodeId: string;
+    };
+};
+
+export type DisableEditModeAction = {
+    type: 'view/main/disable-edit';
+};
 
 export type ViewDocumentAction =
     | DisableEditModeAction
@@ -75,5 +83,22 @@ export type NodeSelectionAction =
     | SetActiveNodeAction
     | NodeNavigationAction;
 
+export type SidebarActions =
+    | PinnedNodesActions
+    | RecentNodesActions
+    | EnableEditInSidebar
+    | DisableEditInSidebar;
+
 export type PinnedNodesActions = SetActivePinnedNodeAction;
 export type RecentNodesActions = SetActiveRecentNodeAction;
+
+export type EnableEditInSidebar = {
+    type: 'view/sidebar/enable-edit';
+    payload: {
+        id: string;
+    };
+};
+
+export type DisableEditInSidebar = {
+    type: 'view/sidebar/disable-edit';
+};

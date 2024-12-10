@@ -68,7 +68,7 @@ export const onViewStateUpdate = (
     }
 
     // effects
-    if (activeNodeChange || e.search || e.edit) {
+    if (activeNodeChange || e.search || e.editMainSplit) {
         const skipAligning =
             action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
             action.context?.modKey;
@@ -87,7 +87,8 @@ export const onViewStateUpdate = (
     }
 
     if (
-        action.type === 'DOCUMENT/DISABLE_EDIT_MODE' ||
+        action.type === 'view/main/disable-edit' ||
+        action.type === 'view/sidebar/disable-edit' ||
         action.type === 'NAVIGATION/NAVIGATE_FORWARD' ||
         action.type === 'NAVIGATION/NAVIGATE_BACK'
     ) {

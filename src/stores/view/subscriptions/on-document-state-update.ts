@@ -12,7 +12,7 @@ import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edi
 import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/actions/remove-obsolete-navigation-items';
 import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { alignBranchAfterDocumentSave } from 'src/stores/view/subscriptions/effects/align-branch/wrappers/align-branch-after-document-save';
 import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persist-pinned-nodes';
 import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
 import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
@@ -72,33 +72,7 @@ export const onDocumentStateUpdate = (
 
     // effects
     if (structuralChange || e.content) {
-        let scrollingBehavior: ScrollBehavior | undefined;
-        let delay = 0;
-        if (action.type === 'DOCUMENT/MOVE_NODE') {
-            const verticalMove =
-                action.payload.direction === 'down' ||
-                action.payload.direction === 'up';
-            if (verticalMove) scrollingBehavior = 'instant';
-        } else if (action.type === 'DOCUMENT/LOAD_FILE') {
-            scrollingBehavior = 'instant';
-        } else if (action.type === 'DOCUMENT/DROP_NODE') {
-            delay = 500;
-        }
-        if (delay > 0) {
-            setTimeout(() => {
-                alignBranch(
-                    view,
-                    scrollingBehavior,
-                    type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
-                );
-            }, delay);
-        } else {
-            alignBranch(
-                view,
-                scrollingBehavior,
-                type === 'DOCUMENT/SPLIT_NODE' ? true : undefined,
-            );
-        }
+        alignBranchAfterDocumentSave(view, action);
     }
 
     if (!container || !view.isViewOfFile) return;

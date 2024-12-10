@@ -5,7 +5,8 @@ import { Notice } from 'obsidian';
 export const copyLinkToBlock = async (view: LineageView) => {
     const file = view.file;
     if (!file) return;
-    const activeNode = view.viewStore.getValue().document.activeNode;
+    const viewState = view.viewStore.getValue();
+    const activeNode = viewState.document.activeNode;
     const documentState = view.documentStore.getValue();
     const content = documentState.document.content[activeNode];
     const text = content?.content;
@@ -18,6 +19,9 @@ export const copyLinkToBlock = async (view: LineageView) => {
             payload: {
                 content: output.text,
                 nodeId: activeNode,
+            },
+            context: {
+                isInSidebar: viewState.document.editing.isInSidebar,
             },
         });
         const link = `[[${fileName}#^${output.blockId}]]`;

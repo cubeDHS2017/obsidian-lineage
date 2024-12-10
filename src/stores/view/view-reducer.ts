@@ -61,8 +61,10 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
                 : state.ui.controls.showHelpSidebar,
             showSettingsSidebar: false,
         };
-    } else if (action.type === 'DOCUMENT/ENABLE_EDIT_MODE') {
-        enableEditMode(state.document, action);
+    } else if (action.type === 'view/main/enable-edit') {
+        enableEditMode(state.document, action.payload.nodeId);
+    } else if (action.type === 'view/sidebar/enable-edit') {
+        enableEditMode(state.document, action.payload.id, true);
     } else if (action.type === 'DOCUMENT/CONFIRM_DISABLE_EDIT') {
         state.document.editing = {
             ...state.document.editing,
@@ -73,7 +75,10 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             ...state.document.editing,
             disableEditConfirmation: false,
         };
-    } else if (action.type === 'DOCUMENT/DISABLE_EDIT_MODE') {
+    } else if (
+        action.type === 'view/main/disable-edit' ||
+        action.type === 'view/sidebar/disable-edit'
+    ) {
         disableEditMode(state.document);
     } else if (action.type === 'SET_DRAG_STARTED') {
         onDragStart(state.document, action);

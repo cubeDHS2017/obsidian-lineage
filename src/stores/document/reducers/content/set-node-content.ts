@@ -7,6 +7,9 @@ export type SetNodeContentAction = {
         nodeId: string;
         content: string;
     };
+    context: {
+        isInSidebar: boolean;
+    };
 };
 export const setNodeContent = (
     content: Content,

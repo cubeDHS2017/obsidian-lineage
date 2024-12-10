@@ -1,22 +1,15 @@
 import { DocumentViewState } from 'src/stores/view/view-state-type';
 import { SilentError } from 'src/lib/errors/errors';
 
-export type ToggleEditModeAction = {
-    type: 'DOCUMENT/ENABLE_EDIT_MODE';
-    payload: {
-        nodeId: string;
-        isInSidebar?: boolean;
-    };
-};
 export const enableEditMode = (
     state: Pick<DocumentViewState, 'editing'>,
-    action: ToggleEditModeAction,
+    nodeId: string,
+    isInSidebar = false,
 ) => {
     if (state.editing.activeNodeId) {
-        const isSameNode = state.editing.activeNodeId === action.payload.nodeId;
+        const isSameNode = state.editing.activeNodeId === nodeId;
         const isSameNodeInDifferentSplit =
-            isSameNode &&
-            state.editing.isInSidebar !== action.payload.isInSidebar;
+            isSameNode && state.editing.isInSidebar !== isInSidebar;
         if (!isSameNode) {
             throw new Error('Another card is being edited');
         } else if (isSameNodeInDifferentSplit) {
@@ -30,8 +23,8 @@ export const enableEditMode = (
         }
     }
     state.editing = {
-        activeNodeId: action.payload.nodeId,
+        activeNodeId: nodeId,
         disableEditConfirmation: false,
-        isInSidebar: Boolean(action.payload.isInSidebar),
+        isInSidebar: isInSidebar,
     };
 };
