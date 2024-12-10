@@ -70,10 +70,10 @@ describe('format-text', () => {
         ].join('\n');
         const output = [
             'text',
-            '<span class="cm-comment">%% text % %%</span>',
+            '<span class="cm-comment">%\u200B% text % %\u200B%</span>',
             '> text',
-            '<span class="cm-comment">%% start %',
-            'end %%</span>',
+            '<span class="cm-comment">%\u200B% start %',
+            'end %\u200B%</span>',
             '% text %',
             '&nbsp;',
         ].join('\n');

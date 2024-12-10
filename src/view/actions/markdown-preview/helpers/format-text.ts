@@ -23,10 +23,16 @@ export const formatText = (text: string) => {
         );
     }
     if (/%%/.test(text)) {
-        text = text.replace(/(%%.*?%%)/gms, '<span class="cm-comment">$1</span>');
+        text = text.replace(
+            /%%(.*?)%%/gms,
+            `<span class="cm-comment">%\u200B%$1%\u200B%</span>`,
+        );
     }
     if (/<!--/.test(text)) {
-        text = text.replace( /<!--(.*?)-->/gms, '<span class="cm-comment">&lt;!--$1--&gt;</span>');
+        text = text.replace(
+            /<!--(.*?)-->/gms,
+            '<span class="cm-comment">&lt;!--$1--&gt;</span>',
+        );
     }
 
     if (/^\s*$/gm.test(text)) {
