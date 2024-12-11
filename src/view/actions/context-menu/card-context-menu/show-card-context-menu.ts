@@ -52,6 +52,11 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
 
     if (!closestCardElement) return;
 
+    const selectedText = activeWindow.getSelection()?.toString();
+    if (selectedText && selectedText.length > 0) {
+        return;
+    }
+
     const isInSidebar = Boolean(target.closest('.sidebar'));
     const isInRecentCardsList =
         isInSidebar && Boolean(target.closest('.recent-cards-container'));
