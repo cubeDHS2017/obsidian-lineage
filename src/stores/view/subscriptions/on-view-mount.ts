@@ -11,7 +11,7 @@ import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-v
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-initial-active-node';
-import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links';
+import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links/mark-unresolved-links';
 import { attachHoverPreviewListener } from 'src/stores/view/subscriptions/event-listeners/attach-hover-preview-listener';
 import { attachWheelScrollListener } from 'src/stores/view/subscriptions/event-listeners/attach-wheel-scroll-listener';
 import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';

@@ -1,31 +1,11 @@
 import { LineageView } from 'src/view/view';
-import { debounce, TFile } from 'obsidian';
-import Lineage from 'src/main';
+import { debounce } from 'obsidian';
+import { getNonExistentLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links/helpers/get-non-existent-links';
+import { getFileLinkElements } from 'src/stores/view/subscriptions/effects/mark-unresolved-links/helpers/get-file-link-elements';
 
 enum Classes {
     'unresolved' = 'is-unresolved',
 }
-
-const getNonExistentLinks = (plugin: Lineage, file: TFile) => {
-    const cache = plugin.app.metadataCache.getFileCache(file);
-    if (!cache?.links) {
-        return new Set<string>();
-    }
-
-    const links = cache.links.map((link) => link.link.split('#')[0]);
-    const nonExistentLinks = links.filter(
-        (link) =>
-            !plugin.app.metadataCache.getFirstLinkpathDest(link, file.path),
-    );
-
-    return new Set(nonExistentLinks);
-};
-
-const getFileLinkElements = (view: LineageView) => {
-    return Array.from(
-        view.contentEl.querySelectorAll('.internal-link'),
-    ) as HTMLElement[];
-};
 
 const markUnresolvedLinks = (view: LineageView) => {
     const file = view.file;
