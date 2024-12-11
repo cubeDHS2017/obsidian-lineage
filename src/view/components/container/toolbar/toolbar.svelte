@@ -18,7 +18,9 @@
     <SearchToggle />
     {#if $search.showInput}
         <SearchInput />
-        <SearchNavigationButtons />
+        {#if $search.query.length > 0}
+            <SearchNavigationButtons />
+        {/if}
     {/if}
 </div>
 <style>

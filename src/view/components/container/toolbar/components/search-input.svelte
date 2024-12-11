@@ -47,20 +47,21 @@
         style={'right: 49px; top: -1px;'+($search.query ? '' : ' display: none;')}
     ></div>
 
-    <div
-        aria-label="Show all cards"
-        class={'input-right-decorator clickable-icon' +
-            ($search.showAllNodes ? ' is-active' : '')}
-        on:click={() => {
-            viewStore.dispatch({
-                type: 'search/toggle-show-all-nodes',
-            });
-
-        }}
-        style="right: 28px"
-    >
-        <Eye class="svg-icon" />
-    </div>
+    {#if $search.query.length > 0}
+        <div
+            aria-label="Show all cards"
+            class={'input-right-decorator clickable-icon' +
+                ($search.showAllNodes ? ' is-active' : '')}
+            on:click={() => {
+                viewStore.dispatch({
+                    type: 'search/toggle-show-all-nodes',
+                });
+            }}
+            style="right: 28px"
+        >
+            <Eye class="svg-icon" />
+        </div>
+    {/if}
     <div
         aria-label="Fuzzy search"
         class={'input-right-decorator clickable-icon' +
@@ -85,7 +86,7 @@
 <style>
     .search-input-element {
         height: 34px;
-        padding-right: 74px;
+        padding-right: 74px !important;
         padding-left: 12px;
         min-width: 250px;
     }
