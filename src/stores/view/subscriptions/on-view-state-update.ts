@@ -42,12 +42,7 @@ export const onViewStateUpdate = (
         updateActiveBranch(viewStore, documentState);
         persistActiveNodeInPluginSettings(view);
         view.minimapStore.setActiveCardId(viewState.document.activeNode);
-        view.plugin.statusBar.update({
-            type: 'DOCUMENT_PROGRESS',
-            payload: {
-                view,
-            },
-        });
+        view.plugin.statusBar.updateProgressIndicator(view);
     }
 
     if (

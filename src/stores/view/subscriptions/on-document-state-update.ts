@@ -10,7 +10,6 @@ import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update
 import { clearSelectedNodes } from 'src/stores/view/subscriptions/actions/clear-selected-nodes';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/actions/remove-obsolete-navigation-items';
-import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranchAfterDocumentSave } from 'src/stores/view/subscriptions/effects/align-branch/wrappers/align-branch-after-document-save';
 import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persist-pinned-nodes';
@@ -85,15 +84,9 @@ export const onDocumentStateUpdate = (
     if (e.content || structuralChange) {
         view.documentSearch.resetIndex();
         view.minimapStore.setDocument(documentState.document);
-        view.plugin.statusBar.update({
-            type: 'DOCUMENT_PROGRESS',
-            payload: {
-                view,
-            },
-        });
     }
     if (structuralChange) {
-        updateStatusBar(view);
+        view.plugin.statusBar.updateAll(view);
     }
 
     if (e.content || structuralChange) {

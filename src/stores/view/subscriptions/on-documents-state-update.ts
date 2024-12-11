@@ -18,7 +18,10 @@ export const onDocumentsStateUpdate = (
         action.type === 'WORKSPACE/SET_ACTIVE_LINEAGE_VIEW' ||
         action.type === 'WORKSPACE/RESIZE'
     ) {
-        if (view.isActive) focusContainer(view);
+        if (view.isActive) {
+            focusContainer(view);
+            view.plugin.statusBar.updateAll(view);
+        }
         alignBranch(view);
     }
 };

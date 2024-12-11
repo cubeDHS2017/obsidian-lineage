@@ -2,7 +2,6 @@ import { LineageView } from 'src/view/view';
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { isEmptyDocument } from 'src/stores/view/subscriptions/helpers/is-empty-document';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
-import { updateStatusBar } from 'src/stores/view/subscriptions/effects/update-status-bar';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-font-size';
@@ -47,7 +46,7 @@ export const onViewMount = (view: LineageView) => {
     if (view.isActive && isEmptyDocument(documentState.document.content)) {
         enableEditMode(viewStore, documentState);
     }
-    updateStatusBar(view);
+    view.plugin.statusBar.updateAll(view);
     // effects
     if (view.isActive) focusContainer(view);
     alignBranch(view, undefined, true);

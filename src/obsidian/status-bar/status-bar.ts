@@ -2,16 +2,6 @@ import { LineageView } from 'src/view/view';
 import Lineage from 'src/main';
 import { calculateDocumentProgressW } from 'src/obsidian/status-bar/helpers/workers-instances';
 
-type UpdateStatusBarAction =
-    | {
-          type: 'NUMBER_OF_CARDS';
-          payload: { cards: number };
-      }
-    | {
-          type: 'DOCUMENT_PROGRESS';
-          payload: { view: LineageView };
-      };
-
 export class StatusBar {
     private container: HTMLElement;
     private elements: {
@@ -44,23 +34,26 @@ export class StatusBar {
         this.container.toggleClass('lineage__hidden-element', !visible);
     }
 
-    update = async (action: UpdateStatusBarAction) => {
-        if (action.type === 'NUMBER_OF_CARDS') {
-            this.elements.numberOfCards.setText(
-                action.payload.cards +
-                    ' card' +
-                    (action.payload.cards === 1 ? '' : 's'),
-            );
-        } else if (action.type === 'DOCUMENT_PROGRESS') {
-            const document =
-                action.payload.view.documentStore.getValue().document;
-            const activeNode =
-                action.payload.view.viewStore.getValue().document.activeNode;
-            const progress = await calculateDocumentProgressW.run({
-                document,
-                activeNode,
-            });
-            this.elements.documentProgress.setText(progress + ' %');
-        }
+    updateAll = (view: LineageView) => {
+        this.updateCardsNumber(view);
+        this.updateProgressIndicator(view);
+    };
+
+    updateCardsNumber = (view: LineageView) => {
+        const cards = Object.keys(
+            view.documentStore.getValue().document.content,
+        ).length;
+        this.elements.numberOfCards.setText(
+            cards + ' card' + (cards === 1 ? '' : 's'),
+        );
+    };
+    updateProgressIndicator = async (view: LineageView) => {
+        const document = view.documentStore.getValue().document;
+        const activeNode = view.viewStore.getValue().document.activeNode;
+        const progress = await calculateDocumentProgressW.run({
+            document,
+            activeNode,
+        });
+        this.elements.documentProgress.setText(progress + ' %');
     };
 }
