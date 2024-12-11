@@ -28,7 +28,7 @@ export const addNodeAndSplitAtCursor = (
     const value = view.inlineEditor.getContent();
     const cursor = flattenEditorPosition(value, view.inlineEditor.getCursor());
 
-    if (cursor < value.length) {
+    if (cursor <= value.length) {
         firstHalf = value.substring(0, cursor);
         secondHalf = value.substring(cursor);
         if (direction === 'up') {
