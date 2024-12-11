@@ -119,7 +119,7 @@ const updateDocumentState = (
         unpinNode(state.pinnedNodes, action.payload.id);
         return;
     } else if (action.type === 'document/pinned-nodes/remove-stale-nodes') {
-        removeStalePinnedNodes(state.pinnedNodes, state.document.content);
+        removeStalePinnedNodes(state.pinnedNodes, state.sections);
         return;
     } else if (action.type === 'document/pinned-nodes/load-from-settings') {
         loadPinnedNodes(
