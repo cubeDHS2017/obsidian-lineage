@@ -3,11 +3,9 @@ import { getFileNameFromContent } from 'src/obsidian/commands/helpers/extract-br
 export const getFileNameOfExtractedBranch = (
     nodeContent: string,
     currentFileName: string,
-    sectionNumber: string | undefined,
+    sectionNumber: string,
 ) => {
     const name = getFileNameFromContent(nodeContent);
     if (name) return name;
-    if (sectionNumber) {
-        return `${currentFileName} - ${sectionNumber}`;
-    } else return `${currentFileName} - extracted-section`;
+    return `${currentFileName.trim()} - ${sectionNumber}`;
 };

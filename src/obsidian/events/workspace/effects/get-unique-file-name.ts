@@ -3,7 +3,7 @@ import { sanitizeFileName } from 'src/helpers/sanitize-file-name';
 export const getUniqueFileName = (
     folderPath: string,
     files: string[],
-    basename = 'Untitled',
+    basename: string,
 ): string => {
     basename = sanitizeFileName(basename);
     let index = 1;

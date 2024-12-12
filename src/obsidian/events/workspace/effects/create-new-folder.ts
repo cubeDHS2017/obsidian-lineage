@@ -6,7 +6,7 @@ import { getUniqueFileName } from 'src/obsidian/events/workspace/effects/get-uni
 export const createNewFolder = async (
     plugin: Lineage,
     folder: TFolder,
-    basename?: string,
+    basename: string,
 ) => {
     invariant(folder);
     const children = folder.children

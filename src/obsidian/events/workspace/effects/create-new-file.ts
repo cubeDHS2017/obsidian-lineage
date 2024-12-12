@@ -7,7 +7,7 @@ export const createNewFile = async (
     plugin: Lineage,
     folder: TFolder,
     data = '',
-    basename?: string,
+    basename = 'Untitled',
 ) => {
     invariant(folder);
     const children = folder.children

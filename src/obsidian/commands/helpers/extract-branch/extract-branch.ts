@@ -30,15 +30,16 @@ export const extractBranch = async (view: LineageView) => {
                 : format === 'html-element'
                   ? branchToHtmlElement([branch])
                   : branchToHtmlComment([branch]);
+        const fileName = getFileNameOfExtractedBranch(
+            branch.content[branch.nodeId].content,
+            view.file.basename,
+            documentState.sections.id_section[branch.nodeId],
+        );
         const newFile = await createNewFile(
             view.plugin,
             view.file.parent,
             text,
-            getFileNameOfExtractedBranch(
-                branch.content[branch.nodeId].content,
-                view.file.basename,
-                documentState.sections.id_section[branch.nodeId],
-            ),
+            fileName,
         );
         await openFileInLineage(view.plugin, newFile, format, 'split');
 
