@@ -5,14 +5,17 @@
     import { documentStateStore } from '../../../../../../stores/view/derived/editing-store';
     import { IdSectionStore } from '../../../../../../stores/document/derived/id-section-store';
     import { onDestroy } from 'svelte';
-    import { ActiveRecentNodeStore, RecentNodesStore } from 'src/stores/view/derived/recent-nodes';
+    import { ActiveRecentNodeStore } from 'src/stores/view/derived/recent-nodes';
     import {
         scrollCardIntoView
     } from 'src/view/components/container/left-sidebar/components/recent-cards/helpers/scroll-card-into-view';
     import NoItems from '../no-items/no-items.svelte';
+    import { removeDuplicatesFromArray } from 'src/helpers/remove-duplicates-from-array';
+    import { navigationHistoryStore } from 'src/stores/view/derived/navigation-history-store';
 
+    const RECENT_NODES_LIMIT = 30;
     const view = getView();
-    const recentNodes = RecentNodesStore(view);
+    let recentNodes: string[] = [];
 
     let containerRef: HTMLElement | null = null;
 
@@ -20,6 +23,8 @@
     const editingStateStore = documentStateStore(view);
 
     const activePinnedCard = ActiveRecentNodeStore(view);
+
+
 
     const subscriptions: (() => void)[] = [];
     subscriptions.push(
@@ -31,6 +36,19 @@
             }, 200);
         }),
     );
+
+    subscriptions.push(
+        navigationHistoryStore(view).subscribe((state) => {
+            const items = state.items;
+            if (items.length > RECENT_NODES_LIMIT) {
+                const itemsToRemove = items.length - RECENT_NODES_LIMIT + 1;
+                items.splice(0, itemsToRemove);
+            }
+            recentNodes = removeDuplicatesFromArray(items, true);
+        }),
+    );
+
+
     onDestroy(() => {
         for (const unsub of subscriptions) {
             unsub();
@@ -39,8 +57,8 @@
 </script>
 
 <div class="recent-cards-container" bind:this={containerRef}>
-    {#if $recentNodes.length > 0}
-        {#each $recentNodes as node (node)}
+    {#if recentNodes.length > 0}
+        {#each recentNodes as node (node)}
             <Node
                 {node}
                 active={$activePinnedCard === node

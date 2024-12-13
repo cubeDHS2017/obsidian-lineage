@@ -12,7 +12,7 @@ export type NodeHistoryNavigationAction =
 
 export const navigateActiveNodeHistory = (
     documentState: DocumentViewState,
-    state: Pick<ViewState, 'navigationHistory'>,
+    state: Pick<ViewState, 'navigationHistory' | 'recentNodes'>,
     forward = false,
 ) => {
     const activeIndex = state.navigationHistory.state.activeIndex;
@@ -23,5 +23,6 @@ export const navigateActiveNodeHistory = (
         updateNavigationState(state.navigationHistory);
         state.navigationHistory = { ...state.navigationHistory };
         updateActiveNode(documentState, newItem, null);
+        state.recentNodes.activeNode = newItem;
     }
 };
