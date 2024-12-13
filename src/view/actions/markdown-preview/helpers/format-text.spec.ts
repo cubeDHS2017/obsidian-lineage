@@ -116,6 +116,34 @@ describe('format-text', () => {
         const actual = formatText(input);
         expect(actual).toEqual(output);
     });
+    test('should not add nbsp to code blocks', () => {
+        const input = [
+            'text',
+            '',
+            '',
+            '```',
+            '',
+            'text',
+            '',
+            '```',
+            '',
+            'text',
+        ].join('\n');
+        const output = [
+            'text',
+            '&nbsp;',
+            '&nbsp;',
+            '```',
+            '',
+            'text',
+            '',
+            '```',
+            '&nbsp;',
+            'text',
+        ].join('\n');
+        const actual = formatText(input);
+        expect(actual).toEqual(output);
+    });
 });
 
 describe('performance-test: format-text', () => {

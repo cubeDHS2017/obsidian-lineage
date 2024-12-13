@@ -1,7 +1,15 @@
 const applyNbsp = (text: string) => {
     const lines = text.split('\n');
     let mutated = false;
+
+    let isInCodeBlock = false;
+
     for (let i = 0; i < lines.length; i++) {
+        if (lines[i].startsWith('```')) {
+            isInCodeBlock = !isInCodeBlock;
+        }
+
+        if (isInCodeBlock) continue;
         if (lines[i].length > 0) continue;
         const previousLine = lines[i - 1];
         const skipNbsp =
