@@ -7,20 +7,27 @@ import {
 } from 'src/lib/data-conversion/x-to-json/outline-to-json';
 import { findHighestHeadingLevel } from 'src/lib/data-conversion/helpers/find-highest-heading-level';
 
+type ExtendedState = State & {
+    isInCodeBlock: boolean;
+};
 export const headingsToJson = (input: string): TreeNode[] => {
     const lines = input.split('\n');
     const highestHeadingLevel = findHighestHeadingLevel(lines);
-    const state: State = {
+    const state: ExtendedState = {
         currentParents: {},
         currentNode: null,
         tree: [],
+        isInCodeBlock: false,
     };
 
     for (const line of lines) {
         if (parseHtmlCommentMarker(line))
             throw new Error('input has a section');
+        if (line.startsWith('```')) {
+            state.isInCodeBlock = !state.isInCodeBlock;
+        }
 
-        const match = line.match(/^(#+) (.+)/);
+        const match = state.isInCodeBlock ? null : line.match(/^(#+) (.+)/);
         if (match) {
             const level = match[1].length;
 

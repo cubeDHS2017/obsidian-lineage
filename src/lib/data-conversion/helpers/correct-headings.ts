@@ -9,14 +9,19 @@ export const correctHeadings = (markdown: string): string => {
         previousLevel: number;
         previousCorrectedLevel: number;
         previousLevels: { level: number; correctedLevel: number }[];
+        isInCodeBlock: boolean;
     } = {
         previousLevel: 0,
         previousCorrectedLevel: 0,
         previousLevels: [],
+        isInCodeBlock: false,
     };
     const updatedLines: string[] = [];
     for (const line of lines) {
-        const match = line.match(headingRegex);
+        if (line.startsWith('```')) {
+            state.isInCodeBlock = !state.isInCodeBlock;
+        }
+        const match = state.isInCodeBlock ? null : line.match(headingRegex);
         let updatedLine: string | null = null;
         if (match) {
             const level = match[1].length;

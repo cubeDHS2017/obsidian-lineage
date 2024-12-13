@@ -941,4 +941,41 @@ text 2
 - item 3`;
         expect(headingsToHtmlComment(input)).toEqual(output);
     });
+
+    test('code block', () => {
+        const input = `## H2
+
+text 1
+\`\`\`python
+# text
+
+text
+\`\`\`
+
+
+text 2
+### H3
+
+text 3`;
+
+        const output = `
+<!--section: 1-->
+## H2
+
+text 1
+\`\`\`python
+# text
+
+text
+\`\`\`
+
+
+text 2
+
+<!--section: 1.1-->
+### H3
+
+text 3`;
+        expect(headingsToHtmlComment(input)).toEqual(output);
+    });
 });

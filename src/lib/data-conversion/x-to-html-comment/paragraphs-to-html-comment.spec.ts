@@ -19,6 +19,18 @@ In vestibulum, neque sit amet elementum aliquet, leo velit posuere sem, quis con
 In placerat, nunc ac sodales pretium, elit ligula gravida lacus, sed suscipit felis nibh eget mi. Suspendisse eu mauris non diam maximus eleifend. Mauris fringilla placerat dui at mattis. Cras ut pharetra dui. Cras condimentum lacus augue, sed efficitur quam malesuada in.
  Proin laoreet quam eu nunc accumsan, quis vehicula urna gravida. Ut sollicitudin lacus nec neque pharetra luctus. Fusce quis eleifend magna, id laoreet dui. Curabitur vitae nisi vel metus sodales facilisis sed sed risus. In purus justo, interdum eget condimentum at, placerat ut mi. Mauris metus magna, ullamcorper et porttitor quis, pretium non sem. Donec hendrerit dolor at urna gravida, id volutpat tellus condimentum. Fusce posuere tellus et lorem vulputate varius.
 
+ \`\`\`python
+In vestibulum, neque sit amet elementum aliquet, leo velit posuere sem, quis consectetur justo mi a lacus. Duis hendrerit ultricies ante, vel semper ex tempor eget. Maecenas eleifend ex at egestas malesuada. Pellentesque vitae ligula imperdiet, fermentum mi a, vulputate felis. Cras eget elit in nibh fringilla tristique non in est. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum semper commodo metus, ullamcorper semper neque imperdiet et. Nullam interdum, dolor quis malesuada scelerisque, est magna ultrices massa, sit amet sodales urna nisl vitae orci. Nam viverra varius dictum. Curabitur quam nisl, blandit in sapien non, consectetur suscipit quam. Mauris efficitur lorem et sapien sagittis efficitur. Vestibulum varius orci ex, a facilisis odio lobortis quis. Quisque eget erat nibh. Cras id sem non augue sodales vestibulum.
+
+In placerat, nunc ac sodales pretium, elit ligula gravida lacus, sed suscipit felis nibh eget mi. Suspendisse eu mauris non diam maximus eleifend. Mauris fringilla placerat dui at mattis. Cras ut pharetra dui. Cras condimentum lacus augue, sed efficitur quam malesuada in.
+ Proin laoreet quam eu nunc accumsan, quis vehicula urna gravida.
+  
+  
+Ut sollicitudin lacus nec neque pharetra luctus. Fusce quis eleifend magna, id laoreet dui. Curabitur vitae nisi vel metus sodales facilisis sed sed risus. In purus justo, interdum eget condimentum at, placerat ut mi. Mauris metus magna, ullamcorper et porttitor quis, pretium non sem. Donec hendrerit dolor at urna gravida, id volutpat tellus condimentum. Fusce posuere tellus et lorem vulputate varius.
+ 
+ \`\`\`
+
+
 
 
 Morbi ultrices augue quis vestibulum pharetra. Aliquam vestibulum purus ut semper consectetur. Etiam sodales urna id massa vulputate, vitae scelerisque velit lacinia. Aenean mattis, magna vel viverra ultrices, tortor urna porttitor sem, eu interdum massa justo lobortis nisi. 
@@ -42,6 +54,18 @@ In placerat, nunc ac sodales pretium, elit ligula gravida lacus, sed suscipit fe
  Proin laoreet quam eu nunc accumsan, quis vehicula urna gravida. Ut sollicitudin lacus nec neque pharetra luctus. Fusce quis eleifend magna, id laoreet dui. Curabitur vitae nisi vel metus sodales facilisis sed sed risus. In purus justo, interdum eget condimentum at, placerat ut mi. Mauris metus magna, ullamcorper et porttitor quis, pretium non sem. Donec hendrerit dolor at urna gravida, id volutpat tellus condimentum. Fusce posuere tellus et lorem vulputate varius.
 
 <!--section: 5-->
+ \`\`\`python
+In vestibulum, neque sit amet elementum aliquet, leo velit posuere sem, quis consectetur justo mi a lacus. Duis hendrerit ultricies ante, vel semper ex tempor eget. Maecenas eleifend ex at egestas malesuada. Pellentesque vitae ligula imperdiet, fermentum mi a, vulputate felis. Cras eget elit in nibh fringilla tristique non in est. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum semper commodo metus, ullamcorper semper neque imperdiet et. Nullam interdum, dolor quis malesuada scelerisque, est magna ultrices massa, sit amet sodales urna nisl vitae orci. Nam viverra varius dictum. Curabitur quam nisl, blandit in sapien non, consectetur suscipit quam. Mauris efficitur lorem et sapien sagittis efficitur. Vestibulum varius orci ex, a facilisis odio lobortis quis. Quisque eget erat nibh. Cras id sem non augue sodales vestibulum.
+
+In placerat, nunc ac sodales pretium, elit ligula gravida lacus, sed suscipit felis nibh eget mi. Suspendisse eu mauris non diam maximus eleifend. Mauris fringilla placerat dui at mattis. Cras ut pharetra dui. Cras condimentum lacus augue, sed efficitur quam malesuada in.
+ Proin laoreet quam eu nunc accumsan, quis vehicula urna gravida.
+  
+  
+Ut sollicitudin lacus nec neque pharetra luctus. Fusce quis eleifend magna, id laoreet dui. Curabitur vitae nisi vel metus sodales facilisis sed sed risus. In purus justo, interdum eget condimentum at, placerat ut mi. Mauris metus magna, ullamcorper et porttitor quis, pretium non sem. Donec hendrerit dolor at urna gravida, id volutpat tellus condimentum. Fusce posuere tellus et lorem vulputate varius.
+ 
+ \`\`\`
+
+<!--section: 6-->
 Morbi ultrices augue quis vestibulum pharetra. Aliquam vestibulum purus ut semper consectetur. Etiam sodales urna id massa vulputate, vitae scelerisque velit lacinia. Aenean mattis, magna vel viverra ultrices, tortor urna porttitor sem, eu interdum massa justo lobortis nisi. 
 Ut convallis odio sed lectus posuere imperdiet. Aliquam fermentum bibendum lacinia. Nunc consequat nulla eleifend scelerisque lobortis. Aliquam tincidunt finibus imperdiet.`;
         expect(paragraphsToHtmlComment(input)).toEqual(output);
