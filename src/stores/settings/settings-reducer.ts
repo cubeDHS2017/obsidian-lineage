@@ -101,19 +101,6 @@ export type SettingsActions =
           };
       }
     | {
-          type: 'BACKUP/ADD_FILE';
-          payload: {
-              content: string;
-              path: string;
-          };
-      }
-    | {
-          type: 'BACKUP/DELETE_FILE';
-          payload: {
-              path: string;
-          };
-      }
-    | {
           type: 'UPDATE_DOCUMENTS_DICTIONARY';
           payload: {
               documents: Record<string, DocumentPreferences>;
@@ -208,14 +195,6 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.minimumCardHeight = action.payload.height;
     } else if (action.type === 'SET_LIMIT_PREVIEW_HEIGHT') {
         store.view.limitPreviewHeight = action.payload.limit;
-    } else if (action.type === 'BACKUP/ADD_FILE') {
-        store.backup[action.payload.path] = {
-            content: action.payload.content,
-            created: Date.now(),
-        };
-    } else if (action.type === 'BACKUP/DELETE_FILE') {
-        if (store.backup[action.payload.path])
-            delete store.backup[action.payload.path];
     } else if (action.type === 'UPDATE_DOCUMENTS_DICTIONARY') {
         store.documents = action.payload.documents;
     } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {

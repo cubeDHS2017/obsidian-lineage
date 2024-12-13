@@ -109,7 +109,6 @@ export class LineageView extends TextFileView {
         for (const s of this.onDestroyCallbacks) {
             s();
         }
-        this.deleteBackup();
     }
 
     clear(): void {
@@ -181,18 +180,6 @@ export class LineageView extends TextFileView {
             this.data = data;
             if (immediate) await this.save();
             else this.requestSave();
-            this.deleteBackup();
-        }
-    };
-
-    deleteBackup = () => {
-        if (this.file && this.plugin.documents.getValue().processedBackups) {
-            this.plugin.settings.dispatch({
-                type: 'BACKUP/DELETE_FILE',
-                payload: {
-                    path: this.file.path,
-                },
-            });
         }
     };
 

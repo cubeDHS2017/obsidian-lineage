@@ -29,5 +29,4 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     general: {
         defaultDocumentFormat: 'sections',
     },
-    backup: {},
 });

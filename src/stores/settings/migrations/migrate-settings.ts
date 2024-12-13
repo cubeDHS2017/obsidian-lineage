@@ -1,9 +1,7 @@
 import { Settings } from 'src/stores/settings/settings-type';
 import { Settings_0_5_4 } from 'src/stores/settings/migrations/old-settings-type';
 
-export const migrateDocumentPreferences = (
-    settings: Settings | Settings_0_5_4,
-) => {
+export const migrateSettings = (settings: Settings | Settings_0_5_4) => {
     for (const [path, pref] of Object.entries(settings.documents)) {
         if (typeof pref === 'boolean') {
             settings.documents[path] = {
@@ -13,5 +11,10 @@ export const migrateDocumentPreferences = (
                 pinnedSections: null,
             };
         }
+    }
+
+    if ('backup' in settings) {
+        // @ts-ignore
+        delete settings.backup;
     }
 };

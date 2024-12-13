@@ -1,9 +1,13 @@
 import {
     CustomHotkeys,
-    DocumentBackup,
     ScrollingSettings,
     Theme,
 } from 'src/stores/settings/settings-type';
+
+export type DocumentBackup = {
+    content: string;
+    created: number;
+};
 
 export type Settings_0_5_4 = {
     documents: Record<string, true>;
