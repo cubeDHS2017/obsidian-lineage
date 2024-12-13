@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { filterObsoleteDocuments } from './filter-obsolete-documents';
+import { filterStaleDocuments } from './filter-stale-documents';
 import {
     DocumentPreferences,
     Settings as TSettings,
@@ -12,15 +12,15 @@ const sample: DocumentPreferences = {
     activeSection: null,
     pinnedSections: null,
 };
-describe('filterObsoleteDocuments', () => {
+describe('filterStaleDocuments', () => {
     it('should return 0 if allFiles is empty', () => {
         const settings: Settings = { documents: {} };
         const allFiles: Set<string> = new Set();
-        const result = filterObsoleteDocuments(settings, allFiles);
+        const result = filterStaleDocuments(settings, allFiles);
         expect(result).toBe(0);
     });
 
-    it('should remove obsolete documents and return the count of deleted documents', () => {
+    it('should remove stale documents and return the count of deleted documents', () => {
         const settings: Settings = {
             documents: {
                 path1: sample,
@@ -29,7 +29,7 @@ describe('filterObsoleteDocuments', () => {
             },
         };
         const allFiles: Set<string> = new Set(['path1', 'path3']);
-        const result = filterObsoleteDocuments(settings, allFiles);
+        const result = filterStaleDocuments(settings, allFiles);
         expect(result).toBe(1);
         expect(settings.documents).toEqual({
             path1: sample,
@@ -45,7 +45,7 @@ describe('filterObsoleteDocuments', () => {
             },
         };
         const allFiles: Set<string> = new Set(['path1', 'path2']);
-        const result = filterObsoleteDocuments(settings, allFiles);
+        const result = filterStaleDocuments(settings, allFiles);
         expect(result).toBe(0);
         expect(settings.documents).toEqual({
             path1: sample,
@@ -61,7 +61,7 @@ describe('filterObsoleteDocuments', () => {
             },
         };
         const allFiles: Set<string> = new Set(['path3']);
-        const result = filterObsoleteDocuments(settings, allFiles);
+        const result = filterStaleDocuments(settings, allFiles);
         expect(result).toBe(2);
         expect(settings.documents).toEqual({});
     });

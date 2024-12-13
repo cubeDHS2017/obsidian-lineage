@@ -22,7 +22,7 @@ import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actio
 import { documentsReducer } from 'src/stores/documents/documents-reducer';
 import { DefaultDocumentsState } from 'src/stores/documents/default-documents-state';
 import { StatusBar } from 'src/obsidian/status-bar/status-bar';
-import { documentsStoreSubscriptions } from 'src/stores/documents/subscriptions/documents-store-subscriptions';
+import { removeStaleDocuments } from 'src/stores/documents/subscriptions/effects/remove-stale-documents/remove-stale-documents';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
 import { registerActiveLeafChange } from 'src/obsidian/events/workspace/register-active-leaf-change';
 import { registerWorkspaceResize } from 'src/obsidian/events/workspace/register-workspace-resize';
@@ -43,6 +43,8 @@ export default class Lineage extends Plugin {
     settings: SettingsStore;
     documents: DocumentsStore;
     statusBar: StatusBar;
+    private timeoutReferences: Set<ReturnType<typeof setTimeout>> = new Set();
+
     async onload() {
         await this.loadSettings();
         this.documents = new Store<DocumentsState, DocumentsStoreAction>(
@@ -96,9 +98,13 @@ export default class Lineage extends Plugin {
         registerLayoutReady(this);
     }
 
+    registerTimeout(timeout: ReturnType<typeof setTimeout>) {
+        this.timeoutReferences.add(timeout);
+    }
+
     private registerEffects() {
         hotkeySubscriptions(this);
-        documentsStoreSubscriptions(this);
+        removeStaleDocuments(this);
     }
 
     private registerPatches() {
@@ -117,5 +123,12 @@ export default class Lineage extends Plugin {
                 else createLineageDocument(this);
             },
         );
+    }
+
+    onunload() {
+        super.onunload();
+        for (const timeout of this.timeoutReferences) {
+            clearTimeout(timeout);
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Settings } from 'src/stores/settings/settings-type';
 
-export const filterObsoleteDocuments = (
+export const filterStaleDocuments = (
     settings: Pick<Settings, 'documents'>,
     allFiles: Set<string>,
 ) => {
