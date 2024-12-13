@@ -19,9 +19,10 @@ export const jsonToHtmlElement = (
         if (content.match(/^#+ /)) {
             const headingLevel = content.match(/^#+/)?.[0];
             content = `${headingLevel} ${marker}${content.slice(headingLevel!.length).trim()}`;
-        } else if (content.match(/^#[^\s#]/)) {
-            // tag
-            content = `${marker} ${content}`;
+        } else if (content.match(/^#[^\s#\uFEFF\u200B]+/)) {
+            // BOM (\uFEFF) and zero-width spaces (\u200B) are matched to avoid issues with emojis
+            const tag = content.match(/^#[^\s#\uFEFF\u200B]+/)?.[0];
+            content = `${tag}${marker}${content.slice(tag!.length)}`;
         } else if (content.startsWith('>')) {
             content = `> ${marker}${content.slice(1).trim()}`;
         } else if (content.match(/^[-*+]\s\[.\]\s/)) {

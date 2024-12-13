@@ -142,12 +142,12 @@ describe('json to html element', () => {
     it('case: tags', () => {
         const input: TreeNode[] = [
             {
-                content: '#🙄',
+                content: '#🙄 text',
                 children: [],
             },
         ];
 
-        const output = [createHtmlElementMarker('', 1) + ' #🙄'];
+        const output = ['#🙄' + createHtmlElementMarker('', 1) + ' text'];
         expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
     });
 });
