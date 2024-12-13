@@ -1132,6 +1132,74 @@ describe('calculate-chunk-position', () => {
         const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
         expect(actual).toEqual(output);
     });
+
+    test('case: tags', () => {
+        const input = `#^word #!word  #\`word #%word #?word #"word #~word #\\word`;
+        const output = {
+            chunks: [
+                {
+                    chunk: '#^word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 0,
+                },
+                {
+                    chunk: '#!word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 7,
+                },
+                {
+                    chunk: '#`word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 15,
+                },
+                {
+                    chunk: '#%word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 22,
+                },
+                {
+                    chunk: '#?word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 29,
+                },
+                {
+                    chunk: '#"word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 36,
+                },
+                {
+                    chunk: '#~word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 43,
+                },
+                {
+                    chunk: '#\\word',
+                    length_chars: 6,
+                    line: 0,
+                    type: null,
+                    x_chars: 50,
+                },
+            ],
+            totalLines: 1,
+            empty: false,
+        };
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        expect(actual).toEqual(output);
+    });
 });
 
 describe('performance-test: calculate-chunk-position', () => {

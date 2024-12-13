@@ -60,6 +60,33 @@ type State = {
 const abbrevRegex =
     /\b(dr|mr|mrs|ms|e\.g|e\.i|sr|jr|st|ave|rd|no|vs|etc|vol|ed|pp)\b/i;
 
+const unhallowedTagCharacters = new Set([
+    '^',
+    '.',
+    '!',
+    '`',
+    '*',
+    '%',
+    '?',
+    '"',
+    '~',
+    '@',
+    "'",
+    '(',
+    ')',
+    '!',
+    '{',
+    '}',
+    '[',
+    ']',
+    '^',
+    '%',
+    '$',
+    '+',
+    '=',
+    '\\',
+]);
+
 export const calculateChunkPositions = (
     content: string,
     availableLineCharacters: number,
@@ -149,7 +176,10 @@ export const calculateChunkPositions = (
                     state.lineType = state.type;
                 }
                 // tag
-                else if (chunk === '#') {
+                else if (
+                    chunk === '#' &&
+                    !unhallowedTagCharacters.has(nextChunk)
+                ) {
                     // switch from "heading" to "tag"
                     state.type = ChunkType.tag;
                     state.category = Category.block_without_space;
