@@ -3,7 +3,7 @@
     height: 34px !important;
     padding: 8px !important;
     font-size: inherit;
-    color: var(--text-muted) !important;
+    color: var(--icon-color) !important;
     background-color: var(--interactive-normal);
     --icon-size: var(--icon-s);
     --icon-stroke: var(--icon-s-stroke-width);
@@ -11,6 +11,10 @@
     border-radius: 0;
     border: none;
     box-shadow: none !important;
+
+    & svg {
+        opacity: 0.7;
+    }
 }
 
 .lineage-view-button:disabled {
@@ -28,13 +32,21 @@
 
 .theme-dark {
     & .lineage-view-button[data-active='true'] {
-        background-color: var(--color-base-40);
+        color: var(--icon-color-active) !important;
+    }
+
+    & .lineage-view-button[data-active='true'] svg {
+        opacity: 1;
     }
 }
 
 .theme-light {
     & .lineage-view-button[data-active='true'] {
-        background-color: var(--color-base-25);
+        color: var(--icon-color-active) !important;
+    }
+
+    & .lineage-view-button[data-active='true'] svg {
+        opacity: 1;
     }
 }
 
