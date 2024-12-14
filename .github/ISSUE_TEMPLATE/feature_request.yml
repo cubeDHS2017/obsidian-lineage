@@ -16,15 +16,3 @@ body:
       label: Why is this feature needed?
     validations:
       required: true
-
-  - type: dropdown
-    id: estimated-importance
-    validations:
-      required: true
-    attributes:
-      label: Estimated usefulness for plugin users
-      description: We appreciate your input on how useful this feature is for plugin users.
-      options:
-        - Useful for some users
-        - Useful for many users
-        - Useful for the majority of users
