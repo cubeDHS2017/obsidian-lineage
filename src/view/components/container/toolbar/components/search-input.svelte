@@ -1,7 +1,7 @@
 <script lang="ts">
     import { getView } from '../../context';
     import { searchStore } from 'src/stores/view/derived/search-store';
-    import { Text } from 'lucide-svelte';
+    import { Eye, Text } from 'lucide-svelte';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -18,10 +18,6 @@
                 query: e.currentTarget.value,
             },
         });
-        clearTimeout(focusTimeout);
-        focusTimeout = setTimeout(() => {
-            if (e.currentTarget) e.currentTarget.focus();
-        }, 500);
     };
 </script>
 
@@ -48,8 +44,24 @@
                 },
             });
         }}
-        style={$search.query ? '' : 'display: none'}
+        style={'right: 49px; top: -1px;'+($search.query ? '' : ' display: none;')}
     ></div>
+
+    {#if $search.query.length > 0}
+        <div
+            aria-label="Show all cards"
+            class={'input-right-decorator clickable-icon' +
+                ($search.showAllNodes ? ' is-active' : '')}
+            on:click={() => {
+                viewStore.dispatch({
+                    type: 'search/toggle-show-all-nodes',
+                });
+            }}
+            style="right: 28px"
+        >
+            <Eye class="svg-icon" />
+        </div>
+    {/if}
     <div
         aria-label="Fuzzy search"
         class={'input-right-decorator clickable-icon' +
@@ -65,6 +77,7 @@
                 },
             });
         }}
+        style="right: 4px;"
     >
         <Text class="svg-icon" />
     </div>
@@ -73,13 +86,15 @@
 <style>
     .search-input-element {
         height: 34px;
-        padding-right: 64px;
+        padding-right: 74px !important;
         padding-left: 12px;
+        min-width: 250px;
     }
 
     @media (max-width: 568px) {
         .search-input-element {
             width: 100%;
+            min-width: 50px;
         }
         .search-input-wrapper {
             width: 100%;

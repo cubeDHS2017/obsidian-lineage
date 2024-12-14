@@ -14,7 +14,7 @@ export const editCommands = () => {
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
-                    type: 'DOCUMENT/ENABLE_EDIT_MODE',
+                    type: 'view/main/enable-edit',
                     payload: {
                         nodeId: view.viewStore.getValue().document.activeNode,
                     },
@@ -29,7 +29,7 @@ export const editCommands = () => {
                 event.preventDefault();
                 view.inlineEditor.overrideCursor({ line: 0, ch: 0 });
                 view.viewStore.dispatch({
-                    type: 'DOCUMENT/ENABLE_EDIT_MODE',
+                    type: 'view/main/enable-edit',
                     payload: {
                         nodeId: view.viewStore.getValue().document.activeNode,
                     },

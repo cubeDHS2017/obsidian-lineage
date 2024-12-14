@@ -1,5 +1,6 @@
 import { DocumentStore, ViewStore } from 'src/view/view';
 import { Direction } from 'src/stores/document/document-store-actions';
+import { isId } from 'src/helpers/id';
 
 const getDropPosition = (event: DragEvent, targetElement: HTMLElement) => {
     const boundingBox = targetElement.getBoundingClientRect();
@@ -61,14 +62,26 @@ export const droppable = (
         targetCard.removeClass('inactive-node-hover');
         if (!data) throw new Error(`droppedNodeId is missing`);
         if (!targetCard.id) throw new Error(`targetCard.id is missing`);
-        documentStore.dispatch({
-            type: 'DOCUMENT/DROP_NODE',
-            payload: {
-                droppedNodeId: data,
-                targetNodeId: targetCard.id,
-                position: getDropPosition(event, targetCard) as Direction,
-            },
-        });
+        const sections = documentStore.getValue().sections;
+        if (isId.node(data) && sections.id_section[data]) {
+            documentStore.dispatch({
+                type: 'DOCUMENT/DROP_NODE',
+                payload: {
+                    droppedNodeId: data,
+                    targetNodeId: targetCard.id,
+                    position: getDropPosition(event, targetCard) as Direction,
+                },
+            });
+        } else {
+            documentStore.dispatch({
+                type: 'DOCUMENT/PASTE_NODE',
+                payload: {
+                    targetNodeId: targetCard.id,
+                    text: data,
+                    position: getDropPosition(event, targetCard) as Direction,
+                },
+            });
+        }
         viewStore.dispatch({
             type: 'DOCUMENT/SET_DRAG_ENDED',
         });

@@ -50,13 +50,7 @@ export class InlineEditor {
         this.#mounting = new Promise((_resolve) => {
             resolve = _resolve;
         });
-        this.view.plugin.settings.dispatch({
-            type: 'BACKUP/ADD_FILE',
-            payload: {
-                path: this.view.file.path,
-                content: this.view.data,
-            },
-        });
+
         const content =
             this.view.documentStore.getValue().document.content[nodeId]
                 ?.content || '';
@@ -87,6 +81,7 @@ export class InlineEditor {
         this.target.addEventListener('focusin', this.setActiveEditor);
         this.setActiveEditor();
         setTimeout(() => resolve(), Math.max(16, content.length / 60));
+        this.lockFile();
     }
 
     focus = () => {
@@ -101,6 +96,7 @@ export class InlineEditor {
             this.target.empty();
             this.target = null;
         }
+        this.unlockFile();
     }
 
     async onload() {
@@ -163,5 +159,34 @@ export class InlineEditor {
 
     private setCursor(line: number, ch: number) {
         this.inlineView.editor.setCursor(line, ch);
+    }
+
+    /* prevents obsidian from replacing file.data with card.data when the card editor and file editor share the same file*/
+    private lockFile() {
+        this.view.plugin.app.workspace.iterateAllLeaves((e) => {
+            const view = e.view;
+            if (view instanceof MarkdownView) {
+                if (view.file === this.view.file) {
+                    // @ts-ignore
+                    view.__setViewData__ = view.setViewData;
+                    view.setViewData = noop;
+                }
+            }
+        });
+    }
+
+    private unlockFile() {
+        this.view.plugin.app.workspace.iterateAllLeaves((e) => {
+            const view = e.view;
+            if (view instanceof MarkdownView) {
+                if (view.file === this.view.file) {
+                    if ('__setViewData__' in view) {
+                        // @ts-ignore
+                        view.setViewData = view.__setViewData__;
+                        delete view.__setViewData__;
+                    }
+                }
+            }
+        });
     }
 }

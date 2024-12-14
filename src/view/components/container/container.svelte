@@ -4,7 +4,7 @@
     import { scrollOnDndX } from 'src/view/actions/dnd/scroll-on-dnd-x';
     import { columnsStore } from 'src/stores/document/derived/columns-store';
     import ColumnsBuffer from './buffers/columns-buffer.svelte';
-    import { scrollingModeStore } from 'src/stores/settings/derived/scrolling-store';
+    import { ScrollSettingsStore } from 'src/stores/settings/derived/scrolling-store';
     import { dndStore } from 'src/stores/view/derived/dnd-store';
     import { activeBranchStore } from 'src/stores/view/derived/active-branch-store';
     import { activeNodeStore } from 'src/stores/view/derived/active-node-store';
@@ -12,14 +12,17 @@
     import { searchStore } from 'src/stores/view/derived/search-store';
     import { NodeId } from 'src/stores/document/document-state-type';
     import { limitPreviewHeightStore } from 'src/stores/settings/derived/limit-preview-height-store';
-    import { idSectionStore } from 'src/stores/document/derived/id-section-store';
-    import { contextMenu } from 'src/view/actions/context-menu/context-menu';
-    import { closeModalsWhenClickingOutside } from 'src/view/actions/close-modals-when-clicking-outside';
+    import { IdSectionStore } from 'src/stores/document/derived/id-section-store';
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
+    import { PinnedNodesStore } from 'src/stores/document/derived/pinned-nodes-store';
+    import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
+    import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
+    import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
 
     const view = getView();
+    const zoomLevel = zoomLevelStore(view);
     const columns = columnsStore(view);
-    const scrolling = scrollingModeStore(view);
+    const scrolling = ScrollSettingsStore(view);
     const dnd = dndStore(view);
     const activeBranch = activeBranchStore(view);
     const activeNode = activeNodeStore(view);
@@ -27,31 +30,30 @@
     const editing = documentStateStore(view);
     const search = searchStore(view);
     const limitPreviewHeight = limitPreviewHeightStore(view);
-    const idSection = idSectionStore(view,);
+    const idSection = IdSectionStore(view);
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
+    const groupParentIds = GroupParentIdsStore(view);
+    const pinnedNodesArray = PinnedNodesStore(view);
+    $: pinnedNodes = new Set($pinnedNodesArray);
 
+    const applyGap = ApplyGapBetweenCardsStore(view);
 </script>
 
 <div
     class={'columns-container ' +
-        ($scrolling === 'fixed-position' ||
-        $scrolling === 'keep-active-card-at-center'
-            ? 'hide-scrollbars'
-            : '') +
-        ($limitPreviewHeight ? ' limit-card-height' : '')}
+        ($limitPreviewHeight ? ' limit-card-height' : '') +
+        ($applyGap ? ' gap-between-cards' : '')}
     id="columns-container"
     tabindex="0"
-    use:closeModalsWhenClickingOutside={view}
-    use:contextMenu={view}
 
     use:scrollOnDndX
 >
     <div class="columns">
-        {#if $scrolling === 'fixed-position' || $scrolling === 'keep-active-card-at-center'}
+        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
             <ColumnsBuffer />
         {/if}
-        {#each $columns as column (column.id)}
+        {#each $columns as column,i  (column.id)}
             <Column
                 columnId={column.id}
                 dndChildGroups={$dnd.childGroups}
@@ -59,16 +61,19 @@
                 activeGroup={$activeBranch.group}
                 activeChildGroups={$activeBranch.childGroups}
                 activeNode={$activeNode}
-                editedNode={$editing.activeNodeId}
-                disableEditConfirmation={$editing.disableEditConfirmation}
+                editedNodeState={$editing}
                 searchQuery={$search.query}
                 searchResults={$search.results}
+                showAllNodes={$search.showAllNodes}
                 searching={$search.searching}
                 idSection={$idSection}
                 selectedNodes={$selectedNodes}
+                pinnedNodes={pinnedNodes}
+                groupParentIds={$groupParentIds}
+                firstColumn={i===0}
             />
         {/each}
-        {#if $scrolling === 'fixed-position' || $scrolling === 'keep-active-card-at-center'}
+        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
             <ColumnsBuffer />
         {:else}
             <div style="min-width: 50px;min-height: 10px"></div>
@@ -79,6 +84,9 @@
 <style>
     :root {
         --container-left-padding: 100px;
+        --column-gap: 0;
+        --node-gap: 4px;
+        --group-gap: 2px;
     }
     .columns-container {
         position: relative;
@@ -91,6 +99,9 @@
         padding-left: var(--container-left-padding);
         overflow-y: hidden;
         overflow-x: auto;
+        --scrollbar-thumb-bg: transparent;
+        --scrollbar-active-thumb-bg: transparent;
+        --scrollbar-bg: transparent;
     }
     :global(.is-mobile) {
         --container-left-padding: 10px;
@@ -98,22 +109,45 @@
     .columns {
         display: flex;
         align-items: center;
-        width: 100%;
+        gap: var(--column-gap);
+        transform: scale(var(--zoom-level));
+        height: calc(1/var(--zoom-level) * 100vh);
+        width: calc(1/var(--zoom-level) * 100vw);
     }
-    .hide-scrollbars {
-        --scrollbar-thumb-bg: transparent;
-        --scrollbar-active-thumb-bg: transparent;
-        --scrollbar-bg: transparent;
-    }
-    .hide-scrollbars::-webkit-scrollbar {
+
+    .columns-container::-webkit-scrollbar {
         display: none;
     }
     .limit-card-height {
-        & .preview-container {
+        & .lng-prev {
             max-height: 65vh;
         }
         & .editor-container {
             max-height: 65vh;
+        }
+    }
+
+    .gap-between-cards {
+        & .group {
+            background-color: transparent;
+        }
+        --node-gap: var(--node-gap-setting);
+        --column-gap: var(--column-gap-setting);
+        --group-gap: var(--node-gap-setting);
+
+        & .active-parent-bridge-right {
+          display: none;
+        }
+
+        & .active-parent-bridge-left {
+            display: none;
+        }
+        & .active-node-bridge {
+            display: none;
+        }
+
+       & .active-node {
+            outline: 8px solid var(--background-active-parent) !important;
         }
     }
 </style>

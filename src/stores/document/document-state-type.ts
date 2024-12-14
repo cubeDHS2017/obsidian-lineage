@@ -11,6 +11,9 @@ export type Sections = {
     section_id: Record<string, string>;
     id_section: Record<string, string>;
 };
+export type DocumentMeta = {
+    groupParentIds: Set<string>;
+};
 export type DocumentState = {
     document: LineageDocument;
     sections: Sections;
@@ -18,8 +21,9 @@ export type DocumentState = {
         path: string | null;
         frontmatter: string;
     };
-
+    meta: DocumentMeta;
     history: DocumentHistory;
+    pinnedNodes: PinnedNodesState;
 };
 
 // document
@@ -82,4 +86,8 @@ export type History<T, U = undefined> = {
     items: T[];
     state: HistoryState;
     context: U;
+};
+
+export type PinnedNodesState = {
+    Ids: string[];
 };

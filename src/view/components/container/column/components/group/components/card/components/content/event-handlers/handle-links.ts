@@ -1,4 +1,5 @@
 import { LineageView } from 'src/view/view';
+import { openFileInExistingRightTabGroup } from 'src/view/components/container/column/components/group/components/card/components/content/event-handlers/helpers/open-file-in-existing-right-tab-group';
 
 const selectCard = (view: LineageView, id: string) => {
     view.viewStore.dispatch({
@@ -11,7 +12,9 @@ const selectCard = (view: LineageView, id: string) => {
 
 const handleFile = (view: LineageView, link: string) => {
     const path = view.documentStore.getValue().file.path;
-    if (link && path) {
+    if (!link || !path) return;
+    const success = openFileInExistingRightTabGroup(view, link, path);
+    if (!success) {
         view.plugin.app.workspace.openLinkText(link, path, 'split');
     }
 };

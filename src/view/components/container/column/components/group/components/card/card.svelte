@@ -11,22 +11,45 @@
     export let node: NodeId;
     export let editing: boolean;
     export let active: ActiveStatus | null;
+    export let hasActiveChildren: boolean;
     export let hasChildren: boolean;
-    export let parentId: string;
-    export let disableEditConfirmation: boolean
+    export let firstColumn: boolean;
+    export let disableEditConfirmation: boolean;
     export let section: string;
-    export let selected: boolean
+    export let selected: boolean;
+    export let pinned: boolean;
+    export let isInSidebar = false;
+    export let isSearchMatch = false
+
 </script>
 
-<Droppable {active}{disableEditConfirmation} {editing} {hasChildren} nodeId={node} {parentId} {selected}>
-    {#if active===ActiveStatus.node && editing}
+<Droppable
+    {active}
+    {disableEditConfirmation}
+    {editing}
+    {hasActiveChildren}
+    nodeId={node}
+    {firstColumn}
+    {selected}
+    {isInSidebar}
+    {isSearchMatch}
+>
+    {#if active === ActiveStatus.node && editing }
         <InlineEditor nodeId={node} />
     {:else}
-        <Draggable nodeId={node}>
+        <Draggable nodeId={node} {isInSidebar}>
             <Content nodeId={node} />
         </Draggable>
     {/if}
-    <CardButtons {active} {editing} nodeId={node} {section}/>
+    <CardButtons
+        {active}
+        {editing}
+        nodeId={node}
+        {section}
+        {pinned}
+        {hasChildren}
+        {isInSidebar}
+    />
 </Droppable>
 
 

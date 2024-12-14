@@ -10,52 +10,61 @@
     import Lineage from '../../../main';
     import { setContext } from 'svelte';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
-    import { scrollingModeStore } from 'src/stores/settings/derived/scrolling-store';
-    import ScrollingAxis from 'src/view/components/container/scrolling-axis/scrolling-axis.svelte';
+    import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
+    import Minimap from './minimap/minimap.svelte';
+    import { dragToPan } from 'src/view/actions/drag-to-pan/drag-to-pan';
+    import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
+    import { contextMenu } from 'src/view/actions/context-menu/context-menu';
 
     export let plugin: Lineage;
     export let view: LineageView;
     setContext('plugin', plugin);
     setContext('view', view);
     const controls = uiControlsStore(view);
-    const scrollingMode = scrollingModeStore(view);
+    const showMinimap = showMinimapStore(view);
 </script>
 
 <div
-    class={`lineage-main`}
+    class="lineage-view"
     use:keyboardShortcuts={{ view }}
-    use:mouseWheelZoom={view}
+    use:contextMenu={view}
+    tabindex="0"
 >
-    <Container />
-    <Toolbar />
-    <Breadcrumbs />
-    <ControlsBar />
-    {#if $controls.showHistorySidebar}
-        <FileHistory />
-    {:else if $controls.showHelpSidebar}
-        <Hotkeys />
-    {:else if $controls.showSettingsSidebar}
-        <Settings />
-    {/if}
-    {#if $scrollingMode === 'fixed-position'}
-        <ScrollingAxis />
+    <LeftSidebar />
+
+    <div class={`lineage-main`} use:mouseWheelZoom={view} use:dragToPan={view}>
+        <Container />
+        <Toolbar />
+        <Breadcrumbs />
+        <ControlsBar />
+        {#if $controls.showHistorySidebar}
+            <FileHistory />
+        {:else if $controls.showHelpSidebar}
+            <Hotkeys />
+        {:else if $controls.showSettingsSidebar}
+            <Settings />
+        {/if}
+
+    </div>
+    {#if $showMinimap}
+        <Minimap />
     {/if}
 </div>
 
 <style>
     .lineage-main {
-
         --z-index-breadcrumbs: 10;
-        background-color: var(--background-container);
+
         display: flex;
         height: 100%;
-        width: 100%;
+        flex: 1 1 auto;
+        width: 0; /* ensures it shrinks properly when the minimap is visible */
         position: relative;
     }
 
-    .lineage-main:not(:focus-within) {
+    .lineage-view:not(:focus-within) {
         & .node-border--active {
             border-left-color: var(--lineage-accent-faint);
         }
@@ -68,5 +77,12 @@
         & .node-border--selected {
             border-left-color: var(--lineage-color-selection-faint);
         }
+    }
+
+    .lineage-view {
+        background-color: var(--background-container);
+        display: flex;
+        height: 100%;
+        width: 100%;
     }
 </style>

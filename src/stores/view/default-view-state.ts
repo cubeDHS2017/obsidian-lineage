@@ -8,6 +8,7 @@ export const defaultViewState = (): ViewState => ({
         searching: false,
         showInput: false,
         fuzzySearch: false,
+        showAllNodes: true,
     },
     ui: {
         controls: {
@@ -20,6 +21,7 @@ export const defaultViewState = (): ViewState => ({
         editing: {
             activeNodeId: '',
             disableEditConfirmation: false,
+            isInSidebar: false,
         },
         activeBranch: {
             group: '',
@@ -44,6 +46,12 @@ export const defaultViewState = (): ViewState => ({
         },
         context: undefined,
     },
+    pinnedNodes: {
+        activeNode: '',
+    },
+    recentNodes: {
+        activeNode: '',
+    },
 });
 export type ActiveBranch = {
     childGroups: Set<string>;
@@ -58,4 +66,5 @@ export type DNDState = {
 export type EditingState = {
     activeNodeId: string;
     disableEditConfirmation: boolean;
+    isInSidebar: boolean;
 };

@@ -1,4 +1,4 @@
-import { parseDelimiter } from 'src/lib/data-conversion/helpers/delimiter';
+import { parseHtmlCommentMarker } from 'src/lib/data-conversion/helpers/html-comment-marker/parse-html-comment-marker';
 import { LineageView } from 'src/view/view';
 import { get } from 'svelte/store';
 
@@ -8,7 +8,7 @@ export const findSectionPosition = (view: LineageView, nodeId: string) => {
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
         if (line.startsWith('<!--')) {
-            const section = parseDelimiter(line);
+            const section = parseHtmlCommentMarker(line);
             if (section && section[2] === treeIndex) {
                 return i;
             }

@@ -6,16 +6,18 @@ import {
 } from 'src/stores/view/helpers/get-view-event-type';
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe-clear-selection';
-import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results/update-search-results';
+import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
 import { updateConflictingHotkeys } from 'src/stores/view/subscriptions/actions/update-conflicting-hotkeys';
-import { resetSearchFuse } from 'src/stores/view/subscriptions/actions/update-search-results/helpers/reset-search-fuse';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
+import { persistActivePinnedNode } from 'src/stores/view/subscriptions/actions/persist-active-pinned-node';
+import { showSearchResultsInMinimap } from 'src/stores/view/subscriptions/effects/show-search-results-in-minimap';
 
 export const onViewStateUpdate = (
     view: LineageView,
     action: ViewStoreAction,
+    localState: { previousActiveNode: string },
 ) => {
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
@@ -30,15 +32,22 @@ export const onViewStateUpdate = (
     );
 
     const activeNodeChange = e.activeNode || e.activeNodeHistory;
-
-    if (activeNodeChange) {
+    const activeNodeHasChanged =
+        localState.previousActiveNode !== viewState.document.activeNode;
+    if (activeNodeHasChanged) {
+        localState.previousActiveNode = viewState.document.activeNode;
+    }
+    if (activeNodeChange && activeNodeHasChanged) {
         // this should be handled internally
         updateActiveBranch(viewStore, documentState);
         persistActiveNodeInPluginSettings(view);
+        view.minimapStore.setActiveCardId(viewState.document.activeNode);
+        view.plugin.statusBar.updateProgressIndicator(view);
     }
 
     if (
         activeNodeChange &&
+        activeNodeHasChanged &&
         type !== 'DOCUMENT/NAVIGATE_USING_KEYBOARD' &&
         type !== 'DOCUMENT/JUMP_TO_NODE'
     ) {
@@ -46,7 +55,7 @@ export const onViewStateUpdate = (
     }
 
     if (action.type === 'SEARCH/SET_QUERY') {
-        updateSearchResults(documentStore, viewStore);
+        updateSearchResults(view);
     }
     if (action.type === 'UI/TOGGLE_HELP_SIDEBAR') {
         if (viewState.ui.controls.showHelpSidebar)
@@ -54,6 +63,14 @@ export const onViewStateUpdate = (
     }
 
     // effects
+    if (activeNodeChange || e.search || e.editMainSplit) {
+        const skipAligning =
+            action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
+            action.context?.modKey;
+        if (!skipAligning) {
+            alignBranch(view);
+        }
+    }
     if (!container || !view.isViewOfFile) return;
     const postInlineEditor = type === 'DOCUMENT/CONFIRM_DISABLE_EDIT';
     if (postInlineEditor) {
@@ -61,24 +78,32 @@ export const onViewStateUpdate = (
         view.saveDocument(maybeViewIsClosing, postInlineEditor);
     }
     if (type === 'SEARCH/TOGGLE_FUZZY_MODE') {
-        resetSearchFuse(documentStore);
+        view.documentSearch.resetIndex();
     }
 
     if (
-        action.type === 'DOCUMENT/DISABLE_EDIT_MODE' ||
-        action.type === 'SEARCH/TOGGLE_INPUT' ||
+        action.type === 'view/main/disable-edit' ||
+        action.type === 'view/sidebar/disable-edit' ||
         action.type === 'NAVIGATION/NAVIGATE_FORWARD' ||
         action.type === 'NAVIGATION/NAVIGATE_BACK'
     ) {
         focusContainer(view);
     }
-
-    if (activeNodeChange || e.search || e.edit) {
-        const skipAligning =
-            action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
-            action.context?.modKey;
-        if (!skipAligning) {
-            alignBranch(view);
+    if (action.type === 'SEARCH/TOGGLE_INPUT') {
+        if (!viewState.search.showInput) {
+            focusContainer(view);
         }
+    }
+
+    if (
+        action.type === 'SEARCH/SET_RESULTS' ||
+        action.type === 'SEARCH/TOGGLE_INPUT' ||
+        action.type === 'SEARCH/SET_QUERY'
+    ) {
+        showSearchResultsInMinimap(view);
+    }
+
+    if (type === 'view/pinned-nodes/set-active-node') {
+        persistActivePinnedNode(view);
     }
 };

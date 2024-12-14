@@ -9,9 +9,8 @@ export const updateActiveNode = (
 ) => {
     documentState.activeNode = nodeId;
     if (state) addNavigationHistoryItem(state, documentState.activeNode);
-    if (
-        documentState.editing.activeNodeId &&
-        documentState.editing.activeNodeId !== nodeId
-    )
+
+    const activeNodeId = documentState.editing.activeNodeId;
+    if (activeNodeId !== nodeId || documentState.editing.isInSidebar)
         disableEditMode(documentState);
 };

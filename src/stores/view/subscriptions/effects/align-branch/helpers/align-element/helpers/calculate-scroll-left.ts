@@ -26,11 +26,6 @@ export const calculateScrollLeft = (
     let scrollLeft = 0;
     if (!viewPortIsWideEnough) {
         scrollLeft = deltaLeft;
-    } else if (settings.horizontalScrollingMode === 'fixed-position') {
-        scrollLeft =
-            containerRect.left +
-            settings.horizontalOffset * containerRect.width -
-            elementRect.left;
     } else if (
         settings.horizontalScrollingMode === 'keep-active-card-at-center'
     ) {
@@ -40,8 +35,8 @@ export const calculateScrollLeft = (
     } else if (!leftSideIsVisible) {
         scrollLeft = deltaLeft;
     } else if (
-        settings.horizontalScrollingMode ===
-            'reveal-active-card-and-direct-child' &&
+        settings.horizontalScrollingMode === 'reveal-active-card' &&
+        settings.revealChildren &&
         !rightSideOfChildIsVisible
     ) {
         if (viewPortIsWideEnoughForChild) {

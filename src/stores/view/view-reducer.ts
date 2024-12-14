@@ -17,6 +17,9 @@ import { removeDeletedNavigationItems } from 'src/stores/view/reducers/ui/helper
 import { toggleFuzzySearch } from 'src/stores/view/reducers/search/toggle-fuzzy-search';
 import { resetSelectionState } from 'src/stores/view/reducers/document/helpers/reset-selection-state';
 import { navigateActiveNode } from 'src/stores/view/reducers/ui/navigate-active-node';
+import { setActivePinnedNode } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
+import { setActiveRecentNode } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
+import { toggleShowAllNodes } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
@@ -58,8 +61,10 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
                 : state.ui.controls.showHelpSidebar,
             showSettingsSidebar: false,
         };
-    } else if (action.type === 'DOCUMENT/ENABLE_EDIT_MODE') {
-        enableEditMode(state.document, action);
+    } else if (action.type === 'view/main/enable-edit') {
+        enableEditMode(state.document, action.payload.nodeId);
+    } else if (action.type === 'view/sidebar/enable-edit') {
+        enableEditMode(state.document, action.payload.id, true);
     } else if (action.type === 'DOCUMENT/CONFIRM_DISABLE_EDIT') {
         state.document.editing = {
             ...state.document.editing,
@@ -70,7 +75,10 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             ...state.document.editing,
             disableEditConfirmation: false,
         };
-    } else if (action.type === 'DOCUMENT/DISABLE_EDIT_MODE') {
+    } else if (
+        action.type === 'view/main/disable-edit' ||
+        action.type === 'view/sidebar/disable-edit'
+    ) {
         disableEditMode(state.document);
     } else if (action.type === 'SET_DRAG_STARTED') {
         onDragStart(state.document, action);
@@ -96,6 +104,20 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         resetSelectionState(state.document);
     } else if (action.type === 'NAVIGATION/SELECT_NEXT_NODE') {
         navigateActiveNode(state.document, state, action);
+    } else if (action.type === 'view/pinned-nodes/set-active-node') {
+        setActivePinnedNode(
+            state.document,
+            state.pinnedNodes,
+            action.payload.id,
+        );
+    } else if (action.type === 'view/recent-nodes/set-active-node') {
+        setActiveRecentNode(
+            state.document,
+            state.recentNodes,
+            action.payload.id,
+        );
+    } else if (action.type === 'search/toggle-show-all-nodes') {
+        toggleShowAllNodes(state);
     }
 };
 export const viewReducer = (

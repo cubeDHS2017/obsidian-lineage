@@ -5,8 +5,7 @@ export type DocumentsStoreAction =
     | UpdateDocumentPath
     | AddDocument
     | ActiveLineageViewChange
-    | WorkspaceEvents
-    | { type: 'BACKUPS/SET_PROCESSED' };
+    | WorkspaceEvents;
 
 export type AddDocument = {
     type: 'DOCUMENTS/ADD_DOCUMENT';

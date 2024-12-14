@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { ActiveStatus } from '../../../active-status.enum';
+    import { ActiveStatus } from '../../../active-status.enum';
 
-	export let editing: boolean;
-    export let hasChildren: boolean;
+    export let editing: boolean;
+    export let hasActiveChildren: boolean;
     export let active: ActiveStatus | null;
-    export let parentId: string;
+    export let firstColumn: boolean;
 </script>
 
-{#if !editing && hasChildren && active === ActiveStatus.node}
+{#if !editing && hasActiveChildren && active === ActiveStatus.node}
     <div class="active-node-bridge"></div>
 {:else if active === ActiveStatus.parent}
     <div class={'active-parent-bridge-right'}></div>
-    {#if !parentId.startsWith("r")}
+    {#if !firstColumn}
         <div class="active-parent-bridge-left"></div>
     {/if}
 {/if}

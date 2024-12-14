@@ -1,4 +1,4 @@
-import { IconName, TextFileView, WorkspaceLeaf } from 'obsidian';
+import { IconName, Notice, TextFileView, WorkspaceLeaf } from 'obsidian';
 
 import Component from './components/container/main.svelte';
 import Lineage from '../main';
@@ -28,6 +28,8 @@ import { getOrDetectDocumentFormat } from 'src/obsidian/events/workspace/helpers
 import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/maybe-get-document-format';
 import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
 import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
+import { Minimap } from 'src/view/actions/minimap/minimap';
+import { DocumentSearch } from 'src/view/helpers/document-search';
 
 export const LINEAGE_VIEW_TYPE = 'lineage';
 
@@ -38,8 +40,10 @@ export class LineageView extends TextFileView {
     component: Component;
     documentStore: DocumentStore;
     viewStore: ViewStore;
+    minimapStore: Minimap;
     container: HTMLElement | null;
     inlineEditor: InlineEditor;
+    documentSearch: DocumentSearch;
     id: string;
     private readonly onDestroyCallbacks: Set<Unsubscriber> = new Set();
     private activeFilePath: null | string;
@@ -58,7 +62,9 @@ export class LineageView extends TextFileView {
             viewReducer,
             this.onViewStoreError as OnError<ViewStoreAction>,
         );
+        this.minimapStore = new Minimap(this);
         this.id = id.view();
+        this.documentSearch = new DocumentSearch(this);
     }
 
     get isActive() {
@@ -103,7 +109,6 @@ export class LineageView extends TextFileView {
         for (const s of this.onDestroyCallbacks) {
             s();
         }
-        this.deleteBackup();
     }
 
     clear(): void {
@@ -175,18 +180,6 @@ export class LineageView extends TextFileView {
             this.data = data;
             if (immediate) await this.save();
             else this.requestSave();
-            this.deleteBackup();
-        }
-    };
-
-    deleteBackup = () => {
-        if (this.file && this.plugin.documents.getValue().processedBackups) {
-            this.plugin.settings.dispatch({
-                type: 'BACKUP/DELETE_FILE',
-                payload: {
-                    path: this.file.path,
-                },
-            });
         }
     };
 
@@ -200,7 +193,7 @@ export class LineageView extends TextFileView {
         } else {
             this.createStore();
         }
-        this.loadDocumentToStore();
+        this.loadDocumentToStore(true);
         if (!this.inlineEditor) {
             this.inlineEditor = new InlineEditor(this);
             await this.inlineEditor.onload();
@@ -245,7 +238,7 @@ export class LineageView extends TextFileView {
             ].documentStore;
     };
 
-    private loadDocumentToStore = () => {
+    private loadDocumentToStore = (isInitialLoad = false) => {
         const { data, frontmatter } = extractFrontmatter(this.data);
 
         const state = this.documentStore.getValue();
@@ -257,7 +250,7 @@ export class LineageView extends TextFileView {
         if (!existingData || bodyHasChanged || frontmatterHasChanged) {
             const isEditing =
                 this.viewStore.getValue().document.editing.activeNodeId;
-            if (frontmatterHasChanged) {
+            if (frontmatterHasChanged && !isInitialLoad) {
                 this.documentStore.dispatch({
                     type: 'FILE/UPDATE_FRONTMATTER',
                     payload: {
@@ -280,6 +273,14 @@ export class LineageView extends TextFileView {
                     },
                     type: 'DOCUMENT/LOAD_FILE',
                 });
+                if (
+                    this.isActive &&
+                    !isInitialLoad &&
+                    existingData &&
+                    bodyHasChanged
+                ) {
+                    new Notice('Document reloaded due to external changes');
+                }
                 if (!maybeGetDocumentFormat(this)) {
                     invariant(this.file);
                     setDocumentFormat(this.plugin, this.file.path, format);

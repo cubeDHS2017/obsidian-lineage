@@ -5,8 +5,9 @@ export const lang = {
     export_document: 'Export document',
     create_new_document: 'Create new document',
     new_document: 'New document',
-    change_format_to_document: 'File format: sections',
-    change_format_to_outline: 'File format: outline (experimental)',
+    change_format_to_html_element: 'Format: HTML elements',
+    change_format_to_document: 'Format: HTML comments',
+    change_format_to_outline: 'Format: outline',
     format_headings: 'Format headings',
     extract_branch: 'Extract branch to a new document',
     error_apply_snapshot_while_editing: 'Cannot apply a snapshot while editing',
@@ -19,4 +20,5 @@ export const lang = {
     error_parent_not_found: (full: string) =>
         `Could not find the parent section of ${full}`,
     import_from_gingko: 'Import from Gingko',
+    toggle_scrolling_mode: 'Toggle scrolling mode',
 };

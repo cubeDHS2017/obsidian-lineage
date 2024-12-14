@@ -1,30 +1,24 @@
-<script>
+<script lang="ts">
     import { lang } from 'src/lang/lang';
-    import { maxZoomLevel, minZoomLevel } from 'src/stores/settings/reducers/change-zoom-level';
     import {
         HistoryIcon,
         Keyboard,
-        Maximize,
-        Minus as ZoomOut,
         MoreVertical,
-        Plus as ZoomIn,
+        PanelRightInactive as PanelRight,
         Redo2 as RedoIcon,
-        RotateCcw,
         Settings,
         Undo2 as UndoIcon
     } from 'lucide-svelte';
-    import { getPlugin, getView } from '../context';
+    import { getView } from '../context';
     import { historyStore } from 'src/stores/document/derived/history-store';
     import { Notice } from 'obsidian';
-    import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { writable } from 'svelte/store';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
     import Button from '../shared/button.svelte';
-    import { resetZoom } from 'src/stores/view/subscriptions/effects/align-branch/helpers/reset-zoom';
-    import invariant from 'tiny-invariant';
-    import {
-        getCombinedBoundingClientRect
-    } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
+    import { ScrollSettingsStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
+    import { customIcons } from 'src/helpers/load-custom-icons';
+    import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
+    import ZoomButtons from './components/zoom-buttons.svelte';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -33,7 +27,7 @@
     const history = historyStore(view);
     const handleNextClick = () => {
         if (viewStore.getValue().document.editing.activeNodeId)
-            new Notice(lang.error_apply_snapshot_while_editing );
+            new Notice(lang.error_apply_snapshot_while_editing);
         else
             documentStore.dispatch({
                 type: 'HISTORY/APPLY_NEXT_SNAPSHOT',
@@ -48,7 +42,6 @@
                 type: 'HISTORY/APPLY_PREVIOUS_SNAPSHOT',
             });
     };
-    const plugin = getPlugin();
 
     const toggleHelp = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_HELP_SIDEBAR' });
@@ -57,60 +50,30 @@
         viewStore.dispatch({ type: 'UI/TOGGLE_SETTINGS_SIDEBAR' });
     };
 
-    const zoomIn = () => {
-        view.plugin.settings.dispatch({
-            type: 'UI/CHANGE_ZOOM_LEVEL',
-            payload: { direction: 'in' },
-        });
-    };
-    const zoomOut = () => {
-        view.plugin.settings.dispatch({
-            type: 'UI/CHANGE_ZOOM_LEVEL',
-            payload: { direction: 'out' },
-        });
-    };
-
-    const restoreZoom = () => {
-        view.plugin.settings.dispatch({
-            type: 'UI/CHANGE_ZOOM_LEVEL',
-            payload: { value: 1 },
-        });
-    };
-
-    const fitDocumentHeightIntoView = () => {
-        invariant(view.container);
-        resetZoom(view.container);
-        const columns = Array.from(
-            view.containerEl.querySelectorAll('.column'),
-        );
-        if (columns.length) {
-            const groupHeights = columns
-                .map((c) => {
-                    return getCombinedBoundingClientRect(
-                        Array.from(c.querySelectorAll('.group')),
-                    ).height;
-                })
-                .sort((a,b)=>a-b);
-            const height = groupHeights[groupHeights.length-1];
-            const width = getCombinedBoundingClientRect(columns).width;
-
-            // eslint-disable-next-line no-undef
-            const heightScale = view.container.getBoundingClientRect().height / (height+ 100);
-            const widthScale = view.container.getBoundingClientRect().width / (width+ 100);
-
-            const scale =
-                Math.min(heightScale,widthScale);
-            view.plugin.settings.dispatch({
-                type: 'UI/CHANGE_ZOOM_LEVEL',
-                payload: { value: scale },
-            });
-        }
-    };
-    const zoomLevel = zoomLevelStore(view);
     const controls = uiControlsStore(view);
     const showControls = writable(false);
     const toggleShowControls = () => {
         showControls.update((v) => !v);
+    };
+    const showMinimap = showMinimapStore(view);
+    const toggleMinimap = () => {
+        view.plugin.settings.dispatch({
+            type: 'VIEW/TOGGLE_MINIMAP',
+        });
+    };
+    const toggleScrollMode = () => {
+        view.plugin.settings.dispatch({
+            type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE',
+        });
+    };
+
+    const scrollSettingsStore = ScrollSettingsStore(view);
+
+    const applyGapBetweenCards = ApplyGapBetweenCardsStore(view);
+    const toggleGap = () => {
+        view.plugin.settings.dispatch({
+            type: 'view/modes/gap-between-cards/toggle',
+        });
     };
 </script>
 
@@ -125,14 +88,23 @@
             <MoreVertical class="svg-icon" />
         </Button>
     </div>
+
     <div
         class="buttons-group buttons-group--vertical"
         data-visible={$showControls}
     >
-
+        <Button
+            active={$showMinimap}
+            classes="control-item"
+            label={'Toggle minimap'}
+            on:click={toggleMinimap}
+            tooltipPosition="left"
+        >
+            <PanelRight class="svg-icon" />
+        </Button>
         <Button
             active={$controls.showSettingsSidebar}
-            class="control-item"
+            classes="control-item"
             label={'Settings'}
             on:click={toggleSettings}
             tooltipPosition="left"
@@ -141,7 +113,7 @@
         </Button>
         <Button
             active={$controls.showHelpSidebar}
-            class="control-item"
+            classes="control-item"
             label="Keyboard shortcuts"
             on:click={toggleHelp}
             tooltipPosition="left"
@@ -154,8 +126,47 @@
         data-visible={$showControls}
     >
         <Button
+            active={$scrollSettingsStore.horizontalScrollingMode ===
+                'keep-active-card-at-center'}
+            classes="control-item"
+            label={lang.toggle_scrolling_mode}
+            on:click={toggleScrollMode}
+            tooltipPosition="left"
+        >
+            {@html customIcons.align.svg}
+        </Button>
+        <Button
+            active={$applyGapBetweenCards}
+            classes="control-item"
+            label={'Gap between cards'}
+            on:click={toggleGap}
+            tooltipPosition="left"
+        >
+            <svg
+                viewBox="0 0 24 24"
+                class="svg-icon"
+                stroke="currentColor"
+                fill="transparent"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <rect width="20" height="12" x="-11.600009" y="6" rx="2" />
+                <rect
+                    width="20"
+                    height="12"
+                    x="16.534304"
+                    y="5.9783392"
+                    rx="2"
+                />
+            </svg>
+        </Button>
+    </div>
+    <div
+        class="buttons-group buttons-group--vertical"
+        data-visible={$showControls}
+    >
+        <Button
             active={$controls.showHistorySidebar}
-            class="control-item"
+            classes="control-item"
             disabled={$history.items.length === 0}
             label="History"
             on:click={() => {
@@ -167,7 +178,7 @@
         </Button>
 
         <Button
-            class="control-item"
+            classes="control-item"
             disabled={!$history.state.canGoBack}
             label="Undo"
             on:click={handlePreviousClick}
@@ -176,7 +187,7 @@
             <UndoIcon class="svg-icon" />
         </Button>
         <Button
-            class="control-item"
+            classes="control-item"
             disabled={!$history.state.canGoForward}
             label="Redo"
             on:click={handleNextClick}
@@ -185,46 +196,7 @@
             <RedoIcon class="svg-icon" />
         </Button>
     </div>
-    <div
-        class="buttons-group buttons-group--vertical"
-        data-visible={$showControls}
-    >
-        <Button
-            class="control-item"
-            disabled={$zoomLevel === maxZoomLevel}
-            label="zoom in"
-            on:click={zoomIn}
-            tooltipPosition="left"
-        >
-            <ZoomIn class="svg-icon" />
-        </Button>
-        <Button
-            class="control-item"
-            disabled={$zoomLevel===1}
-            label="Restore zoom level"
-            on:click={restoreZoom}
-            tooltipPosition="left"
-        >
-            <RotateCcw class="svg-icon" />
-        </Button>
-        <Button
-            class="control-item"
-            label="Fit document height into view"
-            on:click={fitDocumentHeightIntoView}
-            tooltipPosition="left"
-        >
-            <Maximize class="svg-icon" />
-        </Button>
-        <Button
-            class="control-item"
-            disabled={$zoomLevel === minZoomLevel}
-            label="Zoom out"
-            on:click={zoomOut}
-            tooltipPosition="left"
-        >
-            <ZoomOut class="svg-icon" />
-        </Button>
-    </div>
+    <ZoomButtons showControls={$showControls} />
 </div>
 
 <style>
@@ -241,7 +213,7 @@
     .controls-toggle {
         display: none;
     }
-    :global(.is-mobile){
+    :global(.is-mobile) {
         & .controls-toggle {
             display: block;
         }

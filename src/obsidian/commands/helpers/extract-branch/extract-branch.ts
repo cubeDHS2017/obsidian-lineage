@@ -1,13 +1,14 @@
 import { LineageView } from 'src/view/view';
 import { getBranch } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/get-branch';
-import { branchToSection } from 'src/lib/data-conversion/branch-to-section';
+import { branchToHtmlComment } from 'src/lib/data-conversion/branch-to-x/branch-to-html-comment';
 import { createNewFile } from 'src/obsidian/events/workspace/effects/create-new-file';
 import invariant from 'tiny-invariant';
 import { openFileInLineage } from 'src/obsidian/events/workspace/effects/open-file-in-lineage';
 import { getFileNameOfExtractedBranch } from 'src/obsidian/commands/helpers/extract-branch/helpers/get-file-name-of-extracted-branch/get-file-name-of-extracted-branch';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
 import { getDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-document-format';
-import { branchToOutline } from 'src/lib/data-conversion/branch-to-outline';
+import { branchToOutline } from 'src/lib/data-conversion/branch-to-x/branch-to-outline';
+import { branchToHtmlElement } from 'src/lib/data-conversion/branch-to-x/branch-to-html-element';
 
 export const extractBranch = async (view: LineageView) => {
     try {
@@ -26,16 +27,19 @@ export const extractBranch = async (view: LineageView) => {
         const text =
             format === 'outline'
                 ? branchToOutline([branch])
-                : branchToSection([branch]);
+                : format === 'html-element'
+                  ? branchToHtmlElement([branch])
+                  : branchToHtmlComment([branch]);
+        const fileName = getFileNameOfExtractedBranch(
+            branch.content[branch.nodeId].content,
+            view.file.basename,
+            documentState.sections.id_section[branch.nodeId],
+        );
         const newFile = await createNewFile(
             view.plugin,
             view.file.parent,
             text,
-            getFileNameOfExtractedBranch(
-                branch.content[branch.nodeId].content,
-                view.file.basename,
-                documentState.sections.id_section[branch.nodeId],
-            ),
+            fileName,
         );
         await openFileInLineage(view.plugin, newFile, format, 'split');
 

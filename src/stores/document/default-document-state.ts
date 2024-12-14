@@ -24,4 +24,10 @@ export const defaultDocumentState = (): DocumentState => ({
             activeSection: '',
         },
     },
+    pinnedNodes: {
+        Ids: [],
+    },
+    meta: {
+        groupParentIds: new Set(),
+    },
 });

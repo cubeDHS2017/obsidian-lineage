@@ -7,5 +7,4 @@ export type DocumentsState = {
             viewId: string;
         };
     };
-    processedBackups: boolean;
 };

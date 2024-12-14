@@ -53,7 +53,10 @@ export const loadCommands = (plugin: Lineage) => {
                 e.stopPropagation();
                 view.viewStore.dispatch({ type: 'SEARCH/TOGGLE_INPUT' });
             },
-            hotkeys: [{ key: '/', modifiers: [] }],
+            hotkeys: [
+                { key: '/', modifiers: [] },
+                { key: 'f', modifiers: ['Alt'] },
+            ],
         },
     ];
     hotkeyStore.dispatch({

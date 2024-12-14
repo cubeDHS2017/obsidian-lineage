@@ -12,6 +12,11 @@ import { FormatHeadingsAction } from 'src/stores/document/reducers/content/forma
 import { PasteNodeAction } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
 import { ExtractNodeAction } from 'src/stores/document/reducers/extract-node/extract-node';
 import { SplitNodeAction } from 'src/stores/document/reducers/split-node/split-node';
+import { PinNodeAction } from 'src/stores/document/reducers/pinned-nodes/pin-node';
+import { UnpinNodeAction } from 'src/stores/document/reducers/pinned-nodes/unpin-node';
+import { RemoveStalePinnedNodesAction } from 'src/stores/document/reducers/pinned-nodes/remove-stale-pinned-nodes';
+import { LoadPinnedNodesAction } from 'src/stores/document/reducers/pinned-nodes/load-pinned-nodes';
+import { RefreshGroupParentIdsAction } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
 
 export type VerticalDirection = 'up' | 'down';
 export type Direction = VerticalDirection | 'right';
@@ -50,7 +55,9 @@ export type DocumentAction =
           payload: {
               frontmatter: string;
           };
-      };
+      }
+    | PinnedNodesActions
+    | MetaActions;
 
 export type HistoryAction = UndoRedoAction | SelectSnapshotAction;
 export type UndoableAction =
@@ -87,3 +94,11 @@ export type DocumentClipboardActions =
     | CopyNodeAction
     | PasteNodeAction
     | CutNodeAction;
+
+export type PinnedNodesActions =
+    | PinNodeAction
+    | UnpinNodeAction
+    | RemoveStalePinnedNodesAction
+    | LoadPinnedNodesAction;
+
+export type MetaActions = RefreshGroupParentIdsAction;

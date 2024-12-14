@@ -4,6 +4,7 @@
     import { getView } from 'src/view/components/container/context';
     import clx from 'classnames';
     import { nodesStore } from 'src/stores/document/derived/nodes-store';
+    import { EditingState } from 'src/stores/view/default-view-state';
 
     export let groupId: string;
     export let columnId: string;
@@ -12,18 +13,20 @@
     export let parentNodes: Set<string>;
     export let activeGroup: string;
     export let activeNode: string;
-    export let editedNode: string;
-    export let disableEditConfirmation: boolean;
+    export let editedNodeState: EditingState;
     export let searchQuery: string;
     export let searchResults: Set<string>;
+    export let showAllNodes: boolean;
+    export let pinnedNodes: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string, string>;
-
+    export let groupParentIds: Set<string>;
+    export let firstColumn: boolean;
     const view = getView();
     const nodes = nodesStore(view, columnId, groupId);
 </script>
 
-{#if $nodes.length > 0 && (searchQuery.length === 0 || $nodes.some( (n) => searchResults.has(n), ))}
+{#if $nodes.length > 0 && (searchQuery.length === 0 || showAllNodes || $nodes.some( (n) => searchResults.has(n), ))}
     <div
         class={clx(
             'group',
@@ -33,7 +36,7 @@
         id={'group-' + groupId}
     >
         {#each $nodes as node (node)}
-            {#if searchQuery.length === 0 || (!searching && searchResults.has(node))}
+            {#if searchQuery.length === 0 || showAllNodes||  (!searching && searchResults.has(node))}
                 <Node
                     {node}
                     active={node === activeNode
@@ -45,13 +48,18 @@
                             : activeGroup === groupId
                               ? ActiveStatus.sibling
                               : null}
-                    editing={editedNode === node}
-                    hasChildren={activeChildGroups.size > 0}
-                    parentId={groupId}
-                    disableEditConfirmation={editedNode === node &&
-                        disableEditConfirmation}
+                    editing={editedNodeState.activeNodeId === node &&
+                        !editedNodeState.isInSidebar}
+                    disableEditConfirmation={editedNodeState.activeNodeId === node &&
+                        editedNodeState.disableEditConfirmation &&
+                        !editedNodeState.isInSidebar}
+                    hasActiveChildren={activeChildGroups.size > 0}
+                    hasChildren={groupParentIds.has(node)}
                     section={idSection[node]}
                     selected={selectedNodes.has(node)}
+                    pinned={pinnedNodes.has(node)}
+                    isSearchMatch={searchResults.has(node)}
+                    {firstColumn}
                 />
             {/if}
         {/each}
@@ -63,9 +71,9 @@
         display: flex;
         flex-direction: column;
         width: fit-content;
-        gap: 4px;
+        gap: var(--node-gap);
         padding: 8px;
-        margin-bottom: 2px;
+        margin-bottom: var(--group-gap);
     }
     .group:last-child {
         margin-bottom: 0;

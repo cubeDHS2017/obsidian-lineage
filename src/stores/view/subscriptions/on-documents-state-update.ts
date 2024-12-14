@@ -15,11 +15,13 @@ export const onDocumentsStateUpdate = (
         }
     }
     if (
-        view.isActive &&
-        (action.type === 'WORKSPACE/SET_ACTIVE_LINEAGE_VIEW' ||
-            action.type === 'WORKSPACE/RESIZE')
+        action.type === 'WORKSPACE/SET_ACTIVE_LINEAGE_VIEW' ||
+        action.type === 'WORKSPACE/RESIZE'
     ) {
-        focusContainer(view);
+        if (view.isActive) {
+            focusContainer(view);
+            view.plugin.statusBar.updateAll(view);
+        }
         alignBranch(view);
     }
 };

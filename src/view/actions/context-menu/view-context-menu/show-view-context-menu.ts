@@ -14,6 +14,8 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
 
     const format = getDocumentFormat(view);
     const isOutline = format === 'outline';
+    const isHtmlElement = format === 'html-element';
+    const isHtmlComments = format === 'sections';
 
     const _hasHeading = hasNHeadings(view.data, 1);
     menu.addItem((item) =>
@@ -33,12 +35,22 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
 
     menu.addItem((item) =>
         item
+            .setTitle(lang.change_format_to_html_element)
+            .setIcon('file-cog')
+            .onClick(() => {
+                setDocumentFormat(view.plugin, file.path, 'html-element');
+            })
+            .setChecked(isHtmlElement),
+    );
+
+    menu.addItem((item) =>
+        item
             .setTitle(lang.change_format_to_document)
             .setIcon('file-cog')
             .onClick(() => {
                 setDocumentFormat(view.plugin, file.path, 'sections');
             })
-            .setChecked(!isOutline),
+            .setChecked(isHtmlComments),
     );
 
     menu.addItem((item) =>
@@ -56,7 +68,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
     menu.addItem((item) =>
         item
             .setTitle(lang.export_document)
-            .setIcon('file-symlink')
+            .setIcon('file-text')
             .onClick(() => {
                 exportDocument(view);
             }),

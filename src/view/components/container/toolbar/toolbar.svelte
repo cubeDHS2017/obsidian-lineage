@@ -4,16 +4,23 @@
     import { getView } from 'src/view/components/container/context';
     import { searchStore } from 'src/stores/view/derived/search-store';
     import SearchInput from './components/search-input.svelte';
+    import LeftSidebarToggle from './components/left-sidebar-toggle.svelte';
+    import SearchNavigationButtons from './components/search/search-navigation-buttons.svelte';
 
     const view = getView();
+
     const search = searchStore(view);
 </script>
 
 <div class="navigation-history-container">
+    <LeftSidebarToggle />
     <NavigationHistory />
     <SearchToggle />
     {#if $search.showInput}
         <SearchInput />
+        {#if $search.query.length > 0}
+            <SearchNavigationButtons />
+        {/if}
     {/if}
 </div>
 <style>

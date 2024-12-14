@@ -11,11 +11,15 @@
     import {
         openFileAndJumpToLine
     } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/openFileAndJumpToLine';
+    import {
+        findHtmlElementPosition
+    } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/find-html-element-position';
 
     const view = getView();
     export let nodeId: string;
     export let activeStatus: ActiveStatus | null;
     export let section: string;
+    export let hasChildren: boolean;
 
     // eslint-disable-next-line no-undef
     const openFile = async () => {
@@ -25,14 +29,15 @@
         const i =
             format === 'sections'
                 ? findSectionPosition(view, nodeId)
-                : findOutlinePosition(view, nodeId);
+                : format === 'html-element'
+                  ? findHtmlElementPosition(view, nodeId)
+                  : findOutlinePosition(view, nodeId);
         if (typeof i === 'undefined') return;
         const targetLine = i + (format === 'sections' ? 1 : 0);
         const lines = view.data.split('\n');
         const nextLine = lines[targetLine] || '';
         await openFileAndJumpToLine(
-            view.plugin,
-            view.file,
+            view,
             targetLine,
             nextLine.length,
         );
@@ -47,7 +52,9 @@
 
 <div
     aria-label="Reveal in editor"
-    class={'tree-index ' + (activeStatus ? classes[activeStatus] : '')}
+    class={'tree-index ' +
+        (activeStatus ? classes[activeStatus] : '') +
+        (hasChildren ? ' has-children' : '')}
     on:click={openFile}
 >
     {section}
@@ -72,5 +79,10 @@
 
     .is-active-parent {
         opacity: 0.6;
+    }
+
+    .has-children {
+        font-style: italic;
+
     }
 </style>

@@ -1,4 +1,5 @@
 import { LineageView } from 'src/view/view';
+import { Notice } from 'obsidian';
 
 export const pasteNode = async (view: LineageView) => {
     const viewState = view.viewStore.getValue();
@@ -11,5 +12,9 @@ export const pasteNode = async (view: LineageView) => {
                 text,
             },
         });
+    } else {
+        new Notice(
+            'Lineage: paste action failed. Try pasting directly into a card.',
+        );
     }
 };

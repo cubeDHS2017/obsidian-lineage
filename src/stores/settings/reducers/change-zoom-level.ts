@@ -1,8 +1,10 @@
 import { Settings } from 'src/stores/settings/settings-type';
 
+const formatNumber = (num: number): number => parseFloat(num.toFixed(3));
+
 const zoomStep = 0.1;
 export const maxZoomLevel = 2;
-export const minZoomLevel = 0.1;
+export const minZoomLevel = 0.05;
 
 export type ChangeZoomLevelAction = {
     type: 'UI/CHANGE_ZOOM_LEVEL';
@@ -27,4 +29,5 @@ export const changeZoomLevel = (
                 ? Math.min(state.view.zoomLevel + zoomStep, maxZoomLevel)
                 : Math.max(state.view.zoomLevel - zoomStep, minZoomLevel);
     }
+    state.view.zoomLevel = formatNumber(state.view.zoomLevel);
 };

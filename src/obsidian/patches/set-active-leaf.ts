@@ -6,7 +6,7 @@ export function setActiveLeaf(next: (...params: unknown[]) => unknown) {
         const isLineageViewAndIsEditing =
             leaf.view &&
             leaf.view instanceof LineageView &&
-            leaf.view.inlineEditor.activeNode;
+            leaf.view.inlineEditor?.activeNode;
         if (isLineageViewAndIsEditing) return;
         return next.call(this, leaf, param);
     };

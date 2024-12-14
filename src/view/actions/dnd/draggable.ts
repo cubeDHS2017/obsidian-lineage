@@ -19,9 +19,11 @@ export type DraggableData = {
     id: string;
     documentStore: DocumentStore;
     viewStore: ViewStore;
+    isInSidebar: boolean;
 };
 
 export const draggable = (node: HTMLElement, data: DraggableData) => {
+    if (data.isInSidebar) return;
     node.draggable = true;
 
     const handleDragstart = (event: DragEvent) => {

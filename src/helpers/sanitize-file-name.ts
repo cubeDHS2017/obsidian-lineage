@@ -27,5 +27,5 @@ export const sanitizeFileName = (path: string, replacement = '-') => {
                 new RegExp(`^${replacement}(.)|(.)${replacement}$`, 'g'),
                 '$1$2',
             );
-    return sanitized;
+    return sanitized.trim();
 };

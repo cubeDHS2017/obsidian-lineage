@@ -6,6 +6,11 @@
         filter: grayscale(1);
     }
 }
+.active-sibling,.active-parent,.inactive-node{
+    & .cm-comment{
+        color: var(--text-muted);
+    }
+}
 
 .lineage-card p {
     margin: 0;

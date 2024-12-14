@@ -22,6 +22,12 @@ export type DocumentViewState = {
     activeNodesOfColumn: ActiveNodesOfColumn;
     selectedNodes: Set<string>;
 };
+export type PinnedNodes = {
+    activeNode: string;
+};
+export type RecentNodes = {
+    activeNode: string;
+};
 export type ViewState = {
     search: {
         query: string;
@@ -29,6 +35,7 @@ export type ViewState = {
         searching: boolean;
         showInput: boolean;
         fuzzySearch: boolean;
+        showAllNodes: boolean;
     };
     ui: {
         controls: {
@@ -39,4 +46,6 @@ export type ViewState = {
     };
     document: DocumentViewState;
     navigationHistory: NavigationHistory;
+    pinnedNodes: PinnedNodes;
+    recentNodes: RecentNodes;
 };

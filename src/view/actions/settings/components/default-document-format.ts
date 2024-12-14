@@ -8,13 +8,14 @@ export const DefaultDocumentFormat = (
 ) => {
     const settingsState = settingsStore.getValue();
     const setting = new Setting(element).setName('Default format');
-
+    setting.setDesc('Applies to new documents');
     setting.addDropdown((cb) => {
         const value = settingsState.general.defaultDocumentFormat;
 
         cb.addOptions({
-            sections: 'Sections',
-            outline: 'Outline (experimental)',
+            'html-element': 'HTML elements',
+            sections: 'HTML comments',
+            outline: 'Outline',
         } satisfies Record<LineageDocumentFormat, string>)
             .setValue(value)
             .onChange((value) => {

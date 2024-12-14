@@ -7,7 +7,7 @@ export const enableEditMode = (
     documentState: DocumentState,
 ) => {
     viewStore.dispatch({
-        type: 'DOCUMENT/ENABLE_EDIT_MODE',
+        type: 'view/main/enable-edit',
         payload: {
             nodeId: getIdOfSection(
                 documentState.sections,
