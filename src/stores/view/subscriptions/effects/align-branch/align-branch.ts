@@ -3,13 +3,16 @@ import { alignParentsNodes } from 'src/stores/view/subscriptions/effects/align-b
 import { alignChildColumns } from 'src/stores/view/subscriptions/effects/align-branch/align-child-columns';
 import { alignActiveNode } from 'src/stores/view/subscriptions/effects/align-branch/align-active-node';
 import { LineageView } from 'src/view/view';
+import { delay } from 'src/helpers/delay';
 
 export const alignBranch = async (
     view: LineageView,
     behavior?: ScrollBehavior,
     alignInactiveColumns = false,
+    delayMs = 0,
 ) => {
     await view.inlineEditor.mounting;
+    if (delayMs > 0) await delay(delayMs);
     requestAnimationFrame(() => {
         const container = view.container;
         if (!container) return;
