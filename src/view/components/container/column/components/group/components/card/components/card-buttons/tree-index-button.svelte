@@ -52,15 +52,12 @@
 
 <div
     aria-label="Reveal in editor"
-    class={'tree-index ' + (activeStatus ? classes[activeStatus] : '')}
+    class={'tree-index ' +
+        (activeStatus ? classes[activeStatus] : '') +
+        (hasChildren ? ' has-children' : '')}
     on:click={openFile}
 >
     {section}
-    {#if hasChildren}
-       <span class="has-children">
-           •
-       </span>
-    {/if}
 </div>
 
 <style>
@@ -84,9 +81,8 @@
         opacity: 0.6;
     }
 
-    .has-children{
-        position: absolute;
-        bottom: 0.5px;
-        right: -7px;
+    .has-children {
+        font-style: italic;
+
     }
 </style>
