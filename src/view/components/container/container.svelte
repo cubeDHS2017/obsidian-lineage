@@ -50,7 +50,7 @@
     use:scrollOnDndX
 >
     <div class="columns">
-        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center' }
+        {#if $scrolling.horizontalScrollingMode === 'keep-active-card-at-center'}
             <ColumnsBuffer />
         {/if}
         {#each $columns as column,i  (column.id)}
@@ -146,6 +146,8 @@
             display: none;
         }
 
-
+       & .active-node {
+            outline: 8px solid var(--background-active-parent) !important;
+        }
     }
 </style>

@@ -91,12 +91,13 @@
 
 <style>
     .sidebar {
-        --node-width: calc(var(--sidebar-width) - 30px);
+        --node-width: calc(var(--sidebar-width) - 40px);
         flex: 0 0 auto;
         width: var(--animated-sidebar-width);
         position: relative;
         overflow: hidden;
-        background-color: var(--color-base-20);
+        background-color: rgba(0, 0, 0, 0.2);
+        background-blend-mode: multiply;
         display: flex;
         flex-direction: column;
         padding: 10px 0;
@@ -130,4 +131,10 @@
             max-height: 65vh;
         }
     }
+
+    /*.sidebar {
+        & .active-node {
+            outline: 8px solid var(--background-active-parent) !important;
+        }
+    }*/
 </style>

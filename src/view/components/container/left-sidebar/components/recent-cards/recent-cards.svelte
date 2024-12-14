@@ -86,18 +86,18 @@
 
 <style>
     .recent-cards-container {
-        overflow-y: auto;
+        overflow-y:  overlay;
         height: 100%;
         width: 100%;
 
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 20px;
         flex: 1 1 auto;
         padding-bottom: 10px;
     }
-    /* .recent-cards-container::-webkit-scrollbar {
-        display: none;
-    }*/
+
+
+
 </style>

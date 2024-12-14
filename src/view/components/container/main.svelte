@@ -56,7 +56,7 @@
 <style>
     .lineage-main {
         --z-index-breadcrumbs: 10;
-        background-color: var(--background-container);
+
         display: flex;
         height: 100%;
         flex: 1 1 auto;
@@ -80,6 +80,7 @@
     }
 
     .lineage-view {
+        background-color: var(--background-container);
         display: flex;
         height: 100%;
         width: 100%;

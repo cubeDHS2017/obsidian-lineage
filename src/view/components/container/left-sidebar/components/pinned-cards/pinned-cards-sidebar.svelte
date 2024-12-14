@@ -86,7 +86,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 10px;
+        gap: 20px;
         flex: 1 1 auto;
         padding-bottom: 10px;
     }
