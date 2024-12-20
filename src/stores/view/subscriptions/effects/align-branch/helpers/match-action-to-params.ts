@@ -35,6 +35,8 @@ export const matchActionToParams = (
         if (verticalMove) behavior = 'instant';
     } else if (action.type === 'DOCUMENT/LOAD_FILE') {
         behavior = 'instant';
+    } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
+        behavior = 'instant';
     }
 
     let delay = 0;
@@ -58,9 +60,10 @@ export const matchActionToParams = (
     }
 
     const scrollFirstColumnToTheLeft =
-        action.type === 'view/life-cycle/mount' &&
-        settings.view.scrolling.horizontalScrollingMode ===
-            'reveal-active-card';
+        (action.type === 'view/life-cycle/mount' &&
+            settings.view.scrolling.horizontalScrollingMode ===
+                'reveal-active-card') ||
+        settings.view.zoomLevel < 1;
 
     return {
         behavior,

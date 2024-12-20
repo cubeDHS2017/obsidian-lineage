@@ -152,11 +152,21 @@
             menuDom.style.width = '200px';
         }
 
-        menu.showAtPosition({ x: event.pageX, y: event.pageY });
+        if (menuDom && !menuHeight) {
+            menu.showAtPosition({ x: event.pageX, y: event.pageY });
+            menuHeight = menuDom.getBoundingClientRect().height;
+            menu.close();
+        }
+        menu.showAtPosition({
+            x: (event.target as HTMLElement).getBoundingClientRect().left - 10,
+            y: event.pageY - menuHeight / 2,
+        });
         menu.onHide(() => {
             lastMenuHideEvent_ms = Date.now();
         });
     };
+
+    let menuHeight = 0;
 
     let lastMenuHideEvent_ms = 0;
     const showZoomPopupMenu = (event: MouseEvent) => {
