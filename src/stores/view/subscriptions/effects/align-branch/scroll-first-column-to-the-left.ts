@@ -8,7 +8,8 @@ export const scrollFirstColumnToTheLeft = (
     settings: Settings,
     container: HTMLElement,
 ) => {
-    const firstColumnId = documentState.document.columns[0].id;
+    const firstColumnId = documentState.document.columns[0]?.id;
+    if (!firstColumnId) return;
     const firstColumnElement = getNodeElement(container, firstColumnId);
     if (!firstColumnElement) return;
     if (firstColumnId) {
