@@ -49,16 +49,7 @@ export const onPluginSettingsUpdate = (
         type === 'SET_COLUMNS_GAP' ||
         type === 'view/modes/gap-between-cards/toggle';
     if (shouldAlign) {
-        let delay = 0;
-        let behavior: ScrollBehavior = 'instant';
-        if (
-            type === 'view/left-sidebar/toggle' ||
-            type === 'VIEW/TOGGLE_MINIMAP'
-        ) {
-            delay = 300;
-            behavior = 'smooth';
-        }
-        alignBranch(view, behavior, false, delay);
+        alignBranch(view, action);
     }
     if (view.isActive && type === 'UI/CHANGE_ZOOM_LEVEL') {
         focusContainer(view);

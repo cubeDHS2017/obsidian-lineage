@@ -22,6 +22,6 @@ export const onDocumentsStateUpdate = (
             focusContainer(view);
             view.plugin.statusBar.updateAll(view);
         }
-        alignBranch(view);
+        alignBranch(view, action);
     }
 };

@@ -49,7 +49,7 @@ export const onViewMount = (view: LineageView) => {
     view.plugin.statusBar.updateAll(view);
     // effects
     if (view.isActive) focusContainer(view);
-    alignBranch(view, undefined, true);
+    alignBranch(view, { type: 'view/life-cycle/mount' });
 
     loadPinnedNodesToDocument(view);
     markUnresolvedLinks(view);

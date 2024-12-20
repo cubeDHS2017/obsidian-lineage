@@ -7,6 +7,7 @@ export const calculateScrollLeft = (
     containerRect: DOMRect,
     settings: ScrollingSettings,
     childRect?: DOMRect | null,
+    scrollToTheLeft = false,
 ) => {
     const viewPortIsWideEnough = containerRect.width > elementRect.width;
     const viewPortIsWideEnoughForChild = childRect
@@ -32,7 +33,7 @@ export const calculateScrollLeft = (
         const horizontalMiddle = containerRect.left + containerRect.width / 2;
         const elementMiddle = elementRect.left + elementRect.width / 2;
         scrollLeft = horizontalMiddle - elementMiddle;
-    } else if (!leftSideIsVisible) {
+    } else if (!leftSideIsVisible || scrollToTheLeft) {
         scrollLeft = deltaLeft;
     } else if (
         settings.horizontalScrollingMode === 'reveal-active-card' &&

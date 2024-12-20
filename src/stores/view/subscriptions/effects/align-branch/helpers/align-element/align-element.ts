@@ -14,6 +14,7 @@ export const alignElement = (
     behavior: ScrollBehavior = 'smooth',
     mode: 'vertical' | 'horizontal' | 'both' = 'vertical',
     horizontalChild?: HTMLElement,
+    scrollToTheLeft = false,
 ) => {
     if (!container) return;
     const isArray = Array.isArray(elements);
@@ -38,6 +39,7 @@ export const alignElement = (
                 containerRect,
                 settings.view.scrolling,
                 childRect,
+                scrollToTheLeft,
             );
             if (Math.abs(scrollLeft) > THRESHOLD)
                 container.scrollBy({

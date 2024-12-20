@@ -8,12 +8,13 @@ export const setActiveNode = (
 ) => {
     const documentState = view.documentStore.getValue();
     let shouldSetActiveNode =
-        view.isViewOfFile || action.type === 'DOCUMENT/LOAD_FILE';
+        (view.isViewOfFile && action.type !== 'DOCUMENT/DROP_NODE') ||
+        action.type === 'DOCUMENT/LOAD_FILE';
     if (!shouldSetActiveNode) {
         const activeNodeOfView = view.viewStore.getValue().document.activeNode;
-        const aciveNodeDoesNotExist =
+        const activeNodeDoesNotExist =
             !documentState.sections.id_section[activeNodeOfView];
-        shouldSetActiveNode = aciveNodeDoesNotExist;
+        shouldSetActiveNode = activeNodeDoesNotExist;
     }
     if (shouldSetActiveNode) {
         view.viewStore.dispatch({
