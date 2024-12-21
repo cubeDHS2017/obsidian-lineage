@@ -32,7 +32,7 @@ export type MinimapProps = {
     tree: ExtendedTreeNode[];
     dom: MinimapDomElements | null;
     isLightTheme: boolean;
-    searchResults: CardRange[];
+    searchResults: string[];
 };
 
 export type CardRange = {
@@ -55,6 +55,7 @@ export type MinimapState = {
     };
     ranges: {
         cards: CardRanges;
+        searchResults: CardRange[];
     };
 };
 
@@ -84,6 +85,7 @@ export class Minimap {
         },
         ranges: {
             cards: {},
+            searchResults: [],
         },
     };
     private subscriptions: Set<() => void> = new Set();
@@ -135,7 +137,7 @@ export class Minimap {
 
         this.setDocument(this.view.documentStore.getValue().document);
         const viewState = this.view.viewStore.getValue();
-        this.setSearchResults(Array.from(viewState.search.results));
+        this.setSearchResults(viewState.search.results);
         this.setActiveCardId(viewState.document.activeNode);
         this.subscriptions.add(() => {
             canvas.removeEventListener('click', onClick);
@@ -174,6 +176,7 @@ export class Minimap {
         );
 
         this.state.totalDrawnHeight_cpx = blocks.totalLines * LINE_HEIGHT_CPX;
+        this.updateSearchResultsRanges();
         this.render();
     }
 
@@ -189,11 +192,16 @@ export class Minimap {
         this.updateScrollIndicator();
     }
 
-    public setSearchResults(searchResults: string[]) {
-        this.props.searchResults = searchResults.map((id) => {
+    public setSearchResults(searchResults: Set<string>) {
+        this.props.searchResults = Array.from(searchResults);
+        this.updateSearchResultsRanges();
+        this.render();
+    }
+
+    private updateSearchResultsRanges() {
+        this.state.ranges.searchResults = this.props.searchResults.map((id) => {
             return this.state.ranges.cards[id];
         });
-        this.render();
     }
 
     private render(): void {

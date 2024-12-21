@@ -42,7 +42,7 @@
     const saveActiveNodeOnClick = (event: MouseEvent) => {
         if (
             isEditing(view) &&
-            !(event.target as HTMLELement).closest('.active-node')
+            !(event.target as HTMLElement).closest('.active-node')
         ) {
             saveNodeContent(view);
         }

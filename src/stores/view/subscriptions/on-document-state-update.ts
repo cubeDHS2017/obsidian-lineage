@@ -82,8 +82,17 @@ export const onDocumentStateUpdate = (
     }
 
     if (e.content || structuralChange) {
-        view.documentSearch.resetIndex();
         view.minimapStore.setDocument(documentState.document);
+        view.documentSearch.resetIndex();
+        const query = viewStore.getValue().search.query;
+        if (query) {
+            view.viewStore.dispatch({
+                type: 'SEARCH/SET_QUERY',
+                payload: {
+                    query,
+                },
+            });
+        }
     }
     if (structuralChange) {
         view.plugin.statusBar.updateAll(view);

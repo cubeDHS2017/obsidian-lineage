@@ -31,7 +31,7 @@ const renderMinimap = async (
         theme: minimapTheme.current,
         activeCardRange: state.ranges.cards[props.activeCardId],
         isLightTheme: props.isLightTheme,
-        searchResults: props.searchResults,
+        searchResults: state.ranges.searchResults,
     });
 };
 
