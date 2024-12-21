@@ -16,6 +16,10 @@
     import { PinnedNodesStore } from 'src/stores/document/derived/pinned-nodes-store';
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
     import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
+    import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+    import {
+        saveNodeContent
+    } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 
     const view = getView();
     const columns = columnsStore(view);
@@ -34,6 +38,15 @@
     $: pinnedNodes = new Set($pinnedNodesArray);
 
     const applyGap = ApplyGapBetweenCardsStore(view);
+
+    const saveActiveNodeOnClick = (event: MouseEvent) => {
+        if (
+            isEditing(view) &&
+            !(event.target as HTMLELement).closest('.active-node')
+        ) {
+            saveNodeContent(view);
+        }
+    };
 </script>
 
 <div
@@ -42,7 +55,7 @@
         ($applyGap ? ' gap-between-cards' : '')}
     id="columns-container"
     tabindex="0"
-
+    on:click={saveActiveNodeOnClick}
     use:scrollOnDndX
 >
     <div class="columns">
