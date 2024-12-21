@@ -5,7 +5,7 @@ import { LineageDocumentFormat } from 'src/stores/settings/settings-type';
 import { outlineToJson } from 'src/lib/data-conversion/x-to-json/outline-to-json';
 import { htmlElementToJson } from 'src/lib/data-conversion/x-to-json/html-element-to-json';
 
-export const prepareExportedDocument = (
+export const mapDocumentToText = (
     fileData: string,
     basename: string,
     format: LineageDocumentFormat,

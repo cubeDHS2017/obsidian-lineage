@@ -2,7 +2,8 @@ import { LineageView } from 'src/view/view';
 import { Menu } from 'obsidian';
 import { extractBranch } from 'src/obsidian/commands/helpers/extract-branch/extract-branch';
 import { mergeNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/merge-node';
-import { copyNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/copy-node';
+import { copyActiveBranchesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-branches-to-clipboard';
+import { copyActiveNodesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-nodes-to-clipboard';
 import { cutNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cut-node';
 import { pasteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/paste-node';
 import { openSplitNodeModal } from 'src/view/modals/split-node-modal/open-split-node-modal';
@@ -44,7 +45,6 @@ const selectInactiveCard = (
 };
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
-    const menu = new Menu();
     const target = event.target as HTMLElement;
     const closestCardElement = target.closest(
         '.lineage-card',
@@ -73,6 +73,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const viewState = view.viewStore.getValue();
     const multipleNodesAreSelected = viewState.document.selectedNodes.size > 1;
 
+    const menu = new Menu();
     menu.addItem((item) =>
         item
             .setTitle('Split card')
@@ -115,14 +116,40 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     );
 
     menu.addSeparator();
-    menu.addItem((item) =>
-        item
-            .setTitle('Copy')
-            .setIcon('documents')
-            .onClick(() => {
-                copyNode(view);
-            }),
-    );
+    menu.addItem((item) => {
+        item.setTitle('Copy').setIcon('documents');
+        const setSubmenuAPI =
+            'setSubmenu' in item && typeof item.setSubmenu === 'function';
+        if (!setSubmenuAPI) {
+            throw new Error('item.setSubmenu is not a function');
+        }
+        // @ts-ignore
+        const subMenu: Menu = item.setSubmenu();
+        subMenu.addItem((subItem) =>
+            subItem
+                .setTitle('Copy branch')
+                .setIcon('lineage-cards')
+                .onClick(() => {
+                    copyActiveBranchesToClipboard(view, true);
+                }),
+        );
+        subMenu.addItem((subItem) =>
+            subItem
+                .setTitle('Copy branch without formatting')
+                .setIcon('file-text')
+                .onClick(() => {
+                    copyActiveBranchesToClipboard(view, false);
+                }),
+        );
+        subMenu.addItem((subItem) =>
+            subItem
+                .setTitle('Copy without sub-items')
+                .setIcon('file-text')
+                .onClick(() => {
+                    copyActiveNodesToClipboard(view);
+                }),
+        );
+    });
 
     menu.addItem((item) =>
         item

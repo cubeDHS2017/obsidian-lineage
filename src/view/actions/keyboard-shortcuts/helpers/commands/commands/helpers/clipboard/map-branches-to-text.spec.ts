@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { mapActiveBranchesToText } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/map-active-branches-to-text';
+import { mapBranchesToText } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/map-branches-to-text';
 
 describe('map active branches to text', () => {
     test('case 1', () => {
@@ -59,10 +59,11 @@ describe('map active branches to text', () => {
 \t- 2.3`;
 
         expect(
-            mapActiveBranchesToText(
+            mapBranchesToText(
                 input,
-                action.activeNode,
-                action.selectedNodes,
+                action.selectedNodes.size > 0
+                    ? Array.from(action.selectedNodes)
+                    : [action.activeNode],
                 'outline',
             ),
         ).toEqual(output);

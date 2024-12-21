@@ -1,6 +1,6 @@
 import { PluginCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
 import { isActiveAndNotEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { copyNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/copy-node';
+import { copyActiveBranchesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-branches-to-clipboard';
 import { cutNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cut-node';
 import { pasteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/paste-node';
 
@@ -11,7 +11,7 @@ export const clipboardCommands = () => {
             check: isActiveAndNotEditing,
             callback: async (view, event) => {
                 event.preventDefault();
-                copyNode(view);
+                copyActiveBranchesToClipboard(view, true);
             },
             hotkeys: [{ key: 'C', modifiers: ['Mod'] }],
         },

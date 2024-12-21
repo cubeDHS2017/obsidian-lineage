@@ -4,24 +4,26 @@ import { branchToOutline } from 'src/lib/data-conversion/branch-to-x/branch-to-o
 import { LineageDocumentFormat } from 'src/stores/settings/settings-type';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { branchToHtmlElement } from 'src/lib/data-conversion/branch-to-x/branch-to-html-element';
+import { branchToText } from 'src/lib/data-conversion/branch-to-x/branch-to-text';
 
-export const mapActiveBranchesToText = (
+export const mapBranchesToText = (
     document: LineageDocument,
-    activeNode: string,
-    selectedNodes: Set<string>,
-    format: LineageDocumentFormat,
+    nodes: Array<string>,
+    format: LineageDocumentFormat | 'unformatted-text',
 ) => {
-    const isSelection = selectedNodes.size > 1;
-
-    const nodes = isSelection ? [...selectedNodes] : [activeNode];
-
     const branches = nodes.map((node) =>
         getBranch(document.columns, document.content, node, 'copy'),
     );
 
-    return format === 'outline'
-        ? branchToOutline(branches)
-        : format === 'html-element'
-          ? branchToHtmlElement(branches)
-          : branchToHtmlComment(branches);
+    if (format === 'outline') {
+        return branchToOutline(branches);
+    } else if (format === 'html-element') {
+        return branchToHtmlElement(branches);
+    } else if (format === 'sections') {
+        return branchToHtmlComment(branches);
+    } else if (format === 'unformatted-text') {
+        return branchToText(branches);
+    } else {
+        throw new Error(`Invalid format: ${format}`);
+    }
 };

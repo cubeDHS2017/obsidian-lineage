@@ -16,7 +16,6 @@
     import { PinnedNodesStore } from 'src/stores/document/derived/pinned-nodes-store';
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
     import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
-    import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
     import {
         saveNodeContent
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
@@ -40,11 +39,12 @@
     const applyGap = ApplyGapBetweenCardsStore(view);
 
     const saveActiveNodeOnClick = (event: MouseEvent) => {
-        if (
-            isEditing(view) &&
-            !(event.target as HTMLElement).closest('.active-node')
-        ) {
-            saveNodeContent(view);
+        const target = event.target as HTMLElement;
+        if (!target.closest('.active-node')) {
+            const editingState = view.viewStore.getValue().document.editing;
+            if (editingState.activeNodeId && !editingState.isInSidebar) {
+                saveNodeContent(view);
+            }
         }
     };
 </script>
