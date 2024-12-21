@@ -33,6 +33,8 @@ export const hotkeysLang = {
     go_to_beginning_of_column: 'Go to start of column',
     go_to_end_of_column: 'Go to end of column',
     copy_node: 'Copy branch',
+    copy_node_unformatted: 'Copy branch without formatting',
+    copy_node_without_subitems: 'Copy without subitems',
     cut_node: 'Cut branch',
     paste_node: 'Paste branch',
     navigate_back: 'Navigate back',
@@ -106,7 +108,13 @@ export const groupedHotkeys = {
     ]),
     History: new Set(['undo_change', 'redo_change']),
     Search: new Set(['toggle_search_input']),
-    Clipboard: new Set(['copy_node', 'cut_node', 'paste_node']),
+    Clipboard: new Set([
+        'copy_node',
+        'copy_node_unformatted',
+        'copy_node_without_subitems',
+        'cut_node',
+        'paste_node',
+    ]),
     Scrolling: new Set([
         'scroll_left',
         'scroll_right',
