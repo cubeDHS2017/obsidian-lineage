@@ -1,4 +1,10 @@
-import { IconName, Notice, TextFileView, WorkspaceLeaf } from 'obsidian';
+import {
+    debounce,
+    IconName,
+    Notice,
+    TextFileView,
+    WorkspaceLeaf,
+} from 'obsidian';
 
 import Component from './components/container/main.svelte';
 import Lineage from '../main';
@@ -91,7 +97,7 @@ export class LineageView extends TextFileView {
             this.loadInitialData();
         } else {
             this.data = data;
-            this.loadDocumentToStore();
+            this.debouncedLoadDocumentToStore();
         }
     }
     async onUnloadFile() {
@@ -288,4 +294,9 @@ export class LineageView extends TextFileView {
             }
         }
     };
+
+    private debouncedLoadDocumentToStore = debounce(
+        this.loadDocumentToStore,
+        250,
+    );
 }
