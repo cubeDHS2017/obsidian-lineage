@@ -11,6 +11,10 @@ export const clipboardCommands = () => {
             name: 'copy_node',
             check: isActiveAndNotEditing,
             callback: async (view, event) => {
+                const selectedText = activeWindow.getSelection()?.toString();
+                if (selectedText && selectedText.length > 0) {
+                    return;
+                }
                 event.preventDefault();
                 copyActiveBranchesToClipboard(view, true);
             },
