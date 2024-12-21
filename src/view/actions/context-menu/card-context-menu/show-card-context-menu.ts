@@ -1,5 +1,4 @@
 import { LineageView } from 'src/view/view';
-import { Menu } from 'obsidian';
 import { extractBranch } from 'src/obsidian/commands/helpers/extract-branch/extract-branch';
 import { mergeNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/merge-node';
 import { copyActiveBranchesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-branches-to-clipboard';
@@ -10,39 +9,11 @@ import { openSplitNodeModal } from 'src/view/modals/split-node-modal/open-split-
 import { customIcons } from 'src/helpers/load-custom-icons';
 import { copyLinkToBlock } from 'src/view/actions/context-menu/card-context-menu/helpers/copy-link-to-block';
 import { exportColumn } from 'src/view/actions/context-menu/card-context-menu/helpers/export-column';
-
-const selectInactiveCard = (
-    view: LineageView,
-    closestCardElement: HTMLElement,
-    isInSidebar: boolean,
-    isInRecentCardsList: boolean,
-) => {
-    const id = closestCardElement?.id;
-    if (!isInSidebar) {
-        view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
-            payload: {
-                id,
-            },
-            // to prevent scrolling
-            context: { modKey: true },
-        });
-    } else if (isInRecentCardsList) {
-        view.viewStore.dispatch({
-            type: 'view/recent-nodes/set-active-node',
-            payload: {
-                id,
-            },
-        });
-    } else {
-        view.viewStore.dispatch({
-            type: 'view/pinned-nodes/set-active-node',
-            payload: {
-                id,
-            },
-        });
-    }
-};
+import {
+    MenuItemObject,
+    renderContextMenu,
+} from 'src/obsidian/context-menu/render-context-menu';
+import { selectInactiveCard } from 'src/obsidian/context-menu/select-inactive-card';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const target = event.target as HTMLElement;
@@ -70,148 +41,106 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             isInRecentCardsList,
         );
     }
+
     const viewState = view.viewStore.getValue();
-    const multipleNodesAreSelected = viewState.document.selectedNodes.size > 1;
-
-    const menu = new Menu();
-    menu.addItem((item) =>
-        item
-            .setTitle('Split card')
-            .setIcon(customIcons.split.name)
-            .onClick(() => {
-                openSplitNodeModal(view);
-            })
-            .setDisabled(isInSidebar),
-    );
-
-    menu.addSeparator();
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Merge with the card above')
-            .setIcon('merge')
-            .onClick(() => {
-                mergeNode(view, 'up');
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
-    menu.addItem((item) =>
-        item
-            .setTitle('Merge with the card below')
-            .setIcon('merge')
-            .onClick(() => {
-                mergeNode(view, 'down');
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
-
-    menu.addSeparator();
-    menu.addItem((item) =>
-        item
-            .setTitle('Copy link to block')
-            .setIcon('links-coming-in')
-            .onClick(() => {
-                copyLinkToBlock(view);
-            }),
-    );
-
-    menu.addSeparator();
-    menu.addItem((item) => {
-        item.setTitle('Copy').setIcon('documents');
-        const setSubmenuAPI =
-            'setSubmenu' in item && typeof item.setSubmenu === 'function';
-        if (!setSubmenuAPI) {
-            throw new Error('item.setSubmenu is not a function');
-        }
-        // @ts-ignore
-        const subMenu: Menu = item.setSubmenu();
-        subMenu.addItem((subItem) =>
-            subItem
-                .setTitle('Copy branch')
-                .setIcon('lineage-cards')
-                .onClick(() => {
-                    copyActiveBranchesToClipboard(view, true);
-                }),
-        );
-        subMenu.addItem((subItem) =>
-            subItem
-                .setTitle('Copy branch without formatting')
-                .setIcon('file-text')
-                .onClick(() => {
-                    copyActiveBranchesToClipboard(view, false);
-                }),
-        );
-        subMenu.addItem((subItem) =>
-            subItem
-                .setTitle('Copy without sub-items')
-                .setIcon('file-text')
-                .onClick(() => {
-                    copyActiveNodesToClipboard(view);
-                }),
-        );
-    });
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Cut')
-            .setIcon('scissors')
-            .onClick(() => {
-                cutNode(view);
-            })
-            .setDisabled(isInSidebar),
-    );
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Paste')
-            .setIcon('paste')
-            .onClick(() => {
-                pasteNode(view);
-            })
-            .setDisabled(isInSidebar),
-    );
-
-    menu.addSeparator();
+    const multipleNodesAreSelected =
+        !isInSidebar && viewState.document.selectedNodes.size > 1;
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const activeNode = viewState.document.activeNode;
     const isPinned =
         (isInSidebar && !isInRecentCardsList) ||
         documentState.pinnedNodes.Ids.includes(activeNode);
-    menu.addItem((item) =>
-        item
-            .setTitle(isPinned ? 'Unpin' : 'Pin')
-            .setIcon(isPinned ? 'pin-off' : 'pin')
-            .onClick(() => {
+
+    const menuItems: MenuItemObject[] = [
+        {
+            title: 'Split card',
+            icon: customIcons.split.name,
+            action: () => openSplitNodeModal(view),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        { type: 'separator' },
+        {
+            title: 'Merge with the card above',
+            icon: 'merge',
+            action: () => mergeNode(view, 'up'),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        {
+            title: 'Merge with the card below',
+            icon: 'merge',
+            action: () => mergeNode(view, 'down'),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        { type: 'separator' },
+        {
+            title: 'Copy link to block',
+            icon: 'links-coming-in',
+            action: () => copyLinkToBlock(view),
+            disabled: multipleNodesAreSelected,
+        },
+        { type: 'separator' },
+        {
+            title: 'Copy',
+            icon: 'documents',
+            submenu: [
+                {
+                    title: 'Copy branch',
+                    icon: 'lineage-cards',
+                    action: () => copyActiveBranchesToClipboard(view, true),
+                },
+                {
+                    title: 'Copy branch without formatting',
+                    icon: 'file-text',
+                    action: () => copyActiveBranchesToClipboard(view, false),
+                },
+                {
+                    title: 'Copy without sub-items',
+                    icon: 'file-text',
+                    action: () => copyActiveNodesToClipboard(view),
+                },
+            ],
+        },
+        {
+            title: 'Cut',
+            icon: 'scissors',
+            action: () => cutNode(view),
+            disabled: isInSidebar,
+        },
+        {
+            title: 'Paste',
+            icon: 'paste',
+            action: () => pasteNode(view),
+            disabled: isInSidebar,
+        },
+        { type: 'separator' },
+        {
+            title: isPinned ? 'Unpin' : 'Pin',
+            icon: isPinned ? 'pin-off' : 'pin',
+            action: () => {
                 documentStore.dispatch({
                     type: isPinned
                         ? 'document/pinned-nodes/unpin'
                         : 'document/pinned-nodes/pin',
                     payload: { id: activeNode },
                 });
-            })
-            .setDisabled(isInRecentCardsList),
-    );
-    menu.addSeparator();
-    menu.addItem((item) =>
-        item
-            .setTitle('Extract branch')
-            .setIcon(customIcons.cards.name)
-            .onClick(() => {
-                extractBranch(view);
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
+            },
+            disabled: isInRecentCardsList || multipleNodesAreSelected,
+        },
+        { type: 'separator' },
+        {
+            title: 'Extract branch',
+            icon: customIcons.cards.name,
+            action: () => extractBranch(view),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        {
+            title: 'Export column',
+            icon: 'file-text',
+            action: () => exportColumn(view),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+    ];
 
-    menu.addItem((item) =>
-        item
-            .setTitle('Export column')
-            .setIcon('file-text')
-            .onClick(() => {
-                exportColumn(view);
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
-
-    menu.showAtMouseEvent(event);
+    renderContextMenu(event, menuItems);
 };
