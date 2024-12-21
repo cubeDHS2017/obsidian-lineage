@@ -4,9 +4,21 @@ import invariant from 'tiny-invariant';
 import { createNewFile } from 'src/obsidian/events/workspace/effects/create-new-file';
 import { openFile } from 'src/obsidian/events/workspace/effects/open-file';
 import { Notice } from 'obsidian';
+import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 
 export const exportColumn = async (view: LineageView) => {
-    const activeNode = view.viewStore.getValue().document.activeNode;
+    const viewState = view.viewStore.getValue();
+
+    const isEditing = Boolean(viewState.document.editing.activeNodeId);
+    if (isEditing) {
+        saveNodeContent(view);
+        setTimeout(() => {
+            exportColumn(view);
+        }, 100);
+        return;
+    }
+
+    const activeNode = viewState.document.activeNode;
     invariant(activeNode);
 
     const document = view.documentStore.getValue().document;

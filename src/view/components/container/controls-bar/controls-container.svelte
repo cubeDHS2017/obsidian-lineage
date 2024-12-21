@@ -142,22 +142,7 @@
             on:click={toggleGap}
             tooltipPosition="left"
         >
-            <svg
-                viewBox="0 0 24 24"
-                class="svg-icon"
-                stroke="currentColor"
-                fill="transparent"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <rect width="20" height="12" x="-11.600009" y="6" rx="2" />
-                <rect
-                    width="20"
-                    height="12"
-                    x="16.534304"
-                    y="5.9783392"
-                    rx="2"
-                />
-            </svg>
+            {@html customIcons.gap.svg}
         </Button>
     </div>
     <div

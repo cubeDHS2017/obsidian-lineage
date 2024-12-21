@@ -31,7 +31,23 @@ const align: Icon = {
     svg: `<g> <rect width="20" height="12" x="2" y="6" rx="2"/> <line x1="12" y1="0" x2="12" y2="24" stroke-dasharray="4 3" /></g> `,
     mode: 'stroke',
 };
-export const customIcons = { cards, split, align };
+
+const gap: Icon = {
+    name: 'cards-gap',
+    svg: `  
+                <rect width="20" height="12" x="-11.600009" y="6" rx="2" />
+                <rect
+                    width="20"
+                    height="12"
+                    x="16.534304"
+                    y="5.9783392"
+                    rx="2"
+                />
+          `,
+    mode: 'stroke',
+};
+
+export const customIcons = { cards, split, align, gap };
 
 export const loadCustomIcons = () => {
     for (const icon of Object.values(customIcons)) {

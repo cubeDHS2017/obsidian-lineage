@@ -17,8 +17,8 @@ export const mapDocumentToText = (
             : format === 'html-element'
               ? htmlElementToJson(data)
               : htmlCommentToJson(data);
-    if (tree.length < 2 && tree[0].children.length == 0) {
+    /* if (tree.length < 2 && tree[0].children.length == 0) {
         throw new Error(`File ${basename} does not appear to be a tree`);
-    }
+    }*/
     return (frontmatter ? frontmatter + '\n' : '') + jsonToText(tree);
 };
