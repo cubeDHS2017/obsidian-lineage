@@ -15,7 +15,12 @@ export const mapBranchesToText = (
         getBranch(document.columns, document.content, node, 'copy'),
     );
 
-    if (format === 'outline') {
+    const isSingleNode =
+        nodes.length === 1 && Object.keys(branches[0].content).length === 1;
+
+    if (isSingleNode) {
+        return branches[0].content[nodes[0]].content;
+    } else if (format === 'outline') {
         return branchToOutline(branches);
     } else if (format === 'html-element') {
         return branchToHtmlElement(branches);

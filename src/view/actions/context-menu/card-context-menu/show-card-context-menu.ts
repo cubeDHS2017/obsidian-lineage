@@ -52,6 +52,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
         (isInSidebar && !isInRecentCardsList) ||
         documentState.pinnedNodes.Ids.includes(activeNode);
 
+    const hasChildren = documentState.meta.groupParentIds.has(activeNode);
     const menuItems: MenuItemObject[] = [
         {
             title: 'Split card',
@@ -80,27 +81,41 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             disabled: multipleNodesAreSelected,
         },
         { type: 'separator' },
-        {
-            title: 'Copy',
-            icon: 'documents',
-            submenu: [
-                {
-                    title: 'Copy branch',
-                    icon: 'lineage-cards',
-                    action: () => copyActiveBranchesToClipboard(view, true),
-                },
-                {
-                    title: 'Copy branch without formatting',
-                    icon: 'file-text',
-                    action: () => copyActiveBranchesToClipboard(view, false),
-                },
-                {
-                    title: 'Copy without sub-items',
-                    icon: 'file-text',
-                    action: () => copyActiveNodesToClipboard(view),
-                },
-            ],
-        },
+        !multipleNodesAreSelected && !hasChildren
+            ? {
+                  title: 'Copy',
+                  icon: 'documents',
+                  action: () => copyActiveNodesToClipboard(view),
+              }
+            : {
+                  title: 'Copy',
+                  icon: 'documents',
+                  submenu: [
+                      {
+                          title: multipleNodesAreSelected
+                              ? 'Copy branches'
+                              : 'Copy branch',
+                          icon: 'lineage-cards',
+                          action: () =>
+                              copyActiveBranchesToClipboard(view, true),
+                      },
+                      {
+                          title: multipleNodesAreSelected
+                              ? 'Copy branches without formatting'
+                              : 'Copy branch without formatting',
+                          icon: 'file-text',
+                          action: () =>
+                              copyActiveBranchesToClipboard(view, false),
+                      },
+                      {
+                          title: multipleNodesAreSelected
+                              ? 'Copy sections without sub-items'
+                              : 'Copy section without sub-items',
+                          icon: 'file-text',
+                          action: () => copyActiveNodesToClipboard(view),
+                      },
+                  ],
+              },
         {
             title: 'Cut',
             icon: 'scissors',
