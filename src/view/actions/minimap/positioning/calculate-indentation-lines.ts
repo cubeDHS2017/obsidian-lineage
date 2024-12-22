@@ -11,6 +11,7 @@ export type IndentationLine = {
     y_px: number;
     height_px: number;
     width_px: number;
+    cardId: string;
 };
 
 export const calculateIndentationLines = (wordBlocks: WordBlock[]) => {
@@ -46,6 +47,7 @@ export const calculateIndentationLines = (wordBlocks: WordBlock[]) => {
                 height_px:
                     LINE_HEIGHT_CPX - (lastLineOfCard ? LINE_GAP_CPX : 0),
                 width_px: INDENT_BLOCK_WIDTH_CPX,
+                cardId: lineWordBlocks[0].cardId,
             });
         }
     }

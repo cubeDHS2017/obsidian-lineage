@@ -1,7 +1,7 @@
 import {
     MinimapDomElements,
     MinimapState,
-} from 'src/view/actions/minimap/minimap';
+} from 'src/view/actions/minimap/minimap-controller';
 import {
     cpx_to_dpx,
     dpx_to_cpx,

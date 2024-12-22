@@ -21,7 +21,7 @@ export const createOnCanvasMousemove = (view: LineageView) => {
         const cardId = findCardAtPosition(y, state.ranges.cards, 0);
         if (cardId && cardId !== lastActiveCardId) {
             lastActiveCardId = cardId;
-            minimapStore.setActiveCardId(cardId);
+            minimapStore.debouncedSetActiveCardId(cardId);
             view.viewStore.dispatch({
                 type: 'DOCUMENT/SET_ACTIVE_NODE',
                 payload: {

@@ -41,7 +41,7 @@ export const onDocumentStateUpdate = (
     if (structuralChange) {
         setActiveNode(view, action);
         updateActiveBranch(viewStore, documentState);
-        view.minimapStore.setActiveCardId(
+        view.minimapStore.debouncedSetActiveCardId(
             viewStore.getValue().document.activeNode,
         );
         documentStore.dispatch({
@@ -82,7 +82,7 @@ export const onDocumentStateUpdate = (
     }
 
     if (e.content || structuralChange) {
-        view.minimapStore.setDocument(documentState.document);
+        view.minimapStore.debouncedSetDocument(documentState.document);
         view.documentSearch.resetIndex();
         const query = viewStore.getValue().search.query;
         if (query) {

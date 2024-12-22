@@ -1,38 +1,29 @@
-import {
-    CANVAS_WIDTH_CPX,
-    LINE_HEIGHT_CPX,
-} from 'src/view/actions/minimap/constants';
-import { debouncedRenderMinimap } from 'src/view/actions/minimap/render-minimap/render-minimap';
+import { CANVAS_WIDTH_CPX } from 'src/view/actions/minimap/constants';
 import { debouncedUpdateScrollIndicator } from 'src/view/actions/minimap/scroll-indicator/update-scroll-indicator';
-import {
-    columnsToExtendedJson,
-    ExtendedTreeNode,
-} from 'src/lib/data-conversion/x-to-json/columns-to-extended-json';
+import { ExtendedTreeNode } from 'src/lib/data-conversion/x-to-json/columns-to-extended-json';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { calculateScrollDeltaToActiveCard } from 'src/view/actions/minimap/scroll-indicator/calculate-scroll-delta-to-active-card';
 import invariant from 'tiny-invariant';
-import { refreshMinimapTheme } from 'src/view/actions/minimap/minimap-theme';
+import {
+    MinimapTheme,
+    minimapTheme,
+    refreshMinimapTheme,
+} from 'src/view/actions/minimap/minimap-theme';
 import { onCanvasClick } from 'src/view/actions/minimap/event-handlers/on-canvas-click';
 import { onCanvasWheel } from 'src/view/actions/minimap/event-handlers/on-canvas-wheel';
 import { LineageView } from 'src/view/view';
 import { id } from 'src/helpers/id';
-import {
-    createYRangeMapWorker,
-    drawMinimapWorker,
-    lineIndentationWorker,
-    wordBlockWorker,
-} from 'src/view/actions/minimap/worker-instances';
-import { WordBlock } from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
-import { IndentationLine } from 'src/view/actions/minimap/positioning/calculate-indentation-lines';
+import { drawMinimapWorker } from 'src/view/actions/minimap/worker-instances';
 import { createOnCanvasMousemove } from 'src/view/actions/minimap/event-handlers/create-on-canvas-mousemove';
 import { getTheme } from 'src/obsidian/helpers/get-theme';
+import { debounce } from 'src/helpers/debounce';
 
 export type MinimapProps = {
     activeCardId: string;
     tree: ExtendedTreeNode[];
     dom: MinimapDomElements | null;
+    canvasId: string;
     isLightTheme: boolean;
-    searchResults: string[];
 };
 
 export type CardRange = {
@@ -47,15 +38,9 @@ export type CardRanges = {
 export type MinimapState = {
     scrollPosition_cpx: number;
     totalDrawnHeight_cpx: number;
-    totalLines: number;
-    canvasId: string;
-    shapes: {
-        wordBlocks: WordBlock[];
-        indentationLines: IndentationLine[];
-    };
+    initialized: boolean;
     ranges: {
         cards: CardRanges;
-        searchResults: CardRange[];
     };
 };
 
@@ -65,27 +50,21 @@ export type MinimapDomElements = {
     offscreen: OffscreenCanvas;
 };
 
-export class Minimap {
+export class MinimapController {
     private props: MinimapProps = {
         tree: [],
         activeCardId: '',
         dom: null,
         isLightTheme: false,
-        searchResults: [],
+        canvasId: '',
     };
 
     private state: MinimapState = {
         scrollPosition_cpx: 0,
         totalDrawnHeight_cpx: 0,
-        totalLines: 0,
-        canvasId: '',
-        shapes: {
-            wordBlocks: [],
-            indentationLines: [],
-        },
+        initialized: false,
         ranges: {
             cards: {},
-            searchResults: [],
         },
     };
     private subscriptions: Set<() => void> = new Set();
@@ -93,7 +72,7 @@ export class Minimap {
     public constructor(private view: LineageView) {}
 
     private get enabled() {
-        return Boolean(this.props.dom);
+        return Boolean(this.props.dom) && this.state.initialized;
     }
 
     public getDom(): MinimapDomElements {
@@ -105,7 +84,7 @@ export class Minimap {
         return this.state;
     }
 
-    public onLoad(container: HTMLElement): void {
+    public async onLoad(container: HTMLElement) {
         const scrollIndicator = container.querySelector(
             '#scrollIndicator',
         ) as HTMLElement;
@@ -115,13 +94,15 @@ export class Minimap {
         canvas.width = CANVAS_WIDTH_CPX;
         refreshMinimapTheme();
         const offscreen = canvas.transferControlToOffscreen();
+        this.props.isLightTheme = getTheme() === 'light';
+        this.props.canvasId = id.canvas();
+
         this.props.dom = {
             offscreen,
             canvas,
             scrollIndicator,
         };
-        this.props.isLightTheme = getTheme() === 'light';
-        this.state.canvasId = id.canvas();
+        await this.initializeWorker(minimapTheme.current);
 
         const onClick = (e: MouseEvent) => {
             onCanvasClick(e, this.view);
@@ -135,18 +116,15 @@ export class Minimap {
         container.addEventListener('wheel', onWheel);
         container.addEventListener('mousemove', onMousemove);
 
-        this.setDocument(this.view.documentStore.getValue().document);
+        this.debouncedSetDocument(this.view.documentStore.getValue().document);
         const viewState = this.view.viewStore.getValue();
-        this.setSearchResults(viewState.search.results);
-        this.setActiveCardId(viewState.document.activeNode);
+        this.debouncedSetSearchResults(viewState.search.results);
+
+        this.debouncedSetActiveCardId(viewState.document.activeNode);
         this.subscriptions.add(() => {
             canvas.removeEventListener('click', onClick);
             container.removeEventListener('wheel', onWheel);
             container.removeEventListener('mousemove', onMousemove);
-            drawMinimapWorker.run({
-                canvasId: this.state.canvasId,
-                event: 'destroy',
-            });
         });
     }
 
@@ -156,73 +134,76 @@ export class Minimap {
         }
         this.props.dom = null;
         this.view.contentEl.removeClass('lineage-view__content-el--minimap-on');
+        this.destroyWorker();
     }
 
-    public async setDocument(lineageDocument: LineageDocument) {
-        if (!this.enabled) return;
-        const tree = columnsToExtendedJson(
-            lineageDocument.columns,
-            lineageDocument.content,
-        );
-        const blocks = await wordBlockWorker.run(tree);
-        this.state.shapes.wordBlocks = blocks.wordBlocks;
-        this.state.totalLines = blocks.totalLines;
-        this.state.shapes.indentationLines = await lineIndentationWorker.run(
-            blocks.wordBlocks,
-        );
+    public debouncedSetDocument = debounce(
+        async (lineageDocument: LineageDocument) => {
+            if (!this.enabled) return;
+            const payload = await drawMinimapWorker.run({
+                type: 'minimap/set/document',
+                payload: {
+                    document: lineageDocument,
+                    canvasId: this.props.canvasId,
+                    activeNodeId: this.props.activeCardId,
+                },
+            });
+            invariant(payload);
+            this.state.ranges.cards = payload.cardRanges;
+            this.state.totalDrawnHeight_cpx = payload.totalDrawnHeight_cpx;
+            this.debouncedScrollCardIntoView();
+        },
+        100,
+    );
 
-        this.state.ranges.cards = await createYRangeMapWorker.run(
-            this.state.shapes.wordBlocks,
-        );
-
-        this.state.totalDrawnHeight_cpx = blocks.totalLines * LINE_HEIGHT_CPX;
-        this.updateSearchResultsRanges();
-        this.render();
-    }
-
-    public setActiveCardId(nodeId: string): void {
+    public debouncedSetActiveCardId = debounce((nodeId: string): void => {
         if (!nodeId) return;
         if (nodeId === this.props.activeCardId) return;
         this.props.activeCardId = nodeId;
-        this.render();
-    }
+        drawMinimapWorker.run({
+            type: 'minimap/set/active-node',
+            payload: {
+                canvasId: this.props.canvasId,
+                activeNodeId: nodeId,
+            },
+        });
+        this.debouncedScrollCardIntoView();
+    }, 16);
 
     public setScrollPosition(cpx: number): void {
         this.state.scrollPosition_cpx = cpx;
         this.updateScrollIndicator();
     }
 
-    public setSearchResults(searchResults: Set<string>) {
-        this.props.searchResults = Array.from(searchResults);
-        this.updateSearchResultsRanges();
-        this.render();
-    }
-
-    private updateSearchResultsRanges() {
-        this.state.ranges.searchResults = this.props.searchResults.map((id) => {
-            return this.state.ranges.cards[id];
-        });
-    }
-
-    private render(): void {
-        if (!this.enabled) return;
-        debouncedRenderMinimap(this.state, this.props, this.getDom());
-        this.scrollCardIntoView();
-    }
+    public debouncedSetSearchResults = debounce(
+        (searchResults: Set<string>) => {
+            drawMinimapWorker.run({
+                type: 'minimap/set/search-results',
+                payload: {
+                    canvasId: this.props.canvasId,
+                    searchResults,
+                },
+            });
+        },
+        100,
+    );
 
     private updateScrollIndicator(): void {
         if (!this.enabled) return;
         debouncedUpdateScrollIndicator(this.state, this.getDom());
     }
 
-    private scrollCardIntoView() {
+    private scrollCardIntoView = async () => {
         if (!this.enabled) return;
-        const card = this.state.ranges.cards[this.props.activeCardId];
-        if (!card) return;
+
+        const activeCardRange =
+            this.state.ranges.cards[this.props.activeCardId];
+        if (!activeCardRange) return;
         const delta_cpx = calculateScrollDeltaToActiveCard(
-            card.y_start,
-            card.y_end,
-            this.state,
+            activeCardRange.y_start,
+            activeCardRange.y_end,
+            this.state.totalDrawnHeight_cpx,
+            this.state.scrollPosition_cpx,
             this.getDom(),
         );
         if (typeof delta_cpx === 'number') {
@@ -230,5 +211,34 @@ export class Minimap {
         } else {
             this.updateScrollIndicator();
         }
-    }
+    };
+
+    private debouncedScrollCardIntoView = debounce(this.scrollCardIntoView, 16);
+
+    initializeWorker = async (theme: MinimapTheme): Promise<void> => {
+        if (this.state.initialized) return;
+        if (!this.props.dom) return;
+
+        await drawMinimapWorker.run(
+            {
+                type: 'worker/initialize',
+                payload: {
+                    canvas: this.props.dom.offscreen,
+                    canvasId: this.props.canvasId,
+                    theme,
+                },
+            },
+            this.props.dom?.offscreen,
+        );
+
+        this.state.initialized = true;
+    };
+
+    destroyWorker = () => {
+        this.state.initialized = false;
+        drawMinimapWorker.run({
+            type: 'worker/destroy',
+            payload: { canvasId: this.props.canvasId },
+        });
+    };
 }

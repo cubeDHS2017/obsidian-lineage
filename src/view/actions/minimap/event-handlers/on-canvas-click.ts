@@ -25,7 +25,7 @@ export const onCanvasClick = (e: MouseEvent, view: LineageView) => {
 
     const cardId = findCardAtPosition(y, state.ranges.cards);
     if (cardId) {
-        minimapStore.setActiveCardId(cardId);
+        minimapStore.debouncedSetActiveCardId(cardId);
         view.viewStore.dispatch({
             type: 'DOCUMENT/SET_ACTIVE_NODE',
             payload: {

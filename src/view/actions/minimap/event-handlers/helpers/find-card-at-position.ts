@@ -1,4 +1,4 @@
-import { CardRanges } from 'src/view/actions/minimap/minimap';
+import { CardRanges } from 'src/view/actions/minimap/minimap-controller';
 import { LINE_HEIGHT_CPX } from 'src/view/actions/minimap/constants';
 
 export const findCardAtPosition = (

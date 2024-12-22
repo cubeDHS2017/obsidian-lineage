@@ -1,4 +1,4 @@
-import { CardRanges } from 'src/view/actions/minimap/minimap';
+import { CardRanges } from 'src/view/actions/minimap/minimap-controller';
 import { WordBlock } from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
 
 export const createYRangeMap = (wordBlocks: WordBlock[]) => {

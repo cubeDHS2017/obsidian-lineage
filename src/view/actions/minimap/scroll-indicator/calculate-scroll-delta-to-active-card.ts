@@ -1,13 +1,11 @@
 import { dpx_to_cpx } from '../event-handlers/on-canvas-click';
-import {
-    MinimapDomElements,
-    MinimapState,
-} from 'src/view/actions/minimap/minimap';
+import { MinimapDomElements } from 'src/view/actions/minimap/minimap-controller';
 
 export const calculateScrollDeltaToActiveCard = (
     y_start_cpx: number,
     y_end_cpx: number,
-    state: MinimapState,
+    totalDrawnHeight_cpx: number,
+    scrollPosition_cpx: number,
     dom: MinimapDomElements,
 ) => {
     const minimapContainer = dom.scrollIndicator.parentElement;
@@ -16,14 +14,13 @@ export const calculateScrollDeltaToActiveCard = (
     const clientHeight_dpx = minimapContainer.clientHeight;
     const containerHeight_cpx = dpx_to_cpx(clientHeight_dpx);
 
-    const contentFitsContainer =
-        state.totalDrawnHeight_cpx <= containerHeight_cpx;
+    const contentFitsContainer = totalDrawnHeight_cpx <= containerHeight_cpx;
     if (contentFitsContainer) {
         dom.canvas.style.transform = 'translateY(0)';
         return null;
     }
 
-    const currentScroll_cpx = state.scrollPosition_cpx;
+    const currentScroll_cpx = scrollPosition_cpx;
     const visibleStart_cpx = currentScroll_cpx;
     const visibleEnd_cpx = currentScroll_cpx + containerHeight_cpx;
 
@@ -49,7 +46,7 @@ export const calculateScrollDeltaToActiveCard = (
         }
     }
 
-    const maxScroll_cpx = state.totalDrawnHeight_cpx - containerHeight_cpx;
+    const maxScroll_cpx = totalDrawnHeight_cpx - containerHeight_cpx;
     newScroll_cpx = Math.max(0, Math.min(newScroll_cpx, maxScroll_cpx));
 
     return newScroll_cpx;

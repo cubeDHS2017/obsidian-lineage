@@ -2,6 +2,7 @@ import { getTheme } from 'src/obsidian/helpers/get-theme';
 import { ChunkType } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-chunk-positions';
 
 export type MinimapTheme = {
+    isLightTheme: boolean;
     wordBlock: string;
     indentLine: string;
     card_active: string;
@@ -21,6 +22,7 @@ export type MinimapTheme = {
 
 const themes = {
     dark: {
+        isLightTheme: false,
         card_active: '#a9a9a9a',
         card_searchResult: '#e0de71', // obsidian yellow
         wordBlock: '#999999aa',
@@ -38,6 +40,7 @@ const themes = {
         },
     },
     light: {
+        isLightTheme: true,
         wordBlock: '#707070cc',
         card_active: '#aaaaaa',
         card_searchResult: '#e0ac00', // obsidian yellow
