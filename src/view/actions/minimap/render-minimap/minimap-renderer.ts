@@ -34,8 +34,12 @@ export class MinimapRenderer {
         this.state.theme = theme;
     };
 
-    setDocument = (document: LineageDocument, activeNodeId: string) => {
-        const shapes = this.shapes.calculateDocument(document);
+    setDocument = (
+        document: LineageDocument,
+        activeNodeId: string,
+        canvasId: string,
+    ) => {
+        const shapes = this.shapes.calculateDocument(document, canvasId);
         this.shapes.updateSearchResultRanges(this.state.searchResults);
         this.state.activeNodeId = activeNodeId;
         this.renderer.drawDocument(activeNodeId, this.state.theme);

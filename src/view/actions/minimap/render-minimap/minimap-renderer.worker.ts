@@ -1,6 +1,7 @@
 import { MinimapRenderer } from 'src/view/actions/minimap/render-minimap/minimap-renderer';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { MinimapTheme } from 'src/view/actions/minimap/minimap-theme';
+import { chunkPositionsCache } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/chunk-positions-cache';
 
 type State = {
     canvases: {
@@ -76,6 +77,7 @@ self.onmessage = (message: MessageEvent) => {
         }
     } else if (event.type === 'worker/destroy') {
         delete state.canvases[event.payload.canvasId];
+        chunkPositionsCache.deleteCanvasCache(event.payload.canvasId);
     } else {
         const viewCanvas = state.canvases[event.payload.canvasId];
         if (!viewCanvas) {
@@ -87,6 +89,7 @@ self.onmessage = (message: MessageEvent) => {
             result = viewCanvas.minimap.setDocument(
                 event.payload.document,
                 event.payload.activeNodeId,
+                event.payload.canvasId,
             );
         } else if (event.type === 'minimap/set/active-node') {
             viewCanvas.minimap.setActiveNode(event.payload.activeNodeId);

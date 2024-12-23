@@ -27,7 +27,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
     test('case 2: heading and bold text', () => {
@@ -46,7 +46,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -73,7 +73,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -107,7 +107,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -134,7 +134,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -154,7 +154,7 @@ describe('calculate-chunk-position', () => {
             empty: true,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -181,7 +181,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -222,7 +222,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -256,7 +256,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -290,7 +290,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -401,7 +401,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
     test('case 12: tag and simple text', () => {
@@ -434,7 +434,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -496,7 +496,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -530,7 +530,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -655,7 +655,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -682,7 +682,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -709,7 +709,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -743,7 +743,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
     test('case 19: standalone period', () => {
@@ -825,7 +825,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -887,7 +887,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -935,7 +935,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
         };
 
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -1024,7 +1024,7 @@ describe('calculate-chunk-position', () => {
             empty: false,
             totalLines: 1,
         };
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -1043,7 +1043,7 @@ describe('calculate-chunk-position', () => {
             totalLines: 1,
             empty: false,
         };
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -1129,7 +1129,7 @@ describe('calculate-chunk-position', () => {
             totalLines: 3,
             empty: false,
         };
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 
@@ -1197,7 +1197,7 @@ describe('calculate-chunk-position', () => {
             totalLines: 1,
             empty: false,
         };
-        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE);
+        const actual = calculateChunkPositions(input, N_CHARS_PER_LINE, '', '');
         expect(actual).toEqual(output);
     });
 });
@@ -1214,7 +1214,7 @@ describe('performance-test: calculate-chunk-position', () => {
         // eslint-disable-next-line no-console
         console.time('calculateWordPositions');
         for (let i = 0; i < lines.length; i++) {
-            calculateChunkPositions(lines[i], N_CHARS_PER_LINE);
+            calculateChunkPositions(lines[i], N_CHARS_PER_LINE, '', '');
         }
         // eslint-disable-next-line no-console
         console.timeEnd('calculateWordPositions');

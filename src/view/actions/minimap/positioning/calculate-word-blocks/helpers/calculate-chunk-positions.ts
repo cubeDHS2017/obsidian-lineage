@@ -1,3 +1,5 @@
+import { chunkPositionsCache } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/chunk-positions-cache';
+
 export enum ChunkType {
     heading = 'heading',
     period = 'period',
@@ -38,7 +40,7 @@ type ChunkPosition = {
     type: ChunkType | null;
 };
 
-type ChunkPositionResult = {
+export type ChunkPositionResult = {
     chunks: ChunkPosition[];
     totalLines: number;
     empty: boolean;
@@ -90,11 +92,23 @@ const unhallowedTagCharacters = new Set([
 export const calculateChunkPositions = (
     content: string,
     availableLineCharacters: number,
+    nodeId: string,
+    canvasId: string,
 ): ChunkPositionResult => {
+    const cache = chunkPositionsCache.getCachedResult(
+        canvasId,
+        nodeId,
+        content,
+        availableLineCharacters,
+    );
+    if (cache) {
+        return cache;
+    }
     const isEmptyCard = !content.trim();
     if (isEmptyCard) {
         content = 'empty';
     }
+
     const positions: ChunkPosition[] = [];
     const state: State = {
         chunk: {
@@ -285,9 +299,18 @@ export const calculateChunkPositions = (
     if (state.chunk.length_chars > 0) {
         positions.push(state.chunk);
     }
-    return {
+
+    const result = {
         chunks: positions,
         totalLines: state.line + 1,
         empty: isEmptyCard,
     };
+    chunkPositionsCache.cacheResult(
+        canvasId,
+        nodeId,
+        content,
+        availableLineCharacters,
+        result,
+    );
+    return result;
 };

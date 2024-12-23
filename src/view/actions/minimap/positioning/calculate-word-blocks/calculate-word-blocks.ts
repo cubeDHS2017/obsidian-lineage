@@ -27,6 +27,7 @@ export type WordBlock = {
 const calculateWordBlocksOfCard = (
     node: ExtendedTreeNode,
     state: { nextLineOffset: number; depth: number },
+    canvasId: string,
 ) => {
     const wordBlocks: WordBlock[] = [];
     const availableLineCharacters =
@@ -34,6 +35,8 @@ const calculateWordBlocksOfCard = (
     const wordPositions = calculateChunkPositions(
         node.content,
         availableLineCharacters,
+        node.id,
+        canvasId,
     );
 
     for (const wordPos of wordPositions.chunks) {
@@ -57,7 +60,11 @@ const calculateWordBlocksOfCard = (
     const currentDepth = state.depth;
     state.depth = currentDepth + 1;
     for (const child of node.children) {
-        const wordBlocksOfCard = calculateWordBlocksOfCard(child, state);
+        const wordBlocksOfCard = calculateWordBlocksOfCard(
+            child,
+            state,
+            canvasId,
+        );
         wordBlocks.push(...wordBlocksOfCard);
     }
     state.depth = currentDepth;
@@ -65,16 +72,17 @@ const calculateWordBlocksOfCard = (
 };
 
 export type WordBlocksResult = { totalLines: number; wordBlocks: WordBlock[] };
-export const calculateWordBlocks: (
+export const calculateWordBlocks = (
     nodes: ExtendedTreeNode[],
-) => WordBlocksResult = (nodes: ExtendedTreeNode[]) => {
+    canvasId: string,
+) => {
     const wordBlocks: WordBlock[] = [];
     const state = {
         nextLineOffset: 1, // keep an empty line at the start for card focus rectangle
         depth: 0,
     };
     for (const node of nodes) {
-        wordBlocks.push(...calculateWordBlocksOfCard(node, state));
+        wordBlocks.push(...calculateWordBlocksOfCard(node, state, canvasId));
     }
     return {
         wordBlocks,

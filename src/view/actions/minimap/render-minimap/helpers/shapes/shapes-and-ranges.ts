@@ -25,9 +25,9 @@ export class ShapesAndRanges {
     private cardRanges: CardRanges = {};
     private searchResultRanges: CardRange[] = [];
 
-    calculateDocument(document: LineageDocument) {
+    calculateDocument(document: LineageDocument, canvasId: string) {
         const tree = columnsToExtendedJson(document.columns, document.content);
-        const blocks = calculateWordBlocks(tree);
+        const blocks = calculateWordBlocks(tree, canvasId);
 
         this.wordBlocks = blocks.wordBlocks;
         this.totalLines = blocks.totalLines;
