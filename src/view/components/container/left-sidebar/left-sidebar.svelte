@@ -86,7 +86,7 @@
         <RecentCards />
     {/if}
     <slot />
-    {#if animatedSidebarWidth > 0}{/if}
+
 </div>
 
 <style>

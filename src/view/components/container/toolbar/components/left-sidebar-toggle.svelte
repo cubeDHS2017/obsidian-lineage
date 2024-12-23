@@ -32,24 +32,4 @@
         position: relative;
         display: inline-block;
     }
-
-    .badge {
-        position: absolute;
-        top: -4px;
-        right: -4px;
-        background-color: var(--color-base-50);
-        color: white;
-        font-size: 8px;
-        font-weight: bold;
-        border-radius: 50%;
-        padding: 7px 4px;
-        line-height: 1;
-        min-width: 12px;
-        height: 12px;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        opacity: 0.8;
-    }
 </style>

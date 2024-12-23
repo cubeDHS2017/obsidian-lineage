@@ -6,6 +6,7 @@ import { drawRectangle } from 'src/view/actions/minimap/render-minimap/helpers/r
 import { drawIndentationLines } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/draw-indentation-lines';
 import { drawWordBlocks } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/draw-word-blocks';
 import { CanvasWrapper } from 'src/view/actions/minimap/render-minimap/helpers/renderer/canvas-wrapper';
+import { filterSearchAreas } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/filter-search-areas';
 
 type State = {
     drawnAreas: {
@@ -77,8 +78,8 @@ export class Renderer extends CanvasWrapper {
     };
 
     drawIndicators = async (activeNodeId: string, theme: MinimapTheme) => {
-        const cardRange = this.shapes.getCardRange(activeNodeId);
-        if (!cardRange) {
+        const newActiveCardRange = this.shapes.getCardRange(activeNodeId);
+        if (!newActiveCardRange) {
             return;
         }
 
@@ -90,17 +91,24 @@ export class Renderer extends CanvasWrapper {
             );
         }
 
-        for (const searchResult of this.state.drawnAreas.searchResults) {
+        const searchResultRanges = this.shapes.getSearchResultRanges();
+
+        const filtered = filterSearchAreas(
+            this.state.drawnAreas.searchResults,
+            searchResultRanges,
+            this.state.drawnAreas.activeNode!,
+            newActiveCardRange,
+        );
+        for (const searchResult of filtered.previousSearchResultRanges) {
             this.resetRange(activeNodeId, searchResult, theme);
         }
 
-        drawRectangle(this.ctx, cardRange, theme.card_active);
-        this.state.drawnAreas.activeNode = cardRange;
+        drawRectangle(this.ctx, newActiveCardRange, theme.card_active);
 
-        const searchResultRanges = this.shapes.getSearchResultRanges();
-        for (const searchResult of searchResultRanges) {
+        for (const searchResult of filtered.nextSearchResultRanges) {
             drawRectangle(this.ctx, searchResult, theme.card_searchResult);
         }
+        this.state.drawnAreas.activeNode = newActiveCardRange;
         this.state.drawnAreas.searchResults = searchResultRanges;
     };
 }
