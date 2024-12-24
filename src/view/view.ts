@@ -46,7 +46,7 @@ export class LineageView extends TextFileView {
     component: Component;
     documentStore: DocumentStore;
     viewStore: ViewStore;
-    minimapStore: MinimapController;
+    minimapController: MinimapController;
     container: HTMLElement | null;
     inlineEditor: InlineEditor;
     documentSearch: DocumentSearch;
@@ -68,7 +68,7 @@ export class LineageView extends TextFileView {
             viewReducer,
             this.onViewStoreError as OnError<ViewStoreAction>,
         );
-        this.minimapStore = new MinimapController(this);
+        this.minimapController = new MinimapController(this);
         this.id = id.view();
         this.documentSearch = new DocumentSearch(this);
     }

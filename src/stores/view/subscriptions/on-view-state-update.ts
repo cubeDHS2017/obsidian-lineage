@@ -41,9 +41,10 @@ export const onViewStateUpdate = (
         // this should be handled internally
         updateActiveBranch(viewStore, documentState);
         persistActiveNodeInPluginSettings(view);
-        view.minimapStore.debouncedSetActiveCardId(
+        view.minimapController.onActiveNodeUpdate(
             viewState.document.activeNode,
         );
+
         view.plugin.statusBar.updateProgressIndicator(view);
     }
 

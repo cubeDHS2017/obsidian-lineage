@@ -1,6 +1,6 @@
 import {
     MinimapDomElements,
-    MinimapState,
+    ScrollInfo,
 } from 'src/view/actions/minimap/minimap-controller';
 import {
     cpx_to_dpx,
@@ -9,7 +9,7 @@ import {
 import { debounce } from 'obsidian';
 
 const updateScrollIndicator = (
-    state: MinimapState,
+    state: ScrollInfo,
     dom: MinimapDomElements,
 ): void => {
     const minimapContainer = dom.scrollIndicator.parentElement;
@@ -20,7 +20,7 @@ const updateScrollIndicator = (
 
     if (state.totalDrawnHeight_cpx <= containerHeight_cpx) {
         dom.scrollIndicator.style.display = 'none';
-        dom.canvas.style.transform = 'translateY(0)';
+        dom.canvasContainer.style.transform = 'translateY(0)';
         return;
     }
 
@@ -35,10 +35,12 @@ const updateScrollIndicator = (
     const indicatorPosition_dpx =
         scrollPercent * (clientHeight_dpx - indicatorHeight_dpx);
 
-    dom.scrollIndicator.style.height = `${indicatorHeight_dpx}px`;
-    dom.scrollIndicator.style.transform = `translateY(${indicatorPosition_dpx}px)`;
-    const scrollPosition_dpx = cpx_to_dpx(state.scrollPosition_cpx);
-    dom.canvas.style.transform = `translateY(${-scrollPosition_dpx}px)`;
+    requestAnimationFrame(() => {
+        dom.scrollIndicator.style.height = `${indicatorHeight_dpx}px`;
+        dom.scrollIndicator.style.transform = `translateY(${indicatorPosition_dpx}px)`;
+        const scrollPosition_dpx = cpx_to_dpx(state.scrollPosition_cpx);
+        dom.canvasContainer.style.transform = `translateY(${-scrollPosition_dpx}px)`;
+    });
 };
 
 export const debouncedUpdateScrollIndicator = debounce(

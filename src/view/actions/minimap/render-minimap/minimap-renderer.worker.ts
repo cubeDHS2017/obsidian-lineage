@@ -1,7 +1,7 @@
 import { MinimapRenderer } from 'src/view/actions/minimap/render-minimap/minimap-renderer';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { MinimapTheme } from 'src/view/actions/minimap/minimap-theme';
-import { chunkPositionsCache } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/chunk-positions-cache';
+import { chunkPositionsCache } from 'src/view/actions/minimap/render-minimap/helpers/shapes/helpers/chunk-positions-cache';
 
 type State = {
     canvases: {
@@ -31,25 +31,11 @@ export type CanvasWorkerProps =
       }
     | MinimapEvent
     | {
-          type: 'minimap/set/active-node';
-          payload: {
-              canvasId: string;
-              activeNodeId: string;
-          };
-      }
-    | {
           type: 'minimap/set/document';
           payload: {
               document: LineageDocument;
               activeNodeId: string;
               canvasId: string;
-          };
-      }
-    | {
-          type: 'minimap/set/search-results';
-          payload: {
-              canvasId: string;
-              searchResults: Set<string>;
           };
       };
 
@@ -91,10 +77,6 @@ self.onmessage = (message: MessageEvent) => {
                 event.payload.activeNodeId,
                 event.payload.canvasId,
             );
-        } else if (event.type === 'minimap/set/active-node') {
-            viewCanvas.minimap.setActiveNode(event.payload.activeNodeId);
-        } else if (event.type === 'minimap/set/search-results') {
-            viewCanvas.minimap.setSearchResults(event.payload.searchResults);
         }
     }
 

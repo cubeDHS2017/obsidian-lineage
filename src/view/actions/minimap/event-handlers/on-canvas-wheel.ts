@@ -4,10 +4,11 @@ import { LineageView } from 'src/view/view';
 export const onCanvasWheel = (e: WheelEvent, view: LineageView) => {
     e.preventDefault();
 
-    const minimapStore = view.minimapStore;
-    const state = minimapStore.getState();
+    const minimapStore = view.minimapController;
+    const state = minimapStore.getScrollInfo();
     const dom = minimapStore.getDom();
-    const minimapContainer = dom.canvas.parentElement;
+    // @ts-ignore
+    const minimapContainer = dom.canvas.parentElement.parentElement;
     if (!minimapContainer) return;
 
     const scrollAmount_cpx = dpx_to_cpx(e.deltaY);

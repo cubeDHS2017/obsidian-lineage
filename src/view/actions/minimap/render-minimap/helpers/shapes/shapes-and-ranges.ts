@@ -1,26 +1,22 @@
 import {
     calculateWordBlocks,
-    WordBlock,
-} from 'src/view/actions/minimap/positioning/calculate-word-blocks/calculate-word-blocks';
-import {
-    calculateIndentationLines,
-    IndentationLine,
-} from 'src/view/actions/minimap/positioning/calculate-indentation-lines';
+    MinimapLine,
+} from 'src/view/actions/minimap/render-minimap/helpers/shapes/calculate-word-blocks';
+import { calculateIndentationLines } from 'src/view/actions/minimap/render-minimap/helpers/shapes/calculate-indentation-lines';
 import {
     CardRange,
     CardRanges,
 } from 'src/view/actions/minimap/minimap-controller';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { columnsToExtendedJson } from 'src/lib/data-conversion/x-to-json/columns-to-extended-json';
-import { createYRangeMap } from 'src/view/actions/minimap/positioning/create-y-range-map';
+import { createYRangeMap } from 'src/view/actions/minimap/render-minimap/helpers/shapes/create-y-range-map';
 import { LINE_HEIGHT_CPX } from 'src/view/actions/minimap/constants';
 
 export class ShapesAndRanges {
     getSearchResultRanges() {
         return this.searchResultRanges;
     }
-    private wordBlocks: WordBlock[] = [];
-    private indentationLines: IndentationLine[] = [];
+    private lines: MinimapLine[] = [];
     private totalLines: number = 0;
     private cardRanges: CardRanges = {};
     private searchResultRanges: CardRange[] = [];
@@ -29,11 +25,11 @@ export class ShapesAndRanges {
         const tree = columnsToExtendedJson(document.columns, document.content);
         const blocks = calculateWordBlocks(tree, canvasId);
 
-        this.wordBlocks = blocks.wordBlocks;
+        this.lines = blocks.lines;
         this.totalLines = blocks.totalLines;
-        this.indentationLines = calculateIndentationLines(this.wordBlocks);
+        calculateIndentationLines(blocks.lines);
 
-        this.cardRanges = createYRangeMap(this.wordBlocks);
+        this.cardRanges = createYRangeMap(this.lines);
 
         return {
             totalLines: this.totalLines,
@@ -48,12 +44,8 @@ export class ShapesAndRanges {
         );
     }
 
-    getWordBlocks() {
-        return this.wordBlocks;
-    }
-
-    getIndentationLines() {
-        return this.indentationLines;
+    getLines() {
+        return this.lines;
     }
 
     getTotalLines() {

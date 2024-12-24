@@ -2,6 +2,7 @@ export const CANVAS_WIDTH_DPX = 176;
 export const CANVAS_WIDTH_CPX = CANVAS_WIDTH_DPX * 2;
 export const CHAR_WIDTH_CPX = 6;
 export const LINE_HEIGHT_CPX = 10;
+
 export const LINE_GAP_CPX = 4;
 export const N_CHARS_PER_LINE = CANVAS_WIDTH_CPX / CHAR_WIDTH_CPX; // 30
 export const N_CHARS_OF_INDENT = 2;

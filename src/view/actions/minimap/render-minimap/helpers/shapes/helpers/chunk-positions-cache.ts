@@ -1,4 +1,4 @@
-import { ChunkPositionResult } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-chunk-positions';
+import { ChunkPositionResult } from 'src/view/actions/minimap/render-minimap/helpers/shapes/helpers/calculate-chunk-positions';
 
 class ChunkPositionsCache {
     private caches: {

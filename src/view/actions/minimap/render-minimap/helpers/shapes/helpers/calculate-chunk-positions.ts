@@ -1,4 +1,4 @@
-import { chunkPositionsCache } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/chunk-positions-cache';
+import { chunkPositionsCache } from 'src/view/actions/minimap/render-minimap/helpers/shapes/helpers/chunk-positions-cache';
 
 export enum ChunkType {
     heading = 'heading',

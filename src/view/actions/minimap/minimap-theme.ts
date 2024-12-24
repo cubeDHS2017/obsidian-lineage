@@ -1,5 +1,5 @@
 import { getTheme } from 'src/obsidian/helpers/get-theme';
-import { ChunkType } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-chunk-positions';
+import { ChunkType } from 'src/view/actions/minimap/render-minimap/helpers/shapes/helpers/calculate-chunk-positions';
 
 export type MinimapTheme = {
     isLightTheme: boolean;
@@ -25,7 +25,7 @@ const themes = {
         isLightTheme: false,
         card_active: '#a9a9a9a',
         card_searchResult: '#e0de71', // obsidian yellow
-        wordBlock: '#999999aa',
+        wordBlock: '#99999966',
         indentLine: '#ffffff55',
         chars: {
             [ChunkType.highlight]: '#e0de71', // obsidian yellow
@@ -41,10 +41,10 @@ const themes = {
     },
     light: {
         isLightTheme: true,
-        wordBlock: '#707070cc',
+        wordBlock: '#70707088',
         card_active: '#aaaaaa',
         card_searchResult: '#e0ac00', // obsidian yellow
-        indentLine: '#77777750',
+        indentLine: '#777777aa',
         chars: {
             [ChunkType.highlight]: '#e0ac00', // obsidian yellow
             [ChunkType.wikilink]: '#086ddd', // obsidian blue

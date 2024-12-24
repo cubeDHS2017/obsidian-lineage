@@ -8,9 +8,8 @@ import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-
 export const createOnCanvasMousemove = (view: LineageView) => {
     let lastActiveCardId: string | null = null;
 
-    const minimapStore = view.minimapStore;
+    const minimapStore = view.minimapController;
     const dom = minimapStore.getDom();
-    const state = minimapStore.getState();
     const hoverHandler = debounce((e: MouseEvent) => {
         if (!(e.buttons === 1 || (isMacLike ? e.metaKey : e.ctrlKey))) return;
         const rect = dom.canvas.getBoundingClientRect();
@@ -18,10 +17,11 @@ export const createOnCanvasMousemove = (view: LineageView) => {
         const domY = e.clientY - rect.top;
         const y = dpx_to_cpx(domY);
 
-        const cardId = findCardAtPosition(y, state.ranges.cards, 0);
+        const ranges = minimapStore.getCardRanges();
+        const cardId = findCardAtPosition(y, ranges, 0);
         if (cardId && cardId !== lastActiveCardId) {
             lastActiveCardId = cardId;
-            minimapStore.debouncedSetActiveCardId(cardId);
+
             view.viewStore.dispatch({
                 type: 'DOCUMENT/SET_ACTIVE_NODE',
                 payload: {

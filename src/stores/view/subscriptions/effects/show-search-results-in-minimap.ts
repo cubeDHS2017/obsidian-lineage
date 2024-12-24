@@ -5,9 +5,7 @@ export const showSearchResultsInMinimap = (view: LineageView) => {
     const viewState = viewStore.getValue();
     const settingsStore = view.plugin.settings;
     const settingsState = settingsStore.getValue();
-    if (settingsState.view.showMinimap) {
-        view.minimapStore.debouncedSetSearchResults(viewState.search.results);
-    } else {
+    if (!settingsState.view.showMinimap) {
         if (viewState.search.results.size > 0) {
             settingsStore.dispatch({ type: 'VIEW/TOGGLE_MINIMAP' });
         }

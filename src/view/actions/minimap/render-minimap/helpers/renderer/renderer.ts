@@ -1,114 +1,55 @@
 import { MinimapTheme } from 'src/view/actions/minimap/minimap-theme';
 import { ShapesAndRanges } from 'src/view/actions/minimap/render-minimap/helpers/shapes/shapes-and-ranges';
 import { LINE_HEIGHT_CPX } from 'src/view/actions/minimap/constants';
-import { CardRange } from 'src/view/actions/minimap/minimap-controller';
-import { drawRectangle } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/draw-rectangle';
-import { drawIndentationLines } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/draw-indentation-lines';
-import { drawWordBlocks } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/draw-word-blocks';
-import { CanvasWrapper } from 'src/view/actions/minimap/render-minimap/helpers/renderer/canvas-wrapper';
-import { filterSearchAreas } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/filter-search-areas';
+import { drawLines } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/draw-lines';
+import { MinimapLine } from 'src/view/actions/minimap/render-minimap/helpers/shapes/calculate-word-blocks';
+import { resizeOffscreenCanvas } from 'src/view/actions/minimap/render-minimap/helpers/renderer/helpers/resize-offscreen-canvas';
+import invariant from 'tiny-invariant';
 
 type State = {
-    drawnAreas: {
-        activeNode: CardRange | null;
-        searchResults: CardRange[];
-    };
+    drawnLines: Map<number, MinimapLine>;
 };
 
-export class Renderer extends CanvasWrapper {
+export class Renderer {
     private shapes: ShapesAndRanges;
-
+    private tempCtx: OffscreenCanvasRenderingContext2D;
     private state: State = {
-        drawnAreas: {
-            activeNode: null,
-            searchResults: [],
-        },
+        drawnLines: new Map<number, MinimapLine>(),
     };
+
+    protected ctx: OffscreenCanvasRenderingContext2D;
+    protected canvas: OffscreenCanvas;
 
     constructor(
         ctx: OffscreenCanvasRenderingContext2D,
         canvas: OffscreenCanvas,
         shapes: ShapesAndRanges,
     ) {
-        super(ctx, canvas);
+        this.ctx = ctx;
+        this.canvas = canvas;
         this.shapes = shapes;
     }
 
-    private resetRange = (
-        activeNodeId: string,
-        cardRange: CardRange,
-        theme: MinimapTheme,
-    ) => {
-        this.clearCanvasRange(cardRange);
-        const wordBlocks = this.shapes
-            .getWordBlocks()
-            .filter((wb) => wb.cardId === cardRange.cardId);
-
-        drawWordBlocks(this.ctx, wordBlocks, activeNodeId, theme);
-
-        drawIndentationLines(
-            this.ctx,
-            this.shapes
-                .getIndentationLines()
-                .filter((line) => line.cardId === cardRange.cardId),
-            theme,
-        );
-    };
-
     drawDocument = (activeNodeId: string, theme: MinimapTheme) => {
         const totalHeight = this.shapes.getTotalLines() * LINE_HEIGHT_CPX;
-        this.canvas.height = totalHeight;
-        this.clearCanvas();
-        this.state.drawnAreas = {
-            activeNode: null,
-            searchResults: [],
-        };
 
-        drawWordBlocks(
-            this.ctx,
-            this.shapes.getWordBlocks(),
-            activeNodeId,
-            theme,
-        );
-        drawIndentationLines(
-            this.ctx,
-            this.shapes.getIndentationLines(),
-            theme,
-        );
-    };
-
-    drawIndicators = async (activeNodeId: string, theme: MinimapTheme) => {
-        const newActiveCardRange = this.shapes.getCardRange(activeNodeId);
-        if (!newActiveCardRange) {
-            return;
-        }
-
-        if (this.state.drawnAreas.activeNode) {
-            this.resetRange(
-                activeNodeId,
-                this.state.drawnAreas.activeNode,
-                theme,
+        if (!this.tempCtx) {
+            const tempCanvas = new OffscreenCanvas(
+                this.ctx.canvas.width,
+                this.ctx.canvas.height,
             );
+            const context = tempCanvas.getContext('2d');
+            invariant(context);
+            this.tempCtx = context;
         }
-
-        const searchResultRanges = this.shapes.getSearchResultRanges();
-
-        const filtered = filterSearchAreas(
-            this.state.drawnAreas.searchResults,
-            searchResultRanges,
-            this.state.drawnAreas.activeNode!,
-            newActiveCardRange,
+        if (this.canvas.height !== totalHeight) {
+            resizeOffscreenCanvas(this.ctx, this.tempCtx, totalHeight);
+        }
+        drawLines(
+            this.ctx,
+            this.shapes.getLines(),
+            this.state.drawnLines,
+            theme,
         );
-        for (const searchResult of filtered.previousSearchResultRanges) {
-            this.resetRange(activeNodeId, searchResult, theme);
-        }
-
-        drawRectangle(this.ctx, newActiveCardRange, theme.card_active);
-
-        for (const searchResult of filtered.nextSearchResultRanges) {
-            drawRectangle(this.ctx, searchResult, theme.card_searchResult);
-        }
-        this.state.drawnAreas.activeNode = newActiveCardRange;
-        this.state.drawnAreas.searchResults = searchResultRanges;
     };
 }

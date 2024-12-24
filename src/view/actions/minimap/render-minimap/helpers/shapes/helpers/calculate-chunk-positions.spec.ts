@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { calculateChunkPositions } from 'src/view/actions/minimap/positioning/calculate-word-blocks/helpers/calculate-chunk-positions';
+import { calculateChunkPositions } from 'src/view/actions/minimap/render-minimap/helpers/shapes/helpers/calculate-chunk-positions';
 import { N_CHARS_PER_LINE } from 'src/view/actions/minimap/constants';
 import { generateLoremIpsumWithMarkdown } from 'src/helpers/test-helpers/generate-lorem-ipsum-with.markdown';
 

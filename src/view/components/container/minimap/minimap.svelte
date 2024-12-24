@@ -1,12 +1,16 @@
 <script lang="ts">
     import { minimapAction } from '../../../actions/minimap/minimap-action';
     import { getView } from 'src/view/components/container/context';
+    import Indicators from './components/indicators.svelte';
 
     const view = getView();
 </script>
 
 <div class="minimap-container" use:minimapAction={view}>
-    <canvas id="minimap"></canvas>
+    <div class="canvas-container">
+        <Indicators />
+        <canvas id="minimap"></canvas>
+    </div>
     <div class="scroll-indicator" id="scrollIndicator"></div>
 </div>
 
@@ -28,7 +32,11 @@
     canvas {
         width: 176px;
         margin-right: 4px;
-        transition: transform 0.1s ease-out;
+    }
+
+    .canvas-container{
+               transition: transform 0.1s ease-out;
+        width: 176px;
     }
 
     .scroll-indicator {

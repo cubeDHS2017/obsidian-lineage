@@ -11,13 +11,9 @@ export class MinimapRenderer {
     private shapes: ShapesAndRanges;
 
     private state: {
-        activeNodeId: string;
-        searchResults: Set<string>;
         theme: MinimapTheme;
     } = {
-        activeNodeId: '',
         theme: minimapTheme.current,
-        searchResults: new Set(),
     };
 
     constructor(
@@ -40,25 +36,10 @@ export class MinimapRenderer {
         canvasId: string,
     ) => {
         const shapes = this.shapes.calculateDocument(document, canvasId);
-        this.shapes.updateSearchResultRanges(this.state.searchResults);
-        this.state.activeNodeId = activeNodeId;
         this.renderer.drawDocument(activeNodeId, this.state.theme);
-        this.renderer.drawIndicators(activeNodeId, this.state.theme);
-
         return {
             totalDrawnHeight_cpx: shapes.totalDrawnHeight_cpx,
             cardRanges: shapes.cardRanges,
         };
     };
-
-    setActiveNode = (activeNodeId: string) => {
-        this.state.activeNodeId = activeNodeId;
-        this.renderer.drawIndicators(activeNodeId, this.state.theme);
-    };
-
-    setSearchResults(searchResults: Set<string>) {
-        this.state.searchResults = searchResults;
-        this.shapes.updateSearchResultRanges(searchResults);
-        this.renderer.drawIndicators(this.state.activeNodeId, this.state.theme);
-    }
 }

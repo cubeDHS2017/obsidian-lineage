@@ -2,6 +2,7 @@ import { findCardAtPosition } from 'src/view/actions/minimap/event-handlers/help
 import {
     CANVAS_WIDTH_CPX,
     CANVAS_WIDTH_DPX,
+    LINE_HEIGHT_CPX,
 } from 'src/view/actions/minimap/constants';
 import { LineageView } from 'src/view/view';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
@@ -12,20 +13,21 @@ export const dpx_to_cpx = (px: number) =>
 /** c stands for canvas, d stands for dom **/
 export const cpx_to_dpx = (px: number) =>
     px * (CANVAS_WIDTH_DPX / CANVAS_WIDTH_CPX);
+export const LINE_HEIGHT_DPX = cpx_to_dpx(LINE_HEIGHT_CPX);
 
 export const onCanvasClick = (e: MouseEvent, view: LineageView) => {
-    const minimapStore = view.minimapStore;
+    const minimapStore = view.minimapController;
     const dom = minimapStore.getDom();
-    const state = minimapStore.getState();
     const rect = dom.canvas.getBoundingClientRect();
 
     const domY = e.clientY - rect.top;
 
     const y = dpx_to_cpx(domY);
 
-    const cardId = findCardAtPosition(y, state.ranges.cards);
+    const ranges = minimapStore.getCardRanges();
+    const cardId = findCardAtPosition(y, ranges);
     if (cardId) {
-        minimapStore.debouncedSetActiveCardId(cardId);
+        minimapStore.onActiveNodeUpdate(cardId);
         view.viewStore.dispatch({
             type: 'DOCUMENT/SET_ACTIVE_NODE',
             payload: {

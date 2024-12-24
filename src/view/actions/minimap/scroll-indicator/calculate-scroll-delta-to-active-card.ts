@@ -8,7 +8,7 @@ export const calculateScrollDeltaToActiveCard = (
     scrollPosition_cpx: number,
     dom: MinimapDomElements,
 ) => {
-    const minimapContainer = dom.scrollIndicator.parentElement;
+    const minimapContainer = dom.canvasContainer.parentElement;
     if (!minimapContainer) return null;
 
     const clientHeight_dpx = minimapContainer.clientHeight;
@@ -16,7 +16,6 @@ export const calculateScrollDeltaToActiveCard = (
 
     const contentFitsContainer = totalDrawnHeight_cpx <= containerHeight_cpx;
     if (contentFitsContainer) {
-        dom.canvas.style.transform = 'translateY(0)';
         return null;
     }
 
@@ -24,9 +23,11 @@ export const calculateScrollDeltaToActiveCard = (
     const visibleStart_cpx = currentScroll_cpx;
     const visibleEnd_cpx = currentScroll_cpx + containerHeight_cpx;
 
-    const rangeIsVisible =
-        y_start_cpx >= visibleStart_cpx && y_end_cpx <= visibleEnd_cpx;
-    if (rangeIsVisible) {
+    const startIsVisible =
+        y_start_cpx > visibleStart_cpx && y_start_cpx < visibleEnd_cpx;
+    const endIsVisible =
+        y_end_cpx > visibleStart_cpx && y_end_cpx < visibleEnd_cpx;
+    if (startIsVisible && endIsVisible) {
         return null;
     }
 
@@ -34,15 +35,15 @@ export const calculateScrollDeltaToActiveCard = (
     let newScroll_cpx = 0;
 
     const range_height_cpx = y_end_cpx - y_start_cpx;
-    const rangeIsTallerThanContaienr = range_height_cpx > containerHeight_cpx;
-    if (rangeIsTallerThanContaienr) {
+    const rangeIsTallerThanContainer = range_height_cpx > containerHeight_cpx;
+    if (rangeIsTallerThanContainer) {
         //  scroll to start of range
         newScroll_cpx = y_start_cpx;
     } else {
-        if (y_end_cpx > visibleEnd_cpx) {
-            newScroll_cpx = y_end_cpx + 10;
-        } else if (y_start_cpx < visibleStart_cpx) {
+        if (!startIsVisible) {
             newScroll_cpx = y_start_cpx - 10;
+        } else if (!endIsVisible) {
+            newScroll_cpx = y_end_cpx - containerHeight_cpx + 10;
         }
     }
 

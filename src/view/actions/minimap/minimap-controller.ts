@@ -17,6 +17,7 @@ import { drawMinimapWorker } from 'src/view/actions/minimap/worker-instances';
 import { createOnCanvasMousemove } from 'src/view/actions/minimap/event-handlers/create-on-canvas-mousemove';
 import { getTheme } from 'src/obsidian/helpers/get-theme';
 import { debounce } from 'src/helpers/debounce';
+import { Writable, writable } from 'svelte/store';
 
 export type MinimapProps = {
     activeCardId: string;
@@ -35,12 +36,16 @@ export type CardRanges = {
     [cardId: string]: CardRange;
 };
 
-export type MinimapState = {
+export type ScrollInfo = {
     scrollPosition_cpx: number;
     totalDrawnHeight_cpx: number;
+};
+export type MinimapState = {
+    scrollInfo: ScrollInfo;
     initialized: boolean;
     ranges: {
         cards: CardRanges;
+        cardsStore: Writable<CardRanges>;
     };
 };
 
@@ -48,6 +53,7 @@ export type MinimapDomElements = {
     canvas: HTMLCanvasElement;
     scrollIndicator: HTMLElement;
     offscreen: OffscreenCanvas;
+    canvasContainer: HTMLElement;
 };
 
 export class MinimapController {
@@ -60,11 +66,14 @@ export class MinimapController {
     };
 
     private state: MinimapState = {
-        scrollPosition_cpx: 0,
-        totalDrawnHeight_cpx: 0,
+        scrollInfo: {
+            scrollPosition_cpx: 0,
+            totalDrawnHeight_cpx: 0,
+        },
         initialized: false,
         ranges: {
             cards: {},
+            cardsStore: writable({}),
         },
     };
     private subscriptions: Set<() => void> = new Set();
@@ -80,17 +89,18 @@ export class MinimapController {
         return this.props.dom;
     }
 
-    public getState(): MinimapState {
-        return this.state;
-    }
-
     public async onLoad(container: HTMLElement) {
+        this.view.contentEl.addClass('lineage-view__content-el--minimap-on');
         const scrollIndicator = container.querySelector(
             '#scrollIndicator',
         ) as HTMLElement;
         const canvas = container.querySelector('canvas');
+        const canvasContainer = container.querySelector(
+            '.canvas-container',
+        ) as HTMLElement | null;
         invariant(canvas);
         invariant(scrollIndicator);
+        invariant(canvasContainer);
         canvas.width = CANVAS_WIDTH_CPX;
         refreshMinimapTheme();
         const offscreen = canvas.transferControlToOffscreen();
@@ -101,6 +111,7 @@ export class MinimapController {
             offscreen,
             canvas,
             scrollIndicator,
+            canvasContainer: canvasContainer,
         };
         await this.initializeWorker(minimapTheme.current);
 
@@ -111,16 +122,14 @@ export class MinimapController {
 
         const onMousemove = createOnCanvasMousemove(this.view);
 
-        this.view.contentEl.addClass('lineage-view__content-el--minimap-on');
-        canvas.addEventListener('click', onClick);
+        canvasContainer.addEventListener('click', onClick);
         container.addEventListener('wheel', onWheel);
         container.addEventListener('mousemove', onMousemove);
 
+        this.props.activeCardId =
+            this.view.viewStore.getValue().document.activeNode;
         this.debouncedSetDocument(this.view.documentStore.getValue().document);
-        const viewState = this.view.viewStore.getValue();
-        this.debouncedSetSearchResults(viewState.search.results);
 
-        this.debouncedSetActiveCardId(viewState.document.activeNode);
         this.subscriptions.add(() => {
             canvas.removeEventListener('click', onClick);
             container.removeEventListener('wheel', onWheel);
@@ -149,51 +158,35 @@ export class MinimapController {
                 },
             });
             invariant(payload);
-            this.state.ranges.cards = payload.cardRanges;
-            this.state.totalDrawnHeight_cpx = payload.totalDrawnHeight_cpx;
+
+            this.updateCardRanges(payload.cardRanges);
+            this.state.scrollInfo.totalDrawnHeight_cpx =
+                payload.totalDrawnHeight_cpx;
             this.debouncedScrollCardIntoView();
         },
         100,
     );
 
-    public debouncedSetActiveCardId = debounce((nodeId: string): void => {
-        if (!nodeId) return;
-        if (nodeId === this.props.activeCardId) return;
-        this.props.activeCardId = nodeId;
-        drawMinimapWorker.run({
-            type: 'minimap/set/active-node',
-            payload: {
-                canvasId: this.props.canvasId,
-                activeNodeId: nodeId,
-            },
-        });
-        this.debouncedScrollCardIntoView();
-    }, 16);
+    private updateCardRanges = (cardRanges: CardRanges) => {
+        this.state.ranges.cardsStore.set(cardRanges);
+        this.state.ranges.cards = cardRanges;
+    };
 
     public setScrollPosition(cpx: number): void {
-        this.state.scrollPosition_cpx = cpx;
+        this.state.scrollInfo.scrollPosition_cpx = cpx;
         this.updateScrollIndicator();
     }
 
-    public debouncedSetSearchResults = debounce(
-        (searchResults: Set<string>) => {
-            drawMinimapWorker.run({
-                type: 'minimap/set/search-results',
-                payload: {
-                    canvasId: this.props.canvasId,
-                    searchResults,
-                },
-            });
-        },
-        100,
-    );
-
+    onActiveNodeUpdate = (activeCardId: string) => {
+        this.props.activeCardId = activeCardId;
+        this.debouncedScrollCardIntoView();
+    };
     private updateScrollIndicator(): void {
         if (!this.enabled) return;
-        debouncedUpdateScrollIndicator(this.state, this.getDom());
+        debouncedUpdateScrollIndicator(this.state.scrollInfo, this.getDom());
     }
 
-    private scrollCardIntoView = async () => {
+    private debouncedScrollCardIntoView = debounce(() => {
         if (!this.enabled) return;
 
         const activeCardRange =
@@ -202,8 +195,8 @@ export class MinimapController {
         const delta_cpx = calculateScrollDeltaToActiveCard(
             activeCardRange.y_start,
             activeCardRange.y_end,
-            this.state.totalDrawnHeight_cpx,
-            this.state.scrollPosition_cpx,
+            this.state.scrollInfo.totalDrawnHeight_cpx,
+            this.state.scrollInfo.scrollPosition_cpx,
             this.getDom(),
         );
         if (typeof delta_cpx === 'number') {
@@ -211,9 +204,7 @@ export class MinimapController {
         } else {
             this.updateScrollIndicator();
         }
-    };
-
-    private debouncedScrollCardIntoView = debounce(this.scrollCardIntoView, 16);
+    }, 16);
 
     initializeWorker = async (theme: MinimapTheme): Promise<void> => {
         if (this.state.initialized) return;
@@ -240,5 +231,17 @@ export class MinimapController {
             type: 'worker/destroy',
             payload: { canvasId: this.props.canvasId },
         });
+    };
+
+    getCardRangesStore = (): Writable<CardRanges> => {
+        return this.state.ranges.cardsStore;
+    };
+
+    getCardRanges = (): CardRanges => {
+        return this.state.ranges.cards;
+    };
+
+    getScrollInfo = (): MinimapState['scrollInfo'] => {
+        return this.state.scrollInfo;
     };
 }
