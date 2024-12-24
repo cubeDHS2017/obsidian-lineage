@@ -39,10 +39,10 @@
         }
     }
     :global(.theme-light) {
-        & .clickable-icon {
+        & .lineage-view .sidebar-tabs-header .clickable-icon {
             color: var(--color-base-10);
         }
-        & .clickable-icon:active {
+        & .lineage-view .sidebar-tabs-header .clickable-icon:active {
             color: var(--icon-color-active);
         }
     }

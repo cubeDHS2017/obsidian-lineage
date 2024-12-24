@@ -1,6 +1,6 @@
 {
   "name": "lineage",
-  "version": "0.7.0-beta",
+  "version": "0.7.1-beta",
   "description": "",
   "scripts": {
     "dev": "node esbuild.config.mjs",
