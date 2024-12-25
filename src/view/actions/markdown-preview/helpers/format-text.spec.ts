@@ -144,6 +144,19 @@ describe('format-text', () => {
         const actual = formatText(input);
         expect(actual).toEqual(output);
     });
+
+    test('should skip tables', () => {
+        const input = `text
+
+
+| 中文 1  | 中文 2     |
+| ----- | -------- |
+| Row 1 | Cell 1   |
+| Row 2 | Cell 2   |`;
+
+        const actual = formatText(input);
+        expect(actual).toEqual(input);
+    });
 });
 
 describe('performance-test: format-text', () => {

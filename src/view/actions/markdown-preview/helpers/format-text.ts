@@ -43,7 +43,8 @@ export const formatText = (text: string) => {
         );
     }
 
-    if (/^\s*$/gm.test(text)) {
+    // emptylines && !tables
+    if (/^\s*$/gm.test(text) && !/^\|.*\|/m.test(text)) {
         text = applyNbsp(text);
     }
     return text;
