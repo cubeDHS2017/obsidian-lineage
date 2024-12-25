@@ -51,7 +51,6 @@ export const matchActionToParams = (
     }
 
     if (action.type === 'DOCUMENT/MOVE_NODE') {
-        delay = 16;
         retry = true;
     } else if (action.type === 'DOCUMENT/INSERT_NODE') {
         if (settings.view.zoomLevel !== 1) {
@@ -60,10 +59,8 @@ export const matchActionToParams = (
     }
 
     const scrollFirstColumnToTheLeft =
-        (action.type === 'view/life-cycle/mount' &&
-            settings.view.scrolling.horizontalScrollingMode ===
-                'reveal-active-card') ||
-        settings.view.zoomLevel < 1;
+        settings.view.scrolling.horizontalScrollingMode ===
+            'reveal-active-card' && action.type === 'view/life-cycle/mount';
 
     return {
         behavior,

@@ -20,7 +20,7 @@ type AlignBranchParams = {
 };
 
 const defaultParams: AlignBranchParams = {
-    alignInactiveColumns: true,
+    alignInactiveColumns: false,
     behavior: 'smooth' as const,
     delay: 0,
     retry: false,
