@@ -10,6 +10,7 @@
     } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { maxZoomLevel, minZoomLevel } from 'src/stores/settings/reducers/change-zoom-level';
+    import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
 
     export let showControls: boolean;
 
@@ -154,12 +155,19 @@
 
         if (menuDom && !menuHeight) {
             menu.showAtPosition({ x: event.pageX, y: event.pageY });
-            menuHeight = menuDom.getBoundingClientRect().height;
+            const rect = menuDom.getBoundingClientRect();
+            menuHeight = rect.height;
+            menuWidth = rect.width;
             menu.close();
         }
+        const buttonRect = (
+            event.target as HTMLElement
+        ).getBoundingClientRect();
         menu.showAtPosition({
-            x: (event.target as HTMLElement).getBoundingClientRect().left - 10,
-            y: event.pageY - menuHeight / 2,
+            x: get(showMinimapStore(view))
+                ? buttonRect.left - menuWidth - 10
+                : buttonRect.left - 10,
+            y: buttonRect.top + buttonRect.height / 2 - menuHeight / 2,
         });
         menu.onHide(() => {
             lastMenuHideEvent_ms = Date.now();
@@ -167,6 +175,7 @@
     };
 
     let menuHeight = 0;
+    let menuWidth = 0;
 
     let lastMenuHideEvent_ms = 0;
     const showZoomPopupMenu = (event: MouseEvent) => {
