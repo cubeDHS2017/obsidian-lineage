@@ -62,6 +62,9 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             showSettingsSidebar: false,
         };
     } else if (action.type === 'view/main/enable-edit') {
+        if (state.document.activeNode !== action.payload.nodeId) {
+            updateActiveNode(state.document, action.payload.nodeId, state);
+        }
         enableEditMode(state.document, action.payload.nodeId);
     } else if (action.type === 'view/sidebar/enable-edit') {
         enableEditMode(state.document, action.payload.id, true);

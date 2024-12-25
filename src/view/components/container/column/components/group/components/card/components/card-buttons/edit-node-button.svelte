@@ -14,7 +14,8 @@
     // eslint-disable-next-line no-undef
     const toggleEdit = (e: MouseEvent) => {
         e.stopPropagation();
-        const editingState = viewStore.getValue().document.editing;
+        const documentViewState = viewStore.getValue().document;
+        const editingState = documentViewState.editing;
         const editedNodeId = editingState.activeNodeId;
         if (editedNodeId) {
             saveNodeContent(view);

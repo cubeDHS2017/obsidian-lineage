@@ -8,6 +8,7 @@ export const saveNodeAndInsertNode = (
     view: LineageView,
     direction: Direction,
     content = '',
+    activeNodeId?: string,
 ) => {
     if (isEditing(view)) {
         saveNodeContent(view);
@@ -17,7 +18,8 @@ export const saveNodeAndInsertNode = (
         payload: {
             position: direction,
             content,
-            activeNodeId: view.viewStore.getValue().document.activeNode,
+            activeNodeId:
+                activeNodeId || view.viewStore.getValue().document.activeNode,
         },
     });
     if (content) {

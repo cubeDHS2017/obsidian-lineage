@@ -16,12 +16,12 @@
     export let isInSidebar = false;
 </script>
 
-{#if active === ActiveStatus.node}
+{#if active}
     {#if !editing}
         {#if !isInSidebar}
-            <CreateCardButton position="up" />
-            <CreateCardButton position="right" />
-            <CreateCardButton position="down" />
+            <CreateCardButton position="up" {nodeId}/>
+            <CreateCardButton position="right" {nodeId}/>
+            <CreateCardButton position="down" {nodeId}/>
 
             <DeleteNodeButton {nodeId} />
         {:else}

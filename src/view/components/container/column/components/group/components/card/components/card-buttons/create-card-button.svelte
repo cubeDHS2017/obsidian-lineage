@@ -7,12 +7,13 @@
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-and-insert-node';
     import { Direction } from 'src/stores/document/document-store-actions';
 
+    export let nodeId : string;
     export let position: Direction;
     const view = getView();
     // eslint-disable-next-line no-undef
     const createCard = (e: MouseEvent) => {
         e.stopPropagation();
-        saveNodeAndInsertNode(view, position);
+        saveNodeAndInsertNode(view, position, undefined, nodeId);
     };
     const chevrons = {
         right: ChevronRight,
