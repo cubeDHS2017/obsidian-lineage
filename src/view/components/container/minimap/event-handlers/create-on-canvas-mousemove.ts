@@ -15,11 +15,11 @@ export const createOnCanvasMousemove = (view: LineageView) => {
     let dom: MinimapDomElements;
     const hoverHandler = debounce((e: MouseEvent) => {
         if (!(e.buttons === 1 || (isMacLike ? e.metaKey : e.ctrlKey))) return;
-        const rect = dom.canvas.getBoundingClientRect();
         if (!minimapStore) {
             minimapStore = view.getMinimapStore();
             dom = view.getMinimapDom();
         }
+        const rect = dom.canvas.getBoundingClientRect();
         const domY = e.clientY - rect.top;
         const y = dpx_to_cpx(domY);
 

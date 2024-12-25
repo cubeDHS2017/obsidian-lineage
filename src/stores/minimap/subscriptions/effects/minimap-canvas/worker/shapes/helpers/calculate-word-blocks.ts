@@ -37,7 +37,6 @@ const calculateWordBlocksOfCard = (
     );
 
     let line: MinimapLine = {
-        content: '',
         indentationLines: [],
         lineNumber: state.nextLineOffset,
         wordBlocks: [],
@@ -52,7 +51,6 @@ const calculateWordBlocksOfCard = (
 
         if (wordPos.line > lineNumberRelativeToSection) {
             line = {
-                content: '',
                 indentationLines: [],
                 lineNumber: lineNumberRelativeToCanvas,
                 wordBlocks: [],
@@ -63,7 +61,6 @@ const calculateWordBlocksOfCard = (
             state.lines.push(line);
             lineNumberRelativeToSection = wordPos.line;
         }
-        line.content += wordPos.chunk;
         line.wordBlocks.push({
             width_px: wordPos.length_chars * CHAR_WIDTH_CPX,
             x_px:
@@ -87,7 +84,6 @@ const calculateWordBlocksOfCard = (
 export type MinimapLine = {
     wordBlocks: WordBlock[];
     indentationLines: IndentationLine[];
-    content: string;
     lineNumber: number;
     depth: number;
     nodeId: string;
@@ -109,6 +105,6 @@ export const calculateWordBlocks = (
     }
     return {
         lines: state.lines,
-        totalLines: state.nextLineOffset + 2, // add an additional line for card focus rectangle
+        totalLines: state.nextLineOffset + 1,
     };
 };

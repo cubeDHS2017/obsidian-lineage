@@ -15,7 +15,7 @@
         [activeCard, ranges],
         ([activeCard, ranges]) => {
             if (activeCard) {
-                const range = ranges[activeCard];
+                const range = ranges?.[activeCard];
                 if (range) {
                     const y_start = cpx_to_dpx(range.y_start);
                     const y_end = cpx_to_dpx(range.y_end);
@@ -29,12 +29,13 @@
         },
     );
 
-    const searchResultsRanges =
-        derived([searchResults, ranges], ([searchResults, ranges]) => {
+    const searchResultsRanges = derived(
+        [searchResults, ranges],
+        ([searchResults, ranges]) => {
             if (searchResults) {
                 const searchResultsRanges = Array.from(searchResults.results)
                     .map((searchResult) => {
-                        const range = ranges[searchResult];
+                        const range = ranges?.[searchResult];
                         if (range) {
                             const y_start = cpx_to_dpx(range.y_start);
                             const y_end = cpx_to_dpx(range.y_end);
@@ -45,10 +46,14 @@
                         }
                     })
                     .filter((x) => x);
-                return searchResultsRanges as { y_start: number; height: number }[]
+                return searchResultsRanges as {
+                    y_start: number;
+                    height: number;
+                }[];
             }
             return [];
-        });
+        },
+    );
 </script>
 
 <div id="indicators-container">
