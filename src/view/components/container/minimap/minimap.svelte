@@ -1,13 +1,48 @@
 <script lang="ts">
-    import { minimapAction } from '../../../actions/minimap/minimap-action';
     import { getView } from 'src/view/components/container/context';
     import Indicators from './components/indicators.svelte';
+    import { onCanvasClick } from 'src/view/components/container/minimap/event-handlers/on-canvas-click';
+    import { onCanvasWheel } from 'src/view/components/container/minimap/event-handlers/on-canvas-wheel';
+    import {
+        createOnCanvasMousemove
+    } from 'src/view/components/container/minimap/event-handlers/create-on-canvas-mousemove';
+    import { onDestroy, onMount } from 'svelte';
+    import { OnError, Store } from 'src/lib/store/store';
+    import { defaultMinimapState } from 'src/stores/minimap/default-minimap-state';
+    import { minimapReducer } from 'src/stores/minimap/minimap-reducer';
+    import { MinimapStoreAction } from 'src/stores/minimap/minimap-store-actions';
+    import { minimapSubscriptions } from 'src/stores/minimap/subscriptions/minimap-subscriptions';
 
     const view = getView();
+    view.minimapStore = new Store(
+        defaultMinimapState(),
+        minimapReducer,
+        this.onViewStoreError as OnError<MinimapStoreAction>,
+    );
+
+    const onClick = (e: MouseEvent) => onCanvasClick(e, view);
+    const onWheel = (e: WheelEvent) => onCanvasWheel(e, view);
+    const onMousemove = createOnCanvasMousemove(view);
+
+
+    let unloadMinimap: () => void;
+    onMount(() => {
+        view.contentEl.addClass('lineage-view__content-el--minimap-on');
+        unloadMinimap = minimapSubscriptions(view);
+    });
+    onDestroy(() => {
+        view.contentEl.removeClass('lineage-view__content-el--minimap-on');
+        unloadMinimap();
+    });
 </script>
 
-<div class="minimap-container" use:minimapAction={view}>
-    <div class="canvas-container">
+<div class="minimap-container"  on:wheel={onWheel}>
+    <div
+        class="canvas-container"
+        on:click={onClick}
+
+        on:mousemove={onMousemove}
+    >
         <Indicators />
         <canvas id="minimap"></canvas>
     </div>
@@ -34,8 +69,8 @@
         margin-right: 4px;
     }
 
-    .canvas-container{
-               transition: transform 0.1s ease-out;
+    .canvas-container {
+        transition: transform 0.1s ease-out;
         width: 176px;
     }
 

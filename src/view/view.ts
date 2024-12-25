@@ -34,23 +34,31 @@ import { getOrDetectDocumentFormat } from 'src/obsidian/events/workspace/helpers
 import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/maybe-get-document-format';
 import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
 import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
-import { MinimapController } from 'src/view/actions/minimap/minimap-controller';
 import { DocumentSearch } from 'src/view/helpers/document-search';
+import {
+    MinimapDomElements,
+    MinimapState,
+} from 'src/stores/minimap/minimap-state-type';
+import { MinimapStoreAction } from 'src/stores/minimap/minimap-store-actions';
 
 export const LINEAGE_VIEW_TYPE = 'lineage';
 
 export type DocumentStore = Store<DocumentState, DocumentStoreAction>;
 export type ViewStore = Store<ViewState, ViewStoreAction>;
+export type MinimapStore = Store<MinimapState, MinimapStoreAction>;
 
 export class LineageView extends TextFileView {
     component: Component;
     documentStore: DocumentStore;
     viewStore: ViewStore;
-    minimapController: MinimapController;
+    minimapStore: MinimapStore | null;
     container: HTMLElement | null;
     inlineEditor: InlineEditor;
     documentSearch: DocumentSearch;
     id: string;
+
+    private minimapDom: MinimapDomElements | null = null;
+
     private readonly onDestroyCallbacks: Set<Unsubscriber> = new Set();
     private activeFilePath: null | string;
     constructor(
@@ -68,7 +76,7 @@ export class LineageView extends TextFileView {
             viewReducer,
             this.onViewStoreError as OnError<ViewStoreAction>,
         );
-        this.minimapController = new MinimapController(this);
+
         this.id = id.view();
         this.documentSearch = new DocumentSearch(this);
     }
@@ -299,4 +307,18 @@ export class LineageView extends TextFileView {
         this.loadDocumentToStore,
         250,
     );
+
+    setMinimapDom(dom: MinimapDomElements) {
+        this.minimapDom = dom;
+    }
+
+    getMinimapDom() {
+        invariant(this.minimapDom);
+        return this.minimapDom;
+    }
+
+    getMinimapStore() {
+        invariant(this.minimapStore);
+        return this.minimapStore;
+    }
 }

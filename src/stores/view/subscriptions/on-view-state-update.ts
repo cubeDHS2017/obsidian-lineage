@@ -41,11 +41,17 @@ export const onViewStateUpdate = (
         // this should be handled internally
         updateActiveBranch(viewStore, documentState);
         persistActiveNodeInPluginSettings(view);
-        view.minimapController.onActiveNodeUpdate(
-            viewState.document.activeNode,
-        );
-
         view.plugin.statusBar.updateProgressIndicator(view);
+    }
+    if (activeNodeChange) {
+        if (view.minimapStore) {
+            view.minimapStore.dispatch({
+                type: 'minimap/set-active-node',
+                payload: {
+                    id: viewState.document.activeNode,
+                },
+            });
+        }
     }
 
     if (

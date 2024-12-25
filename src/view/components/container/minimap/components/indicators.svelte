@@ -2,13 +2,14 @@
     import { activeNodeStore } from '../../../../../stores/view/derived/active-node-store';
     import { getView } from '../../context';
     import { derived } from 'svelte/store';
-    import { cpx_to_dpx, LINE_HEIGHT_DPX } from '../../../../actions/minimap/event-handlers/on-canvas-click';
+    import { cpx_to_dpx, LINE_HEIGHT_DPX } from '../event-handlers/on-canvas-click';
     import { searchStore } from 'src/stores/view/derived/search-store';
+    import { MinimapRangesStore } from 'src/stores/minimap/derived/minimap-ranges';
 
     const view = getView();
     const activeCard = activeNodeStore(view);
     const searchResults = searchStore(view);
-    const ranges = view.minimapController.getCardRangesStore();
+    const ranges = MinimapRangesStore(view);
 
     const activeCardRange = derived(
         [activeCard, ranges],

@@ -15,6 +15,7 @@ import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/
 import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persist-pinned-nodes';
 import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
 import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
+import { debouncedDrawDocument } from 'src/stores/minimap/subscriptions/effects/draw-document';
 
 export const onDocumentStateUpdate = (
     view: LineageView,
@@ -80,7 +81,10 @@ export const onDocumentStateUpdate = (
     }
 
     if (e.content || structuralChange) {
-        view.minimapController.debouncedSetDocument(documentState.document);
+        if (view.minimapStore) {
+            debouncedDrawDocument(view);
+        }
+
         view.documentSearch.resetIndex();
         const query = viewStore.getValue().search.query;
         if (query) {
