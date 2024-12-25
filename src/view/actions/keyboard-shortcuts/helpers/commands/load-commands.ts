@@ -6,7 +6,10 @@ import { editCommands } from 'src/view/actions/keyboard-shortcuts/helpers/comman
 import { createCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/create-commands';
 import { moveCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/move-commands';
 import { mergeCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/merge-commands';
-import { isActiveAndNotEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import {
+    isActive,
+    isActiveAndNotEditing,
+} from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 import { historyCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/history-commands';
 import { clipboardCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/clipboard-commands';
 import { mapCtrlToMod } from 'src/stores/settings/migrations/map-ctrl-to-mod';
@@ -57,6 +60,42 @@ export const loadCommands = (plugin: Lineage) => {
                 { key: '/', modifiers: [] },
                 { key: 'f', modifiers: ['Alt'] },
             ],
+        },
+        {
+            name: 'zoom_in',
+            check: isActive,
+            callback: (view, e) => {
+                e.preventDefault();
+                view.plugin.settings.dispatch({
+                    type: 'UI/CHANGE_ZOOM_LEVEL',
+                    payload: { direction: 'in' },
+                });
+            },
+            hotkeys: [{ key: '=', modifiers: ['Mod'] }],
+        },
+        {
+            name: 'zoom_out',
+            check: isActive,
+            callback: (view, e) => {
+                e.preventDefault();
+                view.plugin.settings.dispatch({
+                    type: 'UI/CHANGE_ZOOM_LEVEL',
+                    payload: { direction: 'out' },
+                });
+            },
+            hotkeys: [{ key: '-', modifiers: ['Mod'] }],
+        },
+        {
+            name: 'zoom_reset',
+            check: isActive,
+            callback: (view, e) => {
+                e.preventDefault();
+                view.plugin.settings.dispatch({
+                    type: 'UI/CHANGE_ZOOM_LEVEL',
+                    payload: { value: 1 },
+                });
+            },
+            hotkeys: [{ key: '0', modifiers: ['Mod'] }],
         },
     ];
     hotkeyStore.dispatch({

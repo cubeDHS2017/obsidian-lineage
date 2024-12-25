@@ -52,6 +52,9 @@ export const hotkeysLang = {
     scroll_up: 'Scroll up',
     scroll_down: 'Scroll down',
     align_branch: 'Align active branch',
+    zoom_in: 'Zoom in',
+    zoom_out: 'Zoom out',
+    zoom_reset: 'Reset zoom',
 };
 export type PluginCommand = {
     check: (view: LineageView) => boolean;
@@ -122,6 +125,7 @@ export const groupedHotkeys = {
         'scroll_down',
         'align_branch',
     ]),
+    Zoom: new Set(['zoom_in', 'zoom_out', 'zoom_reset']),
 } satisfies Record<string, Set<CommandName>>;
 
 export const hotkeysGroups: Record<CommandName, GroupName> = Object.fromEntries(

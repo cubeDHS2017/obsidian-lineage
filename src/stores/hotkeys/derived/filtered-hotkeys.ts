@@ -32,6 +32,7 @@ export const filteredHotkeys = derivedOnAction(
             Scrolling: [],
             History: [],
             Search: [],
+            Zoom: [],
         } satisfies GroupedHotkeys);
     },
     ['UI/SET_SEARCH_TERM', 'SET_CONFLICTING_HOTKEYS'],

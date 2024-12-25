@@ -60,7 +60,9 @@ export const matchActionToParams = (
 
     const scrollFirstColumnToTheLeft =
         settings.view.scrolling.horizontalScrollingMode ===
-            'reveal-active-card' && action.type === 'view/life-cycle/mount';
+            'reveal-active-card' &&
+        (action.type === 'view/life-cycle/mount' ||
+            action.type === 'UI/CHANGE_ZOOM_LEVEL');
 
     return {
         behavior,
