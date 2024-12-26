@@ -10,11 +10,12 @@ export enum ChunkType {
     tag = 'tag',
     strikethrough = 'strikethrough',
     task = 'task',
+    comma = 'comma',
 }
 
 export enum Category {
     single_character = 'single_character',
-    full_line = 'full_line',
+    full_line = 'full_line', // heading
     full_line_container = 'full_line_container', // bullet point
     block_with_space = 'block_with_space',
     block_without_space = 'block_without_space',
@@ -30,6 +31,7 @@ const charToChunkType: Record<string, ChunkType> = {
     '[': ChunkType.wikilink,
     ']': ChunkType.wikilink,
     '~': ChunkType.strikethrough,
+    ',': ChunkType.comma,
 };
 
 type ChunkPosition = {
@@ -224,6 +226,16 @@ export const calculateChunkPositions = (
                         !(content[i - 1] === 'e' && nextChunk === 'g') &&
                         !(content[i - 1] === 'i' && nextChunk === 'e')
                     ) {
+                        state.category = Category.single_character;
+                    } else {
+                        state.type = state.previousType;
+                    }
+                } else if (chunk === ',') {
+                    const previousChunk = content[i - 1] || '';
+                    const nextChunk = content[i + 1] || '';
+
+                    // don't highlight commas in numbers (e.g., 1,000)
+                    if (!previousChunk.match(/\d/) || !nextChunk.match(/\d/)) {
                         state.category = Category.single_character;
                     } else {
                         state.type = state.previousType;
