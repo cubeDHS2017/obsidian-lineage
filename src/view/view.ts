@@ -184,13 +184,13 @@ export class LineageView extends TextFileView {
         onPluginError(error, location, action);
     };
 
-    saveDocument = async (immediate = false, force = false) => {
+    saveDocument = async (immediate = false) => {
         invariant(this.file);
         const state = clone(this.documentStore.getValue());
         const data: string =
             state.file.frontmatter +
             stringifyDocument(state.document, getDocumentFormat(this));
-        if (data !== this.data || force) {
+        if (data !== this.data) {
             this.data = data;
             if (immediate) await this.save();
             else this.requestSave();

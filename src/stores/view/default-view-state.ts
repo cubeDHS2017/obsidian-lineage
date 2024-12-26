@@ -20,7 +20,6 @@ export const defaultViewState = (): ViewState => ({
     document: {
         editing: {
             activeNodeId: '',
-            disableEditConfirmation: false,
             isInSidebar: false,
         },
         activeBranch: {
@@ -36,6 +35,10 @@ export const defaultViewState = (): ViewState => ({
         activeNode: '',
         activeNodesOfColumn: {},
         selectedNodes: new Set<string>(),
+        pendingConfirmation: {
+            disableEdit: null,
+            deleteNode: new Set<string>(),
+        },
     },
     navigationHistory: {
         items: [],
@@ -65,6 +68,5 @@ export type DNDState = {
 };
 export type EditingState = {
     activeNodeId: string;
-    disableEditConfirmation: boolean;
     isInSidebar: boolean;
 };

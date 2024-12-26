@@ -19,6 +19,7 @@
     import {
         saveNodeContent
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
+    import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
 
     const view = getView();
     const columns = columnsStore(view);
@@ -37,7 +38,7 @@
     $: pinnedNodes = new Set($pinnedNodesArray);
 
     const applyGap = ApplyGapBetweenCardsStore(view);
-
+    const pendingConfirmation = PendingConfirmationStore(view);
     const saveActiveNodeOnClick = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
         if (!target.closest('.active-node')) {
@@ -76,7 +77,8 @@
                 searching={$search.searching}
                 idSection={$idSection}
                 selectedNodes={$selectedNodes}
-                pinnedNodes={pinnedNodes}
+                {pinnedNodes}
+                pendingConfirmation={$pendingConfirmation}
                 groupParentIds={$groupParentIds}
                 firstColumn={i === 0}
             />

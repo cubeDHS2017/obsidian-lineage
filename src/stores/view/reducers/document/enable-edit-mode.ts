@@ -1,8 +1,9 @@
 import { DocumentViewState } from 'src/stores/view/view-state-type';
 import { SilentError } from 'src/lib/errors/errors';
+import { resetPendingConfirmation } from 'src/stores/view/reducers/document/reset-pending-confirmation';
 
 export const enableEditMode = (
-    state: Pick<DocumentViewState, 'editing'>,
+    state: Pick<DocumentViewState, 'editing' | 'pendingConfirmation'>,
     nodeId: string,
     isInSidebar = false,
 ) => {
@@ -24,7 +25,7 @@ export const enableEditMode = (
     }
     state.editing = {
         activeNodeId: nodeId,
-        disableEditConfirmation: false,
         isInSidebar: isInSidebar,
     };
+    resetPendingConfirmation(state);
 };

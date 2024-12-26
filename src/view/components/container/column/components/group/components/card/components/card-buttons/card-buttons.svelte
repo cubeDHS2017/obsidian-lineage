@@ -16,21 +16,18 @@
     export let isInSidebar = false;
 </script>
 
-{#if active}
-    {#if !editing}
-        {#if !isInSidebar}
-            <CreateCardButton position="up" {nodeId}/>
-            <CreateCardButton position="right" {nodeId}/>
-            <CreateCardButton position="down" {nodeId}/>
+{#if !editing}
+    {#if !isInSidebar}
+        <CreateCardButton position="up" {nodeId} />
+        <CreateCardButton position="right" {nodeId} />
+        <CreateCardButton position="down" {nodeId} />
 
-            <DeleteNodeButton {nodeId} />
-        {:else}
-            <FocusCardButton {nodeId} />
-        {/if}
+        <DeleteNodeButton {nodeId} />
+    {:else}
+        <FocusCardButton {nodeId} />
     {/if}
-
-    <EditNodeButton {editing} {nodeId} {isInSidebar} />
 {/if}
+<EditNodeButton {editing} {nodeId} {isInSidebar} />
 <TreeIndex activeStatus={active} {nodeId} {section} {hasChildren} />
 {#if pinned}
     <Pin />

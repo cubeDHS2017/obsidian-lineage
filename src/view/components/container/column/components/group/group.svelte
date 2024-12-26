@@ -5,6 +5,7 @@
     import clx from 'classnames';
     import { nodesStore } from 'src/stores/document/derived/nodes-store';
     import { EditingState } from 'src/stores/view/default-view-state';
+    import { PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
 
     export let groupId: string;
     export let columnId: string;
@@ -14,6 +15,7 @@
     export let activeGroup: string;
     export let activeNode: string;
     export let editedNodeState: EditingState;
+    export let pendingConfirmation: PendingDocumentConfirmation;
     export let searchQuery: string;
     export let searchResults: Set<string>;
     export let showAllNodes: boolean;
@@ -36,7 +38,7 @@
         id={'group-' + groupId}
     >
         {#each $nodes as node (node)}
-            {#if searchQuery.length === 0 || showAllNodes||  (!searching && searchResults.has(node))}
+            {#if searchQuery.length === 0 || showAllNodes || (!searching && searchResults.has(node))}
                 <Node
                     {node}
                     active={node === activeNode
@@ -50,9 +52,10 @@
                               : null}
                     editing={editedNodeState.activeNodeId === node &&
                         !editedNodeState.isInSidebar}
-                    disableEditConfirmation={editedNodeState.activeNodeId === node &&
-                        editedNodeState.disableEditConfirmation &&
+                    confirmDisableEdit={editedNodeState.activeNodeId === node &&
+                        pendingConfirmation.disableEdit === node &&
                         !editedNodeState.isInSidebar}
+                    confirmDelete={pendingConfirmation.deleteNode.has(node)}
                     hasActiveChildren={activeChildGroups.size > 0}
                     hasChildren={groupParentIds.has(node)}
                     section={idSection[node]}

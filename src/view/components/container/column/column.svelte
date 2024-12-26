@@ -4,6 +4,7 @@
     import { scrollOnDndY } from 'src/view/actions/dnd/scroll-on-dnd-y';
     import { groupsStore } from 'src/stores/document/derived/groups-store';
     import { EditingState } from 'src/stores/view/default-view-state';
+    import { PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
 
     export let columnId: string;
     export let activeChildGroups: Set<string>;
@@ -13,6 +14,7 @@
     export let activeGroup: string;
     export let activeNode: string;
     export let editedNodeState: EditingState;
+    export let pendingConfirmation: PendingDocumentConfirmation;
     export let showAllNodes: boolean;
     export let searchQuery: string;
     export let searchResults: Set<string>;
@@ -46,6 +48,7 @@
                 {pinnedNodes}
                 {groupParentIds}
                 {firstColumn}
+                {pendingConfirmation}
             />
         {/if}
     {/each}

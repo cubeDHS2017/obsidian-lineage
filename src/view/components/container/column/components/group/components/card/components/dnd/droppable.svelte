@@ -12,7 +12,8 @@
     export let hasActiveChildren: boolean;
     export let firstColumn: boolean;
     export let editing: boolean;
-    export let disableEditConfirmation: boolean;
+    export let confirmDisableEdit: boolean;
+    export let confirmDelete: boolean;
     export let selected: boolean;
     export let isInSidebar = false;
     export let isSearchMatch = false;
@@ -56,7 +57,7 @@
                 },
             });
         }
-    }
+    };
     const documentStore = view.documentStore;
     const viewStore = view.viewStore;
 
@@ -72,17 +73,19 @@
     class={clx(
         'lineage-card',
         active ? activeStatusClasses[active] : ' inactive-node',
-        disableEditConfirmation
-            ? 'node-border--discard'
-            : editing
-              ? 'node-border--editing'
-              : selected
-                ? 'node-border--selected'
-                : isSearchMatch
-                  ? 'node-border--search-match'
-                  : active === ActiveStatus.node
-                    ? 'node-border--active'
-                    : undefined,
+        confirmDelete
+            ? 'node-border--delete'
+            : confirmDisableEdit
+              ? 'node-border--discard'
+              : editing
+                ? 'node-border--editing'
+                : selected
+                  ? 'node-border--selected'
+                  : isSearchMatch
+                    ? 'node-border--search-match'
+                    : active === ActiveStatus.node
+                      ? 'node-border--active'
+                      : undefined,
     )}
     id={nodeId}
     on:click={setActive}
@@ -118,13 +121,16 @@
         border-left: 5px var(--color-base-70) solid;
     }
     .node-border--discard {
-        border-left: 5px var(--color-red) solid;
+        border-left: 5px #FF3B3B solid;
     }
 
+    .node-border--delete{
+        border-left: 5px #FF7B4D solid;
+    }
     .node-border--selected {
         border-left: 5px var(--lineage-color-selection) solid;
     }
     .node-border--search-match {
-        border-left: 5px var(--color-yellow) solid;
+        border-left: 5px #FFC857  solid;
     }
 </style>

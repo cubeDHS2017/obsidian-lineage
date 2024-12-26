@@ -52,10 +52,23 @@ export type ViewDocumentAction =
     | SetDragCanceled
     | UpdateActiveBranchAction
     | {
-          type: 'DOCUMENT/CONFIRM_DISABLE_EDIT';
+          type: 'view/confirmation/reset/disable-edit';
       }
     | {
-          type: 'DOCUMENT/RESET_DISABLE_EDIT_CONFIRMATION';
+          type: 'view/confirmation/reset/delete-node';
+      }
+    | {
+          type: 'view/confirmation/confirm/delete-node';
+          payload: {
+              id: string;
+              includeSelection?: boolean;
+          };
+      }
+    | {
+          type: 'view/confirmation/confirm/disable-edit';
+          payload: {
+              id: string;
+          };
       }
     | { type: 'DOCUMENT/CLEAR_SELECTION' };
 type ToggleHistorySidebarAction = {

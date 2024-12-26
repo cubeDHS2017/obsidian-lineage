@@ -68,6 +68,7 @@
         opacity: 0.8;
         font-size: 12px;
         cursor: pointer;
+        transition: opacity 200ms;
     }
     .is-active {
         opacity: 0.3;
@@ -79,6 +80,15 @@
 
     .is-active-parent {
         opacity: 0.6;
+    }
+
+    .tree-index:hover {
+        opacity: 0.8;
+    }
+    :global(.is-mobile){
+        & .tree-index {
+            opacity: 0.8;
+        }
     }
 
     .has-children {

@@ -5,10 +5,10 @@ export const unloadInlineEditor = (view: LineageView) => {
 };
 
 export const cancelChanges = (view: LineageView) => {
-    const editingState = view.viewStore.getValue().document.editing;
-    if (editingState.disableEditConfirmation) {
+    const documentViewState = view.viewStore.getValue().document;
+    if (documentViewState.pendingConfirmation.disableEdit) {
         unloadInlineEditor(view);
-        if (editingState.isInSidebar) {
+        if (documentViewState.editing.isInSidebar) {
             view.viewStore.dispatch({
                 type: 'view/sidebar/disable-edit',
             });
@@ -20,11 +20,14 @@ export const cancelChanges = (view: LineageView) => {
     } else {
         view.inlineEditor.onNextChange(() => {
             view.viewStore.dispatch({
-                type: 'DOCUMENT/RESET_DISABLE_EDIT_CONFIRMATION',
+                type: 'view/confirmation/reset/disable-edit',
             });
         });
         view.viewStore.dispatch({
-            type: 'DOCUMENT/CONFIRM_DISABLE_EDIT',
+            type: 'view/confirmation/confirm/disable-edit',
+            payload: {
+                id: documentViewState.editing.activeNodeId,
+            },
         });
     }
 };

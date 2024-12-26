@@ -14,6 +14,11 @@ export type ActiveNodesOfColumn = {
     };
 };
 
+export type PendingDocumentConfirmation = {
+    disableEdit: string | null;
+    deleteNode: Set<string>;
+};
+
 export type DocumentViewState = {
     editing: EditingState;
     activeBranch: ActiveBranch;
@@ -21,6 +26,7 @@ export type DocumentViewState = {
     activeNode: string;
     activeNodesOfColumn: ActiveNodesOfColumn;
     selectedNodes: Set<string>;
+    pendingConfirmation: PendingDocumentConfirmation;
 };
 export type PinnedNodes = {
     activeNode: string;

@@ -15,6 +15,7 @@ import { clipboardCommands } from 'src/view/actions/keyboard-shortcuts/helpers/c
 import { mapCtrlToMod } from 'src/stores/settings/migrations/map-ctrl-to-mod';
 import { selectionCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/selection-commands';
 import { scrollCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/scroll-commands';
+import { deleteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/delete-node';
 
 export const pluginCommands: {
     current: PluginCommand[] | null;
@@ -38,13 +39,8 @@ export const loadCommands = (plugin: Lineage) => {
             check: isActiveAndNotEditing,
             callback: (view) => {
                 const document = view.viewStore.getValue().document;
-                view.documentStore.dispatch({
-                    type: 'DOCUMENT/DELETE_NODE',
-                    payload: {
-                        activeNodeId: document.activeNode,
-                        selectedNodes: document.selectedNodes,
-                    },
-                });
+
+                deleteNode(view, document.activeNode, true);
             },
             hotkeys: [{ key: 'Backspace', modifiers: ['Mod'] }],
         },

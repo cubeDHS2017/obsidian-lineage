@@ -1,7 +1,10 @@
 .lineage-card:hover .lineage-floating-button {
-    opacity: 0.6;
+    opacity: 0.3;
 }
 
-.lineage-card.active-node:hover .lineage-floating-button {
-    opacity: 0.3;
+.lineage-card.active-sibling:hover .lineage-floating-button {
+    opacity: 0.5;
+}
+.lineage-card.active-parent:hover .lineage-floating-button {
+    opacity: 0.5;
 }

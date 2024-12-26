@@ -20,6 +20,7 @@ import { navigateActiveNode } from 'src/stores/view/reducers/ui/navigate-active-
 import { setActivePinnedNode } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
 import { setActiveRecentNode } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 import { toggleShowAllNodes } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
+import { resetPendingConfirmation } from 'src/stores/view/reducers/document/reset-pending-confirmation';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
@@ -68,15 +69,23 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         enableEditMode(state.document, action.payload.nodeId);
     } else if (action.type === 'view/sidebar/enable-edit') {
         enableEditMode(state.document, action.payload.id, true);
-    } else if (action.type === 'DOCUMENT/CONFIRM_DISABLE_EDIT') {
-        state.document.editing = {
-            ...state.document.editing,
-            disableEditConfirmation: true,
+    } else if (action.type === 'view/confirmation/reset/disable-edit') {
+        resetPendingConfirmation(state.document);
+    } else if (action.type === 'view/confirmation/reset/delete-node') {
+        resetPendingConfirmation(state.document);
+    } else if (action.type === 'view/confirmation/confirm/delete-node') {
+        state.document.pendingConfirmation = {
+            ...state.document.pendingConfirmation,
+            deleteNode:
+                action.payload.includeSelection &&
+                state.document.selectedNodes.size > 1
+                    ? new Set(state.document.selectedNodes)
+                    : new Set([action.payload.id]),
         };
-    } else if (action.type === 'DOCUMENT/RESET_DISABLE_EDIT_CONFIRMATION') {
-        state.document.editing = {
-            ...state.document.editing,
-            disableEditConfirmation: false,
+    } else if (action.type === 'view/confirmation/confirm/disable-edit') {
+        state.document.pendingConfirmation = {
+            ...state.document.pendingConfirmation,
+            disableEdit: action.payload.id,
         };
     } else if (
         action.type === 'view/main/disable-edit' ||

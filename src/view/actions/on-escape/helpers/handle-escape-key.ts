@@ -36,5 +36,9 @@ export const handleEscapeKey = (view: LineageView) => {
             type: 'DOCUMENT/CLEAR_SELECTION',
         });
         return true;
+    } else if (value.document.pendingConfirmation.deleteNode.size > 1) {
+        viewStore.dispatch({
+            type: 'view/confirmation/reset/delete-node',
+        });
     }
 };

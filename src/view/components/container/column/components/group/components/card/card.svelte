@@ -14,7 +14,8 @@
     export let hasActiveChildren: boolean;
     export let hasChildren: boolean;
     export let firstColumn: boolean;
-    export let disableEditConfirmation: boolean;
+    export let confirmDisableEdit: boolean;
+    export let confirmDelete: boolean;
     export let section: string;
     export let selected: boolean;
     export let pinned: boolean;
@@ -25,7 +26,8 @@
 
 <Droppable
     {active}
-    {disableEditConfirmation}
+    {confirmDisableEdit}
+    {confirmDelete}
     {editing}
     {hasActiveChildren}
     nodeId={node}

@@ -11,6 +11,7 @@
     } from 'src/view/components/container/left-sidebar/components/recent-cards/helpers/scroll-card-into-view';
     import { onDestroy } from 'svelte';
     import NoItems from '../no-items/no-items.svelte';
+    import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
 
     let containerRef: HTMLElement | null = null;
     const view = getView();
@@ -20,6 +21,7 @@
     const editingStateStore = documentStateStore(view);
 
     const activePinnedCard = ActivePinnedCardStore(view);
+    const pendingConfirmation = PendingConfirmationStore(view);
 
     const subscriptions: (() => void)[] = [];
     subscriptions.push(
@@ -59,10 +61,11 @@
                     : ActiveStatus.sibling}
                 editing={$editingStateStore.activeNodeId === node &&
                     $editingStateStore.isInSidebar === true}
-                disableEditConfirmation={$editingStateStore.activeNodeId ===
+                confirmDisableEdit={$editingStateStore.activeNodeId ===
                     node &&
-                    $editingStateStore.disableEditConfirmation &&
+                    $pendingConfirmation.disableEdit===node &&
                     $editingStateStore.isInSidebar === true}
+                confirmDelete={$pendingConfirmation.deleteNode.has(node)}
                 isInSidebar={true}
                 firstColumn={true}
                 section={$idSection[node]}

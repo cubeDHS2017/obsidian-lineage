@@ -81,11 +81,7 @@ export const onViewStateUpdate = (
         }
     }
     if (!container || !view.isViewOfFile) return;
-    const postInlineEditor = type === 'DOCUMENT/CONFIRM_DISABLE_EDIT';
-    if (postInlineEditor) {
-        const maybeViewIsClosing = !view.isActive;
-        view.saveDocument(maybeViewIsClosing, postInlineEditor);
-    }
+
     if (type === 'SEARCH/TOGGLE_FUZZY_MODE') {
         view.documentSearch.resetIndex();
     }

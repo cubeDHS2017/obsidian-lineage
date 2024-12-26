@@ -12,6 +12,7 @@
     import NoItems from '../no-items/no-items.svelte';
     import { removeDuplicatesFromArray } from 'src/helpers/remove-duplicates-from-array';
     import { navigationHistoryStore } from 'src/stores/view/derived/navigation-history-store';
+    import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
 
     const RECENT_NODES_LIMIT = 30;
     const view = getView();
@@ -22,9 +23,8 @@
     const idSection = IdSectionStore(view);
     const editingStateStore = documentStateStore(view);
 
-    const activePinnedCard = ActiveRecentNodeStore(view);
-
-
+    const activeRecentCard = ActiveRecentNodeStore(view);
+    const pendingConfirmation = PendingConfirmationStore(view);
 
     const subscriptions: (() => void)[] = [];
     subscriptions.push(
@@ -61,15 +61,15 @@
         {#each recentNodes as node (node)}
             <Node
                 {node}
-                active={$activePinnedCard === node
+                active={$activeRecentCard === node
                     ? ActiveStatus.node
                     : ActiveStatus.sibling}
                 editing={$editingStateStore.activeNodeId === node &&
                     $editingStateStore.isInSidebar === true}
-                disableEditConfirmation={$editingStateStore.activeNodeId ===
-                    node &&
-                    $editingStateStore.disableEditConfirmation &&
+                confirmDisableEdit={$editingStateStore.activeNodeId === node &&
+                    $pendingConfirmation.disableEdit === node &&
                     $editingStateStore.isInSidebar === true}
+                confirmDelete={$pendingConfirmation.deleteNode.has(node)}
                 isInSidebar={true}
                 firstColumn={true}
                 section={$idSection[node]}

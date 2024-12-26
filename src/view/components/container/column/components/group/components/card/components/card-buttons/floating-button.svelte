@@ -51,11 +51,11 @@
         cursor: not-allowed;
     }
     button:not(.is-disabled):hover {
-        opacity: 0.8;
+        opacity: 0.8 !important;
     }
      :global(.is-mobile){
         & button {
-            opacity: 0.8;
+            opacity: 0.8 !important;
         }
     }
 
@@ -80,6 +80,11 @@
     }
     .position-top-right {
         top: var(--position-lr);
-        right: 16px;
+        right: 20px;
+    }
+
+    .position--section {
+        bottom: 3px;
+        right: 8px;
     }
 </style>
