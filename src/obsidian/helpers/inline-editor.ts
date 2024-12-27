@@ -2,6 +2,7 @@ import { EditorPosition, MarkdownView, TFile } from 'obsidian';
 import { LineageView } from 'src/view/view';
 import { AdjustHeight } from 'src/view/actions/inline-editor/expandable-textarea-action';
 import { vimEnterInsertMode } from 'src/obsidian/helpers/vim-enter-insert-mode';
+import { fixVimCursorWhenZooming } from 'src/obsidian/helpers/fix-vim-cursor-when-zooming';
 
 const noop = async () => {};
 
@@ -12,10 +13,11 @@ export class InlineEditor {
     private inlineView: InlineMarkdownView;
     private containerEl: HTMLElement;
     private nodeId: string | null = null;
-    private target: HTMLElement | null = null;
+    target: HTMLElement | null = null;
     private appliedExternalCursor: EditorPosition | null = null;
     private onChangeSubscriptions: Set<() => void> = new Set();
     #mounting: Promise<void> = Promise.resolve();
+    private subscriptions: Set<() => void> = new Set();
 
     constructor(private view: LineageView) {}
 
@@ -82,6 +84,10 @@ export class InlineEditor {
         this.setActiveEditor();
         setTimeout(() => resolve(), Math.max(16, content.length / 60));
         this.lockFile();
+        const unsub = fixVimCursorWhenZooming(this.view);
+        if (unsub) {
+            this.subscriptions.add(unsub);
+        }
     }
 
     focus = () => {
@@ -95,6 +101,10 @@ export class InlineEditor {
             this.target.removeEventListener('focusin', this.setActiveEditor);
             this.target.empty();
             this.target = null;
+        }
+        for (const subscription of this.subscriptions) {
+            subscription();
+            this.subscriptions.delete(subscription);
         }
         this.unlockFile();
     }

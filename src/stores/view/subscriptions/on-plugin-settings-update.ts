@@ -33,6 +33,7 @@ export const onPluginSettingsUpdate = (
         applyCardsGap(view, state.view.cardsGap);
     } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
         applyZoomLevel(view, state.view.zoomLevel);
+        view.zoomFactor = state.view.zoomLevel;
     } else if (action.type === 'SET_DOCUMENT_TYPE') {
         view.saveDocument();
     }

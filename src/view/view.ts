@@ -56,7 +56,7 @@ export class LineageView extends TextFileView {
     inlineEditor: InlineEditor;
     documentSearch: DocumentSearch;
     id: string;
-
+    zoomFactor: number;
     private minimapDom: MinimapDomElements | null = null;
 
     private readonly onDestroyCallbacks: Set<Unsubscriber> = new Set();
