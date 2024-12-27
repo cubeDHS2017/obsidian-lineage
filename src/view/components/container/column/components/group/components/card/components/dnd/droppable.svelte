@@ -6,6 +6,7 @@
     import clx from 'classnames';
     import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
     import { setActiveSidebarNode } from 'src/stores/view/subscriptions/actions/set-active-sidebar-node';
+    import { NodeStyle } from 'src/stores/view/view-state-type';
 
     export let nodeId: string;
     export let active: ActiveStatus | null;
@@ -17,6 +18,7 @@
     export let selected: boolean;
     export let isInSidebar = false;
     export let isSearchMatch = false;
+    export let style: NodeStyle | undefined;
     const view = getView();
     // eslint-disable-next-line no-undef
     const setActive = (e: MouseEvent) => {
@@ -94,6 +96,12 @@
 >
     <slot />
     <Bridges {active} {editing} {hasActiveChildren} {firstColumn} />
+    {#if style}
+        <div
+            style={`background-color: ${style.color}`}
+            class="node-style-container"
+        />
+    {/if}
 </div>
 
 <style>
@@ -121,16 +129,40 @@
         border-left: 5px var(--color-base-70) solid;
     }
     .node-border--discard {
-        border-left: 5px #FF3B3B solid;
+        border-left: 5px #ff3b3b solid;
     }
 
-    .node-border--delete{
-        border-left: 5px #FF7B4D solid;
+    .node-border--delete {
+        border-left: 5px #ff7b4d solid;
     }
     .node-border--selected {
         border-left: 5px var(--lineage-color-selection) solid;
     }
     .node-border--search-match {
-        border-left: 5px #FFC857  solid;
+        border-left: 5px #ffc857 solid;
+    }
+
+    .node-style-container {
+        position: absolute;
+        width: 5px;
+        left: 0;
+        height: 100%;
+        top: 0;
+    }
+
+   /* .node-border--active,
+    .node-border--discard,
+    .node-border--delete,
+    .node-border--selected,
+    .node-border--search-match {
+        & .node-style-container {
+            border-left: 1px solid var(--background-active-node);
+        }
+    }*/
+
+    .node-border--editing {
+        & .node-style-container {
+            display: none;
+        }
     }
 </style>

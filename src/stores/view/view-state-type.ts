@@ -48,10 +48,18 @@ export type ViewState = {
             showHistorySidebar: boolean;
             showHelpSidebar: boolean;
             showSettingsSidebar: boolean;
+            showStyleRulesModal: boolean;
         };
     };
     document: DocumentViewState;
     navigationHistory: NavigationHistory;
     pinnedNodes: PinnedNodes;
     recentNodes: RecentNodes;
+    styleRules: {
+        rules: Map<string, NodeStyle>;
+    };
+};
+
+export type NodeStyle = {
+    color: string;
 };

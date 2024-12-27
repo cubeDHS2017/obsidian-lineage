@@ -18,6 +18,8 @@
     import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
 
+    import StyleRules from './style-rules/style-rules.svelte';
+
     export let plugin: Lineage;
     export let view: LineageView;
     setContext('plugin', plugin);
@@ -45,6 +47,8 @@
             <Hotkeys />
         {:else if $controls.showSettingsSidebar}
             <Settings />
+        {:else if $controls.showStyleRulesModal}
+            <StyleRules />
         {/if}
 
     </div>

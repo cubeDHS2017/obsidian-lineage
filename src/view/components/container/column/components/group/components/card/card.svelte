@@ -7,6 +7,7 @@
     import Content from './components/content/content.svelte';
     import CardButtons
         from 'src/view/components/container/column/components/group/components/card/components/card-buttons/card-buttons.svelte';
+    import { NodeStyle } from 'src/stores/view/view-state-type';
 
     export let node: NodeId;
     export let editing: boolean;
@@ -20,8 +21,8 @@
     export let selected: boolean;
     export let pinned: boolean;
     export let isInSidebar = false;
-    export let isSearchMatch = false
-
+    export let isSearchMatch = false;
+    export let style: NodeStyle | undefined;
 </script>
 
 <Droppable
@@ -35,8 +36,9 @@
     {selected}
     {isInSidebar}
     {isSearchMatch}
+    {style}
 >
-    {#if active === ActiveStatus.node && editing }
+    {#if active === ActiveStatus.node && editing}
         <InlineEditor nodeId={node} />
     {:else}
         <Draggable nodeId={node} {isInSidebar}>

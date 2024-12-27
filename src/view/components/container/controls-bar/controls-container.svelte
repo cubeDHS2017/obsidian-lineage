@@ -4,6 +4,7 @@
         HistoryIcon,
         Keyboard,
         MoreVertical,
+        Palette,
         PanelRightInactive as PanelRight,
         Redo2 as RedoIcon,
         Settings,
@@ -45,6 +46,10 @@
 
     const toggleHelp = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_HELP_SIDEBAR' });
+    };
+
+    const toggleStyleRules = () => {
+        viewStore.dispatch({ type: 'view/modals/toggle-style-rules' });
     };
     const toggleSettings = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_SETTINGS_SIDEBAR' });
@@ -102,6 +107,11 @@
         >
             <PanelRight class="svg-icon" />
         </Button>
+    </div>
+    <div
+        class="buttons-group buttons-group--vertical"
+        data-visible={$showControls}
+    >
         <Button
             active={$controls.showSettingsSidebar}
             classes="control-item"
@@ -119,6 +129,15 @@
             tooltipPosition="left"
         >
             <Keyboard class="svg-icon" />
+        </Button>
+        <Button
+            active={$controls.showStyleRulesModal}
+            classes="control-item"
+            label="Style rules"
+            on:click={toggleStyleRules}
+            tooltipPosition="left"
+        >
+            <Palette class="svg-icon" />
         </Button>
     </div>
     <div

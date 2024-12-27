@@ -29,4 +29,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     general: {
         defaultDocumentFormat: 'sections',
     },
+    styleRules: {
+        documents: {},
+    },
 });

@@ -5,7 +5,7 @@
     import clx from 'classnames';
     import { nodesStore } from 'src/stores/document/derived/nodes-store';
     import { EditingState } from 'src/stores/view/default-view-state';
-    import { PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
+    import { NodeStyle, PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
 
     export let groupId: string;
     export let columnId: string;
@@ -24,6 +24,7 @@
     export let idSection: Record<string, string>;
     export let groupParentIds: Set<string>;
     export let firstColumn: boolean;
+    export let styleRules: Map<string, NodeStyle>;
     const view = getView();
     const nodes = nodesStore(view, columnId, groupId);
 </script>
@@ -63,6 +64,7 @@
                     pinned={pinnedNodes.has(node)}
                     isSearchMatch={searchResults.has(node)}
                     {firstColumn}
+                    style={styleRules.get(node)}
                 />
             {/if}
         {/each}

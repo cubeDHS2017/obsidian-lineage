@@ -12,6 +12,7 @@ import { NodeNavigationAction } from 'src/stores/view/reducers/ui/navigate-activ
 import { SetActivePinnedNodeAction } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
 import { SetActiveRecentNodeAction } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 import { ToggleShowAllNodesAction } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
+import { NodeStyle } from 'src/stores/view/view-state-type';
 
 export type ViewStoreAction =
     | SearchAction
@@ -19,7 +20,8 @@ export type ViewStoreAction =
     | ViewDocumentAction
     | NodeSelectionAction
     | NodeHistoryNavigationAction
-    | SidebarActions;
+    | SidebarActions
+    | StyleRulesViewActions;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -32,7 +34,8 @@ export type ViewUIAction =
     | ToggleHelpSidebarAction
     | ToggleHistorySidebarAction
     | ToggleSettingsSidebarAction
-    | { type: 'CLOSE_MODALS'; payload?: { closeAllModals: boolean } };
+    | { type: 'CLOSE_MODALS'; payload?: { closeAllModals: boolean } }
+    | { type: 'view/modals/toggle-style-rules' };
 
 export type ToggleEditModeAction = {
     type: 'view/main/enable-edit';
@@ -114,4 +117,13 @@ export type EnableEditInSidebar = {
 
 export type DisableEditInSidebar = {
     type: 'view/sidebar/disable-edit';
+};
+
+export type StyleRulesViewActions = UpdateStyleRulesResultAction;
+
+export type UpdateStyleRulesResultAction = {
+    type: 'view/style-rules/update-results';
+    payload: {
+        rules: Map<string, NodeStyle>;
+    };
 };

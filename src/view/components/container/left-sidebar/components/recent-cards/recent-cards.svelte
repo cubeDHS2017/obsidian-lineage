@@ -13,6 +13,7 @@
     import { removeDuplicatesFromArray } from 'src/helpers/remove-duplicates-from-array';
     import { navigationHistoryStore } from 'src/stores/view/derived/navigation-history-store';
     import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
+    import { MatchingStyleRulesStore } from 'src/stores/view/derived/style-rules';
 
     const RECENT_NODES_LIMIT = 30;
     const view = getView();
@@ -25,7 +26,7 @@
 
     const activeRecentCard = ActiveRecentNodeStore(view);
     const pendingConfirmation = PendingConfirmationStore(view);
-
+    const styleRules = MatchingStyleRulesStore(view);
     const subscriptions: (() => void)[] = [];
     subscriptions.push(
         ActiveRecentNodeStore(view).subscribe((activeNodeId) => {
@@ -77,6 +78,7 @@
                 hasChildren={false}
                 selected={false}
                 pinned={false}
+                style={$styleRules.get(node)}
             />
         {/each}
     {:else}

@@ -4,7 +4,7 @@
     import { scrollOnDndY } from 'src/view/actions/dnd/scroll-on-dnd-y';
     import { groupsStore } from 'src/stores/document/derived/groups-store';
     import { EditingState } from 'src/stores/view/default-view-state';
-    import { PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
+    import { NodeStyle, PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
 
     export let columnId: string;
     export let activeChildGroups: Set<string>;
@@ -23,6 +23,7 @@
     export let searching: boolean;
     export let idSection: Record<string,string>;
     export let firstColumn: boolean;
+    export let styleRules: Map<string, NodeStyle>;
     const view = getView();
     const groups = groupsStore(view, columnId);
 </script>
@@ -49,6 +50,7 @@
                 {groupParentIds}
                 {firstColumn}
                 {pendingConfirmation}
+                {styleRules}
             />
         {/if}
     {/each}

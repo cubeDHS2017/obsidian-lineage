@@ -15,6 +15,7 @@ export const defaultViewState = (): ViewState => ({
             showHistorySidebar: false,
             showHelpSidebar: false,
             showSettingsSidebar: false,
+            showStyleRulesModal: false,
         },
     },
     document: {
@@ -54,6 +55,9 @@ export const defaultViewState = (): ViewState => ({
     },
     recentNodes: {
         activeNode: '',
+    },
+    styleRules: {
+        rules: new Map(),
     },
 });
 export type ActiveBranch = {

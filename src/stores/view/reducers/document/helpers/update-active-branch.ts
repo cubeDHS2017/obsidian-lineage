@@ -1,4 +1,4 @@
-import { Column, NodeId } from 'src/stores/document/document-state-type';
+import { Column } from 'src/stores/document/document-state-type';
 import { traverseUp } from 'src/lib/tree-utils/get/traverse-up';
 import { traverseDown } from 'src/lib/tree-utils/get/traverse-down';
 import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id';
@@ -22,7 +22,7 @@ export const updateActiveBranch = (
 ) => {
     if (!state.activeNode) return;
     const sortedParents = traverseUp(columns, state.activeNode).reverse();
-    const childGroups: NodeId[] = [];
+    const childGroups: string[] = [];
     traverseDown(childGroups, columns, state.activeNode);
     const group = findGroupByNodeId(columns, state.activeNode);
     if (!group)

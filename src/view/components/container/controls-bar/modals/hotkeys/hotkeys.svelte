@@ -5,7 +5,7 @@
     import NumberOfConflicts from './number-of-conflicts.svelte';
 </script>
 
-<div class="lineage-modal" tabindex="0">
+<div class="lineage-modal">
     <Front />
     <div class="groups">
         {#each Object.entries($filteredHotkeys) as [groupName, group] (groupName)}

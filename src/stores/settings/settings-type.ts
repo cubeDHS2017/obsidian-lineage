@@ -1,6 +1,7 @@
 import { Hotkey } from 'obsidian';
 
 import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { StyleRule } from 'src/stores/settings/types/style-rules-types';
 
 export type CustomHotkeys = {
     [command in CommandName]?: {
@@ -57,5 +58,8 @@ export type Settings = {
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;
+    };
+    styleRules: {
+        documents: { [path: string]: { rules: StyleRule[] } };
     };
 };

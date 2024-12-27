@@ -16,6 +16,7 @@ import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persis
 import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
 import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
 import { debouncedDrawDocument } from 'src/stores/minimap/subscriptions/effects/draw-document';
+import { updateViewStyleRules } from 'src/stores/view/subscriptions/effects/style-rules/update-view-style-rules';
 
 export const onDocumentStateUpdate = (
     view: LineageView,
@@ -71,6 +72,7 @@ export const onDocumentStateUpdate = (
     // effects
     if (structuralChange || e.content) {
         alignBranch(view, action);
+        updateViewStyleRules(view);
     }
 
     if (!container || !view.isViewOfFile) return;

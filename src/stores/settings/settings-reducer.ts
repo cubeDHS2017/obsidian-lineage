@@ -10,6 +10,10 @@ import {
     changeZoomLevel,
     ChangeZoomLevelAction,
 } from 'src/stores/settings/reducers/change-zoom-level';
+import {
+    StyleRulesAction,
+    updateStyleRules,
+} from 'src/stores/settings/reducers/update-style-rules/update-style-rules';
 
 export type SettingsActions =
     | {
@@ -140,7 +144,8 @@ export type SettingsActions =
               section: string;
           };
       }
-    | { type: 'view/modes/gap-between-cards/toggle' };
+    | { type: 'view/modes/gap-between-cards/toggle' }
+    | StyleRulesAction;
 
 export type PersistActiveNodeAction = {
     type: 'DOCUMENT/SET_ACTIVE_NODE';
@@ -250,6 +255,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.leftSidebarActiveTab = action.payload.tab;
     } else if (action.type === 'view/modes/gap-between-cards/toggle') {
         store.view.applyGapBetweenCards = !store.view.applyGapBetweenCards;
+    } else if (action.type.startsWith('settings/style-rules')) {
+        updateStyleRules(store, action);
     }
 };
 export const settingsReducer = (

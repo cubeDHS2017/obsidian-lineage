@@ -8,6 +8,7 @@ export const id = {
     snapshot: () => 's' + nanoid(id_size),
     view: () => 'v' + nanoid(id_size),
     canvas: () => 'canvas-' + nanoid(id_size),
+    styleRule: () => 'sr' + nanoid(id_size),
 };
 
 export const isId = {

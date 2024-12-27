@@ -39,6 +39,7 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             showHistorySidebar: !showHistorySidebar,
             showHelpSidebar: false,
             showSettingsSidebar: false,
+            showStyleRulesModal: false,
         };
     } else if (action.type === 'UI/TOGGLE_HELP_SIDEBAR') {
         const showHelpSidebar = state.ui.controls.showHelpSidebar;
@@ -46,6 +47,7 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             showHistorySidebar: false,
             showHelpSidebar: !showHelpSidebar,
             showSettingsSidebar: false,
+            showStyleRulesModal: false,
         };
     } else if (action.type === 'UI/TOGGLE_SETTINGS_SIDEBAR') {
         const showSettingsSidebar = state.ui.controls.showSettingsSidebar;
@@ -53,6 +55,7 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             showHistorySidebar: false,
             showHelpSidebar: false,
             showSettingsSidebar: !showSettingsSidebar,
+            showStyleRulesModal: false,
         };
     } else if (action.type === 'CLOSE_MODALS') {
         state.ui.controls = {
@@ -61,6 +64,7 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
                 ? false
                 : state.ui.controls.showHelpSidebar,
             showSettingsSidebar: false,
+            showStyleRulesModal: false,
         };
     } else if (action.type === 'view/main/enable-edit') {
         if (state.document.activeNode !== action.payload.nodeId) {
@@ -130,6 +134,16 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         );
     } else if (action.type === 'search/toggle-show-all-nodes') {
         toggleShowAllNodes(state);
+    } else if (action.type === 'view/modals/toggle-style-rules') {
+        const showStyleRulesModal = state.ui.controls.showStyleRulesModal;
+        state.ui.controls = {
+            showHistorySidebar: false,
+            showStyleRulesModal: !showStyleRulesModal,
+            showSettingsSidebar: false,
+            showHelpSidebar: false,
+        };
+    } else if (action.type === 'view/style-rules/update-results') {
+        state.styleRules.rules = action.payload.rules;
     }
 };
 export const viewReducer = (
