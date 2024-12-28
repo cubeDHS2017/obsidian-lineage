@@ -4,13 +4,24 @@ import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id
 import { traverseUp } from 'src/lib/tree-utils/get/traverse-up';
 import { findChildGroup } from 'src/lib/tree-utils/find/find-child-group';
 import { getAllChildren } from 'src/lib/tree-utils/get/get-all-children';
+import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
+import {
+    STRUCTURE_AND_CONTENT,
+    STRUCTURE_ONLY,
+} from 'src/stores/view/helpers/get-document-event-type';
 
-type NodeCache = {
-    [scope in StyleRuleTarget]: string[];
-};
+const defaultCache = () => ({
+    self: {},
+    'direct-parent': {},
+    'any-parent': {},
+    'direct-children': {},
+    'any-children': {},
+});
 
 type Cache = {
-    [nodeId: string]: NodeCache;
+    [scope in StyleRuleTarget]: {
+        [nodeId: string]: string[];
+    };
 };
 
 export class TargetNodeResolver {
@@ -19,7 +30,7 @@ export class TargetNodeResolver {
 
     constructor(columns: Column[]) {
         this.columns = columns;
-        this.cache = {};
+        this.cache = defaultCache();
     }
 
     private cacheResult(
@@ -27,21 +38,12 @@ export class TargetNodeResolver {
         scope: StyleRuleTarget,
         result: string[],
     ): void {
-        if (!this.cache[nodeId]) {
-            this.cache[nodeId] = {
-                self: [],
-                'direct-parent': [],
-                'any-parent': [],
-                'direct-children': [],
-                'any-children': [],
-            };
-        }
-        this.cache[nodeId][scope] = result;
+        this.cache[scope][nodeId] = result;
     }
 
     public getTargetNodes(scope: StyleRuleTarget, nodeId: string): string[] {
-        if (this.cache[nodeId]?.[scope] !== undefined) {
-            return this.cache[nodeId][scope]!;
+        if (this.cache[scope][nodeId] !== undefined) {
+            return this.cache[scope][nodeId]!;
         }
 
         let result: string[];
@@ -78,4 +80,13 @@ export class TargetNodeResolver {
         this.cacheResult(nodeId, scope, result);
         return result;
     }
+
+    resetCache = (action: DocumentStoreAction) => {
+        if (
+            STRUCTURE_AND_CONTENT.has(action.type) ||
+            STRUCTURE_ONLY.has(action.type)
+        ) {
+            this.cache = defaultCache();
+        }
+    };
 }

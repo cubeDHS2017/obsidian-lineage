@@ -10,11 +10,30 @@ import {
     StringProperty,
 } from 'src/stores/settings/types/style-rules-types';
 import { getHeadings } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/node-property-resolver/helpers/get-headings';
+import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
+import {
+    STRUCTURE_AND_CONTENT,
+    STRUCTURE_ONLY,
+} from 'src/stores/view/helpers/get-document-event-type';
+
+const defaultCache = () => ({
+    // content
+    headings: {},
+    content: {},
+    'line-count': {},
+    'character-count': {},
+    'word-count': {},
+    'headings-word-count': {},
+    // structure
+    'direct-children-count': {},
+    'total-children-count': {},
+    depth: {},
+});
 
 type Property = NumericProperty | StringProperty;
 type Cache = {
-    [nodeId: string]: {
-        [key in Property]?: number | string;
+    [key in Property]: {
+        [nodeId: string]: number | string;
     };
 };
 
@@ -26,7 +45,8 @@ export class NodePropertyResolver {
     constructor(columns: Column[], content: Content) {
         this.columns = columns;
         this.content = content;
-        this.cache = {};
+
+        this.cache = defaultCache();
     }
 
     private cacheResult(
@@ -34,15 +54,12 @@ export class NodePropertyResolver {
         property: Property,
         value: number | string,
     ): void {
-        if (!this.cache[nodeId]) {
-            this.cache[nodeId] = {};
-        }
-        this.cache[nodeId][property] = value;
+        this.cache[property][nodeId] = value;
     }
 
     public getProperty(nodeId: string, property: Property) {
-        if (this.cache[nodeId]?.[property] !== undefined) {
-            return this.cache[nodeId][property] as number | string;
+        if (this.cache[property][nodeId] !== undefined) {
+            return this.cache[property][nodeId] as number | string;
         }
 
         let value: number | string;
@@ -89,4 +106,28 @@ export class NodePropertyResolver {
         this.cacheResult(nodeId, property, value);
         return value;
     }
+
+    resetCache = (action: DocumentStoreAction) => {
+        if (STRUCTURE_AND_CONTENT.has(action.type)) {
+            this.cache = defaultCache();
+        } else if (STRUCTURE_ONLY.has(action.type)) {
+            this.cache['depth'] = {};
+            this.cache['direct-children-count'] = {};
+            this.cache['total-children-count'] = {};
+        } else if (action.type === 'DOCUMENT/SET_NODE_CONTENT') {
+            delete this.cache.headings[action.payload.nodeId];
+            delete this.cache.content[action.payload.nodeId];
+            delete this.cache['line-count'][action.payload.nodeId];
+            delete this.cache['character-count'][action.payload.nodeId];
+            delete this.cache['word-count'][action.payload.nodeId];
+            delete this.cache['headings-word-count'][action.payload.nodeId];
+        } else if (action.type === 'DOCUMENT/FORMAT_HEADINGS') {
+            this.cache.headings = {};
+            this.cache.content = {};
+            this.cache['line-count'] = {};
+            this.cache['character-count'] = {};
+            this.cache['word-count'] = {};
+            this.cache['headings-word-count'] = {};
+        }
+    };
 }

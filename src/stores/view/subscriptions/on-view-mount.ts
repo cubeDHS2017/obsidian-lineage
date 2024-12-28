@@ -17,7 +17,6 @@ import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-varia
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { loadPinnedNodesToDocument } from 'src/stores/view/subscriptions/actions/load-pinned-nodes-to-document';
 import { attachCloseModalsListener } from 'src/stores/view/subscriptions/attach-close-modals-listener';
-import { updateViewStyleRules } from 'src/stores/view/subscriptions/effects/style-rules/update-view-style-rules';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -59,6 +58,6 @@ export const onViewMount = (view: LineageView) => {
     attachWheelScrollListener(view);
     documentStore.dispatch({ type: 'META/REFRESH_GROUP_PARENT_IDS' });
     attachCloseModalsListener(view);
-    updateViewStyleRules(view);
+    view.rulesProcessor.initialize();
     view.zoomFactor = view.plugin.settings.getValue().view.zoomLevel;
 };

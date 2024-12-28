@@ -10,7 +10,6 @@ import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/
 import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { updateViewStyleRules } from 'src/stores/view/subscriptions/effects/style-rules/update-view-style-rules';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -65,6 +64,6 @@ export const onPluginSettingsUpdate = (
         type === 'settings/style-rules/enable-rule' ||
         type === 'settings/style-rules/disable-rule';
     if (shouldUpdateStyleRules) {
-        updateViewStyleRules(view);
+        view.rulesProcessor.handleRulesUpdate();
     }
 };

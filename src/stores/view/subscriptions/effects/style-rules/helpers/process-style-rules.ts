@@ -8,12 +8,16 @@ import { TargetNodeResolver } from 'src/stores/view/subscriptions/effects/style-
 import { NodePropertyResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/node-property-resolver/node-property-resolver';
 import { NodeStyle } from 'src/stores/view/view-state-type';
 
-export const processStyleRules = (doc: LineageDocument, rules: StyleRule[]) => {
+export const processStyleRules = (
+    doc: LineageDocument,
+    rules: StyleRule[],
+    nodeResolver: NodePropertyResolver,
+    propertyResolver: TargetNodeResolver,
+) => {
     const nodeStyles = new Map<string, NodeStyle>();
     // ascending order
     const sortedRules = [...rules].sort((a, b) => a.priority - b.priority);
-    const nodeResolver = new TargetNodeResolver(doc.columns);
-    const propertyResolver = new NodePropertyResolver(doc.columns, doc.content);
+
     for (const column of doc.columns) {
         for (const group of column.groups) {
             for (const nodeId of group.nodes) {
@@ -24,8 +28,8 @@ export const processStyleRules = (doc: LineageDocument, rules: StyleRule[]) => {
                         nodeId,
                         rule.condition as ConditionNode,
                         doc.content,
-                        nodeResolver,
                         propertyResolver,
+                        nodeResolver,
                     );
                     if (match) {
                         nodeStyles.set(nodeId, {
