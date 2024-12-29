@@ -1,177 +1,30 @@
 <script lang="ts">
-    import {
-        ComparisonOperator,
-        ConditionNode,
-        NumericOperator,
-        NumericProperty,
-        StringOperator,
-        StringProperty,
-        StyleRule,
-        StyleRuleCondition,
-        StyleRuleTarget
-    } from '../../../../stores/settings/types/style-rules-types';
+    import { StyleRule } from '../../../../stores/settings/types/style-rules-types';
     import { getView } from 'src/view/components/container/context';
-    import { Trash } from 'lucide-svelte';
+    import { GripVertical, Trash } from 'lucide-svelte';
+    import { ruleDndAction } from 'src/view/components/container/style-rules/dnd/actions/rule-dnd';
+    import {
+        numericOperators,
+        properties,
+        readableText,
+        stringOperators,
+        targets
+    } from 'src/view/components/container/style-rules/helpers/constants';
+    import { ruleEventHandlers } from 'src/view/components/container/style-rules/helpers/rule-event-handlers';
+
 
     export let rule: StyleRule;
+    export let setDraggedRule: (rule: StyleRule) => void;
+    export let setDropTarget: (
+        rule: StyleRule,
+        position: 'before' | 'after',
+    ) => void;
+    export let resetDragState: () => void;
 
     const view = getView();
-    const documentPath = view.file?.path as string;
 
-    const targets: StyleRuleTarget[] = [
-        'self',
-        'direct-parent',
-        'any-parent',
-        'direct-children',
-        'any-children',
-    ];
+  const h = ruleEventHandlers(view,rule.id)
 
-    const readableText = {
-        targets: {
-            self: 'Of card',
-            'direct-parent': 'Of immediate parent',
-            'any-parent': 'Of any parent',
-            'direct-children': 'Of immediate child',
-            'any-children': 'Of any child',
-        } satisfies Record<StyleRuleTarget, string>,
-        operators: {
-            contains: 'Contains',
-            'not-contains': 'Does not contain',
-            equals: 'Equals',
-            'not-equals': 'Does not equal',
-            empty: 'Is empty',
-            'not-empty': 'is not empty',
-
-            'greater-than': 'Is greater than',
-            'less-than': 'Is less than',
-            between: 'Is between',
-            'not-between': 'Is not between',
-            'starts-with': 'Starts with',
-            'not-starts-with': 'Does not start with',
-            'ends-with': 'Ends with',
-            'not-ends-with': 'Does not end with',
-            'matches-regex': 'Matches regex',
-            'not-matches-regex': 'Does not match regex',
-        } satisfies Record<NumericOperator | StringOperator, string>,
-        properties: {
-            depth: 'Depth',
-            'character-count': 'Character count',
-            'word-count': 'Word count',
-            'line-count': 'Line count',
-            'direct-children-count': 'Direct children count',
-            'total-children-count': 'Total children count',
-            content: 'Content',
-            headings: 'Headings',
-            'headings-word-count': 'Headings word count',
-        } satisfies Record<NumericProperty | StringProperty, string>,
-    };
-
-    const stringOperators: StringOperator[] = [
-        'contains',
-        'not-contains',
-        'equals',
-        'not-equals',
-        'empty',
-        'not-empty',
-        'starts-with',
-        'not-starts-with',
-        'ends-with',
-        'not-ends-with',
-        'matches-regex',
-        'not-matches-regex',
-    ];
-
-    const numericOperators: NumericOperator[] = [
-        'equals',
-        'not-equals',
-        'empty',
-        'not-empty',
-        'greater-than',
-        'less-than',
-        'between',
-        'not-between',
-    ];
-
-    const properties: (NumericProperty | StringProperty)[] = [
-        'content',
-        'headings',
-        'headings-word-count',
-        'depth',
-        'character-count',
-        'word-count',
-        'line-count',
-        'direct-children-count',
-        'total-children-count',
-    ];
-
-    const toggleRule = (id: string, enabled: boolean) => {
-        view.plugin.settings.dispatch({
-            type: enabled
-                ? 'settings/style-rules/enable-rule'
-                : 'settings/style-rules/disable-rule',
-            payload: { documentPath, id },
-        });
-    };
-
-    const deleteRule = () => {
-        view.plugin.settings.dispatch({
-            type: 'settings/style-rules/delete',
-            payload: { documentPath, id: rule.id },
-        });
-    };
-    const updateRule = (id: string, rule: Partial<StyleRule>) => {
-        view.plugin.settings.dispatch({
-            type: 'settings/style-rules/update',
-            payload: { documentPath, id, rule },
-        });
-    };
-
-    const updateCondition = (updates: Partial<StyleRuleCondition>) => {
-        view.plugin.settings.dispatch({
-            type: 'settings/style-rules/update-condition',
-            payload: {
-                documentPath,
-                ruleId: rule.id,
-                updates,
-            },
-        });
-    };
-
-    const handleScopeChange = (e: Event) => {
-        const target = e.target as HTMLSelectElement;
-        updateCondition({ scope: target.value as StyleRuleTarget });
-    };
-
-    const handlePropertyChange = (e: Event) => {
-        const target = e.target as HTMLSelectElement;
-        updateCondition({
-            property: target.value as ConditionNode['property'],
-        });
-    };
-
-    const handleOperatorChange = (e: Event) => {
-        const target = e.target as HTMLSelectElement;
-        updateCondition({ operator: target.value as ComparisonOperator });
-    };
-
-    const handleValueChange = (e: Event) => {
-        const target = e.target as HTMLInputElement;
-        updateCondition({ value: target.value });
-    };
-    const handleValueBChange = (e: Event) => {
-        const target = e.target as HTMLInputElement;
-        updateCondition({ valueB: parseFloat(target.value) });
-    };
-
-    const handleColorChange = (e: Event) => {
-        const target = e.target as HTMLInputElement;
-        updateRule(rule.id, { color: target.value });
-    };
-
-    const handleToggleChange = (e: Event) => {
-        const target = e.target as HTMLInputElement;
-        toggleRule(rule.id, target.checked);
-    };
 
     $: operatorIsBetween =
         rule.condition.operator === 'between' ||
@@ -181,12 +34,25 @@
         rule.condition.property === 'headings';
 </script>
 
-<div class="rule">
-    <input type="color" value={rule.color} on:input={handleColorChange} />
+<div
+    class="rule"
+    use:ruleDndAction={{
+        setDraggedRule,
+        setDropTarget,
+        resetDragState,
+        rule,
+        view,
+    }}
+    draggable="true"
+>
+    <div class="drag-handle">
+        <GripVertical class="svg-icon" />
+    </div>
+    <input type="color" value={rule.color} on:input={h.handleColorChange} />
 
     <select
         value={rule.condition.property}
-        on:change={handlePropertyChange}
+        on:change={h.handlePropertyChange}
         aria-label="Property"
     >
         {#each properties as property}
@@ -196,7 +62,7 @@
     </select>
     <select
         value={rule.condition.scope}
-        on:change={handleScopeChange}
+        on:change={h.handleScopeChange}
         aria-label="Scope"
     >
         {#each targets as target}
@@ -206,7 +72,7 @@
 
     <select
         value={rule.condition.operator}
-        on:change={handleOperatorChange}
+        on:change={h.handleOperatorChange}
         aria-label="Operator"
     >
         {#if isStringCondition}
@@ -228,7 +94,7 @@
         <input
             type={isStringCondition ? 'text' : 'number'}
             value={rule.condition.value}
-            on:input={handleValueChange}
+            on:input={h.handleValueChange}
             placeholder={isStringCondition ? 'Text' : 'Number'}
             style={isStringCondition
                 ? ''
@@ -242,7 +108,7 @@
         <input
             type="number"
             value={'valueB' in rule.condition ? rule.condition.valueB : 0}
-            on:input={handleValueBChange}
+            on:input={h.handleValueBChange}
             placeholder={'Number'}
             style={'width: 75px'}
             aria-label="Value 2"
@@ -252,16 +118,17 @@
     <input
         type="checkbox"
         checked={rule.enabled}
-        on:change={handleToggleChange}
+        on:change={h.handleToggleChange}
         aria-label="Enable"
     />
     <div
         class="clickable-icon delete-button"
-        on:click={deleteRule}
+        on:click={h.deleteRule}
         aria-label="Delete"
     >
         <Trash class="svg-icon" />
     </div>
+<!--    <div class="debug-node-id">{rule.id}</div>-->
 </div>
 
 <style>
@@ -273,6 +140,7 @@
         gap: 8px;
         align-items: center;
         justify-content: space-between;
+        position: relative;
     }
 
     select {
@@ -286,4 +154,29 @@
         color: white;
         cursor: pointer;
     }
+
+    .drag-over {
+        border: 2px dashed var(--interactive-accent);
+    }
+
+    .drag-handle {
+        cursor: grab;
+        color: var(--text-muted);
+        padding: 4px;
+        display: flex;
+        align-items: center;
+    }
+
+    .drag-handle:hover {
+        color: var(--text-normal);
+    }
+
+   /* .debug-node-id {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 12px;
+        color: var(--text-on-accent);
+        background-color: var(--color-accent);
+    }*/
 </style>

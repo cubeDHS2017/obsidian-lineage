@@ -2,9 +2,9 @@ import type { CanvasWorkerProps } from 'src/stores/minimap/subscriptions/effects
 // @ts-ignore
 import DrawMinimapWorker from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/minimap-renderer.worker';
 import { CardRanges } from 'src/stores/minimap/minimap-state-type';
-import type { RulesWorkerEvent } from 'src/stores/view/subscriptions/effects/style-rules/workers/minimap-renderer.worker';
+import type { RulesWorkerEvent } from 'src/stores/view/subscriptions/effects/style-rules/workers/style-rules.worker';
 // @ts-ignore
-import RulesWorker from 'src/stores/view/subscriptions/effects/style-rules/workers/minimap-renderer.worker';
+import RulesWorker from 'src/stores/view/subscriptions/effects/style-rules/workers/style-rules.worker';
 import { NodeStyle } from 'src/stores/view/view-state-type';
 import { WorkerPromise } from 'src/helpers/worker-promise';
 // @ts-ignore

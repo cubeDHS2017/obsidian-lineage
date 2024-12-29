@@ -2,6 +2,14 @@ import { StyleRule, StyleRuleCondition } from '../../types/style-rules-types';
 import { id } from 'src/helpers/id';
 import { Settings } from 'src/stores/settings/settings-type';
 import { fixConditionTypes } from 'src/stores/settings/reducers/update-style-rules/helpers/fix-condition-types';
+import { handleDND } from 'src/stores/settings/reducers/update-style-rules/handle-dnd';
+
+export type MoveNodePayload = {
+    documentPath: string;
+    droppedId: string;
+    targetId: string;
+    position: 'before' | 'after';
+};
 
 export type StyleRulesAction =
     | { type: 'settings/style-rules/add'; payload: { documentPath: string } }
@@ -19,7 +27,7 @@ export type StyleRulesAction =
       }
     | {
           type: 'settings/style-rules/move';
-          payload: { documentPath: string; id: string; targetIndex: number };
+          payload: MoveNodePayload;
       }
     | {
           type: 'settings/style-rules/update-condition';
@@ -83,13 +91,7 @@ export const updateStyleRules = (
             (rule) => rule.id !== action.payload.id,
         );
     } else if (action.type === 'settings/style-rules/move') {
-        const { id, targetIndex } = action.payload;
-        const sourceIndex = state.rules.findIndex((r) => r.id === id);
-        if (sourceIndex !== -1) {
-            const [rule] = state.rules.splice(sourceIndex, 1);
-            state.rules.splice(targetIndex, 0, rule);
-            state.rules = [...state.rules];
-        }
+        state.rules = handleDND(state.rules, action.payload);
     } else if (action.type === 'settings/style-rules/update-condition') {
         const { ruleId, updates } = action.payload;
         const index = state.rules.findIndex((r) => r.id === ruleId);
