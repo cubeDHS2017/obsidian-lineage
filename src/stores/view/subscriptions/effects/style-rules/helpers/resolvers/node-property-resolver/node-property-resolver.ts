@@ -41,6 +41,7 @@ export class NodePropertyResolver {
     private columns: Column[];
     private content: Content;
     private cache: Cache;
+    private isEmpty = true;
 
     constructor(columns: Column[], content: Content) {
         this.columns = columns;
@@ -54,6 +55,9 @@ export class NodePropertyResolver {
         property: Property,
         value: number | string,
     ): void {
+        if (this.isEmpty) {
+            this.isEmpty = false;
+        }
         this.cache[property][nodeId] = value;
     }
 
@@ -107,9 +111,17 @@ export class NodePropertyResolver {
         return value;
     }
 
-    resetCache = (action: DocumentStoreAction) => {
+    resetCache = (
+        action: DocumentStoreAction,
+        columns: Column[],
+        content: Content,
+    ) => {
+        this.columns = columns;
+        this.content = content;
+        if (this.isEmpty) return;
         if (STRUCTURE_AND_CONTENT.has(action.type)) {
             this.cache = defaultCache();
+            this.isEmpty = true;
         } else if (STRUCTURE_ONLY.has(action.type)) {
             this.cache['depth'] = {};
             this.cache['direct-children-count'] = {};

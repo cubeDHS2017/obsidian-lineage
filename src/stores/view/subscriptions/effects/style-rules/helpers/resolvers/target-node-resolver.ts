@@ -27,6 +27,7 @@ type Cache = {
 export class TargetNodeResolver {
     private columns: Column[];
     private cache: Cache;
+    private isEmpty = true;
 
     constructor(columns: Column[]) {
         this.columns = columns;
@@ -38,6 +39,9 @@ export class TargetNodeResolver {
         scope: StyleRuleTarget,
         result: string[],
     ): void {
+        if (this.isEmpty) {
+            this.isEmpty = false;
+        }
         this.cache[scope][nodeId] = result;
     }
 
@@ -81,12 +85,15 @@ export class TargetNodeResolver {
         return result;
     }
 
-    resetCache = (action: DocumentStoreAction) => {
+    resetCache = (action: DocumentStoreAction, columns: Column[]) => {
+        this.columns = columns;
+        if (this.isEmpty) return;
         if (
             STRUCTURE_AND_CONTENT.has(action.type) ||
             STRUCTURE_ONLY.has(action.type)
         ) {
             this.cache = defaultCache();
+            this.isEmpty = true;
         }
     };
 }

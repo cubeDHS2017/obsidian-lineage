@@ -64,6 +64,6 @@ export const onPluginSettingsUpdate = (
         type === 'settings/style-rules/enable-rule' ||
         type === 'settings/style-rules/disable-rule';
     if (shouldUpdateStyleRules) {
-        view.rulesProcessor.handleRulesUpdate();
+        view.rulesProcessor.onRulesUpdate();
     }
 };

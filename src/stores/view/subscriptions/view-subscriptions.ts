@@ -47,5 +47,6 @@ export const viewSubscriptions = (view: LineageView) => {
         unsubFromView();
         unsubFromSettings();
         unsubFromDocuments();
+        view.rulesProcessor.onViewUnmount();
     };
 };

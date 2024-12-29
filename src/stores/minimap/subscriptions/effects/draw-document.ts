@@ -1,6 +1,6 @@
 import { debounce } from 'src/helpers/debounce';
 import { LineageView } from 'src/view/view';
-import { drawMinimapWorker } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/worker-instances';
+import { drawMinimapWorker } from 'src/workers/worker-instances';
 import invariant from 'tiny-invariant';
 
 export const drawDocument = async (view: LineageView) => {

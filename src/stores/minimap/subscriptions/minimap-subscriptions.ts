@@ -1,7 +1,7 @@
 import { LineageView } from 'src/view/view';
 import { onMinimapMount } from 'src/stores/minimap/subscriptions/on-minimap-mount';
 import { onMinimapStateUpdate } from 'src/stores/minimap/subscriptions/on-minimap-state-update';
-import { drawMinimapWorker } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/worker-instances';
+import { drawMinimapWorker } from 'src/workers/worker-instances';
 
 export const minimapSubscriptions = (view: LineageView) => {
     const unsub = view.minimapStore!.subscribe(

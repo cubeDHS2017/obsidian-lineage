@@ -71,7 +71,8 @@ export const onDocumentStateUpdate = (
     // effects
     if (structuralChange || e.content) {
         alignBranch(view, action);
-        view.rulesProcessor.handleDocumentUpdate(action);
+
+        view.rulesProcessor.onDocumentUpdate(action);
     }
 
     if (!container || !view.isViewOfFile) return;

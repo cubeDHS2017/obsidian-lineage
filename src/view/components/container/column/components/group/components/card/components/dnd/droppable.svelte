@@ -102,6 +102,7 @@
             class="node-style-container"
         />
     {/if}
+<!--    <div class="debug-node-id">{nodeId}</div>-->
 </div>
 
 <style>
@@ -160,9 +161,17 @@
         }
     }*/
 
-    .node-border--editing {
+  /*  .node-border--editing {
         & .node-style-container {
             display: none;
         }
-    }
+    }*/
+   /* .debug-node-id {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-size: 12px;
+        color: var(--text-on-accent);
+        background-color: var(--color-accent);
+    }*/
 </style>

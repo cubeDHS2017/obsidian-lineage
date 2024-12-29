@@ -1,61 +1,73 @@
 import { debounce } from 'obsidian';
+import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
+import { rulesWorker } from 'src/workers/worker-instances';
+import { StyleRule } from 'src/stores/settings/types/style-rules-types';
 import { LineageView } from 'src/view/view';
 import invariant from 'tiny-invariant';
-import { TargetNodeResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/target-node-resolver';
-import { NodePropertyResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/node-property-resolver/node-property-resolver';
-import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
 import { NodeStyle } from 'src/stores/view/view-state-type';
-import { processStyleRules } from './helpers/process-style-rules';
 
 export class StyleRulesProcessor {
-    private propertyResolver: NodePropertyResolver;
-    private targetResolver: TargetNodeResolver;
-    constructor(private view: LineageView) {
-        this.propertyResolver = new NodePropertyResolver([], {});
-        this.targetResolver = new TargetNodeResolver([]);
+    private view: LineageView;
+    private rules: StyleRule[] = [];
+
+    constructor(view: LineageView) {
+        this.view = view;
     }
 
-    initialize = () => {
-        const document = this.view.documentStore.getValue().document;
-        this.targetResolver = new TargetNodeResolver(document.columns);
-        this.propertyResolver = new NodePropertyResolver(
-            document.columns,
-            document.content,
-        );
-        this.processRules();
+    onViewMount = async () => {
+        this.setRules();
+        this.processRules(null);
     };
-    handleDocumentUpdate = (action: DocumentStoreAction) => {
-        this.resetResolversCache(action);
-        this.processRules();
+    onDocumentUpdate = async (action: DocumentStoreAction) => {
+        this.processRules(action);
     };
-    handleRulesUpdate = () => {
-        this.processRules();
+
+    onRulesUpdate = async () => {
+        this.setRules();
+        this.processRules(null);
     };
-    private processRules = debounce(() => {
+
+    onViewUnmount = async () => {
+        await rulesWorker.run({
+            type: 'destroy',
+            payload: {
+                viewId: this.view.id,
+            },
+        });
+        this.rules = [];
+    };
+
+    private processRules = debounce(
+        async (action: DocumentStoreAction | null) => {
+            let results = new Map<string, NodeStyle>();
+            if (this.rules.length > 0) {
+                const document = this.view.documentStore.getValue().document;
+
+                results = (await rulesWorker.run({
+                    type: 'process-rules',
+                    payload: {
+                        document,
+                        rules: this.rules,
+                        action,
+                        viewId: this.view.id,
+                    },
+                })) as Map<string, NodeStyle>;
+            }
+            this.view.viewStore.dispatch({
+                type: 'view/style-rules/update-results',
+                payload: {
+                    rules: results,
+                },
+            });
+        },
+        100,
+    );
+
+    private setRules = () => {
         const path = this.view.file?.path;
         invariant(path);
         const rules =
             this.view.plugin.settings.getValue().styleRules.documents[path];
-        let results = new Map<string, NodeStyle>();
-        if (rules) {
-            const document = this.view.documentStore.getValue().document;
-            results = processStyleRules(
-                document,
-                rules.rules,
-                this.propertyResolver,
-                this.targetResolver,
-            );
-        }
-        this.view.viewStore.dispatch({
-            type: 'view/style-rules/update-results',
-            payload: {
-                rules: results,
-            },
-        });
-    }, 100);
-
-    private resetResolversCache = (action: DocumentStoreAction) => {
-        this.propertyResolver.resetCache(action);
-        this.targetResolver.resetCache(action);
+        this.rules = rules?.rules ?? [];
     };
 }

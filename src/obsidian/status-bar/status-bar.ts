@@ -1,6 +1,6 @@
 import { LineageView } from 'src/view/view';
 import Lineage from 'src/main';
-import { calculateDocumentProgressW } from 'src/obsidian/status-bar/helpers/workers-instances';
+import { calculateDocumentProgressW } from 'src/workers/worker-instances';
 
 export class StatusBar {
     private container: HTMLElement;
