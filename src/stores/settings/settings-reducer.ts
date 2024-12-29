@@ -158,6 +158,7 @@ export type PersistActiveNodeAction = {
 const updateState = (store: Settings, action: SettingsActions) => {
     if (action.type === 'DELETE_DOCUMENT_PREFERENCES') {
         delete store.documents[action.payload.path];
+        delete store.styleRules.documents[action.payload.path];
     } else if (action.type === 'SET_DOCUMENT_TYPE') {
         if (!store.documents[action.payload.path]) {
             store.documents[action.payload.path] = {
@@ -186,6 +187,12 @@ const updateState = (store: Settings, action: SettingsActions) => {
         const preferences = store.documents[action.payload.oldPath];
         delete store.documents[action.payload.oldPath];
         store.documents[action.payload.newPath] = preferences;
+
+        if (store.styleRules.documents[action.payload.oldPath]) {
+            const rules = store.styleRules.documents[action.payload.oldPath];
+            delete store.styleRules.documents[action.payload.oldPath];
+            store.styleRules.documents[action.payload.newPath] = rules;
+        }
     } else if (action.type === 'SET_CUSTOM_HOTKEYS') {
         store.hotkeys.customHotkeys = action.payload.customHotkeys;
     } else if (action.type === 'SET_FONT_SIZE') {
