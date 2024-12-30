@@ -3,14 +3,15 @@ import {
     AlignBranchState,
     alignElement,
 } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/align-element';
-import { Settings } from 'src/stores/settings/settings-type';
+import { ScrollingSettings } from 'src/stores/settings/settings-type';
 import { getNodeElement } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-node-element';
 
 export const alignActiveNode = (
     viewState: ViewState,
     container: HTMLElement,
     localState: AlignBranchState,
-    settings: Settings,
+    scrolling: ScrollingSettings,
+    zoomLevel = 1,
     behavior?: ScrollBehavior,
 ) => {
     const activeNodeId = viewState.document.activeNode;
@@ -23,9 +24,10 @@ export const alignActiveNode = (
         const columnId = alignElement(
             container,
             element,
-            settings,
             behavior,
             'both',
+            scrolling,
+            zoomLevel,
             childGroupElement,
         );
         if (columnId) localState.columns.add(columnId);

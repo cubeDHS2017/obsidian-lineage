@@ -3,6 +3,7 @@ import { Settings } from './settings-type';
 export const DEFAULT_CARD_WIDTH = 550;
 export const DEFAULT_COLUMNS_GAP = 150;
 export const DEFAULT_CARDS_GAP = 150;
+export const DEFAULT_INDENTATION_WIDTH = 60;
 export const DEFAULT_SETTINGS = (): Settings => ({
     documents: {},
     hotkeys: {
@@ -25,6 +26,8 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         leftSidebarWidth: 500,
         leftSidebarActiveTab: 'pinned-cards',
         applyGapBetweenCards: false,
+        singleColumnMode: false,
+        nodeIndentationWidth: DEFAULT_INDENTATION_WIDTH,
     },
     general: {
         defaultDocumentFormat: 'sections',

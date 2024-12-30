@@ -145,7 +145,14 @@ export type SettingsActions =
           };
       }
     | { type: 'view/modes/gap-between-cards/toggle' }
-    | StyleRulesAction;
+    | { type: 'settings/view/modes/toggle-single-column' }
+    | StyleRulesAction
+    | {
+          type: 'settings/view/set-node-indentation-width';
+          payload: {
+              width: number;
+          };
+      };
 
 export type PersistActiveNodeAction = {
     type: 'DOCUMENT/SET_ACTIVE_NODE';
@@ -262,6 +269,16 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.leftSidebarActiveTab = action.payload.tab;
     } else if (action.type === 'view/modes/gap-between-cards/toggle') {
         store.view.applyGapBetweenCards = !store.view.applyGapBetweenCards;
+    } else if (action.type === 'settings/view/modes/toggle-single-column') {
+        store.view.singleColumnMode = !store.view.singleColumnMode;
+        if (store.view.singleColumnMode) {
+            store.view.scrolling.horizontalScrollingMode = 'reveal-active-card';
+            store.view.scrolling = {
+                ...store.view.scrolling,
+            };
+        }
+    } else if (action.type === 'settings/view/set-node-indentation-width') {
+        store.view.nodeIndentationWidth = action.payload.width;
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

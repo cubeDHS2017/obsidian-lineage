@@ -1,5 +1,5 @@
 import { getCombinedBoundingClientRect } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
-import { Settings } from 'src/stores/settings/settings-type';
+import { ScrollingSettings } from 'src/stores/settings/settings-type';
 import { calculateScrollTop } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/helpers/calculate-scroll-top';
 import { calculateScrollLeft } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/helpers/calculate-scroll-left';
 
@@ -10,9 +10,10 @@ export const THRESHOLD = 5;
 export const alignElement = (
     container: HTMLElement,
     elements: HTMLElement | HTMLElement[],
-    settings: Settings,
     behavior: ScrollBehavior = 'smooth',
     mode: 'vertical' | 'horizontal' | 'both' = 'vertical',
+    settings: ScrollingSettings,
+    zoomLevel = 1,
     horizontalChild?: HTMLElement,
     scrollToTheLeft = false,
 ) => {
@@ -37,7 +38,7 @@ export const alignElement = (
             const scrollLeft = calculateScrollLeft(
                 elementRect,
                 containerRect,
-                settings.view.scrolling,
+                settings,
                 childRect,
                 scrollToTheLeft,
             );
@@ -52,7 +53,7 @@ export const alignElement = (
             const scrollTop = calculateScrollTop(elementRect, containerRect);
             if (Math.abs(scrollTop) > THRESHOLD)
                 column.scrollBy({
-                    top: (scrollTop * -1) / settings.view.zoomLevel,
+                    top: (scrollTop * -1) / zoomLevel,
                     behavior,
                 });
         }

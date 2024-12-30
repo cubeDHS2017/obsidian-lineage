@@ -2,7 +2,7 @@
     import Column from './column/column.svelte';
     import { getView } from 'src/view/components/container/context';
     import { scrollOnDndX } from 'src/view/actions/dnd/scroll-on-dnd-x';
-    import { columnsStore } from 'src/stores/document/derived/columns-store';
+    import { columnsStore, singleColumnStore } from 'src/stores/document/derived/columns-store';
     import ColumnsBuffer from './buffers/columns-buffer.svelte';
     import { dndStore } from 'src/stores/view/derived/dnd-store';
     import { activeBranchStore } from 'src/stores/view/derived/active-branch-store';
@@ -21,9 +21,16 @@
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
     import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
     import { MatchingStyleRulesStore } from 'src/stores/view/derived/style-rules';
+    import { onMount } from 'svelte';
+    import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+
+    export let singleColumnMode: boolean;
 
     const view = getView();
-    const columns = columnsStore(view);
+
+    const columns = singleColumnMode
+        ? singleColumnStore(view)
+        : columnsStore(view);
     const dnd = dndStore(view);
     const activeBranch = activeBranchStore(view);
     const activeNode = activeNodeStore(view);
@@ -50,12 +57,19 @@
             }
         }
     };
+    let containerRef: HTMLElement | null = null;
+    onMount(() => {
+        view.container = containerRef;
+        alignBranch(view, { type: 'view/life-cycle/mount' });
+    });
 </script>
 
 <div
+    bind:this={containerRef}
     class={'columns-container ' +
         ($limitPreviewHeight ? ' limit-card-height' : '') +
-        ($applyGap ? ' gap-between-cards' : '')}
+        ($applyGap ? ' gap-between-cards' : '') +
+        (singleColumnMode ? ' single-column' : '')}
     id="columns-container"
     tabindex="0"
     on:click={saveActiveNodeOnClick}
@@ -84,6 +98,7 @@
                 groupParentIds={$groupParentIds}
                 firstColumn={i === 0}
                 styleRules={$styleRules}
+                {singleColumnMode}
             />
         {/each}
         <ColumnsBuffer />
@@ -120,8 +135,8 @@
         align-items: center;
         gap: var(--column-gap);
         transform: scale(var(--zoom-level));
-        height: calc(1/var(--zoom-level) * 100vh);
-        width: calc(1/var(--zoom-level) * 100vw);
+        height: calc(1 / var(--zoom-level) * 100vh);
+        width: calc(1 / var(--zoom-level) * 100vw);
     }
 
     .columns-container::-webkit-scrollbar {
@@ -136,6 +151,26 @@
         }
     }
 
+    .single-column {
+        & .group {
+            background-color: transparent;
+        }
+        --node-gap: 60px;
+        & .active-parent-bridge-right {
+            display: none;
+        }
+
+        & .active-parent-bridge-left {
+            display: none;
+        }
+        & .active-node-bridge {
+            display: none;
+        }
+
+        & .active-node {
+            outline: 8px solid var(--background-active-parent) !important;
+        }
+    }
     .gap-between-cards {
         & .group {
             background-color: transparent;

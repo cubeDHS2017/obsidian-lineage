@@ -12,6 +12,14 @@ export const alignInactiveColumn = (
     const nodes = column.groups.map((g) => g.nodes).flat();
     if (nodes.length > 0) {
         const element = getNodeElement(container, nodes[nodes.length - 1]);
-        if (element) alignElement(container, element, settings, behavior);
+        if (element)
+            alignElement(
+                container,
+                element,
+                behavior,
+                'vertical',
+                settings.view.scrolling,
+                settings.view.zoomLevel,
+            );
     }
 };

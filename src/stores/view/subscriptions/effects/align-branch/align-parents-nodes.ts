@@ -19,8 +19,10 @@ export const alignParentsNodes = (
             const columnId = alignElement(
                 container,
                 element,
-                settings,
                 behavior,
+                'vertical',
+                settings.view.scrolling,
+                settings.view.zoomLevel,
             );
             if (columnId) localState.columns.add(columnId);
         }

@@ -8,3 +8,10 @@
 .lineage-card.active-parent:hover .lineage-floating-button {
     opacity: 0.5;
 }
+
+.group-has-active-node {
+    /*for single column mode*/
+    & .lineage-card.inactive-node:hover .lineage-floating-button {
+        opacity: 0.5;
+    }
+}

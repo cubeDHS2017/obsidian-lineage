@@ -1,15 +1,7 @@
 import { LineageView } from 'src/view/view';
 import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import invariant from 'tiny-invariant';
 
 export const dragToPan = (element: HTMLElement, view: LineageView) => {
-    let container = element;
-    setTimeout(() => {
-        const columnsContainer = view.container;
-        invariant(columnsContainer);
-        container = columnsContainer;
-    }, 50);
-
     let pressed = false;
     let initializedValues = false;
     let container_startX = 0;
@@ -25,11 +17,11 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
         if (!pressed || e.buttons !== 1) return;
 
         if (!initializedValues) {
-            const rect = container.getBoundingClientRect();
+            const rect = view.container!.getBoundingClientRect();
             container_rectLeft = rect.left;
             container_startX = e.clientX - container_rectLeft;
-            container_scrollLeft = container.scrollLeft;
-            columns = Array.from(container.querySelectorAll('.column'));
+            container_scrollLeft = view.container!.scrollLeft;
+            columns = Array.from(view.container!.querySelectorAll('.column'));
             for (let i = 0; i < columns.length; i++) {
                 const column = columns[i];
                 const rect = column.getBoundingClientRect();
@@ -46,7 +38,7 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
         const _columns_startY = Array.from(columns_startY);
         requestAnimationFrame(() => {
             const dx = e.clientX - container_rectLeft - container_startX;
-            container.scrollLeft = container_scrollLeft - dx;
+            view.container!.scrollLeft = container_scrollLeft - dx;
             for (let i = 0; i < columns.length; i++) {
                 const dy = e.clientY - _columns_rectTop[i] - _columns_startY[i];
                 const column = columns[i];
@@ -62,7 +54,7 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
                 (e.target as HTMLElement).tagName !== 'INPUT';
             if (enabled) {
                 pressed = true;
-                container.style.cursor = 'grab';
+                view.container!.style.cursor = 'grab';
                 e.preventDefault(); // prevent default spacebar scroll
             }
         }
@@ -73,7 +65,7 @@ export const dragToPan = (element: HTMLElement, view: LineageView) => {
             pressed = false;
             initializedValues = false;
             setTimeout(() => {
-                container.style.cursor = 'initial';
+                view.container!.style.cursor = 'initial';
             }, 50);
         }
     };

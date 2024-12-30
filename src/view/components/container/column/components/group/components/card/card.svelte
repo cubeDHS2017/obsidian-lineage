@@ -23,6 +23,7 @@
     export let isInSidebar = false;
     export let isSearchMatch = false;
     export let style: NodeStyle | undefined;
+    export let singleColumnMode: boolean;
 </script>
 
 <Droppable
@@ -37,6 +38,9 @@
     {isInSidebar}
     {isSearchMatch}
     {style}
+    {section}
+    {singleColumnMode}
+
 >
     {#if active === ActiveStatus.node && editing}
         <InlineEditor nodeId={node} />

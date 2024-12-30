@@ -16,9 +16,10 @@ export const scrollFirstColumnToTheLeft = (
         alignElement(
             container,
             firstColumnElement,
-            settings,
             'instant',
             'horizontal',
+            settings.view.scrolling,
+            settings.view.zoomLevel,
             undefined,
             true,
         );

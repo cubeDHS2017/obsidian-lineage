@@ -79,6 +79,7 @@
                 selected={false}
                 pinned={false}
                 style={$styleRules.get(node)}
+                singleColumnMode={false}
             />
         {/each}
     {:else}

@@ -1,6 +1,6 @@
 import { AlignBranchState } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/align-element';
-import { alignParentsNodes } from 'src/stores/view/subscriptions/effects/align-branch/align-parents-nodes';
-import { alignChildColumns } from 'src/stores/view/subscriptions/effects/align-branch/align-child-columns';
+import { alignParentsNodes } from './align-parents-nodes';
+import { alignChildColumns } from './align-child-columns';
 import { alignActiveNode } from 'src/stores/view/subscriptions/effects/align-branch/align-active-node';
 import { LineageView } from 'src/view/view';
 import { delay } from 'src/helpers/delay';
@@ -17,6 +17,7 @@ type AlignBranchParams = {
     delay: number;
     retry: boolean;
     scrollFirstColumnToTheLeft: boolean;
+    centerActiveNode: boolean;
 };
 
 const defaultParams: AlignBranchParams = {
@@ -25,6 +26,7 @@ const defaultParams: AlignBranchParams = {
     delay: 0,
     retry: false,
     scrollFirstColumnToTheLeft: false,
+    centerActiveNode: false,
 };
 
 const align = (view: LineageView, params: AlignBranchParams) => {
@@ -42,11 +44,29 @@ const align = (view: LineageView, params: AlignBranchParams) => {
         if (params.scrollFirstColumnToTheLeft) {
             scrollFirstColumnToTheLeft(documentState, settings, container);
         }
+        if (settings.view.singleColumnMode) {
+            alignActiveNode(
+                viewState,
+                container,
+                localState,
+                // used when toggling 'single column mode' on
+                params.centerActiveNode
+                    ? {
+                          horizontalScrollingMode: 'keep-active-card-at-center',
+                          revealChildren: false,
+                      }
+                    : settings.view.scrolling,
+                settings.view.zoomLevel,
+                params.behavior,
+            );
+            return;
+        }
         alignActiveNode(
             viewState,
             container,
             localState,
-            settings,
+            settings.view.scrolling,
+            settings.view.zoomLevel,
             params.behavior,
         );
         alignParentsNodes(

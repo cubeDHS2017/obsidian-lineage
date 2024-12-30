@@ -223,7 +223,7 @@ export class LineageView extends TextFileView {
                 view: this,
             },
         });
-        this.container = this.contentEl.querySelector('#columns-container');
+
         invariant(this.container);
         this.onDestroyCallbacks.add(viewSubscriptions(this));
     };

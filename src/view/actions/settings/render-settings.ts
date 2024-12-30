@@ -8,6 +8,7 @@ import { LimitCardHeight } from 'src/view/actions/settings/components/limit-card
 import { DefaultDocumentFormat } from 'src/view/actions/settings/components/default-document-format';
 import { ColumnsGap } from 'src/view/actions/settings/components/columns-gap';
 import { CardsGap } from 'src/view/actions/settings/components/cards-gap';
+import { CardIndentationWidth } from 'src/view/actions/settings/components/card-indentation-width';
 
 export const renderSettings = (element: HTMLElement) => {
     const view = getView();
@@ -20,6 +21,7 @@ export const renderSettings = (element: HTMLElement) => {
         CardWidth(element, settingsStore);
         ColumnsGap(element, settingsStore);
         CardsGap(element, settingsStore);
+        CardIndentationWidth(element, settingsStore);
         LimitCardHeight(element, settingsStore);
         ScrollingBehavior(element, settingsStore);
     };

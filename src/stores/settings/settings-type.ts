@@ -55,6 +55,8 @@ export type Settings = {
         leftSidebarWidth: number;
         leftSidebarActiveTab: LeftSidebarActiveTab;
         applyGapBetweenCards: boolean;
+        singleColumnMode: boolean;
+        nodeIndentationWidth: number;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

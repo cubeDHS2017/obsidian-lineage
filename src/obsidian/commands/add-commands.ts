@@ -192,7 +192,19 @@ const createCommands = (plugin: Lineage) => {
             });
         },
     });
-
+    commands.push({
+        name: 'Toggle single column mode',
+        icon: 'rectangle-vertical',
+        checkCallback: (checking) => {
+            const view = getActiveLineageView(plugin);
+            if (checking) {
+                return Boolean(view);
+            }
+            view!.plugin.settings.dispatch({
+                type: 'settings/view/modes/toggle-single-column',
+            });
+        },
+    });
     return commands;
 };
 

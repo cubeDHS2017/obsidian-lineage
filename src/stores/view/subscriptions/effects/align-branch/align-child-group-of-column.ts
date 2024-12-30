@@ -28,8 +28,10 @@ export const alignChildGroupOfColumn = (
         alignElement(
             container,
             elements.length > 1 ? elements : elements[0],
-            settings,
             behavior,
+            'vertical',
+            settings.view.scrolling,
+            settings.view.zoomLevel,
         );
     }
 };

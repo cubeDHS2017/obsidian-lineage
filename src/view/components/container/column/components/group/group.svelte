@@ -3,9 +3,9 @@
     import { ActiveStatus } from 'src/view/components/container/column/components/group/components/active-status.enum';
     import { getView } from 'src/view/components/container/context';
     import clx from 'classnames';
-    import { nodesStore } from 'src/stores/document/derived/nodes-store';
     import { EditingState } from 'src/stores/view/default-view-state';
     import { NodeStyle, PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
+    import { nodesStore, singleColumnNodesStore } from 'src/stores/document/derived/nodes-store';
 
     export let groupId: string;
     export let columnId: string;
@@ -25,16 +25,21 @@
     export let groupParentIds: Set<string>;
     export let firstColumn: boolean;
     export let styleRules: Map<string, NodeStyle>;
+    export let singleColumnMode: boolean;
     const view = getView();
-    const nodes = nodesStore(view, columnId, groupId);
+    const nodes = singleColumnMode
+        ? singleColumnNodesStore(view,)
+        : nodesStore(view, columnId,groupId);
 </script>
 
-{#if $nodes.length > 0 && (searchQuery.length === 0 || showAllNodes || $nodes.some( (n) => searchResults.has(n), ))}
+{#if $nodes.length > 0 && (searchQuery.length === 0 || showAllNodes || (searchResults.size > 0 && $nodes.some( (n) => searchResults.has(n) )))}
     <div
         class={clx(
             'group',
-            activeChildGroups.has(groupId) && 'group-has-active-parent',
-            activeGroup === groupId && 'group-has-active-node',
+            (activeChildGroups.has(groupId) || singleColumnMode) &&
+                'group-has-active-parent',
+            (activeGroup === groupId || singleColumnMode) &&
+                'group-has-active-node',
         )}
         id={'group-' + groupId}
     >
@@ -65,6 +70,7 @@
                     isSearchMatch={searchResults.has(node)}
                     {firstColumn}
                     style={styleRules.get(node)}
+                    {singleColumnMode}
                 />
             {/if}
         {/each}

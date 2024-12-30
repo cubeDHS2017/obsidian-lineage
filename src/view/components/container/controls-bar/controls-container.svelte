@@ -6,6 +6,7 @@
         MoreVertical,
         Palette,
         PanelRightInactive as PanelRight,
+        RectangleVertical,
         Redo2 as RedoIcon,
         Settings,
         Undo2 as UndoIcon
@@ -18,7 +19,7 @@
     import Button from '../shared/button.svelte';
     import { ScrollSettingsStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { customIcons } from 'src/helpers/load-custom-icons';
-    import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
+    import { ApplyGapBetweenCardsStore, SingleColumnMode } from 'src/stores/settings/derived/view-settings-store';
     import ZoomButtons from './components/zoom-buttons.svelte';
 
     const view = getView();
@@ -78,6 +79,12 @@
     const toggleGap = () => {
         view.plugin.settings.dispatch({
             type: 'view/modes/gap-between-cards/toggle',
+        });
+    };
+    const singleColumnMode = SingleColumnMode(view);
+    const toggleSingleColumnMode = () => {
+        view.plugin.settings.dispatch({
+            type: 'settings/view/modes/toggle-single-column',
         });
     };
 </script>
@@ -162,6 +169,15 @@
             tooltipPosition="left"
         >
             {@html customIcons.gap.svg}
+        </Button>
+        <Button
+            active={$singleColumnMode}
+            classes="control-item"
+            label={'Single column'}
+            on:click={toggleSingleColumnMode}
+            tooltipPosition="left"
+        >
+            <RectangleVertical class="svg-icon"/>
         </Button>
     </div>
     <div

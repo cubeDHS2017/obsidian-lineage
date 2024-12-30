@@ -17,6 +17,7 @@ import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-varia
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { loadPinnedNodesToDocument } from 'src/stores/view/subscriptions/actions/load-pinned-nodes-to-document';
 import { attachCloseModalsListener } from 'src/stores/view/subscriptions/attach-close-modals-listener';
+import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -24,6 +25,7 @@ const applySettingsToView = (view: LineageView) => {
     applyContainerBg(view, state.view.theme.containerBg);
     applyActiveBranchBg(view, state.view.theme.activeBranchBg);
     applyCardWidth(view, state.view.cardWidth);
+    applyCardIndentationWidth(view, state.view.cardWidth);
     applyColumnsGap(view, state.view.columnsGap);
     applyCardsGap(view, state.view.cardsGap);
     if (!view.container) return;

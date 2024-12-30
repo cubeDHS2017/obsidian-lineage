@@ -19,6 +19,8 @@
     export let isInSidebar = false;
     export let isSearchMatch = false;
     export let style: NodeStyle | undefined;
+    export let section: string | null;
+    export let singleColumnMode: boolean;
     const view = getView();
     // eslint-disable-next-line no-undef
     const setActive = (e: MouseEvent) => {
@@ -69,9 +71,15 @@
         [ActiveStatus.parent]: 'active-parent',
         [ActiveStatus.sibling]: 'active-sibling',
     };
+
+    let depth = 0;
+    $: depth = section ? section.split('.').length - 1 : 0;
 </script>
 
 <div
+    style={singleColumnMode
+        ? `margin-left: calc(var(--node-indentation-width) * ${depth})`
+        : ''}
     class={clx(
         'lineage-card',
         active ? activeStatusClasses[active] : ' inactive-node',

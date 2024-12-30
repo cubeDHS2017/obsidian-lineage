@@ -15,3 +15,6 @@ export const LeftSidebarActiveTabStore = (view: LineageView) =>
 
 export const ApplyGapBetweenCardsStore = (view: LineageView) =>
     derived(view.plugin.settings, (state) => state.view.applyGapBetweenCards);
+
+export const SingleColumnMode = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.singleColumnMode);

@@ -64,11 +64,16 @@ export const matchActionToParams = (
         (action.type === 'view/life-cycle/mount' ||
             action.type === 'UI/CHANGE_ZOOM_LEVEL');
 
+    const centerActiveNode =
+        // single-column-mode toggled on
+        settings.view.singleColumnMode &&
+        action.type === 'view/life-cycle/mount';
     return {
         behavior,
         delay,
         alignInactiveColumns,
         retry,
         scrollFirstColumnToTheLeft,
+        centerActiveNode,
     };
 };

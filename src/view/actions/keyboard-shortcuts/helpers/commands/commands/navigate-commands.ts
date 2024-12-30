@@ -3,7 +3,45 @@ import {
     isActive,
     isActiveAndNotEditing,
 } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import { LineageView } from 'src/view/view';
+import { AllDirections } from 'src/stores/document/document-store-actions';
+import { JumpTarget } from 'src/stores/view/reducers/document/jump-to-node';
 
+const singleColumnMode = (view: LineageView) =>
+    view.plugin.settings.getValue().view.singleColumnMode;
+
+const spatialNavigation = (view: LineageView, direction: AllDirections) => {
+    view.viewStore.dispatch({
+        type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
+        payload: {
+            direction: direction,
+            columns: view.documentStore.getValue().document.columns,
+        },
+    });
+};
+
+const sequentialNavigation = (
+    view: LineageView,
+    direction: 'forward' | 'back',
+) => {
+    view.viewStore.dispatch({
+        type: 'NAVIGATION/SELECT_NEXT_NODE',
+        payload: {
+            direction,
+            sections: view.documentStore.getValue().sections,
+        },
+    });
+};
+
+const jump = (view: LineageView, target: JumpTarget) => {
+    view.viewStore.dispatch({
+        type: 'DOCUMENT/JUMP_TO_NODE',
+        payload: {
+            target,
+            columns: view.documentStore.getValue().document.columns,
+        },
+    });
+};
 export const navigateCommands = () => {
     const commands: PluginCommand[] = [];
     commands.push(
@@ -12,13 +50,11 @@ export const navigateCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
-                    payload: {
-                        direction: 'right',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+                if (!singleColumnMode(view)) {
+                    spatialNavigation(view, 'right');
+                } else {
+                    spatialNavigation(view, 'down');
+                }
             },
             hotkeys: [
                 { key: 'L', modifiers: [] },
@@ -30,13 +66,12 @@ export const navigateCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
-                    payload: {
-                        direction: 'down',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+
+                if (!singleColumnMode(view)) {
+                    spatialNavigation(view, 'down');
+                } else {
+                    sequentialNavigation(view, 'forward');
+                }
             },
             hotkeys: [
                 { key: 'J', modifiers: [] },
@@ -48,13 +83,11 @@ export const navigateCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
-                    payload: {
-                        direction: 'left',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+                if (!singleColumnMode(view)) {
+                    spatialNavigation(view, 'left');
+                } else {
+                    spatialNavigation(view, 'up');
+                }
             },
             hotkeys: [
                 { key: 'H', modifiers: [] },
@@ -66,13 +99,11 @@ export const navigateCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
-                    payload: {
-                        direction: 'up',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+                if (!singleColumnMode(view)) {
+                    spatialNavigation(view, 'up');
+                } else {
+                    sequentialNavigation(view, 'back');
+                }
             },
             hotkeys: [
                 { key: 'K', modifiers: [] },
@@ -85,13 +116,7 @@ export const navigateCommands = () => {
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/JUMP_TO_NODE',
-                    payload: {
-                        target: 'start-of-group',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+                jump(view, 'start-of-group');
             },
             hotkeys: [{ key: 'PageUp', modifiers: [] }],
         },
@@ -101,13 +126,7 @@ export const navigateCommands = () => {
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/JUMP_TO_NODE',
-                    payload: {
-                        target: 'end-of-group',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+                jump(view, 'end-of-group');
             },
             hotkeys: [{ key: 'PageDown', modifiers: [] }],
         },
@@ -117,13 +136,7 @@ export const navigateCommands = () => {
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/JUMP_TO_NODE',
-                    payload: {
-                        target: 'start-of-column',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+                jump(view, 'start-of-column');
             },
             hotkeys: [{ key: 'Home', modifiers: [] }],
         },
@@ -133,13 +146,7 @@ export const navigateCommands = () => {
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                view.viewStore.dispatch({
-                    type: 'DOCUMENT/JUMP_TO_NODE',
-                    payload: {
-                        target: 'end-of-column',
-                        columns: view.documentStore.getValue().document.columns,
-                    },
-                });
+                jump(view, 'end-of-column');
             },
             hotkeys: [{ key: 'End', modifiers: [] }],
         },
@@ -170,13 +177,7 @@ export const navigateCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.viewStore.dispatch({
-                    type: 'NAVIGATION/SELECT_NEXT_NODE',
-                    payload: {
-                        direction: 'forward',
-                        sections: view.documentStore.getValue().sections,
-                    },
-                });
+                sequentialNavigation(view, 'forward');
             },
             hotkeys: [{ key: 'N', modifiers: [] }],
         },
@@ -185,13 +186,7 @@ export const navigateCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.viewStore.dispatch({
-                    type: 'NAVIGATION/SELECT_NEXT_NODE',
-                    payload: {
-                        direction: 'back',
-                        sections: view.documentStore.getValue().sections,
-                    },
-                });
+                sequentialNavigation(view, 'back');
             },
             hotkeys: [{ key: 'B', modifiers: [] }],
         },

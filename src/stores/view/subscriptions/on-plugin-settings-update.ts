@@ -10,6 +10,7 @@ import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/
 import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
+import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -35,6 +36,8 @@ export const onPluginSettingsUpdate = (
         view.zoomFactor = state.view.zoomLevel;
     } else if (action.type === 'SET_DOCUMENT_TYPE') {
         view.saveDocument();
+    } else if (type === 'settings/view/set-node-indentation-width') {
+        applyCardIndentationWidth(view, state.view.nodeIndentationWidth);
     }
 
     const shouldAlign =
@@ -48,7 +51,8 @@ export const onPluginSettingsUpdate = (
         type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE' ||
         type === 'SET_CARDS_GAP' ||
         type === 'SET_COLUMNS_GAP' ||
-        type === 'view/modes/gap-between-cards/toggle';
+        type === 'view/modes/gap-between-cards/toggle' ||
+        type === 'settings/view/set-node-indentation-width';
     if (shouldAlign) {
         alignBranch(view, action);
     }

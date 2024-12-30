@@ -1,6 +1,6 @@
 <script lang="ts">
     import ControlsBar from './controls-bar/controls-container.svelte';
-    import Container from './container.svelte';
+    import Container from './container-wrapper.svelte';
     import Breadcrumbs from './breadcrumbs/breadcrumbs.svelte';
     import Toolbar from './toolbar/toolbar.svelte';
     import Settings from './controls-bar/modals/settings/settings.svelte';
