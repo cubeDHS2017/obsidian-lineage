@@ -23,7 +23,12 @@ export const processStyleRules = (
             for (const nodeId of group.nodes) {
                 for (const rule of sortedRules) {
                     if (!rule.enabled) continue;
-
+                    if (
+                        typeof rule.condition.value === 'string' &&
+                        rule.condition.value.length === 0
+                    ) {
+                        continue;
+                    }
                     const match = evaluateCondition(
                         nodeId,
                         rule.condition as ConditionNode,

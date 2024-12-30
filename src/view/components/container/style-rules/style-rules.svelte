@@ -108,6 +108,7 @@
         border-radius: 4px;
         cursor: pointer;
         align-self: end;
+        margin-right: 10px;
     }
 
     .rules-list {

@@ -62,7 +62,8 @@ export const onPluginSettingsUpdate = (
         type === 'settings/style-rules/delete' ||
         type === 'settings/style-rules/update-condition' ||
         type === 'settings/style-rules/enable-rule' ||
-        type === 'settings/style-rules/disable-rule';
+        type === 'settings/style-rules/disable-rule' ||
+        type === 'settings/style-rules/move';
     if (shouldUpdateStyleRules) {
         view.rulesProcessor.onRulesUpdate();
     }
