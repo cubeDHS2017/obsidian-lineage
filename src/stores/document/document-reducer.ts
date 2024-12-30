@@ -33,6 +33,7 @@ import { unpinNode } from 'src/stores/document/reducers/pinned-nodes/unpin-node'
 import { removeStalePinnedNodes } from 'src/stores/document/reducers/pinned-nodes/remove-stale-pinned-nodes';
 import { loadPinnedNodes } from 'src/stores/document/reducers/pinned-nodes/load-pinned-nodes';
 import { refreshGroupParentIds } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
+import { loadDocumentFromJSON } from 'src/stores/document/reducers/load-document-from-file/load-document-from-json';
 
 const updateDocumentState = (
     state: DocumentState,
@@ -76,7 +77,14 @@ const updateDocumentState = (
         newActiveNodeId = mergeNode(state.document, action);
         affectedNodeId = action.payload.activeNodeId;
     } else if (action.type === 'DOCUMENT/LOAD_FILE') {
-        newActiveNodeId = loadDocumentFromFile(state, action);
+        if (action.payload.__test_document__) {
+            newActiveNodeId = loadDocumentFromJSON(
+                state,
+                action.payload.__test_document__,
+            );
+        } else {
+            newActiveNodeId = loadDocumentFromFile(state, action);
+        }
     } else if (action.type === 'RESET_STORE') {
         const newState = defaultDocumentState();
         state.document = newState.document;
