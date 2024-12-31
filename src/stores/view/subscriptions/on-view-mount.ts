@@ -18,6 +18,7 @@ import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variabl
 import { loadPinnedNodesToDocument } from 'src/stores/view/subscriptions/actions/load-pinned-nodes-to-document';
 import { attachCloseModalsListener } from 'src/stores/view/subscriptions/attach-close-modals-listener';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
+import { attachCheckboxListener } from 'src/stores/view/subscriptions/effects/checkbox-listener/attach-checkbox-listener';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -30,6 +31,7 @@ const applySettingsToView = (view: LineageView) => {
     applyCardsGap(view, state.view.cardsGap);
     if (!view.container) return;
     applyZoomLevel(view, state.view.zoomLevel);
+    attachCheckboxListener(view);
 };
 
 export const onViewMount = (view: LineageView) => {
