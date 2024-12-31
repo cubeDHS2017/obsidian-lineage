@@ -82,7 +82,11 @@
         : ''}
     class={clx(
         'lineage-card',
-        active ? activeStatusClasses[active] : ' inactive-node',
+        active
+            ? activeStatusClasses[active]
+            : singleColumnMode
+              ? ' active-sibling'
+              : ' inactive-node',
         confirmDelete
             ? 'node-border--delete'
             : confirmDisableEdit
@@ -110,7 +114,7 @@
             class="node-style-container"
         />
     {/if}
-<!--    <div class="debug-node-id">{nodeId}</div>-->
+    <!--    <div class="debug-node-id">{nodeId}</div>-->
 </div>
 
 <style>
@@ -159,7 +163,7 @@
         top: 0;
     }
 
-   /* .node-border--active,
+    /* .node-border--active,
     .node-border--discard,
     .node-border--delete,
     .node-border--selected,
@@ -169,12 +173,12 @@
         }
     }*/
 
-  /*  .node-border--editing {
+    /*  .node-border--editing {
         & .node-style-container {
             display: none;
         }
     }*/
-   /* .debug-node-id {
+    /* .debug-node-id {
         position: absolute;
         bottom: 0;
         right: 0;

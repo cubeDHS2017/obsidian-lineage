@@ -1,0 +1,56 @@
+import invariant from 'tiny-invariant';
+import { get } from 'svelte/store';
+import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
+import { getCombinedBoundingClientRect } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
+import { LineageView } from 'src/view/view';
+import { delay } from 'src/helpers/delay';
+
+export const fitBranchIntoView = async (view: LineageView) => {
+    invariant(view.container);
+    const initialZoomLevel = get(zoomLevelStore(view));
+    view.plugin.settings.dispatch({
+        type: 'UI/CHANGE_ZOOM_LEVEL',
+        payload: { value: 1 },
+    });
+
+    await delay(2);
+    let result = 1;
+
+    const parents = Array.from(
+        view.containerEl.querySelectorAll('.active-parent'),
+    ) as HTMLElement[];
+
+    const activeNode = view.containerEl.querySelector(
+        '.active-node',
+    ) as HTMLElement;
+    const children = Array.from(
+        view.containerEl.querySelectorAll('.active-child'),
+    ) as HTMLElement[];
+    const siblings = Array.from(
+        view.containerEl.querySelectorAll('.active-sibling'),
+    ) as HTMLElement[];
+
+    const combinedRect = getCombinedBoundingClientRect([
+        ...parents,
+        activeNode,
+        ...siblings,
+        ...children,
+    ]);
+
+    const heightScale =
+        view.container.getBoundingClientRect().height /
+        (combinedRect.height + 100);
+    const widthScale =
+        view.container.getBoundingClientRect().width /
+        (combinedRect.width + 100);
+
+    result = Math.min(heightScale, widthScale);
+
+    // restore zoom level
+    view.plugin.settings.dispatch({
+        type: 'UI/CHANGE_ZOOM_LEVEL',
+        payload: { value: initialZoomLevel },
+    });
+
+    return result;
+};
