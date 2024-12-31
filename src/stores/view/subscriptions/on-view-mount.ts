@@ -25,7 +25,7 @@ const applySettingsToView = (view: LineageView) => {
     applyContainerBg(view, state.view.theme.containerBg);
     applyActiveBranchBg(view, state.view.theme.activeBranchBg);
     applyCardWidth(view, state.view.cardWidth);
-    applyCardIndentationWidth(view, state.view.cardWidth);
+    applyCardIndentationWidth(view, state.view.nodeIndentationWidth);
     applyColumnsGap(view, state.view.columnsGap);
     applyCardsGap(view, state.view.cardsGap);
     if (!view.container) return;
