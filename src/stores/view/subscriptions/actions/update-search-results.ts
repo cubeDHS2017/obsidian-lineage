@@ -25,13 +25,21 @@ export const updateSearchResults = (view: LineageView) => {
 
     const query = viewState.search.query;
     if (!query) return;
-    const results = view.documentSearch.search(query);
+    const search = view.documentSearch.search(query);
+    const results = search.map((r) => r.item.id);
     view.viewStore.dispatch({
         type: 'SEARCH/SET_RESULTS',
         payload: {
-            results: results.map((r) => r.item.id),
+            results: results,
         },
     });
-
-    updateActiveNodeAfterSearch(view, results);
+    // needed in cases where the structure of the document is updated while showing search results (dnd/moving branches)
+    // in these cases, unless search results have changed, active node should be maintained
+    const newSearchResults = Array.from(results).sort().join('');
+    const previousSearchResults = Array.from(viewState.search.results)
+        .sort()
+        .join('');
+    if (previousSearchResults !== newSearchResults) {
+        updateActiveNodeAfterSearch(view, search);
+    }
 };
