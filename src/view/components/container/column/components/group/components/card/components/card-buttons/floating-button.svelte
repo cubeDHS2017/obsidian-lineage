@@ -50,14 +50,7 @@
     .is-disabled {
         cursor: not-allowed;
     }
-    button:not(.is-disabled):hover {
-        opacity: 0.8 !important;
-    }
-     :global(.is-mobile){
-        & button {
-            opacity: 0.8 !important;
-        }
-    }
+
 
     .position-top {
         /*top: calc((-1 * var(--height)) / 2);*/

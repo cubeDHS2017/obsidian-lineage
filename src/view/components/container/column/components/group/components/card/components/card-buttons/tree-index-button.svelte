@@ -82,14 +82,8 @@
         opacity: 0.6;
     }
 
-    .tree-index:hover {
-        opacity: 0.8;
-    }
-    :global(.is-mobile){
-        & .tree-index {
-            opacity: 0.8;
-        }
-    }
+
+
 
     .has-children {
         font-style: italic;

@@ -23,6 +23,8 @@
     import { MatchingStyleRulesStore } from 'src/stores/view/derived/style-rules';
     import { onMount } from 'svelte';
     import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+    import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
+    import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
 
     export let singleColumnMode: boolean;
 
@@ -45,6 +47,7 @@
     const groupParentIds = GroupParentIdsStore(view);
     const pinnedNodesArray = PinnedNodesStore(view);
     $: pinnedNodes = new Set($pinnedNodesArray);
+    const zoom = zoomLevelStore(view);
 
     const applyGap = ApplyGapBetweenCardsStore(view);
     const pendingConfirmation = PendingConfirmationStore(view);
@@ -61,6 +64,7 @@
     onMount(() => {
         view.container = containerRef;
         alignBranch(view, { type: 'view/life-cycle/mount' });
+        focusContainer(view);
     });
 </script>
 
@@ -74,6 +78,7 @@
     tabindex="0"
     on:click={saveActiveNodeOnClick}
     use:scrollOnDndX
+    data-zoom-out-enabled={$zoom < 1 ? true : false}
 >
     <div class="columns">
         <ColumnsBuffer />
@@ -180,7 +185,7 @@
         --group-gap: var(--node-gap-setting);
 
         & .active-parent-bridge-right {
-          display: none;
+            display: none;
         }
 
         & .active-parent-bridge-left {
@@ -190,7 +195,7 @@
             display: none;
         }
 
-       & .active-node {
+        & .active-node {
             outline: 8px solid var(--background-active-parent) !important;
         }
     }
