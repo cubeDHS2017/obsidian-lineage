@@ -3,7 +3,6 @@ import { get } from 'svelte/store';
 import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
 import { getCombinedBoundingClientRect } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
 import { LineageView } from 'src/view/view';
-import { delay } from 'src/helpers/delay';
 
 export const fitDocumentHeightIntoView = async (view: LineageView) => {
     invariant(view.container);
@@ -12,7 +11,6 @@ export const fitDocumentHeightIntoView = async (view: LineageView) => {
         type: 'UI/CHANGE_ZOOM_LEVEL',
         payload: { value: 1 },
     });
-    await delay(2);
     const columns = Array.from(
         view.containerEl.querySelectorAll('.column'),
     ) as HTMLElement[];

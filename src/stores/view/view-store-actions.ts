@@ -21,7 +21,8 @@ export type ViewStoreAction =
     | NodeSelectionAction
     | NodeHistoryNavigationAction
     | SidebarActions
-    | StyleRulesViewActions;
+    | StyleRulesViewActions
+    | KeyboardEventAction;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -127,3 +128,11 @@ export type UpdateStyleRulesResultAction = {
         rules: Map<string, NodeStyle>;
     };
 };
+
+export type KeyboardEventAction =
+    | {
+          type: 'view/keyboard/shift/down';
+      }
+    | {
+          type: 'view/keyboard/shift/up';
+      };

@@ -58,6 +58,9 @@ export type ViewState = {
     styleRules: {
         rules: Map<string, NodeStyle>;
     };
+    keyboard: {
+        shift: boolean;
+    };
 };
 
 export type NodeStyle = {

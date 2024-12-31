@@ -3,6 +3,8 @@ import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
 import { Menu } from 'obsidian';
 import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
 import { LineageView } from 'src/view/view';
+import { fitDocumentHeightIntoView } from 'src/view/components/container/controls-bar/components/helpers/fit-document-height-into-view';
+import { fitBranchIntoView } from 'src/view/components/container/controls-bar/components/helpers/fit-branch-into-view';
 
 type State = {
     menuHeight: number;
@@ -10,15 +12,18 @@ type State = {
     lastMenuHideEvent_ms: number;
 };
 
+type DynamicZoomValue = (view: LineageView) => Promise<number>;
+
 type Props = {
     event: MouseEvent;
     view: LineageView;
-    fitDocumentScale: number;
-    fitBranchScale: number;
     state: State;
 };
 
-type ZoomOption = { label: string; scale: number };
+type ZoomOption = {
+    label: string;
+    scale: number | DynamicZoomValue;
+};
 
 const staticZoomOptions: ZoomOption[] = [
     { label: '5%', scale: 0.05 },
@@ -38,27 +43,37 @@ const staticZoomOptions: ZoomOption[] = [
     { label: '200%', scale: 2.0 },
 ];
 
+const dynamicZoomOptions = [
+    {
+        label: 'Fit document height into view',
+        scale: fitDocumentHeightIntoView,
+    },
+    {
+        label: 'Fit active branch into view',
+        scale: fitBranchIntoView,
+    },
+];
+
 export const createZoomMenu = (props: Props) => {
     let lastClickedZoom = get(zoomLevelStore(props.view));
 
-    const zoomGroups: ZoomOption[][] = [
-        [
-            {
-                label: 'Fit document height into view',
-                scale: props.fitDocumentScale,
-            },
-            {
-                label: 'Fit active branch into view',
-                scale: props.fitBranchScale,
-            },
-        ],
-        staticZoomOptions,
-    ];
+    const zoomGroups: ZoomOption[][] = [dynamicZoomOptions, staticZoomOptions];
 
-    const apply = (zoom: ZoomOption) => {
+    const apply = async (zoom: ZoomOption, isClick: boolean) => {
+        const newValue =
+            typeof zoom.scale === 'number'
+                ? zoom.scale
+                : await zoom.scale(props.view);
+        if (isClick) {
+            lastClickedZoom = newValue;
+        } else {
+            hoverZoom = newValue;
+        }
         props.view.plugin.settings.dispatch({
             type: 'UI/CHANGE_ZOOM_LEVEL',
-            payload: { value: zoom.scale },
+            payload: {
+                value: newValue,
+            },
         });
     };
     const menu = new Menu();
@@ -73,8 +88,7 @@ export const createZoomMenu = (props: Props) => {
                 item.setTitle(zoom.label)
                     .setChecked(zoom.scale === lastClickedZoom)
                     .onClick(() => {
-                        lastClickedZoom = zoom.scale;
-                        apply(zoom);
+                        apply(zoom, true);
                         menu.hide();
                         createZoomMenu(props);
                     });
@@ -83,8 +97,7 @@ export const createZoomMenu = (props: Props) => {
                 const dom = item.dom as HTMLElement | null;
                 if (dom) {
                     dom.addEventListener('mouseenter', () => {
-                        hoverZoom = zoom.scale;
-                        apply(zoom);
+                        apply(zoom, false);
                     });
                 }
             });

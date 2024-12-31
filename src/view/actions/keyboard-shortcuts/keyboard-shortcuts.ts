@@ -16,8 +16,6 @@ export const keyboardShortcuts = (
         view: LineageView;
     },
 ) => {
-    const event = 'keydown';
-
     const unsubscribeFromHotkeyStore = hotkeyStore.subscribe(
         (state, action, initialRun) => {
             if (
@@ -28,6 +26,10 @@ export const keyboardShortcuts = (
                 updateCommandsDictionary(state.hotkeys);
         },
     );
+
+    const state = {
+        shift: false,
+    };
     const keyboardEventHandler = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             const contain = handleEscapeKey(view);
@@ -44,14 +46,34 @@ export const keyboardShortcuts = (
                 }
             }
         }
+        if (event.shiftKey !== state.shift) {
+            state.shift = event.shiftKey;
+            view.viewStore.dispatch({
+                type: event.shiftKey
+                    ? 'view/keyboard/shift/down'
+                    : 'view/keyboard/shift/up',
+            });
+        }
     };
 
-    target.addEventListener(event, keyboardEventHandler);
+    const onKeyup = (event: KeyboardEvent) => {
+        if (event.shiftKey !== state.shift) {
+            state.shift = event.shiftKey;
+            view.viewStore.dispatch({
+                type: event.shiftKey
+                    ? 'view/keyboard/shift/down'
+                    : 'view/keyboard/shift/up',
+            });
+        }
+    };
+    target.addEventListener('keydown', keyboardEventHandler);
+    target.addEventListener('keyup', onKeyup);
 
     return {
         destroy: () => {
             unsubscribeFromHotkeyStore();
-            target.removeEventListener(event, keyboardEventHandler);
+            target.removeEventListener('keydown', keyboardEventHandler);
+            target.removeEventListener('keyup', onKeyup);
         },
     };
 };

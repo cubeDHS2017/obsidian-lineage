@@ -59,6 +59,9 @@ export const defaultViewState = (): ViewState => ({
     styleRules: {
         rules: new Map(),
     },
+    keyboard: {
+        shift: false,
+    },
 });
 export type ActiveBranch = {
     childGroups: Set<string>;

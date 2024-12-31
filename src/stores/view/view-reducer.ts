@@ -144,6 +144,12 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         };
     } else if (action.type === 'view/style-rules/update-results') {
         state.styleRules.rules = action.payload.rules;
+    } else if (action.type === 'view/keyboard/shift/up') {
+        state.keyboard.shift = false;
+        state.keyboard = { ...state.keyboard };
+    } else if (action.type === 'view/keyboard/shift/down') {
+        state.keyboard.shift = true;
+        state.keyboard = { ...state.keyboard };
     }
 };
 export const viewReducer = (

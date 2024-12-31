@@ -1,20 +1,17 @@
 <script lang="ts">
-    import { Minus as ZoomOut, Plus as ZoomIn, RotateCcw, ScanSearch } from 'lucide-svelte';
+    import { Minus as ZoomOut, Plus as ZoomIn, RotateCcw, RotateCw, ScanSearch } from 'lucide-svelte';
     import { getView } from '../../context';
     import Button from '../../shared/button.svelte';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { maxZoomLevel, minZoomLevel } from 'src/stores/settings/reducers/change-zoom-level';
-    import {
-        fitDocumentHeightIntoView
-    } from 'src/view/components/container/controls-bar/components/helpers/fit-document-height-into-view';
-    import {
-        fitBranchIntoView
-    } from 'src/view/components/container/controls-bar/components/helpers/fit-branch-into-view';
     import { createZoomMenu } from 'src/view/components/container/controls-bar/components/helpers/create-zoom-menu';
+    import { get } from 'svelte/store';
+    import { KeyboardStore } from 'src/stores/view/derived/keyboard-store';
 
     export let showControls: boolean;
 
     const view = getView();
+    const keyboardStore = KeyboardStore(view);
 
     const zoomIn = () => {
         view.plugin.settings.dispatch({
@@ -29,16 +26,26 @@
         });
     };
 
+    let zoomValueBeforeReset = -1;
     const restoreZoom = () => {
-        view.plugin.settings.dispatch({
-            type: 'UI/CHANGE_ZOOM_LEVEL',
-            payload: { value: 1 },
-        });
+        if (zoomValueBeforeReset === -1) {
+            zoomValueBeforeReset = get(zoomLevelStore(view));
+            view.plugin.settings.dispatch({
+                type: 'UI/CHANGE_ZOOM_LEVEL',
+                payload: { value: 1 },
+            });
+        } else {
+            view.plugin.settings.dispatch({
+                type: 'UI/CHANGE_ZOOM_LEVEL',
+                payload: { value: zoomValueBeforeReset },
+            });
+            zoomValueBeforeReset = -1;
+        }
     };
 
     const zoomLevel = zoomLevelStore(view);
 
-    const state = {
+    const zoomMenuState = {
         menuHeight: 0,
         menuWidth: 0,
         lastMenuHideEvent_ms: 0,
@@ -46,14 +53,12 @@
 
     const showZoomPopupMenu = async (event: MouseEvent) => {
         // to prevent the click event from hiding and re-showing the menu immediately
-        if (Date.now() - state.lastMenuHideEvent_ms < 100) return;
+        if (Date.now() - zoomMenuState.lastMenuHideEvent_ms < 100) return;
 
         createZoomMenu({
             event: event,
             view,
-            fitDocumentScale:await fitDocumentHeightIntoView(view),
-            fitBranchScale: await fitBranchIntoView(view),
-            state,
+            state: zoomMenuState,
         });
     };
 </script>
@@ -70,13 +75,21 @@
     </Button>
     <Button
         classes="control-item"
-        disabled={$zoomLevel === 1}
-        label="Restore zoom level"
-        active={$zoomLevel !== 1}
+        disabled={$keyboardStore.shift
+            ? zoomValueBeforeReset === -1
+            : $zoomLevel === 1}
+        label={'Reset zoom (hold shift to undo)'}
+        active={$keyboardStore.shift
+            ? zoomValueBeforeReset !== -1
+            : $zoomLevel !== 1}
         on:click={restoreZoom}
         tooltipPosition="left"
     >
-        <RotateCcw class="svg-icon" />
+        {#if $keyboardStore.shift}
+            <RotateCw class="svg-icon" />
+        {:else}
+            <RotateCcw class="svg-icon" />
+        {/if}
     </Button>
 
     <Button

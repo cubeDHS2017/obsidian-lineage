@@ -3,7 +3,6 @@ import { get } from 'svelte/store';
 import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
 import { getCombinedBoundingClientRect } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-combined-client-rect';
 import { LineageView } from 'src/view/view';
-import { delay } from 'src/helpers/delay';
 
 export const fitBranchIntoView = async (view: LineageView) => {
     invariant(view.container);
@@ -13,7 +12,6 @@ export const fitBranchIntoView = async (view: LineageView) => {
         payload: { value: 1 },
     });
 
-    await delay(2);
     let result = 1;
 
     const parents = Array.from(
