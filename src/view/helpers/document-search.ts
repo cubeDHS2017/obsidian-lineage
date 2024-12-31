@@ -4,6 +4,7 @@ import { LineageView } from 'src/view/view';
 export class DocumentSearch {
     constructor(private view: LineageView) {}
     private fuse: Fuse<{ id: string; content: string }> | null;
+    #searchTriggeredMinimap: boolean;
 
     private updateIndex = () => {
         const documentState = this.view.documentStore.getValue();
@@ -37,4 +38,11 @@ export class DocumentSearch {
         }
         return this.fuse!.search(query);
     };
+
+    get searchTriggeredMinimap() {
+        return this.#searchTriggeredMinimap;
+    }
+    set searchTriggeredMinimap(value: boolean) {
+        this.#searchTriggeredMinimap = value;
+    }
 }
