@@ -50,7 +50,7 @@
     const pendingConfirmation = PendingConfirmationStore(view);
     const saveActiveNodeOnClick = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
-        if (!target.closest('.active-node')) {
+        if (!target.closest('.lng-prev')) {
             const editingState = view.viewStore.getValue().document.editing;
             if (editingState.activeNodeId && !editingState.isInSidebar) {
                 saveNodeContent(view);

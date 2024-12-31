@@ -152,6 +152,10 @@ export type SettingsActions =
           payload: {
               width: number;
           };
+      }
+    | {
+          type: 'settings/view/set-maintain-edit-mode';
+          payload: { maintain: boolean };
       };
 
 export type PersistActiveNodeAction = {
@@ -279,6 +283,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         }
     } else if (action.type === 'settings/view/set-node-indentation-width') {
         store.view.nodeIndentationWidth = action.payload.width;
+    } else if (action.type === 'settings/view/set-maintain-edit-mode') {
+        store.view.maintainEditMode = action.payload.maintain;
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

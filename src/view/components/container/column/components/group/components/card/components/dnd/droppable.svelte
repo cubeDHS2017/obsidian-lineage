@@ -7,6 +7,7 @@
     import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
     import { setActiveSidebarNode } from 'src/stores/view/subscriptions/actions/set-active-sidebar-node';
     import { NodeStyle } from 'src/stores/view/view-state-type';
+    import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 
     export let nodeId: string;
     export let active: ActiveStatus | null;
@@ -41,8 +42,7 @@
         }
     };
 
-    const enableEditMode = (e: MouseEvent) => {
-        setActive(e);
+    const enableEditMode = () => {
         const editingState = viewStore.getValue().document.editing;
         const editedNodeId = editingState.activeNodeId;
         if (editedNodeId === nodeId) return;
@@ -74,6 +74,20 @@
 
     let depth = 0;
     $: depth = section ? section.split('.').length - 1 : 0;
+
+    const handleClick = (e: MouseEvent) => {
+        const wasEditing = isEditing(view);
+        setActive(e);
+        const maintainEditMode =
+            view.plugin.settings.getValue().view.maintainEditMode;
+        if (wasEditing && maintainEditMode) {
+            enableEditMode();
+        }
+    };
+    const handleDoubleClick = (e: MouseEvent) => {
+        setActive(e);
+        enableEditMode();
+    };
 </script>
 
 <div
@@ -102,8 +116,8 @@
                       : undefined,
     )}
     id={nodeId}
-    on:click={setActive}
-    on:dblclick={enableEditMode}
+    on:click={handleClick}
+    on:dblclick={handleDoubleClick}
     use:droppable={{ viewStore, documentStore }}
 >
     <slot />

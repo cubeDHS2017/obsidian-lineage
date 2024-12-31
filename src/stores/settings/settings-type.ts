@@ -57,6 +57,7 @@ export type Settings = {
         applyGapBetweenCards: boolean;
         singleColumnMode: boolean;
         nodeIndentationWidth: number;
+        maintainEditMode: boolean;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

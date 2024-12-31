@@ -9,21 +9,26 @@ import { DefaultDocumentFormat } from 'src/view/actions/settings/components/defa
 import { ColumnsGap } from 'src/view/actions/settings/components/columns-gap';
 import { CardsGap } from 'src/view/actions/settings/components/cards-gap';
 import { CardIndentationWidth } from 'src/view/actions/settings/components/card-indentation-width';
+import { MaintainEditMode } from 'src/view/actions/settings/components/maintain-edit-mode';
+import { Setting } from 'obsidian';
 
 export const renderSettings = (element: HTMLElement) => {
     const view = getView();
     const settingsStore = view.plugin.settings;
     const render = () => {
         DefaultDocumentFormat(element, settingsStore);
+        MaintainEditMode(element, settingsStore);
+        ScrollingBehavior(element, settingsStore);
+        new Setting(element).setHeading().setName('Appearance');
         BackgroundColor(element, settingsStore);
         ActiveBranchColor(element, settingsStore);
         FontSize(element, settingsStore);
+        new Setting(element).setHeading().setName('Layout');
         CardWidth(element, settingsStore);
         ColumnsGap(element, settingsStore);
         CardsGap(element, settingsStore);
         CardIndentationWidth(element, settingsStore);
         LimitCardHeight(element, settingsStore);
-        ScrollingBehavior(element, settingsStore);
     };
     render();
     return {

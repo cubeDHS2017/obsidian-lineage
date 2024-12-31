@@ -28,6 +28,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         applyGapBetweenCards: false,
         singleColumnMode: false,
         nodeIndentationWidth: DEFAULT_INDENTATION_WIDTH,
+        maintainEditMode: false,
     },
     general: {
         defaultDocumentFormat: 'sections',
