@@ -6,7 +6,7 @@
     import {
         createOnCanvasMousemove
     } from 'src/view/components/container/minimap/event-handlers/create-on-canvas-mousemove';
-    import { onDestroy, onMount } from 'svelte';
+    import { onMount } from 'svelte';
     import { OnError, Store } from 'src/lib/store/store';
     import { defaultMinimapState } from 'src/stores/minimap/default-minimap-state';
     import { minimapReducer } from 'src/stores/minimap/minimap-reducer';
@@ -24,25 +24,21 @@
     const onWheel = (e: WheelEvent) => onCanvasWheel(e, view);
     const onMousemove = createOnCanvasMousemove(view);
 
-
-    let unloadMinimap: () => void;
     onMount(() => {
-        view.contentEl.addClass('lineage-view__content-el--minimap-on');
-        unloadMinimap = minimapSubscriptions(view);
-    });
-    onDestroy(() => {
-        view.contentEl.removeClass('lineage-view__content-el--minimap-on');
-        unloadMinimap();
+        let unsub: (() => void) | null = null;
+        setTimeout(() => {
+            unsub = minimapSubscriptions(view);
+        }, 300);
+
+
+        return () => {
+            if (unsub) unsub();
+        };
     });
 </script>
 
-<div class="minimap-container"  on:wheel={onWheel}>
-    <div
-        class="canvas-container"
-        on:click={onClick}
-
-        on:mousemove={onMousemove}
-    >
+<div class="minimap-container" on:wheel={onWheel}>
+    <div class="canvas-container" on:click={onClick} on:mousemove={onMousemove}>
         <Indicators />
         <canvas id="minimap"></canvas>
     </div>

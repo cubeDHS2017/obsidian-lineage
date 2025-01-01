@@ -13,7 +13,7 @@
     import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
-    import Minimap from './minimap/minimap.svelte';
+    import RightSidebar from './right-sidebar/right-sidebar.svelte';
     import { dragToPan } from 'src/view/actions/drag-to-pan/drag-to-pan';
     import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
@@ -52,9 +52,7 @@
         {/if}
 
     </div>
-    {#if $showMinimap}
-        <Minimap />
-    {/if}
+    <RightSidebar />
 </div>
 
 <style>
