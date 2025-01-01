@@ -26,6 +26,7 @@
     export let firstColumn: boolean;
     export let styleRules: Map<string, NodeStyle>;
     export let singleColumnMode: boolean;
+    export let allDndNodes: Set<string>;
     const view = getView();
     const nodes = singleColumnMode
         ? singleColumnNodesStore(view,)
@@ -44,7 +45,7 @@
         id={'group-' + groupId}
     >
         {#each $nodes as node (node)}
-            {#if searchQuery.length === 0 || showAllNodes || (!searching && searchResults.has(node))}
+            {#if (searchQuery.length === 0 || showAllNodes || (!searching && searchResults.has(node))) && !(allDndNodes.has(node) )}
                 <Node
                     {node}
                     active={node === activeNode

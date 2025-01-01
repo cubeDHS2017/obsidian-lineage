@@ -25,6 +25,7 @@
     import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
+    import { getAllChildren } from 'src/lib/tree-utils/get/get-all-children';
 
     export let singleColumnMode: boolean;
 
@@ -48,16 +49,30 @@
     const pinnedNodesArray = PinnedNodesStore(view);
     $: pinnedNodes = new Set($pinnedNodesArray);
     const zoom = zoomLevelStore(view);
+    let allDndNodes: Set<string> = new Set();
+    $: {
+        if (singleColumnMode && $dnd.node) {
+            allDndNodes = new Set(
+                getAllChildren(
+                    view.documentStore.getValue().document.columns,
+                    $dnd.node,
+                ),
+            );
+        } else {
+            allDndNodes = new Set();
+        }
+    }
 
     const applyGap = ApplyGapBetweenCardsStore(view);
     const pendingConfirmation = PendingConfirmationStore(view);
     const saveActiveNodeOnClick = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
-        if (!target.closest('.lng-prev')) {
-            const editingState = view.viewStore.getValue().document.editing;
-            if (editingState.activeNodeId && !editingState.isInSidebar) {
-                saveNodeContent(view);
-            }
+        if (target.closest('.lng-prev') || target.closest('.active-node')) {
+            return;
+        }
+        const editingState = view.viewStore.getValue().document.editing;
+        if (editingState.activeNodeId && !editingState.isInSidebar) {
+            saveNodeContent(view);
         }
     };
     let containerRef: HTMLElement | null = null;
@@ -78,7 +93,7 @@
     tabindex="0"
     on:click={saveActiveNodeOnClick}
     use:scrollOnDndX
-    data-zoom-out-enabled={$zoom < 1 ? true : false}
+    data-zoom-in-enabled={$zoom < 1 ? true : false}
 >
     <div class="columns">
         <ColumnsBuffer />
@@ -104,6 +119,7 @@
                 firstColumn={i === 0}
                 styleRules={$styleRules}
                 {singleColumnMode}
+                {allDndNodes}
             />
         {/each}
         <ColumnsBuffer />

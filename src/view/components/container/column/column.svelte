@@ -19,6 +19,7 @@
     export let searchQuery: string;
     export let searchResults: Set<string>;
     export let pinnedNodes: Set<string>;
+    export let allDndNodes: Set<string>;
     export let groupParentIds: Set<string>;
     export let searching: boolean;
     export let idSection: Record<string, string>;
@@ -55,6 +56,7 @@
                 {pendingConfirmation}
                 {styleRules}
                 {singleColumnMode}
+                {allDndNodes}
             />
         {/if}
     {/each}
