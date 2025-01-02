@@ -8,20 +8,7 @@ export const loadInlineEditor = (
     view.inlineEditor.loadNode(target, nodeId);
     return {
         destroy: () => {
-            if (view.inlineEditor.activeNode === nodeId) {
-                const viewState = view.viewStore.getValue();
-                view.documentStore.dispatch({
-                    type: 'DOCUMENT/SET_NODE_CONTENT',
-                    payload: {
-                        nodeId,
-                        content: view.inlineEditor.getContent(),
-                    },
-                    context: {
-                        isInSidebar: viewState.document.editing.isInSidebar,
-                    },
-                });
-                view.inlineEditor.unloadNode();
-            }
+            view.inlineEditor.unloadNode(nodeId);
         },
     };
 };

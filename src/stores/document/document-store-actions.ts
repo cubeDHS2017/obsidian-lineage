@@ -10,7 +10,7 @@ import { MoveNodeAction } from 'src/stores/document/reducers/move-node/move-node
 import { MergeNodeAction } from 'src/stores/document/reducers/merge-node/merge-node';
 import { FormatHeadingsAction } from 'src/stores/document/reducers/content/format-content/format-headings';
 import { PasteNodeAction } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
-import { ExtractNodeAction } from 'src/stores/document/reducers/extract-node/extract-node';
+import { ExtractNodeAction } from 'src/stores/document/reducers/extract-node/remove-extracted-branch';
 import { SplitNodeAction } from 'src/stores/document/reducers/split-node/split-node';
 import { PinNodeAction } from 'src/stores/document/reducers/pinned-nodes/pin-node';
 import { UnpinNodeAction } from 'src/stores/document/reducers/pinned-nodes/unpin-node';

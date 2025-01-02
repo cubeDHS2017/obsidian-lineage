@@ -25,7 +25,7 @@ import { formatHeadings } from 'src/stores/document/reducers/content/format-cont
 import { pasteNode } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
 import { updateSectionsDictionary } from 'src/stores/document/reducers/state/update-sections-dictionary';
 import { getIdOfSection } from 'src/stores/view/subscriptions/helpers/get-id-of-section';
-import { extractNode } from 'src/stores/document/reducers/extract-node/extract-node';
+import { removeExtractedBranch } from 'src/stores/document/reducers/extract-node/remove-extracted-branch';
 import { getSectionOfId } from 'src/stores/view/subscriptions/helpers/get-section-of-id';
 import { splitNode } from 'src/stores/document/reducers/split-node/split-node';
 import { pinNode } from 'src/stores/document/reducers/pinned-nodes/pin-node';
@@ -43,7 +43,8 @@ const updateDocumentState = (
     let affectedNodeId: null | string = null;
     let affectedNodeContent: Content[string] | null = null;
     if (action.type === 'DOCUMENT/SET_NODE_CONTENT') {
-        setNodeContent(state.document.content, action);
+        const success = setNodeContent(state.document.content, action);
+        if (!success) return;
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/INSERT_NODE') {
         newActiveNodeId = insertNode(state.document, action);
@@ -58,7 +59,14 @@ const updateDocumentState = (
         affectedNodeId = action.payload.activeNodeId;
     } else if (action.type === 'DOCUMENT/EXTRACT_BRANCH') {
         affectedNodeContent = state.document.content[action.payload.nodeId];
-        extractNode(state.document, action);
+        const success = setNodeContent(state.document.content, {
+            payload: {
+                nodeId: action.payload.nodeId,
+                content: `[[${action.payload.documentName}]]`,
+            },
+        });
+        if (!success) return;
+        removeExtractedBranch(state.document, action);
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/SPLIT_NODE') {
         affectedNodeId = action.payload.target;

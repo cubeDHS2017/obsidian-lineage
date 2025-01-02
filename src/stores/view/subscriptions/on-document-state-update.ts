@@ -4,7 +4,6 @@ import {
     DocumentEventType,
     getDocumentEventType,
 } from 'src/stores/view/helpers/get-document-event-type';
-import { unloadInlineEditor } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
 import { setActiveNode } from 'src/stores/view/subscriptions/actions/set-active-node';
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { clearSelectedNodes } from 'src/stores/view/subscriptions/actions/clear-selected-nodes';
@@ -34,7 +33,7 @@ export const onDocumentStateUpdate = (
     if (type === 'DOCUMENT/LOAD_FILE') {
         // needed when the file was modified externally
         // to prevent saving a node with an obsolete node-id
-        unloadInlineEditor(view);
+        view.inlineEditor.unloadNode();
     }
 
     const structuralChange =

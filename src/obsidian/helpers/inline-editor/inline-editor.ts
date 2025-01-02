@@ -1,8 +1,11 @@
 import { EditorPosition, MarkdownView, TFile } from 'obsidian';
 import { LineageView } from 'src/view/view';
 import { AdjustHeight } from 'src/view/actions/inline-editor/expandable-textarea-action';
-import { vimEnterInsertMode } from 'src/obsidian/helpers/vim-enter-insert-mode';
-import { fixVimCursorWhenZooming } from 'src/obsidian/helpers/fix-vim-cursor-when-zooming';
+import { vimEnterInsertMode } from 'src/obsidian/helpers/inline-editor/helpers/vim-enter-insert-mode';
+import { fixVimCursorWhenZooming } from 'src/obsidian/helpers/inline-editor/helpers/fix-vim-cursor-when-zooming';
+import { lockFile } from 'src/obsidian/helpers/inline-editor/helpers/lock-file';
+import { unlockFile } from 'src/obsidian/helpers/inline-editor/helpers/unlock-file';
+import { saveNodeContent } from 'src/obsidian/helpers/inline-editor/helpers/save-node-content';
 
 const noop = async () => {};
 
@@ -12,17 +15,21 @@ export type InlineMarkdownView = MarkdownView & {
 export class InlineEditor {
     private inlineView: InlineMarkdownView;
     private containerEl: HTMLElement;
-    private nodeId: string | null = null;
+    #nodeId: string | null = null;
     target: HTMLElement | null = null;
     private appliedExternalCursor: EditorPosition | null = null;
     private onChangeSubscriptions: Set<() => void> = new Set();
     #mounting: Promise<void> = Promise.resolve();
     private subscriptions: Set<() => void> = new Set();
+    private cursorPositions: Map<string, EditorPosition> = new Map();
 
     constructor(private view: LineageView) {}
 
-    get activeNode() {
-        return this.nodeId;
+    get nodeId() {
+        return this.#nodeId;
+    }
+    set nodeId(value: string | null) {
+        this.#nodeId = value;
     }
 
     get mounting() {
@@ -38,7 +45,7 @@ export class InlineEditor {
     }
 
     overrideCursor(cursor: EditorPosition) {
-        if (this.activeNode) this.setCursor(cursor.line, cursor.ch);
+        if (this.nodeId) this.setCursor(cursor);
         else this.appliedExternalCursor = cursor;
     }
 
@@ -48,6 +55,9 @@ export class InlineEditor {
 
     loadNode(target: HTMLElement, nodeId: string) {
         if (!this.view.file) return;
+        if (this.nodeId) {
+            this.unloadNode();
+        }
         let resolve = () => {};
         this.#mounting = new Promise((_resolve) => {
             resolve = _resolve;
@@ -55,46 +65,60 @@ export class InlineEditor {
 
         const content =
             this.view.documentStore.getValue().document.content[nodeId]
-                ?.content || '';
+                ?.content;
         this.setContent(content);
 
-        if (this.appliedExternalCursor) {
-            this.setCursor(
-                this.appliedExternalCursor.line,
-                this.appliedExternalCursor.ch,
-            );
-            this.appliedExternalCursor = null;
-        } else {
-            this.setCursor(
-                this.inlineView.editor.lastLine(),
-                this.inlineView.editor.getLine(
-                    this.inlineView.editor.lastLine(),
-                ).length,
-            );
-        }
         target.append(this.containerEl);
         this.focus();
         AdjustHeight(target)();
-        this.nodeId = nodeId;
         this.target = target;
         if (!content) {
             vimEnterInsertMode(this.view.plugin, this.inlineView);
         }
         this.target.addEventListener('focusin', this.setActiveEditor);
         this.setActiveEditor();
-        setTimeout(() => resolve(), Math.max(16, content.length / 60));
+
+        this.nodeId = nodeId;
+        this.restoreCursor();
         this.lockFile();
         const unsub = fixVimCursorWhenZooming(this.view);
         if (unsub) {
             this.subscriptions.add(unsub);
         }
+        setTimeout(() => resolve(), Math.max(16, content.length / 60));
     }
 
     focus = () => {
         this.inlineView.editor.focus();
     };
 
-    unloadNode() {
+    restoreCursor = () => {
+        if (this.appliedExternalCursor) {
+            this.setCursor(this.appliedExternalCursor);
+            this.appliedExternalCursor = null;
+        } else {
+            const existingCursor = this.cursorPositions.get(this.nodeId!);
+            if (existingCursor) {
+                this.setCursor(existingCursor);
+            } else {
+                const lastLine = this.inlineView.editor.lastLine();
+                const ch = this.inlineView.editor.getLine(lastLine).length;
+                this.setCursor({
+                    line: lastLine,
+                    ch: ch,
+                });
+            }
+        }
+    };
+
+    unloadNode(nodeId?: string) {
+        const currentNodeId = this.nodeId;
+        if (nodeId && nodeId !== currentNodeId) return;
+        if (currentNodeId) {
+            this.saveContent();
+            const cursor = this.getCursor();
+            this.cursorPositions.set(currentNodeId, cursor);
+        }
         this.nodeId = null;
         if (this.target) {
             this.view.plugin.app.workspace.activeEditor = null;
@@ -111,11 +135,9 @@ export class InlineEditor {
 
     async onload() {
         const workspace = this.view.plugin.app.workspace;
-        // @ts-ignore
 
         this.containerEl = document.createElement('div');
         this.containerEl.addClasses(['lineage-inline-editor']);
-        // help: how to instantiate a MarkdownView?
         this.inlineView = new MarkdownView({
             containerEl: this.containerEl,
             app: this.view.plugin.app,
@@ -167,36 +189,23 @@ export class InlineEditor {
             }
     };
 
-    private setCursor(line: number, ch: number) {
-        this.inlineView.editor.setCursor(line, ch);
+    private setCursor(cursor: EditorPosition) {
+        this.inlineView.editor.setCursor(cursor);
     }
 
     /* prevents obsidian from replacing file.data with card.data when the card editor and file editor share the same file*/
     private lockFile() {
-        this.view.plugin.app.workspace.iterateAllLeaves((e) => {
-            const view = e.view;
-            if (view instanceof MarkdownView) {
-                if (view.file === this.view.file) {
-                    // @ts-ignore
-                    view.__setViewData__ = view.setViewData;
-                    view.setViewData = noop;
-                }
-            }
-        });
+        lockFile(this.view);
     }
 
     private unlockFile() {
-        this.view.plugin.app.workspace.iterateAllLeaves((e) => {
-            const view = e.view;
-            if (view instanceof MarkdownView) {
-                if (view.file === this.view.file) {
-                    if ('__setViewData__' in view) {
-                        // @ts-ignore
-                        view.setViewData = view.__setViewData__;
-                        delete view.__setViewData__;
-                    }
-                }
-            }
-        });
+        unlockFile(this.view);
     }
+
+    private saveContent = () => {
+        const nodeId = this.nodeId;
+        if (!nodeId) return;
+        const content = this.getContent();
+        saveNodeContent(this.view, nodeId, content);
+    };
 }

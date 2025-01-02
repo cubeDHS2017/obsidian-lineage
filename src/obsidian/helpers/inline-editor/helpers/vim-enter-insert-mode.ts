@@ -8,7 +8,7 @@ export const vimEnterInsertMode = (plugin: Lineage, view: MarkdownView) => {
     if (config?.vimMode) {
         try {
             // @ts-ignore
-            window.CodeMirrorAdapter?.Vim.enterInsertMode(
+            activeWindow.CodeMirrorAdapter?.Vim.enterInsertMode(
                 // @ts-ignore
                 view.editMode?.editor?.cm?.cm,
             );

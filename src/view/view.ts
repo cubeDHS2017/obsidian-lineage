@@ -22,7 +22,7 @@ import { defaultViewState } from 'src/stores/view/default-view-state';
 import { viewReducer } from 'src/stores/view/view-reducer';
 import { viewSubscriptions } from 'src/stores/view/subscriptions/view-subscriptions';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
-import { InlineEditor } from 'src/obsidian/helpers/inline-editor';
+import { InlineEditor } from 'src/obsidian/helpers/inline-editor/inline-editor';
 import { id } from 'src/helpers/id';
 import invariant from 'tiny-invariant';
 import { customIcons } from 'src/helpers/load-custom-icons';

@@ -1,16 +1,13 @@
 import { AllDirections } from 'src/stores/document/document-store-actions';
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 import { LineageView } from 'src/view/view';
-import { EditorPosition } from 'obsidian';
 
 type EditingState = {
     editedNode: string;
-    cursor: EditorPosition;
 };
 
 const restoreEditingState = (view: LineageView, state: EditingState) => {
     setTimeout(() => {
-        view.inlineEditor.overrideCursor(state.cursor);
         view.viewStore.dispatch({
             type: 'view/main/enable-edit',
             payload: {
@@ -22,10 +19,9 @@ const restoreEditingState = (view: LineageView, state: EditingState) => {
 
 export const moveNode = async (view: LineageView, direction: AllDirections) => {
     let state: null | EditingState = null;
-    if (view.inlineEditor.activeNode) {
+    if (view.inlineEditor.nodeId) {
         state = {
-            cursor: view.inlineEditor.getCursor(),
-            editedNode: view.inlineEditor.activeNode,
+            editedNode: view.inlineEditor.nodeId,
         };
     }
     saveNodeContent(view);

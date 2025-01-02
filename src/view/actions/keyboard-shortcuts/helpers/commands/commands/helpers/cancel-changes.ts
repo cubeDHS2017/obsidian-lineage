@@ -1,13 +1,9 @@
 import { LineageView } from 'src/view/view';
 
-export const unloadInlineEditor = (view: LineageView) => {
-    view.inlineEditor.unloadNode();
-};
-
 export const cancelChanges = (view: LineageView) => {
     const documentViewState = view.viewStore.getValue().document;
     if (documentViewState.pendingConfirmation.disableEdit) {
-        unloadInlineEditor(view);
+        view.inlineEditor.unloadNode();
         if (documentViewState.editing.isInSidebar) {
             view.viewStore.dispatch({
                 type: 'view/sidebar/disable-edit',
