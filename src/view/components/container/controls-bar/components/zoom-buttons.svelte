@@ -62,6 +62,12 @@
             state: zoomMenuState,
         });
     };
+
+    let showUndoRestZoomButton = false;
+    $: {
+        showUndoRestZoomButton =
+            $keyboardStore.shift && zoomValueBeforeReset !== -1;
+    }
 </script>
 
 <div class="buttons-group buttons-group--vertical" data-visible={showControls}>
@@ -76,17 +82,13 @@
     </Button>
     <Button
         classes="control-item"
-        disabled={$keyboardStore.shift
-            ? zoomValueBeforeReset === -1
-            : $zoomLevel === 1}
+        disabled={showUndoRestZoomButton ? false : $zoomLevel === 1}
         label={lang.controls_zoom_reset}
-        active={$keyboardStore.shift
-            ? zoomValueBeforeReset !== -1
-            : $zoomLevel !== 1}
+        active={showUndoRestZoomButton ? true : $zoomLevel !== 1}
         on:click={restoreZoom}
         tooltipPosition="left"
     >
-        {#if $keyboardStore.shift}
+        {#if showUndoRestZoomButton}
             <RotateCw class="svg-icon" />
         {:else}
             <RotateCcw class="svg-icon" />
