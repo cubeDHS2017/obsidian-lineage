@@ -44,7 +44,7 @@ const createCommands = (plugin: Lineage) => {
 
     commands.push({
         name: lang.cmd_toggle_scrolling_mode,
-        icon: customIcons.align.name,
+        icon: customIcons.alignH.name,
         checkCallback: (checking) => {
             if (checking) {
                 return Boolean(getActiveLineageView(plugin));
@@ -167,7 +167,7 @@ const createCommands = (plugin: Lineage) => {
 
     commands.push({
         name: lang.cmd_toggle_scrolling_mode,
-        icon: customIcons.align.name,
+        icon: customIcons.alignH.name,
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
             if (checking) {

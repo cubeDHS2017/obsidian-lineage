@@ -26,9 +26,28 @@ const split: Icon = {
     mode: 'stroke',
 };
 
-const align: Icon = {
-    name: 'lineage-align',
-    svg: `<g> <rect width="20" height="12" x="2" y="6" rx="2"/> <line x1="12" y1="0" x2="12" y2="24" stroke-dasharray="4 3" /></g> `,
+const alignH: Icon = {
+    name: 'lineage-align-horizontal',
+    svg: `<g> 
+            <rect width="20" height="12" x="2" y="6" rx="2"/> 
+            <line x1="12" y1="0" x2="12" y2="24" stroke-dasharray="4 3" />
+    </g> `,
+    mode: 'stroke',
+};
+
+const alignV: Icon = {
+    name: 'lineage-align-vertical',
+    svg: `<g> 
+            <rect width="18" height="12" x="3" y="6" rx="2"/> 
+        
+         <path
+      <path
+       style="stroke-width:2;stroke-dasharray:8, 2;stroke-dashoffset:0"
+       d="m -14.007348,12.000818 c 15.3564398,3.95e-4 30.79516,0.16535 46.069016,5.77e-4"
+       id="path5"
+       sodipodi:nodetypes="cc" />
+
+    </g> `,
     mode: 'stroke',
 };
 
@@ -47,7 +66,7 @@ const gap: Icon = {
     mode: 'stroke',
 };
 
-export const customIcons = { cards, split, align, gap };
+export const customIcons = { cards, split, alignH, alignV, gap };
 
 export const loadCustomIcons = () => {
     for (const icon of Object.values(customIcons)) {

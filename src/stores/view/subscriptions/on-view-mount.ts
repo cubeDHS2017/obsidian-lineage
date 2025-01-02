@@ -3,7 +3,6 @@ import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update
 import { isEmptyDocument } from 'src/stores/view/subscriptions/helpers/is-empty-document';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-font-size';
 import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-container-bg';
 import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
@@ -53,7 +52,6 @@ export const onViewMount = (view: LineageView) => {
     view.plugin.statusBar.updateAll(view);
     // effects
     if (view.isActive) focusContainer(view);
-    alignBranch(view, { type: 'view/life-cycle/mount' });
 
     loadPinnedNodesToDocument(view);
     markUnresolvedLinks(view);

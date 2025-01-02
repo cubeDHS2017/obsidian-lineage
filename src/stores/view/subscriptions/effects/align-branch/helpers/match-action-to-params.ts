@@ -7,6 +7,23 @@ import { SettingsActions } from 'src/stores/settings/settings-reducer';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
 import { LineageView } from 'src/view/view';
 
+export type AlignBranchParams = {
+    alignInactiveColumns: boolean;
+    behavior: ScrollBehavior;
+    delay: number;
+    retry: boolean;
+    scrollFirstColumnToTheLeft: boolean;
+    centerActiveNode: boolean;
+};
+export const defaultAlignBranchParams: AlignBranchParams = {
+    alignInactiveColumns: false,
+    behavior: 'smooth' as const,
+    delay: 0,
+    retry: false,
+    scrollFirstColumnToTheLeft: false,
+    centerActiveNode: false,
+};
+
 export type PluginAction =
     | DocumentStoreAction
     | ViewDocumentAction

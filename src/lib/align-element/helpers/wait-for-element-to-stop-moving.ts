@@ -1,5 +1,5 @@
 import { LineageView } from 'src/view/view';
-import { getNodeElement } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-node-element';
+import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
 import { delay } from 'src/helpers/delay';
 
 export const waitForElementToStopMoving = async (

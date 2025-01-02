@@ -2,7 +2,6 @@ import { isActive } from 'src/view/actions/keyboard-shortcuts/helpers/commands/c
 import { PluginCommand } from 'src/lang/hotkey-groups';
 import { scrollNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/scroll-node';
 import { Modifier } from 'obsidian';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export const scrollCommands = () => {
     const modifiers: Modifier[] = ['Mod', 'Alt'];
@@ -43,7 +42,7 @@ export const scrollCommands = () => {
             name: 'align_branch',
             check: isActive,
             callback: (view) => {
-                alignBranch(view);
+                view.alignBranch.align();
             },
             hotkeys: [{ key: 'G', modifiers: modifiers }],
         },

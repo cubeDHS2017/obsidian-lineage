@@ -199,12 +199,12 @@ export const lang = {
     hk_scroll_up: 'Scroll up',
     hk_scroll_down: 'Scroll down',
     hk_align_branch: 'Align active branch',
-    settings_scrolling_reveal_child: 'Scroll to reveal direct child cards',
-    settings_scrolling_reveal_child_desc:
-        "Applicable when 'Center active card horizontally' is disabled",
-    settings_active_branch_scrolling: 'Active branch alignment',
-    controls_toggle_scrolling_mode: 'Center active card horizontally',
-    cmd_toggle_scrolling_mode: `Toggle 'center active card horizontally'`,
+
+    controls_toggle_scrolling_mode_horizontal:
+        'Always center active card horizontally',
+    controls_toggle_scrolling_mode_vertical:
+        'Always center active card vertically',
+    cmd_toggle_scrolling_mode: `Toggle 'always center active card horizontally'`,
     card_btn_scroll_to_reveal: 'Scroll to reveal',
     hkg_scrolling: 'Align branch',
 

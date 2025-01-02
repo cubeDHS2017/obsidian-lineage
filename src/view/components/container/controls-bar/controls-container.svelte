@@ -67,9 +67,14 @@
             type: 'VIEW/TOGGLE_MINIMAP',
         });
     };
-    const toggleScrollMode = () => {
+    const toggleScrollModeH = () => {
         view.plugin.settings.dispatch({
             type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE',
+        });
+    };
+    const toggleScrollModeV = () => {
+        view.plugin.settings.dispatch({
+            type: 'settings/view/scrolling/toggle-vertical-scrolling-mode',
         });
     };
 
@@ -152,14 +157,13 @@
         data-visible={$showControls}
     >
         <Button
-            active={$scrollSettingsStore.horizontalScrollingMode ===
-                'keep-active-card-at-center'}
+            active={$singleColumnMode}
             classes="control-item"
-            label={lang.controls_toggle_scrolling_mode}
-            on:click={toggleScrollMode}
+            label={lang.controls_single_column}
+            on:click={toggleSingleColumnMode}
             tooltipPosition="left"
         >
-            {@html customIcons.align.svg}
+            <RectangleVertical class="svg-icon" />
         </Button>
         <Button
             active={$applyGapBetweenCards}
@@ -170,14 +174,26 @@
         >
             {@html customIcons.gap.svg}
         </Button>
+
         <Button
-            active={$singleColumnMode}
+            active={$scrollSettingsStore.horizontalScrollingMode ===
+                'keep-active-card-at-center'}
             classes="control-item"
-            label={lang.controls_single_column}
-            on:click={toggleSingleColumnMode}
+            label={lang.controls_toggle_scrolling_mode_horizontal}
+            on:click={toggleScrollModeH}
             tooltipPosition="left"
         >
-            <RectangleVertical class="svg-icon"/>
+            {@html customIcons.alignH.svg}
+        </Button>
+        <Button
+            active={$scrollSettingsStore.verticalScrollingMode ===
+                'keep-active-card-at-center'}
+            classes="control-item"
+            label={lang.controls_toggle_scrolling_mode_vertical}
+            on:click={toggleScrollModeV}
+            tooltipPosition="left"
+        >
+            {@html customIcons.alignV.svg}
         </Button>
     </div>
     <div

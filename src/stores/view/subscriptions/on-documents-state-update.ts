@@ -2,7 +2,6 @@ import { LineageView } from 'src/view/view';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export const onDocumentsStateUpdate = (
     view: LineageView,
@@ -22,6 +21,6 @@ export const onDocumentsStateUpdate = (
             focusContainer(view);
             view.plugin.statusBar.updateAll(view);
         }
-        alignBranch(view, action);
+        view.alignBranch.align(action);
     }
 };

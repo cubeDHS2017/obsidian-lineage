@@ -10,7 +10,6 @@ import { clearSelectedNodes } from 'src/stores/view/subscriptions/actions/clear-
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/actions/remove-obsolete-navigation-items';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persist-pinned-nodes';
 import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
 import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
@@ -69,7 +68,7 @@ export const onDocumentStateUpdate = (
 
     // effects
     if (structuralChange || e.content) {
-        alignBranch(view, action);
+        view.alignBranch.align(action);
 
         view.rulesProcessor.onDocumentUpdate(action);
     }

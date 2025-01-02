@@ -3,7 +3,6 @@ import { FontSize } from 'src/view/actions/settings/components/font-size';
 import { BackgroundColor } from 'src/view/actions/settings/components/background-color';
 import { ActiveBranchColor } from 'src/view/actions/settings/components/active-branch-color';
 import { CardWidth } from 'src/view/actions/settings/components/card-width';
-import { ScrollingBehavior } from 'src/view/actions/settings/components/scrolling-behavior';
 import { LimitCardHeight } from 'src/view/actions/settings/components/limit-card-height';
 import { DefaultDocumentFormat } from 'src/view/actions/settings/components/default-document-format';
 import { ColumnsGap } from 'src/view/actions/settings/components/columns-gap';
@@ -29,10 +28,6 @@ export const renderSettings = (element: HTMLElement) => {
         ColumnsGap(element, settingsStore);
         CardIndentationWidth(element, settingsStore);
         LimitCardHeight(element, settingsStore);
-        new Setting(element)
-            .setHeading()
-            .setName(lang.settings_active_branch_scrolling);
-        ScrollingBehavior(element, settingsStore);
     };
     render();
     return {

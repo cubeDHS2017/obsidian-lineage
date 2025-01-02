@@ -16,8 +16,8 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         columnsGap: DEFAULT_COLUMNS_GAP,
         cardsGap: DEFAULT_CARDS_GAP,
         scrolling: {
-            revealChildren: false,
             horizontalScrollingMode: 'reveal-active-card',
+            verticalScrollingMode: 'keep-active-card-at-center',
         },
         limitPreviewHeight: true,
         zoomLevel: 1,

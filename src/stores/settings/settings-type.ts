@@ -17,7 +17,7 @@ export type Theme = {
 export type ScrollingMode = 'reveal-active-card' | 'keep-active-card-at-center';
 export type ScrollingSettings = {
     horizontalScrollingMode: ScrollingMode;
-    revealChildren: boolean;
+    verticalScrollingMode: ScrollingMode;
 };
 
 export type LineageDocumentFormat = 'outline' | 'sections' | 'html-element';

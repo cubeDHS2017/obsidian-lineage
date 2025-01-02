@@ -93,10 +93,7 @@ export type SettingsActions =
           type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE';
       }
     | {
-          type: 'VIEW/SCROLLING/SET_REVEAL_CHILDREN';
-          payload: {
-              reveal: boolean;
-          };
+          type: 'settings/view/scrolling/toggle-vertical-scrolling-mode';
       }
     | {
           type: 'SET_LIMIT_PREVIEW_HEIGHT';
@@ -256,8 +253,13 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.scrolling = {
             ...store.view.scrolling,
         };
-    } else if (action.type === 'VIEW/SCROLLING/SET_REVEAL_CHILDREN') {
-        store.view.scrolling.revealChildren = action.payload.reveal;
+    } else if (
+        action.type === 'settings/view/scrolling/toggle-vertical-scrolling-mode'
+    ) {
+        store.view.scrolling.verticalScrollingMode =
+            store.view.scrolling.verticalScrollingMode === 'reveal-active-card'
+                ? 'keep-active-card-at-center'
+                : 'reveal-active-card';
         store.view.scrolling = {
             ...store.view.scrolling,
         };

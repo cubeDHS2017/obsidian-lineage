@@ -22,7 +22,6 @@
     import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
     import { MatchingStyleRulesStore } from 'src/stores/view/derived/style-rules';
     import { onMount } from 'svelte';
-    import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { getAllChildren } from 'src/lib/tree-utils/get/get-all-children';
@@ -78,7 +77,7 @@
     let containerRef: HTMLElement | null = null;
     onMount(() => {
         view.container = containerRef;
-        alignBranch(view, { type: 'view/life-cycle/mount' });
+        view.alignBranch.align({ type: 'view/life-cycle/mount' });
         focusContainer(view);
     });
 </script>

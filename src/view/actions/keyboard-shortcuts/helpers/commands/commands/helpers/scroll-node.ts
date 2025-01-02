@@ -1,6 +1,6 @@
 import { LineageView } from 'src/view/view';
 import { AllDirections } from 'src/stores/document/document-store-actions';
-import { getNodeElement } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-node-element';
+import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
 
 export const scrollNode = (view: LineageView, direction: AllDirections) => {
     const container = view.container;

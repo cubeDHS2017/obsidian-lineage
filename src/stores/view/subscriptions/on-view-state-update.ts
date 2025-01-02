@@ -9,7 +9,6 @@ import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe
 import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
 import { updateConflictingHotkeys } from 'src/stores/view/subscriptions/actions/update-conflicting-hotkeys';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
 import { persistActivePinnedNode } from 'src/stores/view/subscriptions/actions/persist-active-pinned-node';
 import { showSearchResultsInMinimap } from 'src/stores/view/subscriptions/effects/show-search-results-in-minimap';
@@ -77,7 +76,7 @@ export const onViewStateUpdate = (
             action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
             action.context?.modKey;
         if (!skipAligning) {
-            alignBranch(view);
+            view.alignBranch.align();
         }
     }
     if (!container || !view.isViewOfFile) return;

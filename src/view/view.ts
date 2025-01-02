@@ -41,6 +41,7 @@ import {
 } from 'src/stores/minimap/minimap-state-type';
 import { MinimapStoreAction } from 'src/stores/minimap/minimap-store-actions';
 import { StyleRulesProcessor } from 'src/stores/view/subscriptions/effects/style-rules/style-rules-processor';
+import { AlignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export const LINEAGE_VIEW_TYPE = 'lineage';
 
@@ -57,6 +58,7 @@ export class LineageView extends TextFileView {
     inlineEditor: InlineEditor;
     documentSearch: DocumentSearch;
     rulesProcessor: StyleRulesProcessor;
+    alignBranch: AlignBranch;
     id: string;
     zoomFactor: number;
     private minimapDom: MinimapDomElements | null = null;
@@ -82,6 +84,7 @@ export class LineageView extends TextFileView {
         this.id = id.view();
         this.documentSearch = new DocumentSearch(this);
         this.rulesProcessor = new StyleRulesProcessor(this);
+        this.alignBranch = new AlignBranch(this);
     }
 
     get isActive() {

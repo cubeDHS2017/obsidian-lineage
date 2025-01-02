@@ -1,13 +1,11 @@
 import { ViewState } from 'src/stores/view/view-state-type';
 import { DocumentState } from 'src/stores/document/document-state-type';
-import {
-    AlignBranchState,
-    alignElement,
-} from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-element/align-element';
+import { AlignBranchState } from 'src/lib/align-element/align-element-v-and-h';
 import { Settings } from 'src/stores/settings/settings-type';
-import { getNodeElement } from 'src/stores/view/subscriptions/effects/align-branch/helpers/get-node-element';
-import { alignChildGroupOfColumn } from 'src/stores/view/subscriptions/effects/align-branch/align-child-group-of-column';
-import { alignInactiveColumn } from 'src/stores/view/subscriptions/effects/align-branch/align-inactive-column';
+import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
+import { alignChildGroupOfColumn } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-child-columns/align-child-group-of-column';
+import { alignInactiveColumn } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-child-columns/align-inactive-column';
+import { alignElementVertically } from 'src/lib/align-element/align-element-vertically';
 
 export const alignChildColumns = (
     viewState: ViewState,
@@ -18,8 +16,7 @@ export const alignChildColumns = (
     behavior?: ScrollBehavior,
     alignInactiveColumns = false,
 ) => {
-    let activeBranchNodeOfPreviousColumn: string | null =
-        viewState.document.activeNode;
+    let previousActiveBranchNode: string | null = viewState.document.activeNode;
     for (const column of documentState.document.columns) {
         if (localState.columns.has(column.id)) continue;
 
@@ -27,21 +24,21 @@ export const alignChildColumns = (
             viewState.document.activeNodesOfColumn[column.id];
 
         const activeBranchNode: string | null =
-            activeNodesOfColumn && activeBranchNodeOfPreviousColumn
-                ? activeNodesOfColumn[activeBranchNodeOfPreviousColumn]
+            activeNodesOfColumn && previousActiveBranchNode
+                ? activeNodesOfColumn[previousActiveBranchNode]
                 : null;
-        activeBranchNodeOfPreviousColumn = activeBranchNode;
+        previousActiveBranchNode = activeBranchNode;
         if (activeBranchNode) {
             const element = getNodeElement(container, activeBranchNode);
             if (element) {
-                const columnId = alignElement(
+                const columnId = alignElementVertically(
                     container,
                     element,
-                    behavior,
-                    'vertical',
-                    settings.view.scrolling,
                     settings.view.zoomLevel,
+                    null,
+                    behavior,
                 );
+
                 if (columnId) localState.columns.add(columnId);
             }
         } else {
