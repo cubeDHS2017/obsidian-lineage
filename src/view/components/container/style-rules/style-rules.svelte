@@ -5,6 +5,7 @@
     import { writable } from 'svelte/store';
     import { StyleRule } from 'src/stores/settings/types/style-rules-types';
     import DropTarget from './dnd/drop-target.svelte';
+    import { lang } from 'src/lang/lang';
 
     const view = getView();
     const documentPath = view.file?.path as string;
@@ -49,7 +50,7 @@
 <div class="lineage-modal" on:mouseleave={resetDragState}>
     <div class="modal-content">
         {#if $rulesStore.length === 0}
-            <div class="pane-empty" >No rules defined</div>
+            <div class="pane-empty" >{lang.modals_rules_no_rules}</div>
         {:else}
             <div
                 class={'rules-list' +
@@ -84,7 +85,7 @@
             </div>
         {/if}
 
-        <button class="add-rule" on:click={addRule}>+Add Rule</button>
+        <button class="add-rule" on:click={addRule}>{lang.modals_rules_add_rule}</button>
     </div>
 </div>
 

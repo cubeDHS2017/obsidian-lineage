@@ -78,7 +78,7 @@ export class SplitNodeModal extends Modal {
             this.state.disabledModes.add('outline');
         }
         if (!hasParagraphs) {
-            this.state.disabledModes.add('paragraphs');
+            this.state.disabledModes.add('blocks');
         }
 
         if (hasHeadings) {
@@ -86,7 +86,7 @@ export class SplitNodeModal extends Modal {
         } else if (_isOutline) {
             this.state.mode.set('outline');
         } else if (hasParagraphs) {
-            this.state.mode.set('paragraphs');
+            this.state.mode.set('blocks');
         }
 
         const unsubFromMod = this.state.mode.subscribe((mode) => {

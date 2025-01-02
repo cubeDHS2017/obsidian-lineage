@@ -11,11 +11,11 @@
     const mode = state.mode;
     const disabledModes = state.disabledModes;
 
-    const modes: SplitNodeMode[] = ['headings', 'outline', 'paragraphs'];
+    const modes: SplitNodeMode[] = ['headings', 'outline', 'blocks'];
 </script>
 
-<div class="split-content-footer">
-    <div class="modes-container">
+<div class="split-content-footer" tabindex="0" >
+    <div class="modes-container" tabindex="0">
         {#each modes as _mode}
             <label data-disabled={disabledModes.has(_mode)}>
                 <input
@@ -25,6 +25,7 @@
                     on:change={(e) => onModeChange(e.currentTarget.value)}
                     type="radio"
                     value={_mode}
+                    tabindex="0"
                 />
                 {_mode}
             </label>

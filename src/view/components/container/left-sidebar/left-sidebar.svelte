@@ -85,7 +85,6 @@
     {:else if $activeTab === 'recent-cards'}
         <RecentCards />
     {/if}
-    <slot />
 
 </div>
 

@@ -1,4 +1,4 @@
-import { PluginCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { PluginCommand } from 'src/lang/hotkey-groups';
 import {
     isActive,
     isActiveAndNotEditing,

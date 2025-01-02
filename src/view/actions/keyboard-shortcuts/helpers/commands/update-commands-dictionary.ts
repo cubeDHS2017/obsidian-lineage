@@ -1,4 +1,4 @@
-import { PluginCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { PluginCommand } from 'src/lang/hotkey-groups';
 import { CommandHotkeys } from 'src/stores/hotkeys/hotkey-store';
 import { pluginCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/load-commands';
 import { hotkeyToString } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/hotkey-to-string';

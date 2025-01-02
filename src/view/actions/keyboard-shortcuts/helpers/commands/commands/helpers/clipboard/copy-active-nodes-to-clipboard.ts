@@ -1,5 +1,6 @@
 import { LineageView } from 'src/view/view';
 import { Notice } from 'obsidian';
+import { lang } from 'src/lang/lang';
 
 export const copyActiveNodesToClipboard = async (view: LineageView) => {
     const document = view.viewStore.getValue().document;
@@ -11,9 +12,8 @@ export const copyActiveNodesToClipboard = async (view: LineageView) => {
         .map((id) => view.documentStore.getValue().document.content[id].content)
         .join('\n\n');
     await navigator.clipboard.writeText(text);
-    new Notice(
-        nodes.length > 1
-            ? nodes.length + ' sections copied to clipboard'
-            : 'Section copied to clipboard',
-    );
+    if (nodes.length > 1) {
+        const message = lang.hk_notice_copy(nodes.length, false, 'section');
+        if (message) new Notice(message);
+    }
 };

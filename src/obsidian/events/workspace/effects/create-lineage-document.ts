@@ -23,6 +23,6 @@ export const createLineageDocument = async (plugin: Lineage) => {
             }
         }
     } catch (e) {
-        onPluginError(e, 'command', lang.create_new_document);
+        onPluginError(e, 'command', lang.cmd_create_new_document);
     }
 };

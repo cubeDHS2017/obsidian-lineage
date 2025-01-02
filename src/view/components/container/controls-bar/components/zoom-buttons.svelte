@@ -7,6 +7,7 @@
     import { createZoomMenu } from 'src/view/components/container/controls-bar/components/helpers/create-zoom-menu';
     import { get } from 'svelte/store';
     import { KeyboardStore } from 'src/stores/view/derived/keyboard-store';
+    import { lang } from 'src/lang/lang';
 
     export let showControls: boolean;
 
@@ -67,7 +68,7 @@
     <Button
         classes="control-item"
         disabled={$zoomLevel >= maxZoomLevel}
-        label="zoom in"
+        label={lang.controls_zoom_in}
         on:click={zoomIn}
         tooltipPosition="left"
     >
@@ -78,7 +79,7 @@
         disabled={$keyboardStore.shift
             ? zoomValueBeforeReset === -1
             : $zoomLevel === 1}
-        label={'Reset zoom (hold shift to undo)'}
+        label={lang.controls_zoom_reset}
         active={$keyboardStore.shift
             ? zoomValueBeforeReset !== -1
             : $zoomLevel !== 1}
@@ -94,7 +95,7 @@
 
     <Button
         classes="control-item"
-        label="Fit document height into view"
+        label={lang.controls_zoom_presets}
         on:click={showZoomPopupMenu}
         tooltipPosition="left"
     >
@@ -103,7 +104,7 @@
     <Button
         classes="control-item"
         disabled={$zoomLevel <= minZoomLevel}
-        label="Zoom out"
+        label={lang.controls_zoom_out}
         on:click={zoomOut}
         tooltipPosition="left"
     >

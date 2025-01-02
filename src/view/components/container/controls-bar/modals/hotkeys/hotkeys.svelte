@@ -5,7 +5,7 @@
     import NumberOfConflicts from './number-of-conflicts.svelte';
 </script>
 
-<div class="lineage-modal">
+<div class="lineage-modal lineage-modal--full-height">
     <Front />
     <div class="groups">
         {#each Object.entries($filteredHotkeys) as [groupName, group] (groupName)}
@@ -17,16 +17,16 @@
 
 <style>
     .groups {
-        min-width: 430px;
+        width:500px;
         display: flex;
         flex-direction: column;
         gap: var(--size-4-2);
-        max-height: 70vh;
         overflow-y: auto;
+        flex:1
     }
     @media (max-width: 720px) {
         .groups {
-            min-width: unset;
+            width: initial;
         }
     }
 </style>

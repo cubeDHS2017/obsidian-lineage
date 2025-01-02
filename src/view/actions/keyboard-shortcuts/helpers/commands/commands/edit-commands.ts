@@ -1,6 +1,6 @@
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 import { cancelChanges } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
-import { PluginCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { PluginCommand } from 'src/lang/hotkey-groups';
 import {
     isActiveAndEditing,
     isActiveAndNotEditing,

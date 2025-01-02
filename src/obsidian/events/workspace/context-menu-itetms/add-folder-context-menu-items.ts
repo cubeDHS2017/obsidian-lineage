@@ -10,7 +10,7 @@ export const addFolderContextMenuItems = (
     folder: TFolder,
 ) => {
     menu.addItem((item) => {
-        item.setTitle(lang.new_document);
+        item.setTitle(lang.ocm_new_document);
         item.setIcon(customIcons.cards.name);
         item.onClick(() => createLineageFileInFolder(plugin, folder));
     });

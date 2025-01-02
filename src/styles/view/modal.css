@@ -20,3 +20,6 @@
     }
 }
 
+.lineage-modal--full-height{
+    bottom: var(--size-4-2);
+}

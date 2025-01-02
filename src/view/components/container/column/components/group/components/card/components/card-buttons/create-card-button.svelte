@@ -6,6 +6,7 @@
         saveNodeAndInsertNode
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-and-insert-node';
     import { Direction } from 'src/stores/document/document-store-actions';
+    import { lang } from 'src/lang/lang';
 
     export let nodeId : string;
     export let position: Direction;
@@ -21,9 +22,9 @@
         down: ChevronDown,
     };
     const label: Record<Direction, string> = {
-        "up":"Add card above",
-        "down":"Add card below",
-        "right":"Add child card"
+        "up":lang.card_btn_add_card_above,
+        "down":lang.card_btn_add_card_below,
+        "right":lang.card_btn_add_child_card
     }
 </script>
 

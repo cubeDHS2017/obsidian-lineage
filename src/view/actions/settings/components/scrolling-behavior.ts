@@ -1,5 +1,6 @@
 import { SettingsStore } from 'src/main';
 import { Setting } from 'obsidian';
+import { lang } from 'src/lang/lang';
 
 export const ScrollingBehavior = (
     element: HTMLElement,
@@ -7,10 +8,8 @@ export const ScrollingBehavior = (
 ) => {
     const settingsState = settingsStore.getValue();
     const setting = new Setting(element)
-        .setName('Scroll to reveal child cards')
-        .setDesc(
-            "Applicable when scrolling mode is set to 'reveal active card'",
-        );
+        .setName(lang.settings_scrolling_reveal_child)
+        .setDesc(lang.settings_scrolling_reveal_child_desc);
 
     setting.addToggle((tg) => {
         tg.setValue(settingsState.view.scrolling.revealChildren).onChange(

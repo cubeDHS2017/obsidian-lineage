@@ -13,60 +13,81 @@ import {
 } from 'lucide-svelte';
 import { UndoableAction } from 'src/stores/document/document-store-actions';
 import { Snapshot } from 'src/stores/document/document-state-type';
+import { customIcons } from 'src/helpers/load-custom-icons';
+import { lang } from './lang';
 
 type Key = UndoableAction['type'];
-export const actionInfo: Partial<
+
+export const snapshotActionLang: Partial<
     Record<
         Key,
         (snapshot: Snapshot) => { label: string; icon: typeof FileEdit }
     >
 > = {
     'DOCUMENT/SET_NODE_CONTENT': (snapshot) => ({
-        label: 'Updated card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_updated_card +
+            snapshot.context.affectedSection,
         icon: FileEdit,
     }),
     'DOCUMENT/INSERT_NODE': (snapshot) => ({
-        label: 'Created card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_created_card +
+            snapshot.context.affectedSection,
         icon: FilePlus,
     }),
     'DOCUMENT/DROP_NODE': (snapshot) => ({
-        label: 'Dropped card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_dropped_card +
+            snapshot.context.affectedSection,
         icon: FileOutput,
     }),
     'DOCUMENT/LOAD_FILE': () => ({
-        label: 'Document loaded',
+        label: lang.modals_snapshots_document_loaded,
         icon: FileUp,
     }),
     'DOCUMENT/DELETE_NODE': (snapshot) => ({
-        label: 'Deleted card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_deleted_card +
+            snapshot.context.affectedSection,
         icon: FileMinus,
     }),
     'DOCUMENT/MOVE_NODE': (snapshot) => ({
-        label: 'Moved card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_moved_card + snapshot.context.affectedSection,
         icon: FileOutput,
     }),
     'DOCUMENT/MERGE_NODE': (snapshot) => ({
-        label: 'Merged card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_merged_card +
+            snapshot.context.affectedSection,
         icon: Merge,
     }),
     'DOCUMENT/FORMAT_HEADINGS': () => ({
-        label: 'Formatted headings',
+        label: lang.modals_snapshots_formatted_headings,
         icon: Heading1,
     }),
     'DOCUMENT/CUT_NODE': (snapshot) => ({
-        label: 'Cut card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_cut_card + snapshot.context.affectedSection,
         icon: Scissors,
     }),
     'DOCUMENT/PASTE_NODE': (snapshot) => ({
-        label: 'Pasted card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_pasted_card +
+            snapshot.context.affectedSection,
         icon: ClipboardPaste,
     }),
     'DOCUMENT/EXTRACT_BRANCH': (snapshot) => ({
-        label: 'Extracted card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_extracted_card +
+            snapshot.context.affectedSection,
         icon: FileSymlink,
+        iconHtml: customIcons.cards.svg,
     }),
     'DOCUMENT/SPLIT_NODE': (snapshot) => ({
-        label: 'Split card ' + snapshot.context.affectedSection,
+        label:
+            lang.modals_snapshots_split_card + snapshot.context.affectedSection,
         icon: Split,
     }),
 };

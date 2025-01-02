@@ -5,6 +5,7 @@
     import {
         saveNodeContent
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
+    import { lang } from 'src/lang/lang';
 
     export let editing: boolean;
     export let nodeId: string;
@@ -40,7 +41,7 @@
 </script>
 
 <FloatingButton
-    label={editing ? 'Save' : 'Edit'}
+    label={editing ? lang.card_btn_save : lang.card_btn_edit}
     on:click={toggleEdit}
     position={'down-right'}
 >

@@ -93,7 +93,7 @@
     <div class="buttons-group controls-toggle">
         <Button
             active={$showControls}
-            label={'Toggle controls'}
+            label={lang.controls_toggle_bar}
             on:click={toggleShowControls}
             tooltipPosition="left"
         >
@@ -108,7 +108,7 @@
         <Button
             active={$showMinimap}
             classes="control-item"
-            label={'Toggle minimap'}
+            label={lang.controls_toggle_minimap}
             on:click={toggleMinimap}
             tooltipPosition="left"
         >
@@ -122,7 +122,7 @@
         <Button
             active={$controls.showSettingsSidebar}
             classes="control-item"
-            label={'Settings'}
+            label={lang.controls_settings}
             on:click={toggleSettings}
             tooltipPosition="left"
         >
@@ -131,7 +131,7 @@
         <Button
             active={$controls.showHelpSidebar}
             classes="control-item"
-            label="Keyboard shortcuts"
+            label={lang.controls_hotkeys}
             on:click={toggleHelp}
             tooltipPosition="left"
         >
@@ -140,7 +140,7 @@
         <Button
             active={$controls.showStyleRulesModal}
             classes="control-item"
-            label="Style rules"
+            label={lang.controls_rules}
             on:click={toggleStyleRules}
             tooltipPosition="left"
         >
@@ -155,7 +155,7 @@
             active={$scrollSettingsStore.horizontalScrollingMode ===
                 'keep-active-card-at-center'}
             classes="control-item"
-            label={lang.toggle_scrolling_mode}
+            label={lang.controls_toggle_scrolling_mode}
             on:click={toggleScrollMode}
             tooltipPosition="left"
         >
@@ -164,7 +164,7 @@
         <Button
             active={$applyGapBetweenCards}
             classes="control-item"
-            label={'Gap between cards'}
+            label={lang.controls_gap_between_cards}
             on:click={toggleGap}
             tooltipPosition="left"
         >
@@ -173,7 +173,7 @@
         <Button
             active={$singleColumnMode}
             classes="control-item"
-            label={'Single column'}
+            label={lang.controls_single_column}
             on:click={toggleSingleColumnMode}
             tooltipPosition="left"
         >
@@ -188,7 +188,7 @@
             active={$controls.showHistorySidebar}
             classes="control-item"
             disabled={$history.items.length === 0}
-            label="History"
+            label={lang.controls_history}
             on:click={() => {
                 viewStore.dispatch({ type: 'UI/TOGGLE_HISTORY_SIDEBAR' });
             }}
@@ -200,7 +200,7 @@
         <Button
             classes="control-item"
             disabled={!$history.state.canGoBack}
-            label="Undo"
+            label={lang.controls_history_undo}
             on:click={handlePreviousClick}
             tooltipPosition="left"
         >
@@ -209,7 +209,7 @@
         <Button
             classes="control-item"
             disabled={!$history.state.canGoForward}
-            label="Redo"
+            label={lang.controls_history_redo}
             on:click={handleNextClick}
             tooltipPosition="left"
         >

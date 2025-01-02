@@ -1,5 +1,6 @@
 import { SettingsStore } from 'src/main';
 import { Setting, SliderComponent } from 'obsidian';
+import { lang } from 'src/lang/lang';
 
 export const FontSize = (
     element: HTMLElement,
@@ -12,7 +13,7 @@ export const FontSize = (
         input.setValue(settingsState.view.fontSize);
     };
     new Setting(element)
-        .setName('Font size')
+        .setName(lang.settings_appearance_font_size)
         .addSlider((cb) => {
             input = cb;
             cb.onChange((fontSize) => {
@@ -37,6 +38,6 @@ export const FontSize = (
                     });
                     setValue();
                 })
-                .setTooltip('Reset');
+                .setTooltip(lang.settings_reset);
         });
 };

@@ -13,8 +13,22 @@
         display: flex;
         flex-direction: column;
         padding: 20px;
+        width: 500px;
         & .setting-item {
             padding: 10px 0;
+        }
+
+        & .setting-item-heading {
+            margin-top: 22px;
+
+            & .setting-item-name {
+                font-size: 17px;
+            }
+        }
+    }
+    @media (max-width: 720px) {
+        .setting-items{
+            width:initial;
         }
     }
     :global(.is-mobile) {

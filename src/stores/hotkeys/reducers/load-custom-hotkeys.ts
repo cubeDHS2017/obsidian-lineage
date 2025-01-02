@@ -1,6 +1,6 @@
 import { CommandHotkeys, HotkeyState } from 'src/stores/hotkeys/hotkey-store';
 import { pluginCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/load-commands';
-import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { CommandName } from 'src/lang/hotkey-groups';
 import { updateHotkey } from 'src/stores/hotkeys/reducers/update-hotkey';
 import { Hotkey } from 'obsidian';
 import { CustomHotkeys } from 'src/stores/settings/settings-type';

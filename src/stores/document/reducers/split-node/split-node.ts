@@ -6,7 +6,7 @@ import { findChildGroup } from 'src/lib/tree-utils/find/find-child-group';
 import { lang } from 'src/lang/lang';
 import { splitText } from 'src/stores/document/reducers/split-node/helpers/split-text';
 
-export type SplitNodeMode = 'headings' | 'outline' | 'paragraphs';
+export type SplitNodeMode = 'headings' | 'outline' | 'blocks';
 export type SplitNodeAction = {
     type: 'DOCUMENT/SPLIT_NODE';
     payload: {
@@ -24,9 +24,10 @@ export const splitNode = (
     if (!content?.content) throw new SilentError('empty node');
     const sections = splitText(content?.content, action.payload.mode);
     if (sections === content.content)
-        throw new Error(lang.cant_split_card_identical);
+        throw new Error(lang.error_cm_cant_split_card_identical);
     const childGroup = findChildGroup(document.columns, targetNode);
-    if (childGroup) throw new Error(lang.cant_split_card_that_has_children);
+    if (childGroup)
+        throw new Error(lang.error_cm_cant_split_card_that_has_children);
 
     const newActiveNode = pasteNode(document, {
         payload: {

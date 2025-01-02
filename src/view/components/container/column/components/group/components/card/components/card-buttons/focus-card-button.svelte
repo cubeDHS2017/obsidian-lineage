@@ -3,6 +3,7 @@
    import FloatingButton from './floating-button.svelte';
    import { Focus } from 'lucide-svelte';
    import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
+   import { lang } from 'src/lang/lang';
 
    export let nodeId: string;
     const view = getView();
@@ -14,6 +15,6 @@
 
 </script>
 
-<FloatingButton label={"Bring card into view"} on:click={focusCard} position="up-right">
+<FloatingButton label={lang.card_btn_scroll_to_reveal} on:click={focusCard} position="up-right">
    <Focus class="svg-icon"/>
 </FloatingButton>

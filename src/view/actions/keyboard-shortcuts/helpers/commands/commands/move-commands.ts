@@ -1,5 +1,5 @@
 import { moveNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/move-node';
-import { PluginCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { PluginCommand } from 'src/lang/hotkey-groups';
 import { isActive } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 
 export const moveCommands = () => {

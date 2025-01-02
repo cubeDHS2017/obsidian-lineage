@@ -1,6 +1,7 @@
 import { SettingsStore } from 'src/main';
 import { ColorComponent, Setting } from 'obsidian';
 import { getDefaultTheme } from 'src/stores/view/subscriptions/effects/css-variables/helpers/get-default-theme';
+import { lang } from 'src/lang/lang';
 
 export const ActiveBranchColor = (
     container: HTMLElement,
@@ -27,7 +28,7 @@ export const ActiveBranchColor = (
         input.onChange(onChange);
     };
     new Setting(container)
-        .setName('Active branch color')
+        .setName(lang.settings_theme_active_branch_bg)
         .addColorPicker((cb) => {
             input = cb;
             setValue();
@@ -43,6 +44,6 @@ export const ActiveBranchColor = (
                     });
                     setValue();
                 })
-                .setTooltip('Reset');
+                .setTooltip(lang.settings_reset);
         });
 };

@@ -14,7 +14,7 @@
     import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
     import RightSidebar from './right-sidebar/right-sidebar.svelte';
-    import { dragToPan } from 'src/view/actions/drag-to-pan/drag-to-pan';
+    import { clickAndDrag } from 'src/view/actions/click-and-drag/click-and-drag';
     import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
 
@@ -36,7 +36,7 @@
 >
     <LeftSidebar />
 
-    <div class={`lineage-main`} use:mouseWheelZoom={view} use:dragToPan={view}>
+    <div class={`lineage-main`} use:mouseWheelZoom={view} use:clickAndDrag="{view}">
         <Container />
         <Toolbar />
         <Breadcrumbs />

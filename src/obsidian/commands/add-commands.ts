@@ -20,7 +20,7 @@ const createCommands = (plugin: Lineage) => {
         checkCallback: (checking: boolean) => boolean | void;
     })[] = [];
     commands.push({
-        name: lang.toggle_lineage_view,
+        name: lang.cmd_toggle_lineage_view,
         icon: customIcons.cards.name,
         checkCallback: (checking) => {
             const file = getActiveFile(plugin);
@@ -34,7 +34,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: lang.create_new_document,
+        name: lang.cmd_create_new_document,
         icon: customIcons.cards.name,
         checkCallback: (checking) => {
             if (checking) return true;
@@ -43,7 +43,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: lang.toggle_scrolling_mode,
+        name: lang.cmd_toggle_scrolling_mode,
         icon: customIcons.align.name,
         checkCallback: (checking) => {
             if (checking) {
@@ -56,7 +56,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Split card',
+        name: lang.cm_split_card,
         icon: customIcons.split.name,
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -68,7 +68,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Copy link to block',
+        name: lang.cm_copy_link_to_block,
         icon: 'links-coming-in',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -80,7 +80,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Toggle pin',
+        name: lang.cmd_toggle_pin_in_left_sidebar,
         icon: 'pin',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -104,7 +104,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Extract branch',
+        name: lang.cmd_extract_branch,
         icon: customIcons.cards.name,
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -116,7 +116,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Export column',
+        name: lang.cm_export_column,
         icon: 'file-text',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -128,7 +128,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: lang.export_document,
+        name: lang.cm_export_document,
         icon: 'file-text',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -140,7 +140,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Toggle minimap',
+        name: lang.cmd_toggle_minimap,
         icon: 'panel-right',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -154,7 +154,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Toggle left sidebar',
+        name: lang.cmd_toggle_left_sidebar,
         icon: 'panel-left',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -166,7 +166,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: lang.toggle_scrolling_mode,
+        name: lang.cmd_toggle_scrolling_mode,
         icon: customIcons.align.name,
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -180,7 +180,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: 'Toggle gap between cards',
+        name: lang.cmd_space_between_cards,
         icon: customIcons.gap.name,
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
@@ -193,7 +193,7 @@ const createCommands = (plugin: Lineage) => {
         },
     });
     commands.push({
-        name: 'Toggle single column mode',
+        name: lang.cmd_toggle_pin_in_left_sidebar,
         icon: 'rectangle-vertical',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);

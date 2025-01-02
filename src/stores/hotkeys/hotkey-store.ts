@@ -1,8 +1,5 @@
 import { Store } from 'src/lib/store/store';
-import {
-    CommandName,
-    GroupName,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { CommandName, GroupName } from 'src/lang/hotkey-groups';
 import { HotkeyAction, hotkeyReducer } from 'src/stores/hotkeys/hotkey-reducer';
 import { CustomHotkeys } from 'src/stores/settings/settings-type';
 import { Hotkey } from 'obsidian';

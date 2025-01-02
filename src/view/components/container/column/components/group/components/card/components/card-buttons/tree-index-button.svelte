@@ -14,6 +14,7 @@
     import {
         findHtmlElementPosition
     } from 'src/view/components/container/column/components/group/components/card/components/card-buttons/helpers/find-html-element-position';
+    import { lang } from 'src/lang/lang';
 
     const view = getView();
     export let nodeId: string;
@@ -36,11 +37,7 @@
         const targetLine = i + (format === 'sections' ? 1 : 0);
         const lines = view.data.split('\n');
         const nextLine = lines[targetLine] || '';
-        await openFileAndJumpToLine(
-            view,
-            targetLine,
-            nextLine.length,
-        );
+        await openFileAndJumpToLine(view, targetLine, nextLine.length);
     };
     const classes: Partial<Record<ActiveStatus, string>> = {
         [ActiveStatus.node]: 'is-active',
@@ -51,13 +48,12 @@
 </script>
 
 <div
-    aria-label="Reveal in editor"
+    aria-label={lang.card_btn_reveal_in_editor}
     class={'tree-index ' +
-        (activeStatus ? classes[activeStatus] : '') +
-        (hasChildren ? ' has-children' : '')}
+        (activeStatus ? classes[activeStatus] : '')}
     on:click={openFile}
 >
-    {section}
+    {section}{#if hasChildren}.{/if}
 </div>
 
 <style>
@@ -84,9 +80,4 @@
 
 
 
-
-    .has-children {
-        font-style: italic;
-
-    }
 </style>

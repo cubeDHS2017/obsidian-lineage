@@ -2,6 +2,7 @@ import { Column } from 'src/stores/document/document-state-type';
 
 /** maps an array of columns into a single nodes array that is sorted logically (1, 1.1, 2 ...) */
 export const sortTreeNodes = (columns: Column[]): string[] => {
+    if (columns.length === 0) return [];
     const sortedNodes: string[] = [];
     const stack: { nodeId: string; columnIndex: number }[] = [];
 

@@ -14,6 +14,7 @@ import {
     renderContextMenu,
 } from 'src/obsidian/context-menu/render-context-menu';
 import { selectInactiveCard } from 'src/obsidian/context-menu/select-inactive-card';
+import { lang } from 'src/lang/lang';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const target = event.target as HTMLElement;
@@ -55,27 +56,27 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const hasChildren = documentState.meta.groupParentIds.has(activeNode);
     const menuItems: MenuItemObject[] = [
         {
-            title: 'Split card',
+            title: lang.cm_split_card,
             icon: customIcons.split.name,
             action: () => openSplitNodeModal(view),
-            disabled: multipleNodesAreSelected || isInSidebar,
+            disabled: multipleNodesAreSelected || isInSidebar || hasChildren,
         },
         { type: 'separator' },
         {
-            title: 'Merge with the card above',
+            title: lang.cm_merge_above,
             icon: 'merge',
             action: () => mergeNode(view, 'up'),
             disabled: multipleNodesAreSelected || isInSidebar,
         },
         {
-            title: 'Merge with the card below',
+            title: lang.cm_merge_below,
             icon: 'merge',
             action: () => mergeNode(view, 'down'),
             disabled: multipleNodesAreSelected || isInSidebar,
         },
         { type: 'separator' },
         {
-            title: 'Copy link to block',
+            title: lang.cm_copy_link_to_block,
             icon: 'links-coming-in',
             action: () => copyLinkToBlock(view),
             disabled: multipleNodesAreSelected,
@@ -83,54 +84,56 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
         { type: 'separator' },
         !multipleNodesAreSelected && !hasChildren
             ? {
-                  title: 'Copy',
+                  title: lang.cm_copy,
                   icon: 'documents',
                   action: () => copyActiveNodesToClipboard(view),
               }
             : {
-                  title: 'Copy',
+                  title: lang.cm_copy,
                   icon: 'documents',
                   submenu: [
                       {
                           title: multipleNodesAreSelected
-                              ? 'Copy branches'
-                              : 'Copy branch',
+                              ? lang.cm_copy_branches
+                              : lang.cm_copy_branch,
                           icon: 'lineage-cards',
                           action: () =>
                               copyActiveBranchesToClipboard(view, true),
                       },
                       {
                           title: multipleNodesAreSelected
-                              ? 'Copy branches without formatting'
-                              : 'Copy branch without formatting',
+                              ? lang.cm_copy_branches_wo_formatting
+                              : lang.cm_copy_branch_wo_formatting,
                           icon: 'file-text',
                           action: () =>
                               copyActiveBranchesToClipboard(view, false),
                       },
                       {
                           title: multipleNodesAreSelected
-                              ? 'Copy sections without sub-items'
-                              : 'Copy section without sub-items',
+                              ? lang.cm_copy_section_wo_subitems
+                              : lang.cm_copy_sections_wo_subitems,
                           icon: 'file-text',
                           action: () => copyActiveNodesToClipboard(view),
                       },
                   ],
               },
         {
-            title: 'Cut',
+            title: lang.cm_cut,
             icon: 'scissors',
             action: () => cutNode(view),
             disabled: isInSidebar,
         },
         {
-            title: 'Paste',
+            title: lang.cm_paste,
             icon: 'paste',
             action: () => pasteNode(view),
             disabled: isInSidebar,
         },
         { type: 'separator' },
         {
-            title: isPinned ? 'Unpin' : 'Pin',
+            title: isPinned
+                ? lang.cm_unpin_from_left_sidebar
+                : lang.cm_pin_in_left_sidebar,
             icon: isPinned ? 'pin-off' : 'pin',
             action: () => {
                 documentStore.dispatch({
@@ -144,13 +147,13 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
         },
         { type: 'separator' },
         {
-            title: 'Extract branch',
+            title: lang.cm_extract_branch,
             icon: customIcons.cards.name,
             action: () => extractBranch(view),
             disabled: multipleNodesAreSelected || isInSidebar,
         },
         {
-            title: 'Export column',
+            title: lang.cm_export_column,
             icon: 'file-text',
             action: () => exportColumn(view),
             disabled: multipleNodesAreSelected || isInSidebar,

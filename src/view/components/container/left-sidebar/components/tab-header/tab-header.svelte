@@ -4,6 +4,8 @@
     import { LeftSidebarActiveTabStore } from '../../../../../../stores/settings/derived/view-settings-store';
     import { LeftSidebarActiveTab } from '../../../../../../stores/settings/settings-type';
     import { getView } from '../../../context';
+    import { lang } from 'src/lang/lang';
+
     const view = getView();
     const activeTab = LeftSidebarActiveTabStore(view);
     const setActiveTab = (tab: LeftSidebarActiveTab) => {
@@ -12,6 +14,7 @@
             payload: { tab },
         });
     };
+
 </script>
 
 <div class="sidebar-tabs-header">
@@ -19,7 +22,7 @@
         <ClickableIcon
             hasEnabledItems={false}
             isActive={$activeTab==="pinned-cards"}
-            label={'Pinned cards'}
+            label={lang.sidebar_tab_pinned_cards}
             onClick={() => setActiveTab("pinned-cards")}
         >
             <Pin class="svg-icon" />
@@ -27,7 +30,7 @@
         <ClickableIcon
             hasEnabledItems={false}
             isActive={$activeTab==="recent-cards"}
-            label={'Recent cards'}
+            label={lang.sidebar_tab_recent_cards}
             onClick={() => setActiveTab("recent-cards")}
         >
             <Clock class="svg-icon" />

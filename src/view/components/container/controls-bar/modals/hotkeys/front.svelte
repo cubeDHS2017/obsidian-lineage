@@ -1,5 +1,6 @@
 <script lang="ts">
     import { hotkeyStore } from '../../../../../../stores/hotkeys/hotkey-store';
+    import { lang } from 'src/lang/lang';
 
     let searchTerm = '';
 
@@ -18,12 +19,12 @@
             bind:value={searchTerm}
             class="search-input"
             enterkeyhint="search"
-            placeholder={'Filter'}
+            placeholder={lang.modals_hk_input_placeholder}
             spellcheck="false"
             type="search"
         />
         <div
-            aria-label={'Clear'}
+            aria-label={lang.tlb_search_clear}
             class="search-input-clear-button"
             on:click={() => {
                     searchTerm = '';

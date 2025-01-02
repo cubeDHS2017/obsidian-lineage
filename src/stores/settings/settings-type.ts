@@ -1,6 +1,6 @@
 import { Hotkey } from 'obsidian';
 
-import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { CommandName } from 'src/lang/hotkey-groups';
 import { StyleRule } from 'src/stores/settings/types/style-rules-types';
 
 export type CustomHotkeys = {

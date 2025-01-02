@@ -22,7 +22,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
     const _hasHeading = hasNHeadings(view.data, 1);
     const menuItems: MenuItemObject[] = [
         {
-            title: lang.format_headings,
+            title: lang.cm_format_headings,
             icon: 'heading-1',
             action: () => {
                 saveNodeContent(view);
@@ -34,7 +34,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
         },
         { type: 'separator' },
         {
-            title: lang.change_format_to_html_element,
+            title: lang.cm_change_format_to_html_element,
             icon: 'file-cog',
             action: () => {
                 setDocumentFormat(view.plugin, file.path, 'html-element');
@@ -42,7 +42,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
             checked: isHtmlElement,
         },
         {
-            title: lang.change_format_to_document,
+            title: lang.cm_change_format_to_document,
             icon: 'file-cog',
             action: () => {
                 setDocumentFormat(view.plugin, file.path, 'sections');
@@ -50,7 +50,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
             checked: isHtmlComments,
         },
         {
-            title: lang.change_format_to_outline,
+            title: lang.cm_change_format_to_outline,
             icon: 'file-cog',
             action: () => {
                 setDocumentFormat(view.plugin, file.path, 'outline');
@@ -59,7 +59,7 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
         },
         { type: 'separator' },
         {
-            title: lang.export_document,
+            title: lang.cm_export_document,
             icon: 'file-text',
             action: () => {
                 exportDocument(view);

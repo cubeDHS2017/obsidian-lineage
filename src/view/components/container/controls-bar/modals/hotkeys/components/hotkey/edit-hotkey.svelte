@@ -2,12 +2,13 @@
     import { Hotkey } from 'obsidian';
     import { RotateCcw, X } from 'lucide-svelte';
 
-    import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+    import { CommandName } from 'src/lang/hotkey-groups';
     import { hotkeyStore } from 'src/stores/hotkeys/hotkey-store';
     import { Modifiers } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-commands-dictionary';
     import { isMacLike, modKey } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { getView } from 'src/view/components/container/context';
+    import { lang } from 'src/lang/lang';
 
     export let isCustom: boolean | undefined;
     export let hotkey: Hotkey;
@@ -116,11 +117,11 @@
         />
     </div>
     <div class="save-and-cancel-buttons">
-        <button aria-label="Go back" class="hotkey-button"
+        <button aria-label={lang.modals_hk_editor_cancel} class="hotkey-button"
                 on:click={onCancel}
             ><X class="svg-icon" size={8} /></button
         >
-        <button aria-label="Reset" class="hotkey-button" disabled={!isCustom}
+        <button aria-label={lang.settings_reset} class="hotkey-button" disabled={!isCustom}
                 on:click={reset}
             ><RotateCcw class="svg-icon" size={8} /></button
         >

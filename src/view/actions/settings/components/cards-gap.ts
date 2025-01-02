@@ -1,6 +1,7 @@
 import { SettingsStore } from 'src/main';
 import { Setting, SliderComponent } from 'obsidian';
 import { DEFAULT_CARDS_GAP } from 'src/stores/settings/default-settings';
+import { lang } from 'src/lang/lang';
 
 export const CardsGap = (
     element: HTMLElement,
@@ -13,7 +14,7 @@ export const CardsGap = (
         input.setValue(settingsState.view.cardsGap);
     };
     new Setting(element)
-        .setName('Gap between cards')
+        .setName(lang.settings_layout_space_between_cards)
         .addSlider((cb) => {
             input = cb;
             cb.setLimits(0, 500, 10);
@@ -38,6 +39,6 @@ export const CardsGap = (
                     });
                     setValue();
                 })
-                .setTooltip('Reset');
+                .setTooltip(lang.settings_reset);
         });
 };

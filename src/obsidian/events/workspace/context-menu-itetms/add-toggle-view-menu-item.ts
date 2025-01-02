@@ -18,7 +18,9 @@ export const addToggleViewMenuItem = (
             leaf = getLeafOfFile(plugin, file, 'lineage');
         }
         const isTree = leaf && leaf.view.getViewType() === LINEAGE_VIEW_TYPE;
-        item.setTitle(isTree ? lang.open_in_editor : lang.open_in_lineage);
+        item.setTitle(
+            isTree ? lang.ocm_open_in_editor : lang.ocm_open_in_lineage,
+        );
         item.setIcon(isTree ? 'file-text' : customIcons.cards.name);
 
         item.onClick(async () => {

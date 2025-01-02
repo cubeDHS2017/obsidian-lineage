@@ -1,6 +1,7 @@
 import { SettingsStore } from 'src/main';
 import { ColorComponent, Setting } from 'obsidian';
 import { getDefaultTheme } from 'src/stores/view/subscriptions/effects/css-variables/helpers/get-default-theme';
+import { lang } from 'src/lang/lang';
 
 export const BackgroundColor = (
     element: HTMLElement,
@@ -27,7 +28,7 @@ export const BackgroundColor = (
         colorPicker.onChange(onChange);
     };
     new Setting(element)
-        .setName('Background color')
+        .setName(lang.settings_theme_bg)
         .addColorPicker((cb) => {
             colorPicker = cb;
             setValue();
@@ -43,6 +44,6 @@ export const BackgroundColor = (
                     });
                     setValue();
                 })
-                .setTooltip('Reset');
+                .setTooltip(lang.settings_reset);
         });
 };

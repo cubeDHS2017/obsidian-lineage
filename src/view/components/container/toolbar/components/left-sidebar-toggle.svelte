@@ -3,6 +3,7 @@
     import { PanelLeftDashed } from 'lucide-svelte';
     import { getView } from 'src/view/components/container/context';
     import { ShowLeftSidebarStore } from 'src/stores/settings/derived/view-settings-store';
+    import { lang } from 'src/lang/lang';
 
     const view = getView();
 
@@ -18,7 +19,8 @@
         <Button
             on:click={toggleLeftSidebar}
             active={$show}
-            label={'Toggle sidebar'}
+            label={lang.toolbar_toggle_left_sidebar}
+
             tooltipPosition="bottom"
         >
             <PanelLeftDashed class="svg-icon" size="32" />

@@ -1,7 +1,7 @@
 import { ExtendedHotkey, HotkeyState } from 'src/stores/hotkeys/hotkey-store';
 import { hotkeyToString } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/hotkey-to-string';
 import { Hotkey } from 'obsidian';
-import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { CommandName } from 'src/lang/hotkey-groups';
 
 export type UpdateHotkeyAction = {
     type: 'HOTKEY/UPDATE';

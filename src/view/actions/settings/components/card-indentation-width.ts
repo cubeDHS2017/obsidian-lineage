@@ -1,6 +1,7 @@
 import { SettingsStore } from 'src/main';
 import { Setting, SliderComponent } from 'obsidian';
 import { DEFAULT_INDENTATION_WIDTH } from 'src/stores/settings/default-settings';
+import { lang } from 'src/lang/lang';
 
 export const CardIndentationWidth = (
     element: HTMLElement,
@@ -13,8 +14,8 @@ export const CardIndentationWidth = (
         input.setValue(settingsState.view.nodeIndentationWidth);
     };
     new Setting(element)
-        .setName('Indentation width')
-        .setDesc('Applicable in single column mode')
+        .setName(lang.settings_layout_indentation_width)
+        .setDesc(lang.settings_layout_indentation_width_desc)
         .addSlider((cb) => {
             input = cb;
             cb.setLimits(0, 500, 5);
@@ -39,6 +40,6 @@ export const CardIndentationWidth = (
                     });
                     setValue();
                 })
-                .setTooltip('Reset');
+                .setTooltip(lang.settings_reset);
         });
 };

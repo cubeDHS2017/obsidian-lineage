@@ -11,6 +11,7 @@ import { CardsGap } from 'src/view/actions/settings/components/cards-gap';
 import { CardIndentationWidth } from 'src/view/actions/settings/components/card-indentation-width';
 import { MaintainEditMode } from 'src/view/actions/settings/components/maintain-edit-mode';
 import { Setting } from 'obsidian';
+import { lang } from 'src/lang/lang';
 
 export const renderSettings = (element: HTMLElement) => {
     const view = getView();
@@ -18,17 +19,20 @@ export const renderSettings = (element: HTMLElement) => {
     const render = () => {
         DefaultDocumentFormat(element, settingsStore);
         MaintainEditMode(element, settingsStore);
-        ScrollingBehavior(element, settingsStore);
-        new Setting(element).setHeading().setName('Appearance');
+        new Setting(element).setHeading().setName(lang.settings_appearance);
         BackgroundColor(element, settingsStore);
         ActiveBranchColor(element, settingsStore);
         FontSize(element, settingsStore);
-        new Setting(element).setHeading().setName('Layout');
+        new Setting(element).setHeading().setName(lang.settings_layout);
         CardWidth(element, settingsStore);
-        ColumnsGap(element, settingsStore);
         CardsGap(element, settingsStore);
+        ColumnsGap(element, settingsStore);
         CardIndentationWidth(element, settingsStore);
         LimitCardHeight(element, settingsStore);
+        new Setting(element)
+            .setHeading()
+            .setName(lang.settings_active_branch_scrolling);
+        ScrollingBehavior(element, settingsStore);
     };
     render();
     return {

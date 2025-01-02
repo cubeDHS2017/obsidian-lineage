@@ -2,7 +2,7 @@ import { HotkeyState } from 'src/stores/hotkeys/hotkey-store';
 import { pluginCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/load-commands';
 
 import { commandToHotkeys } from 'src/stores/hotkeys/reducers/helpers/command-to-hotkeys';
-import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { CommandName } from 'src/lang/hotkey-groups';
 
 export type ResetHotkeyAction = {
     type: 'HOTKEY/RESET';

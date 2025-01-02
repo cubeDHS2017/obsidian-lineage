@@ -3,7 +3,7 @@
     import EditHotkey from './edit-hotkey.svelte';
     import clx from 'classnames';
 
-    import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+    import { CommandName } from 'src/lang/hotkey-groups';
     import { ExtendedHotkey } from 'src/stores/hotkeys/hotkey-store';
     import { writable } from 'svelte/store';
     import { getView } from 'src/view/components/container/context';

@@ -6,11 +6,11 @@
     import {
         numericOperators,
         properties,
-        readableText,
         stringOperators,
         targets
     } from 'src/view/components/container/style-rules/helpers/constants';
     import { ruleEventHandlers } from 'src/view/components/container/style-rules/helpers/rule-event-handlers';
+    import { styleRulesLang } from 'src/lang/style-rules-lang';
 
 
     export let rule: StyleRule;
@@ -56,7 +56,7 @@
         aria-label="Property"
     >
         {#each properties as property}
-            <option value={property}>{readableText.properties[property]}</option
+            <option value={property}>{styleRulesLang.properties[property]}</option
             >
         {/each}
     </select>
@@ -66,7 +66,7 @@
         aria-label="Scope"
     >
         {#each targets as target}
-            <option value={target}>{readableText.targets[target]}</option>
+            <option value={target}>{styleRulesLang.targets[target]}</option>
         {/each}
     </select>
 
@@ -78,13 +78,13 @@
         {#if isStringCondition}
             {#each stringOperators as operator}
                 <option value={operator}
-                    >{readableText.operators[operator]}</option
+                    >{styleRulesLang.operators[operator]}</option
                 >
             {/each}
         {:else}
             {#each numericOperators as operator}
                 <option value={operator}
-                    >{readableText.operators[operator]}</option
+                    >{styleRulesLang.operators[operator]}</option
                 >
             {/each}
         {/if}

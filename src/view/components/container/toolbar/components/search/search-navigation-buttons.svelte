@@ -6,6 +6,7 @@
     import { onDestroy } from 'svelte';
     import { sortNodeIdsBySectionNumber } from 'src/stores/document/reducers/pinned-nodes/pin-node';
     import { activeNodeStore } from 'src/stores/view/derived/active-node-store';
+    import { lang } from 'src/lang/lang';
 
     const view = getView();
     const search = searchStore(view);
@@ -53,7 +54,7 @@
 <div class="search-container buttons-group">
     <Button
         disabled={results.length===0 }
-        label={'Previous result'}
+        label={lang.tlb_search_previous_result}
         on:click={selectPreviousResult}
         tooltipPosition="bottom"
     >
@@ -63,7 +64,7 @@
 
     <Button
         disabled={results.length===0 }
-        label={'Next result'}
+        label={lang.tlb_search_next_result}
         on:click={selectNextResult}
         tooltipPosition="bottom"
     >

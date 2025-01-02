@@ -1,6 +1,7 @@
 import { SettingsStore } from 'src/main';
 import { Setting, SliderComponent } from 'obsidian';
 import { DEFAULT_CARD_WIDTH } from 'src/stores/settings/default-settings';
+import { lang } from 'src/lang/lang';
 
 export const CardWidth = (
     element: HTMLElement,
@@ -13,7 +14,7 @@ export const CardWidth = (
         input.setValue(settingsState.view.cardWidth);
     };
     new Setting(element)
-        .setName('Card width')
+        .setName(lang.settings_layout_card_width)
         .addSlider((cb) => {
             input = cb;
             cb.setLimits(200, 1000, 10);
@@ -38,6 +39,6 @@ export const CardWidth = (
                     });
                     setValue();
                 })
-                .setTooltip('Reset');
+                .setTooltip(lang.settings_reset);
         });
 };

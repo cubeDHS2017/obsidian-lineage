@@ -1,10 +1,9 @@
 import { derivedOnAction } from 'src/lib/store/derived-on-action';
 import { CommandHotkeys, hotkeyStore } from 'src/stores/hotkeys/hotkey-store';
-import {
-    GroupName,
-    hotkeysLang,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { GroupName } from 'src/lang/hotkey-groups';
 import { groupArrayByProperty } from 'src/helpers/group-array-by-property';
+import { lang } from 'src/lang/lang';
+import { hotkeysLang } from 'src/lang/hotkeys-lang';
 
 type GroupedHotkeys = Record<GroupName, CommandHotkeys[]>;
 export const filteredHotkeys = derivedOnAction(
@@ -21,18 +20,18 @@ export const filteredHotkeys = derivedOnAction(
             });
         } else array = store.hotkeys;
         return groupArrayByProperty(array, 'group', {
-            'Create cards': [],
-            'Edit cards': [],
-            'Move cards': [],
-            'Merge cards': [],
-            'Delete cards': [],
-            Clipboard: [],
-            Navigation: [],
-            Selection: [],
-            Scrolling: [],
-            History: [],
-            Search: [],
-            Zoom: [],
+            [lang.hkg_create_cards]: [],
+            [lang.hkg_edit_cards]: [],
+            [lang.hkg_move_cards]: [],
+            [lang.hkg_merge_cards]: [],
+            [lang.hkg_delete_cards]: [],
+            [lang.hkg_clipboard]: [],
+            [lang.hkg_navigation]: [],
+            [lang.hkg_selection]: [],
+            [lang.hkg_scrolling]: [],
+            [lang.hkg_history]: [],
+            [lang.hkg_search]: [],
+            [lang.hkg_zoom]: [],
         } satisfies GroupedHotkeys);
     },
     ['UI/SET_SEARCH_TERM', 'SET_CONFLICTING_HOTKEYS'],
