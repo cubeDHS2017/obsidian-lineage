@@ -7,7 +7,10 @@
     import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
     import { setActiveSidebarNode } from 'src/stores/view/subscriptions/actions/set-active-sidebar-node';
     import { NodeStyle } from 'src/stores/view/view-state-type';
-    import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+    import { getCursorPosition } from 'src/view/components/container/column/components/group/components/card/components/content/event-handlers/get-cursor-position';
+    import { contentStore } from 'src/stores/document/derived/content-store';
+    import { get } from 'svelte/store';
+    import { EditorPosition } from 'obsidian';
 
     export let nodeId: string;
     export let active: ActiveStatus | null;
@@ -43,9 +46,7 @@
     };
 
     const enableEditMode = () => {
-        const editingState = viewStore.getValue().document.editing;
-        const editedNodeId = editingState.activeNodeId;
-        if (editedNodeId === nodeId) return;
+        if (editing) return;
         if (isInSidebar) {
             viewStore.dispatch({
                 type: 'view/sidebar/enable-edit',
@@ -76,16 +77,32 @@
     $: depth = section ? section.split('.').length - 1 : 0;
 
     const handleClick = (e: MouseEvent) => {
-        const wasEditing = isEditing(view);
-        setActive(e);
+        if (editing) return;
+        if (active === ActiveStatus.node) return;
         const maintainEditMode =
             view.plugin.settings.getValue().view.maintainEditMode;
-        if (wasEditing && maintainEditMode) {
+
+        if (view.inlineEditor.nodeId && maintainEditMode) {
+            const cursor = getCursorPosition(
+                get(contentStore(view, nodeId)),
+                e,
+            );
+            setActive(e);
+            if (cursor) {
+                view.inlineEditor.setNodeCursor(nodeId, cursor);
+            }
             enableEditMode();
+        } else {
+            setActive(e);
         }
     };
     const handleDoubleClick = (e: MouseEvent) => {
+        if (editing) return;
+        const cursor = getCursorPosition(get(contentStore(view, nodeId)), e);
         setActive(e);
+        if (cursor) {
+            view.inlineEditor.setNodeCursor(nodeId, cursor);
+        }
         enableEditMode();
     };
 </script>

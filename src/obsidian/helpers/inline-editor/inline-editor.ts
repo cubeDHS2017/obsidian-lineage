@@ -17,7 +17,6 @@ export class InlineEditor {
     private containerEl: HTMLElement;
     #nodeId: string | null = null;
     target: HTMLElement | null = null;
-    private appliedExternalCursor: EditorPosition | null = null;
     private onChangeSubscriptions: Set<() => void> = new Set();
     #mounting: Promise<void> = Promise.resolve();
     private subscriptions: Set<() => void> = new Set();
@@ -44,9 +43,9 @@ export class InlineEditor {
         return this.inlineView.editor.getCursor();
     }
 
-    overrideCursor(cursor: EditorPosition) {
-        if (this.nodeId) this.setCursor(cursor);
-        else this.appliedExternalCursor = cursor;
+    setNodeCursor(nodeId: string, cursor: EditorPosition) {
+        if (this.nodeId && nodeId === this.nodeId) this.setCursor(cursor);
+        else this.cursorPositions.set(nodeId, cursor);
     }
 
     setContent(content: string) {
@@ -93,21 +92,16 @@ export class InlineEditor {
     };
 
     restoreCursor = () => {
-        if (this.appliedExternalCursor) {
-            this.setCursor(this.appliedExternalCursor);
-            this.appliedExternalCursor = null;
+        const existingCursor = this.cursorPositions.get(this.nodeId!);
+        if (existingCursor) {
+            this.setCursor(existingCursor);
         } else {
-            const existingCursor = this.cursorPositions.get(this.nodeId!);
-            if (existingCursor) {
-                this.setCursor(existingCursor);
-            } else {
-                const lastLine = this.inlineView.editor.lastLine();
-                const ch = this.inlineView.editor.getLine(lastLine).length;
-                this.setCursor({
-                    line: lastLine,
-                    ch: ch,
-                });
-            }
+            const lastLine = this.inlineView.editor.lastLine();
+            const ch = this.inlineView.editor.getLine(lastLine).length;
+            this.setCursor({
+                line: lastLine,
+                ch: ch,
+            });
         }
     };
 

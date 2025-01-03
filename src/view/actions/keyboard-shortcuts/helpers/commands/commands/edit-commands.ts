@@ -27,11 +27,12 @@ export const editCommands = () => {
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
-                view.inlineEditor.overrideCursor({ line: 0, ch: 0 });
+                const nodeId = view.viewStore.getValue().document.activeNode;
+                view.inlineEditor.setNodeCursor(nodeId, { line: 0, ch: 0 });
                 view.viewStore.dispatch({
                     type: 'view/main/enable-edit',
                     payload: {
-                        nodeId: view.viewStore.getValue().document.activeNode,
+                        nodeId: nodeId,
                     },
                 });
             },

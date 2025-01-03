@@ -13,18 +13,19 @@ export const saveNodeAndInsertNode = (
     if (isEditing(view)) {
         saveNodeContent(view);
     }
+    const nodeId =
+        activeNodeId || view.viewStore.getValue().document.activeNode;
     view.documentStore.dispatch({
         type: 'DOCUMENT/INSERT_NODE',
         payload: {
             position: direction,
             content,
-            activeNodeId:
-                activeNodeId || view.viewStore.getValue().document.activeNode,
+            activeNodeId: nodeId,
         },
     });
     if (content) {
         if (direction === 'down' || direction === 'right') {
-            view.inlineEditor.overrideCursor({ line: 0, ch: 0 });
+            view.inlineEditor.setNodeCursor(nodeId, { line: 0, ch: 0 });
         }
     }
 };
