@@ -36,7 +36,7 @@ describe('headings.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(2);
+        expect(result.nodeStyles.size).toBe(2);
     });
 
     test('headings of self matches regex cob.l', () => {
@@ -61,6 +61,6 @@ describe('headings.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(4);
+        expect(result.nodeStyles.size).toBe(4);
     });
 });

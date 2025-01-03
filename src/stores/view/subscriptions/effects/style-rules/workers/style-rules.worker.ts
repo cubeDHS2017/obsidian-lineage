@@ -2,7 +2,7 @@ import { LineageDocument } from 'src/stores/document/document-state-type';
 import { StyleRule } from 'src/stores/settings/types/style-rules-types';
 import { StyleRulesProcessor } from 'src/stores/view/subscriptions/effects/style-rules/workers/style-rules-processor';
 import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
-import { NodeStyle } from 'src/stores/view/view-state-type';
+import { StyleRulesResult } from '../helpers/process-style-rules';
 
 type State = {
     [viewId: string]: StyleRulesProcessor;
@@ -32,7 +32,7 @@ const state: State = {};
 self.onmessage = (message: MessageEvent) => {
     const event = message.data as { id: string; payload: RulesWorkerEvent };
     const { id, payload } = event;
-    let result: null | Map<string, NodeStyle> = null;
+    let result: null | StyleRulesResult = null;
     switch (payload.type) {
         case 'destroy': {
             delete state[payload.payload.viewId];

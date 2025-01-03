@@ -12,7 +12,7 @@
     import { onDestroy } from 'svelte';
     import NoItems from '../no-items/no-items.svelte';
     import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
-    import { MatchingStyleRulesStore } from 'src/stores/view/derived/style-rules';
+    import { NodeStylesStore } from 'src/stores/view/derived/style-rules';
 
     let containerRef: HTMLElement | null = null;
     const view = getView();
@@ -23,7 +23,7 @@
 
     const activePinnedCard = ActivePinnedCardStore(view);
     const pendingConfirmation = PendingConfirmationStore(view);
-    const styleRules = MatchingStyleRulesStore(view);
+    const styleRules = NodeStylesStore(view);
     const subscriptions: (() => void)[] = [];
     subscriptions.push(
         ActivePinnedCardStore(view).subscribe((activeNodeId) => {

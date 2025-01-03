@@ -5,7 +5,7 @@ import { CardRanges } from 'src/stores/minimap/minimap-state-type';
 import type { RulesWorkerEvent } from 'src/stores/view/subscriptions/effects/style-rules/workers/style-rules.worker';
 // @ts-ignore
 import RulesWorker from 'src/stores/view/subscriptions/effects/style-rules/workers/style-rules.worker';
-import { NodeStyle } from 'src/stores/view/view-state-type';
+import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
 import { WorkerPromise } from 'src/helpers/worker-promise';
 // @ts-ignore
 import W from 'src/obsidian/status-bar/helpers/calculate-document-progress.worker';
@@ -22,7 +22,7 @@ export const drawMinimapWorker = new WorkerPromise<
 
 export const rulesWorker = new WorkerPromise<
     RulesWorkerEvent,
-    null | Map<string, NodeStyle>
+    null | StyleRulesResult
 >(new RulesWorker());
 
 export const calculateDocumentProgressW = new WorkerPromise<

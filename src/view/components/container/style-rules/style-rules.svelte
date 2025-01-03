@@ -6,6 +6,7 @@
     import { StyleRule } from 'src/stores/settings/types/style-rules-types';
     import DropTarget from './dnd/drop-target.svelte';
     import { lang } from 'src/lang/lang';
+    import { AllRuleMatchesStore } from 'src/stores/view/derived/style-rules';
 
     const view = getView();
     const documentPath = view.file?.path as string;
@@ -15,6 +16,7 @@
         dropTarget: StyleRule | null;
         dropPosition: 'before' | 'after';
     } | null>(null);
+    const allMatches = AllRuleMatchesStore(view);
 
     const addRule = () => {
         view.plugin.settings.dispatch({
@@ -70,6 +72,7 @@
                                     {setDraggedRule}
                                     {setDropTarget}
                                     {resetDragState}
+                                    results={$allMatches.get(rule.id)}
                                 />
                             </DropTarget>
                         {:else if $dragState?.draggedRule !== rule}
@@ -78,6 +81,7 @@
                                 {setDraggedRule}
                                 {setDropTarget}
                                 {resetDragState}
+                                results={$allMatches.get(rule.id)}
                             />
                         {/if}
                     </div>

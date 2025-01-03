@@ -37,8 +37,8 @@ describe('content.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(29);
-        expect(result.get('nMasFNiYv')).toEqual(style_1);
+        expect(result.nodeStyles.size).toBe(29);
+        expect(result.nodeStyles.get('nMasFNiYv')).toEqual(style_1);
     });
 
     test('content of self does not include cobol', () => {
@@ -63,7 +63,7 @@ describe('content.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(6);
+        expect(result.nodeStyles.size).toBe(6);
     });
 });
 
@@ -91,8 +91,8 @@ describe('content.direct-children', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(5);
-        expect(Array.from(result.values())).toEqual([
+        expect(result.nodeStyles.size).toBe(5);
+        expect(Array.from(result.nodeStyles.values())).toEqual([
             style_1,
             style_1,
             style_1,
@@ -126,7 +126,7 @@ describe('content.any-children', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(6);
+        expect(result.nodeStyles.size).toBe(6);
     });
 });
 
@@ -154,6 +154,6 @@ describe('content.any-parent', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(8);
+        expect(result.nodeStyles.size).toBe(8);
     });
 });

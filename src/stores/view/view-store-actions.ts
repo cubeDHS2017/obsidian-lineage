@@ -12,7 +12,7 @@ import { NodeNavigationAction } from 'src/stores/view/reducers/ui/navigate-activ
 import { SetActivePinnedNodeAction } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
 import { SetActiveRecentNodeAction } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 import { ToggleShowAllNodesAction } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
-import { NodeStyle } from 'src/stores/view/view-state-type';
+import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
 
 export type ViewStoreAction =
     | SearchAction
@@ -125,7 +125,7 @@ export type StyleRulesViewActions = UpdateStyleRulesResultAction;
 export type UpdateStyleRulesResultAction = {
     type: 'view/style-rules/update-results';
     payload: {
-        rules: Map<string, NodeStyle>;
+        results: StyleRulesResult | null;
     };
 };
 

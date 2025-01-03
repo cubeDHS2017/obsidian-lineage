@@ -38,6 +38,6 @@ describe('headings-word-count.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(23);
+        expect(result.nodeStyles.size).toBe(23);
     });
 });

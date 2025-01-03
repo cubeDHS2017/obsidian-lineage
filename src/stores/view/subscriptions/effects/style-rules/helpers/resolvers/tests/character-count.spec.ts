@@ -37,6 +37,6 @@ describe('character-count.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(26);
+        expect(result.nodeStyles.size).toBe(26);
     });
 });

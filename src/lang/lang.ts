@@ -250,6 +250,7 @@ export const lang = {
     modals_rules_add_rule: 'Add rule',
     modals_rules_no_rules: 'No rules',
     controls_rules: 'Rule-based styles',
+    modals_rules_matches: 'Number of matches',
 
     // settings
     controls_settings: 'Settings',

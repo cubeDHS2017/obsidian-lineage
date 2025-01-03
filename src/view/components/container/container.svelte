@@ -20,7 +20,7 @@
         saveNodeContent
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
     import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
-    import { MatchingStyleRulesStore } from 'src/stores/view/derived/style-rules';
+    import { NodeStylesStore } from 'src/stores/view/derived/style-rules';
     import { onMount } from 'svelte';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
@@ -41,7 +41,7 @@
     const search = searchStore(view);
     const limitPreviewHeight = limitPreviewHeightStore(view);
     const idSection = IdSectionStore(view);
-    const styleRules = MatchingStyleRulesStore(view);
+    const styleRules = NodeStylesStore(view);
     let parentNodes: Set<NodeId> = new Set<NodeId>();
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
     const groupParentIds = GroupParentIdsStore(view);

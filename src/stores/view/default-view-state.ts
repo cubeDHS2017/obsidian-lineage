@@ -57,7 +57,8 @@ export const defaultViewState = (): ViewState => ({
         activeNode: '',
     },
     styleRules: {
-        rules: new Map(),
+        nodeStyles: new Map(),
+        allMatches: new Map(),
     },
     keyboard: {
         shift: false,

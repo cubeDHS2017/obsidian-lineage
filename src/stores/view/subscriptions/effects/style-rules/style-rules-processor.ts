@@ -4,7 +4,7 @@ import { rulesWorker } from 'src/workers/worker-instances';
 import { StyleRule } from 'src/stores/settings/types/style-rules-types';
 import { LineageView } from 'src/view/view';
 import invariant from 'tiny-invariant';
-import { NodeStyle } from 'src/stores/view/view-state-type';
+import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
 
 export class StyleRulesProcessor {
     private view: LineageView;
@@ -39,7 +39,7 @@ export class StyleRulesProcessor {
 
     private processRules = debounce(
         async (action: DocumentStoreAction | null) => {
-            let results = new Map<string, NodeStyle>();
+            let results = null;
             if (this.rules.length > 0) {
                 const document = this.view.documentStore.getValue().document;
 
@@ -51,12 +51,12 @@ export class StyleRulesProcessor {
                         action,
                         viewId: this.view.id,
                     },
-                })) as Map<string, NodeStyle>;
+                })) as StyleRulesResult;
             }
             this.view.viewStore.dispatch({
                 type: 'view/style-rules/update-results',
                 payload: {
-                    rules: results,
+                    results,
                 },
             });
         },

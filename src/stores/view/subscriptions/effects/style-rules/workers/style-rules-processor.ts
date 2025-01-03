@@ -2,8 +2,10 @@ import { LineageDocument } from 'src/stores/document/document-state-type';
 import { StyleRule } from 'src/stores/settings/types/style-rules-types';
 import { NodePropertyResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/node-property-resolver/node-property-resolver';
 import { TargetNodeResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/target-node-resolver';
-import { NodeStyle } from 'src/stores/view/view-state-type';
-import { processStyleRules } from '../helpers/process-style-rules';
+import {
+    processStyleRules,
+    StyleRulesResult,
+} from '../helpers/process-style-rules';
 import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
 
 export class StyleRulesProcessor {
@@ -16,7 +18,7 @@ export class StyleRulesProcessor {
         document: LineageDocument,
         rules: StyleRule[],
         action: DocumentStoreAction | null,
-    ): Map<string, NodeStyle> => {
+    ): StyleRulesResult => {
         if (!this.propertyResolver || !this.targetResolver) {
             this.initialize(document);
         } else if (action) {

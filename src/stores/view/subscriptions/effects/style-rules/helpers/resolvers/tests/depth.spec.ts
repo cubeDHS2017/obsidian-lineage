@@ -37,7 +37,7 @@ describe('depth.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(5);
+        expect(result.nodeStyles.size).toBe(5);
     });
 
     test('depth is between', () => {
@@ -66,6 +66,6 @@ describe('depth.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(30);
+        expect(result.nodeStyles.size).toBe(30);
     });
 });

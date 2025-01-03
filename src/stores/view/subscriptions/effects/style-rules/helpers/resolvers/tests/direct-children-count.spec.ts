@@ -37,6 +37,6 @@ describe('direct-children-count.self', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(3);
+        expect(result.nodeStyles.size).toBe(3);
     });
 });

@@ -8,13 +8,21 @@ import { TargetNodeResolver } from 'src/stores/view/subscriptions/effects/style-
 import { NodePropertyResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/node-property-resolver/node-property-resolver';
 import { NodeStyle } from 'src/stores/view/view-state-type';
 
+export type StyleRulesResult = {
+    nodeStyles: Map<string, NodeStyle>;
+    allMatches: Map<string, string[]>;
+};
+
 export const processStyleRules = (
     doc: LineageDocument,
     rules: StyleRule[],
     nodeResolver: NodePropertyResolver,
     propertyResolver: TargetNodeResolver,
 ) => {
-    const nodeStyles = new Map<string, NodeStyle>();
+    const result: StyleRulesResult = {
+        nodeStyles: new Map(),
+        allMatches: new Map(),
+    };
     // ascending order
     const sortedRules = [...rules].sort((a, b) => a.priority - b.priority);
 
@@ -37,14 +45,21 @@ export const processStyleRules = (
                         nodeResolver,
                     );
                     if (match) {
-                        nodeStyles.set(nodeId, {
-                            color: rule.color,
-                        });
-                        break;
+                        if (!result.nodeStyles.has(nodeId)) {
+                            result.nodeStyles.set(nodeId, {
+                                color: rule.color,
+                            });
+                        }
+                        let ruleNodes = result.allMatches.get(rule.id);
+                        if (!ruleNodes) {
+                            ruleNodes = [];
+                            result.allMatches.set(rule.id, ruleNodes);
+                        }
+                        ruleNodes.push(nodeId);
                     }
                 }
             }
         }
     }
-    return nodeStyles;
+    return result;
 };

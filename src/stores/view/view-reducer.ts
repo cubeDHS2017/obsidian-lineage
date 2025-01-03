@@ -143,7 +143,13 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
             showHelpSidebar: false,
         };
     } else if (action.type === 'view/style-rules/update-results') {
-        state.styleRules.rules = action.payload.rules;
+        if (!action.payload.results) {
+            state.styleRules.nodeStyles = new Map();
+            state.styleRules.allMatches = new Map();
+        } else {
+            state.styleRules.nodeStyles = action.payload.results.nodeStyles;
+            state.styleRules.allMatches = action.payload.results.allMatches;
+        }
     } else if (action.type === 'view/keyboard/shift/up') {
         state.keyboard.shift = false;
         state.keyboard = { ...state.keyboard };

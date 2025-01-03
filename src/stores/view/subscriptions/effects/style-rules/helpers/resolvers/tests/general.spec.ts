@@ -54,7 +54,9 @@ describe('general', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.get('nztGACkf5')).toEqual({ color: '#111111' });
+        expect(result.nodeStyles.get('nztGACkf5')).toEqual({
+            color: '#111111',
+        });
     });
 
     test('disabled rules are ignored', () => {
@@ -80,7 +82,7 @@ describe('general', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(0);
+        expect(result.nodeStyles.size).toBe(0);
     });
 
     test('should ignore rules with empty values', () => {
@@ -106,6 +108,6 @@ describe('general', () => {
             nodeResolver,
             propertyResolver,
         );
-        expect(result.size).toBe(0);
+        expect(result.nodeStyles.size).toBe(0);
     });
 });

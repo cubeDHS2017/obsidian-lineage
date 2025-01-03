@@ -56,7 +56,8 @@ export type ViewState = {
     pinnedNodes: PinnedNodes;
     recentNodes: RecentNodes;
     styleRules: {
-        rules: Map<string, NodeStyle>;
+        nodeStyles: Map<string, NodeStyle>;
+        allMatches: Map<string, string[]>;
     };
     keyboard: {
         shift: boolean;
