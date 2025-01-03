@@ -16,7 +16,15 @@
 
 @media (max-width: 720px) {
     .lineage-modal{
-        max-width: 70vw;
+        left: var(--size-4-2);
+        overflow-x:auto
+    }
+}
+
+@media (max-height: 825px) {
+    .lineage-modal{
+        bottom: var(--size-4-2);
+        overflow-y:auto
     }
 }
 

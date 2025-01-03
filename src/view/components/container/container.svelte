@@ -196,7 +196,7 @@
             background-color: transparent;
         }
         --node-gap: var(--node-gap-setting);
-        --column-gap: var(--column-gap-setting);
+        --column-gap: var(--node-gap-setting);
         --group-gap: var(--node-gap-setting);
 
         & .active-parent-bridge-right {

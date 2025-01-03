@@ -74,12 +74,6 @@ export type SettingsActions =
           };
       }
     | {
-          type: 'SET_COLUMNS_GAP';
-          payload: {
-              gap: number;
-          };
-      }
-    | {
           type: 'SET_CARDS_GAP';
           payload: { gap: number };
       }
@@ -259,8 +253,6 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.scrolling = {
             ...store.view.scrolling,
         };
-    } else if (action.type === 'SET_COLUMNS_GAP') {
-        store.view.columnsGap = action.payload.gap;
     } else if (action.type === 'SET_CARDS_GAP') {
         store.view.cardsGap = action.payload.gap;
     } else if (action.type === 'view/left-sidebar/set-width') {

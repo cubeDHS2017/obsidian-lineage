@@ -4,7 +4,6 @@ export const cssVariables = {
     inactiveNodeBg: '--background-inactive-node',
     cardWidth: '--node-width',
     cardIndentationWidth: '--node-indentation-width',
-    columnGap: '--column-gap-setting',
     nodeGap: '--node-gap-setting',
     minCardHeight: '--min-node-height',
     zoomLevel: '--zoom-level',

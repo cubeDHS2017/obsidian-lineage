@@ -78,7 +78,10 @@ export class AlignBranch {
                 this.alignActiveBranch(context);
             }
         });
-        if (action?.type === 'view/life-cycle/mount') {
+        if (
+            action?.type === 'view/life-cycle/mount' ||
+            action?.type === 'view/align-branch'
+        ) {
             this.state.previousGroupId = '';
         } else {
             this.state.previousGroupId = newGroupId;

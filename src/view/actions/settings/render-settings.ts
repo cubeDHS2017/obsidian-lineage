@@ -5,7 +5,6 @@ import { ActiveBranchColor } from 'src/view/actions/settings/components/active-b
 import { CardWidth } from 'src/view/actions/settings/components/card-width';
 import { LimitCardHeight } from 'src/view/actions/settings/components/limit-card-height';
 import { DefaultDocumentFormat } from 'src/view/actions/settings/components/default-document-format';
-import { ColumnsGap } from 'src/view/actions/settings/components/columns-gap';
 import { CardsGap } from 'src/view/actions/settings/components/cards-gap';
 import { CardIndentationWidth } from 'src/view/actions/settings/components/card-indentation-width';
 import { MaintainEditMode } from 'src/view/actions/settings/components/maintain-edit-mode';
@@ -25,7 +24,6 @@ export const renderSettings = (element: HTMLElement) => {
         new Setting(element).setHeading().setName(lang.settings_layout);
         CardWidth(element, settingsStore);
         CardsGap(element, settingsStore);
-        ColumnsGap(element, settingsStore);
         CardIndentationWidth(element, settingsStore);
         LimitCardHeight(element, settingsStore);
     };

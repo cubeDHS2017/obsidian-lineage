@@ -24,6 +24,7 @@ export const matchActionToSettings = (
     if (!params.centerActiveNodeV) {
         params.centerActiveNodeV =
             action?.type === 'view/life-cycle/mount' ||
+            action?.type === 'view/align-branch' ||
             (!settings.view.singleColumnMode &&
                 (!previousGroupId || previousGroupId !== newGroupId));
     }

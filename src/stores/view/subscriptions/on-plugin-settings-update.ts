@@ -6,7 +6,6 @@ import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-vari
 import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
-import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
@@ -26,8 +25,6 @@ export const onPluginSettingsUpdate = (
         applyActiveBranchBg(view, state.view.theme.activeBranchBg);
     } else if (type === 'SET_CARD_WIDTH') {
         applyCardWidth(view, state.view.cardWidth);
-    } else if (type === 'SET_COLUMNS_GAP') {
-        applyColumnsGap(view, state.view.columnsGap);
     } else if (type === 'SET_CARDS_GAP') {
         applyCardsGap(view, state.view.cardsGap);
     } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
@@ -49,7 +46,6 @@ export const onPluginSettingsUpdate = (
         type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE' ||
         type === 'settings/view/scrolling/toggle-vertical-scrolling-mode' ||
         type === 'SET_CARDS_GAP' ||
-        type === 'SET_COLUMNS_GAP' ||
         type === 'view/modes/gap-between-cards/toggle' ||
         type === 'settings/view/set-node-indentation-width';
     if (shouldAlign) {

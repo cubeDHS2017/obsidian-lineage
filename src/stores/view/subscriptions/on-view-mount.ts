@@ -12,7 +12,6 @@ import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-
 import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links/mark-unresolved-links';
 import { attachHoverPreviewListener } from 'src/stores/view/subscriptions/event-listeners/attach-hover-preview-listener';
 import { attachWheelScrollListener } from 'src/stores/view/subscriptions/event-listeners/attach-wheel-scroll-listener';
-import { applyColumnsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-columns-gap';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { loadPinnedNodesToDocument } from 'src/stores/view/subscriptions/actions/load-pinned-nodes-to-document';
 import { attachCloseModalsListener } from 'src/stores/view/subscriptions/attach-close-modals-listener';
@@ -26,7 +25,6 @@ const applySettingsToView = (view: LineageView) => {
     applyActiveBranchBg(view, state.view.theme.activeBranchBg);
     applyCardWidth(view, state.view.cardWidth);
     applyCardIndentationWidth(view, state.view.nodeIndentationWidth);
-    applyColumnsGap(view, state.view.columnsGap);
     applyCardsGap(view, state.view.cardsGap);
     if (!view.container) return;
     applyZoomLevel(view, state.view.zoomLevel);

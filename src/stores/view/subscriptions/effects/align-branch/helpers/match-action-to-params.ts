@@ -27,7 +27,8 @@ export type PluginAction =
     | ViewStoreAction
     | SettingsActions
     | DocumentsStoreAction
-    | { type: 'view/life-cycle/mount' };
+    | { type: 'view/life-cycle/mount' }
+    | { type: 'view/align-branch' };
 
 export const matchActionToParams = (
     settings: Settings,

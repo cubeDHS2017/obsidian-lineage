@@ -218,7 +218,7 @@ export const lang = {
     settings_layout_limit_card_height: 'Limit card height',
 
     // single column view
-    settings_layout_indentation_width: 'Card indentation width',
+    settings_layout_indentation_width: 'Card indentation',
     settings_layout_indentation_width_desc:
         "Applicable in 'single column view'",
     controls_single_column: 'Single column view',
@@ -228,7 +228,6 @@ export const lang = {
     controls_gap_between_cards: 'Space between cards',
     cmd_space_between_cards: `Toggle 'space between cards'`,
     settings_layout_space_between_cards: 'Space between cards',
-    settings_layout_space_between_columns: 'Space between columns',
 
     // sidebar
     toolbar_toggle_left_sidebar: 'Left sidebar',

@@ -14,6 +14,7 @@
         flex-direction: column;
         padding: 20px;
         width: 500px;
+        overflow-y:auto;
         & .setting-item {
             padding: 10px 0;
         }
