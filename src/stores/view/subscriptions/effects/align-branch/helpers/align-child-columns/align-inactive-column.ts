@@ -1,12 +1,11 @@
 import { Column } from 'src/stores/document/document-state-type';
 import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
-import { Settings } from 'src/stores/settings/settings-type';
 import { alignElementVertically } from 'src/lib/align-element/align-element-vertically';
 
 export const alignInactiveColumn = (
     column: Column,
     container: HTMLElement,
-    settings: Settings,
+    zoomLevel: number,
     behavior?: ScrollBehavior,
 ) => {
     const nodes = column.groups.map((g) => g.nodes).flat();
@@ -17,8 +16,8 @@ export const alignInactiveColumn = (
     alignElementVertically(
         container,
         lastNodeElement,
-        settings.view.zoomLevel,
-        null,
+        zoomLevel,
+        true,
         behavior,
     );
 };

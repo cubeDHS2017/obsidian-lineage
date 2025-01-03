@@ -5,24 +5,21 @@ import {
 } from 'src/stores/view/view-store-actions';
 import { SettingsActions } from 'src/stores/settings/settings-reducer';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
-import { LineageView } from 'src/view/view';
+import { Settings } from 'src/stores/settings/settings-type';
 
 export type AlignBranchParams = {
-    alignInactiveColumns: boolean;
-    behavior: ScrollBehavior;
     delay: number;
     retry: boolean;
+    alignInactiveColumns: boolean;
     scrollFirstColumnToTheLeft: boolean;
-    centerActiveNode: boolean;
 };
-export const defaultAlignBranchParams: AlignBranchParams = {
+
+export const defaultAlignBranchParams = (): AlignBranchParams => ({
     alignInactiveColumns: false,
-    behavior: 'smooth' as const,
+    scrollFirstColumnToTheLeft: false,
     delay: 0,
     retry: false,
-    scrollFirstColumnToTheLeft: false,
-    centerActiveNode: false,
-};
+});
 
 export type PluginAction =
     | DocumentStoreAction
@@ -33,64 +30,42 @@ export type PluginAction =
     | { type: 'view/life-cycle/mount' };
 
 export const matchActionToParams = (
-    view: LineageView,
-    action: PluginAction,
-) => {
+    settings: Settings,
+    action?: PluginAction,
+): AlignBranchParams | null => {
     const skip =
+        action &&
         action.type === 'DOCUMENT/SET_NODE_CONTENT' &&
         action.context.isInSidebar;
     if (skip) return null;
 
-    const settings = view.plugin.settings.getValue();
-    const alignInactiveColumns = action.type === 'DOCUMENT/SPLIT_NODE';
+    const params = defaultAlignBranchParams();
+    if (!action) return params;
 
-    let behavior: ScrollBehavior = 'smooth';
-    if (action.type === 'DOCUMENT/MOVE_NODE') {
-        const verticalMove =
-            action.payload.direction === 'down' ||
-            action.payload.direction === 'up';
-        if (verticalMove) behavior = 'instant';
-    } else if (action.type === 'DOCUMENT/LOAD_FILE') {
-        behavior = 'instant';
-    } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
-        behavior = 'instant';
-    }
-
-    let delay = 0;
-    let retry = false;
     if (
         action.type === 'view/left-sidebar/toggle' ||
         action.type === 'VIEW/TOGGLE_MINIMAP'
     ) {
-        delay = 300;
+        params.delay = 300;
     } else if (action.type === 'DOCUMENT/DROP_NODE') {
-        delay = 16;
+        params.delay = 16;
     }
 
     if (action.type === 'DOCUMENT/MOVE_NODE') {
-        retry = true;
+        params.retry = true;
     } else if (action.type === 'DOCUMENT/INSERT_NODE') {
         if (settings.view.zoomLevel !== 1) {
-            retry = true;
+            params.retry = true;
         }
     }
 
-    const scrollFirstColumnToTheLeft =
-        settings.view.scrolling.horizontalScrollingMode ===
-            'reveal-active-card' &&
+    params.alignInactiveColumns =
+        action.type === 'DOCUMENT/SPLIT_NODE' ||
+        action.type === 'view/life-cycle/mount';
+
+    params.scrollFirstColumnToTheLeft =
+        !settings.view.scrolling.centerActiveNodeH &&
         (action.type === 'view/life-cycle/mount' ||
             action.type === 'UI/CHANGE_ZOOM_LEVEL');
-
-    const centerActiveNode =
-        // single-column-mode toggled on
-        settings.view.singleColumnMode &&
-        action.type === 'view/life-cycle/mount';
-    return {
-        behavior,
-        delay,
-        alignInactiveColumns,
-        retry,
-        scrollFirstColumnToTheLeft,
-        centerActiveNode,
-    };
+    return params;
 };

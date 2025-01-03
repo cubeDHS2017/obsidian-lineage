@@ -14,7 +14,7 @@ export const scrollFirstColumnToTheLeft = (
         alignElementHorizontally(
             container,
             firstColumnElement,
-            null,
+            false,
             'instant',
             true,
         );

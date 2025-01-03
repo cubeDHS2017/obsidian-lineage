@@ -14,10 +14,9 @@ export type Theme = {
     activeBranchBg?: string;
 };
 
-export type ScrollingMode = 'reveal-active-card' | 'keep-active-card-at-center';
 export type ScrollingSettings = {
-    horizontalScrollingMode: ScrollingMode;
-    verticalScrollingMode: ScrollingMode;
+    centerActiveNodeH: boolean;
+    centerActiveNodeV: boolean;
 };
 
 export type LineageDocumentFormat = 'outline' | 'sections' | 'html-element';

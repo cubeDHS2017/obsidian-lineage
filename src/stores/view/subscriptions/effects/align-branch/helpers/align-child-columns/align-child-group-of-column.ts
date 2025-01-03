@@ -1,13 +1,12 @@
 import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
 import { ViewState } from 'src/stores/view/view-state-type';
-import { Settings } from 'src/stores/settings/settings-type';
 import { alignGroupOfElementsVertically } from 'src/lib/align-element/align-group-of-elements-vertically';
 
 export const alignChildGroupOfColumn = (
     viewState: ViewState,
     container: HTMLElement,
     columnId: string,
-    settings: Settings,
+    zoomLevel: number,
     behavior?: ScrollBehavior,
 ) => {
     const columnElement = getNodeElement(container, columnId);
@@ -24,8 +23,8 @@ export const alignChildGroupOfColumn = (
     alignGroupOfElementsVertically(
         container,
         elements,
-        settings.view.zoomLevel,
-        null,
+        zoomLevel,
+        true,
         behavior,
     );
 };

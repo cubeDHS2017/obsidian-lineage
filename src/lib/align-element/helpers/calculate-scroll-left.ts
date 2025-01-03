@@ -1,10 +1,9 @@
-import { ScrollingMode } from 'src/stores/settings/settings-type';
 import { HORIZONTAL_PADDING } from 'src/lib/align-element/constants';
 
 export const calculateScrollLeft = (
     elementRect: DOMRect,
     containerRect: DOMRect,
-    mode: ScrollingMode | null,
+    center: boolean,
     scrollToTheLeft = false,
 ) => {
     const viewPortIsWideEnough = containerRect.width > elementRect.width;
@@ -20,7 +19,7 @@ export const calculateScrollLeft = (
     let scrollLeft = 0;
     if (!viewPortIsWideEnough) {
         scrollLeft = deltaLeft;
-    } else if (mode === 'keep-active-card-at-center') {
+    } else if (center) {
         const horizontalMiddle = containerRect.left + containerRect.width / 2;
         const elementMiddle = elementRect.left + elementRect.width / 2;
         scrollLeft = horizontalMiddle - elementMiddle;

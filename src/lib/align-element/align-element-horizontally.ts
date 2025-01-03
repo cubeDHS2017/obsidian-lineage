@@ -1,4 +1,3 @@
-import { ScrollingMode } from 'src/stores/settings/settings-type';
 import { calculateScrollLeft } from 'src/lib/align-element/helpers/calculate-scroll-left';
 
 import { THRESHOLD } from 'src/lib/align-element/constants';
@@ -6,7 +5,7 @@ import { THRESHOLD } from 'src/lib/align-element/constants';
 export const alignElementHorizontally = (
     container: HTMLElement,
     element: HTMLElement,
-    mode: ScrollingMode | null,
+    center: boolean,
     behavior: ScrollBehavior = 'smooth',
     scrollToTheLeft = false,
 ) => {
@@ -20,7 +19,7 @@ export const alignElementHorizontally = (
     const scrollLeft = calculateScrollLeft(
         elementRect,
         containerRect,
-        mode,
+        center,
         scrollToTheLeft,
     );
     if (Math.abs(scrollLeft) > THRESHOLD)

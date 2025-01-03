@@ -1,27 +1,19 @@
-import { AlignBranchState } from 'src/lib/align-element/align-element-v-and-h';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
-import { ViewState } from 'src/stores/view/view-state-type';
-import { Settings } from 'src/stores/settings/settings-type';
 import { alignElementVertically } from 'src/lib/align-element/align-element-vertically';
 
-export const alignParentsNodes = (
-    viewState: ViewState,
-    container: HTMLElement,
-    localState: AlignBranchState,
-    settings: Settings,
-    behavior?: ScrollBehavior,
-) => {
-    for (const id of viewState.document.activeBranch.sortedParentNodes) {
-        const element = getNodeElement(container, id);
+export const alignParentsNodes = (context: AlignBranchContext) => {
+    for (const id of context.activeBranch.sortedParentNodes) {
+        const element = getNodeElement(context.container, id);
         if (!element) continue;
 
         const columnId = alignElementVertically(
-            container,
+            context.container,
             element,
-            settings.view.zoomLevel,
-            null,
-            behavior,
+            context.settings.zoomLevel,
+            true,
+            context.settings.behavior,
         );
-        if (columnId) localState.columns.add(columnId);
+        if (columnId) context.state.columns.add(columnId);
     }
 };

@@ -1,31 +1,15 @@
-import { ViewState } from 'src/stores/view/view-state-type';
-import {
-    AlignBranchState,
-    alignElementVAndH,
-} from 'src/lib/align-element/align-element-v-and-h';
-import { ScrollingMode } from 'src/stores/settings/settings-type';
+import { alignElementVAndH } from 'src/lib/align-element/align-element-v-and-h';
 import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
-export const alignActiveNode = (
-    viewState: ViewState,
-    container: HTMLElement,
-    localState: AlignBranchState,
-    zoomLevel: number,
-    horizontalMode: ScrollingMode | null,
-    verticalMode: ScrollingMode | null,
-    behavior?: ScrollBehavior,
-) => {
-    const activeNodeId = viewState.document.activeNode;
-    const element = getNodeElement(container, activeNodeId);
+export const alignActiveNode = (context: AlignBranchContext) => {
+    const element = getNodeElement(context.container, context.activeNode);
     if (!element) return;
 
     const columnId = alignElementVAndH(
-        container,
+        context.container,
         element,
-        behavior,
-        zoomLevel,
-        horizontalMode,
-        verticalMode,
+        context.settings,
     );
-    if (columnId) localState.columns.add(columnId);
+    if (columnId) context.state.columns.add(columnId);
 };

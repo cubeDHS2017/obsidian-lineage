@@ -176,8 +176,7 @@
         </Button>
 
         <Button
-            active={$scrollSettingsStore.horizontalScrollingMode ===
-                'keep-active-card-at-center'}
+            active={$scrollSettingsStore.centerActiveNodeH}
             classes="control-item"
             label={lang.controls_toggle_scrolling_mode_horizontal}
             on:click={toggleScrollModeH}
@@ -186,8 +185,7 @@
             {@html customIcons.alignH.svg}
         </Button>
         <Button
-            active={$scrollSettingsStore.verticalScrollingMode ===
-                'keep-active-card-at-center'}
+            active={$scrollSettingsStore.centerActiveNodeV}
             classes="control-item"
             label={lang.controls_toggle_scrolling_mode_vertical}
             on:click={toggleScrollModeV}

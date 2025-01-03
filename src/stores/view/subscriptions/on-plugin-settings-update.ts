@@ -47,6 +47,7 @@ export const onPluginSettingsUpdate = (
         type === 'SET_LIMIT_PREVIEW_HEIGHT' ||
         type === 'VIEW/TOGGLE_MINIMAP' ||
         type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE' ||
+        type === 'settings/view/scrolling/toggle-vertical-scrolling-mode' ||
         type === 'SET_CARDS_GAP' ||
         type === 'SET_COLUMNS_GAP' ||
         type === 'view/modes/gap-between-cards/toggle' ||

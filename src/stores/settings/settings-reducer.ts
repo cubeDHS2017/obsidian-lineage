@@ -245,21 +245,17 @@ const updateState = (store: Settings, action: SettingsActions) => {
         }
         document.pinnedSections.activeSection = action.payload.section;
     } else if (action.type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE') {
-        store.view.scrolling.horizontalScrollingMode =
-            store.view.scrolling.horizontalScrollingMode ===
-            'reveal-active-card'
-                ? 'keep-active-card-at-center'
-                : 'reveal-active-card';
+        store.view.scrolling.centerActiveNodeH =
+            !store.view.scrolling.centerActiveNodeH;
+
         store.view.scrolling = {
             ...store.view.scrolling,
         };
     } else if (
         action.type === 'settings/view/scrolling/toggle-vertical-scrolling-mode'
     ) {
-        store.view.scrolling.verticalScrollingMode =
-            store.view.scrolling.verticalScrollingMode === 'reveal-active-card'
-                ? 'keep-active-card-at-center'
-                : 'reveal-active-card';
+        store.view.scrolling.centerActiveNodeV =
+            !store.view.scrolling.centerActiveNodeV;
         store.view.scrolling = {
             ...store.view.scrolling,
         };
@@ -278,7 +274,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
     } else if (action.type === 'settings/view/modes/toggle-single-column') {
         store.view.singleColumnMode = !store.view.singleColumnMode;
         if (store.view.singleColumnMode) {
-            store.view.scrolling.horizontalScrollingMode = 'reveal-active-card';
+            store.view.scrolling.centerActiveNodeH = false;
             store.view.scrolling = {
                 ...store.view.scrolling,
             };
