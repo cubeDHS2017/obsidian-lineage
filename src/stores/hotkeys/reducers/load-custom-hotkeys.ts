@@ -1,6 +1,5 @@
 import { CommandHotkeys, HotkeyState } from 'src/stores/hotkeys/hotkey-store';
 import { pluginCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/load-commands';
-import { CommandName } from 'src/lang/hotkey-groups';
 import { updateHotkey } from 'src/stores/hotkeys/reducers/update-hotkey';
 import { Hotkey } from 'obsidian';
 import { CustomHotkeys } from 'src/stores/settings/settings-type';
@@ -16,15 +15,9 @@ export type LoadCustomHotkeysAction = {
 
 export const loadCustomHotkeys = (
     state: HotkeyState,
-    action: LoadCustomHotkeysAction,
+    customHotkeys: CustomHotkeys,
 ) => {
-    for (const [name, customHotkey] of Object.entries(
-        action.payload.customHotkeys,
-    )) {
-        if (customHotkey.primary || customHotkey.secondary) {
-            state.customHotkeys[name as CommandName] = customHotkey;
-        }
-    }
+    state.customHotkeys = { ...customHotkeys };
     invariant(pluginCommands.current);
     state.hotkeys = [];
     for (const pluginCommand of pluginCommands.current) {
@@ -33,13 +26,10 @@ export const loadCustomHotkeys = (
         const customHotkey = state.customHotkeys[hotkey.name];
         if (customHotkey) {
             updateHotkey(state, {
-                type: 'HOTKEY/UPDATE',
-                payload: {
-                    command: hotkey.name,
-                    hotkey: (customHotkey.primary ||
-                        customHotkey.secondary) as Hotkey,
-                    primary: !!customHotkey.primary,
-                },
+                command: hotkey.name,
+                hotkey: (customHotkey.primary ||
+                    customHotkey.secondary) as Hotkey,
+                primary: !!customHotkey.primary,
             });
         }
     }

@@ -1,10 +1,6 @@
 import { LineageView } from 'src/view/view';
 import { eventToString } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/event-to-string';
-import { hotkeyStore } from 'src/stores/hotkeys/hotkey-store';
-import {
-    commandsDictionary,
-    updateCommandsDictionary,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-commands-dictionary';
+import { commandsDictionary } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-commands-dictionary';
 import { handleEscapeKey } from 'src/view/actions/on-escape/helpers/handle-escape-key';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
 
@@ -16,17 +12,6 @@ export const keyboardShortcuts = (
         view: LineageView;
     },
 ) => {
-    const unsubscribeFromHotkeyStore = hotkeyStore.subscribe(
-        (state, action, initialRun) => {
-            if (
-                action?.type === 'HOTKEY/UPDATE' ||
-                action?.type === 'HOTKEY/RESET' ||
-                initialRun
-            )
-                updateCommandsDictionary(state.hotkeys);
-        },
-    );
-
     const state = {
         shift: false,
     };
@@ -71,7 +56,6 @@ export const keyboardShortcuts = (
 
     return {
         destroy: () => {
-            unsubscribeFromHotkeyStore();
             target.removeEventListener('keydown', keyboardEventHandler);
             target.removeEventListener('keyup', onKeyup);
         },

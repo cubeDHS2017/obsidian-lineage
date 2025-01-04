@@ -13,29 +13,29 @@ export type UpdateHotkeyAction = {
 };
 export const updateHotkey = (
     state: HotkeyState,
-    action: UpdateHotkeyAction,
+    payload: UpdateHotkeyAction['payload'],
 ) => {
     const commandToUpdate = state.hotkeys.find(
-        (hotkey) => hotkey.name === action.payload.command,
+        (hotkey) => hotkey.name === payload.command,
     );
     if (!commandToUpdate) return;
 
-    let existingCustomHotkey = state.customHotkeys[action.payload.command];
+    let existingCustomHotkey = state.customHotkeys[payload.command];
     if (!existingCustomHotkey) {
         existingCustomHotkey = {};
-        state.customHotkeys[action.payload.command] = existingCustomHotkey;
+        state.customHotkeys[payload.command] = existingCustomHotkey;
     }
     const newHotkey = {
-        modifiers: action.payload.hotkey.modifiers,
-        key: action.payload.hotkey.key,
-        string_representation: hotkeyToString(action.payload.hotkey),
+        modifiers: payload.hotkey.modifiers,
+        key: payload.hotkey.key,
+        string_representation: hotkeyToString(payload.hotkey),
         isCustom: true,
     } satisfies ExtendedHotkey;
-    const hotkeyPosition = action.payload.primary ? 0 : 1;
+    const hotkeyPosition = payload.primary ? 0 : 1;
     commandToUpdate.hotkeys[hotkeyPosition] = newHotkey;
-    if (action.payload.primary) {
-        existingCustomHotkey.primary = action.payload.hotkey;
+    if (payload.primary) {
+        existingCustomHotkey.primary = payload.hotkey;
     } else {
-        existingCustomHotkey.secondary = action.payload.hotkey;
+        existingCustomHotkey.secondary = payload.hotkey;
     }
 };

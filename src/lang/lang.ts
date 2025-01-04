@@ -263,6 +263,9 @@ export const lang = {
     modals_hk_input_placeholder: 'Filter',
     modals_hk_editor_cancel: 'Cancel',
     controls_hotkeys: 'Hotkeys',
+    cmd_reset_hotkeys: 'Reset all view hotkeys',
+    cmd_load_alt_hotkeys_preset:
+        'View hotkeys: use Alt as the primary modifier',
 
     error_generic:
         'Something went wrong\nYou might find additional details in the developer console',

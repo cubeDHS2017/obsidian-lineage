@@ -14,6 +14,9 @@ import { extractBranch } from 'src/obsidian/commands/helpers/extract-branch/extr
 import { exportColumn } from 'src/view/actions/context-menu/card-context-menu/helpers/export-column';
 import { exportDocument } from 'src/obsidian/commands/helpers/export-document/export-document';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
+import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
+import { AltPrimaryModifier } from 'src/view/actions/keyboard-shortcuts/helpers/commands/presets/alt-primary-modifier';
+import { hotkeyStore } from 'src/stores/hotkeys/hotkey-store';
 
 const createCommands = (plugin: Lineage) => {
     const commands: (Omit<Command, 'id' | 'callback'> & {
@@ -205,6 +208,37 @@ const createCommands = (plugin: Lineage) => {
             });
         },
     });
+
+    commands.push({
+        name: lang.cmd_reset_hotkeys,
+        icon: 'keyboard',
+        checkCallback: (checking) => {
+            const view = getActiveLineageView(plugin);
+            if (checking) {
+                return Boolean(view);
+            }
+            hotkeyStore.dispatch({
+                type: 'hotkeys/reset-all',
+            });
+        },
+    });
+
+    if (!isMacLike) {
+        commands.push({
+            name: lang.cmd_load_alt_hotkeys_preset,
+            icon: 'keyboard',
+            checkCallback: (checking) => {
+                const view = getActiveLineageView(plugin);
+                if (checking) {
+                    return Boolean(view);
+                }
+                hotkeyStore.dispatch({
+                    type: 'hotkeys/apply-preset',
+                    payload: { preset: AltPrimaryModifier },
+                });
+            },
+        });
+    }
     return commands;
 };
 
