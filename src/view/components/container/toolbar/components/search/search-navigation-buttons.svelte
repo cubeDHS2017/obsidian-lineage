@@ -1,7 +1,6 @@
 <script lang="ts">
     import { ChevronDown, ChevronUp } from 'lucide-svelte';
     import Button from '../../../shared/button.svelte';
-    import { searchStore } from 'src/stores/view/derived/search-store';
     import { getView } from 'src/view/components/container/context';
     import { onDestroy } from 'svelte';
     import { sortNodeIdsBySectionNumber } from 'src/stores/document/reducers/pinned-nodes/pin-node';
@@ -9,31 +8,27 @@
     import { lang } from 'src/lang/lang';
 
     const view = getView();
-    const search = searchStore(view);
+    export let results: string[]
+
+
     const activeNode = activeNodeStore(view);
 
-    let results: string[] = [];
+    let sortedResults: string[]
+    $:{
+        sortedResults = sortNodeIdsBySectionNumber(
+            view.documentStore.getValue().sections,
+            results,
+        );
+    }
 
-    const subscriptions: (() => void)[] = [];
-    onDestroy(() => {
-        for (const unsub of subscriptions) {
-            unsub();
-        }
-    });
 
-    subscriptions.push(
-        searchStore(view).subscribe((value) => {
-            results = sortNodeIdsBySectionNumber(
-                view.documentStore.getValue().sections,
-                Array.from(value.results),
-            );
-        }),
-    );
+
+
 
     const selectNextResult = () => {
-        if (results.length === 0) return;
-        const currentIndex = results.indexOf($activeNode);
-        const nextId = results[(currentIndex + 1) % results.length];
+        if (sortedResults.length === 0) return;
+        const currentIndex = sortedResults.indexOf($activeNode);
+        const nextId = sortedResults[(currentIndex + 1) % sortedResults.length];
         view.viewStore.dispatch({
             type: 'DOCUMENT/SET_ACTIVE_NODE',
             payload: { id: nextId },
@@ -41,9 +36,9 @@
     };
 
     const selectPreviousResult = () => {
-        if (results.length === 0) return;
-        const currentIndex = results.indexOf($activeNode) === -1 ? results.length : results.indexOf($activeNode);
-        const prevId = results[(currentIndex - 1 + results.length) % results.length];
+        if (sortedResults.length === 0) return;
+        const currentIndex = sortedResults.indexOf($activeNode) === -1 ? sortedResults.length : sortedResults.indexOf($activeNode);
+        const prevId = sortedResults[(currentIndex - 1 + sortedResults.length) % sortedResults.length];
         view.viewStore.dispatch({
             type: 'DOCUMENT/SET_ACTIVE_NODE',
             payload: { id: prevId },
@@ -53,7 +48,7 @@
 
 <div class="search-container buttons-group">
     <Button
-        disabled={results.length===0 }
+        disabled={sortedResults.length===0 }
         label={lang.tlb_search_previous_result}
         on:click={selectPreviousResult}
         tooltipPosition="bottom"
@@ -63,7 +58,7 @@
 
 
     <Button
-        disabled={results.length===0 }
+        disabled={sortedResults.length===0 }
         label={lang.tlb_search_next_result}
         on:click={selectNextResult}
         tooltipPosition="bottom"
@@ -71,7 +66,7 @@
         <ChevronDown class="svg-icon" size="12" />
     </Button>
     <div class="search-stats">
-        {`${results.indexOf($activeNode) + 1} / ${results.length}`}
+        {`${sortedResults.indexOf($activeNode) + 1} / ${sortedResults.length}`}
     </div>
 </div>
 

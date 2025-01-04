@@ -1,5 +1,7 @@
 import { StyleRule } from 'src/stores/settings/types/style-rules-types';
 import { LineageView } from 'src/view/view';
+import { get } from 'svelte/store';
+import { DocumentStyleRulesStore } from 'src/stores/settings/derived/style-rules';
 
 export const ruleDndAction = (
     element: HTMLElement,
@@ -33,6 +35,11 @@ export const ruleDndAction = (
             e.preventDefault();
             return;
         }
+        const rules = get(DocumentStyleRulesStore(view));
+        if (rules.length === 1) {
+            e.preventDefault();
+            return;
+        }
 
         if (!e.dataTransfer) return;
         e.dataTransfer.effectAllowed = 'move';
@@ -55,7 +62,6 @@ export const ruleDndAction = (
     const handleDrop = (e: DragEvent) => {
         e.preventDefault();
         const target = e.currentTarget as HTMLElement;
-
         const data = JSON.parse(e.dataTransfer?.getData('text/plain') || '{}');
         if (!data.id) return;
         const rect = target.getBoundingClientRect();

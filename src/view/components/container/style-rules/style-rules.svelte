@@ -1,103 +1,31 @@
 <script lang="ts">
     import { DocumentStyleRulesStore } from '../../../../stores/settings/derived/style-rules';
     import { getView } from '../context';
-    import ConditionEditor from './condition-editor.svelte';
-    import { writable } from 'svelte/store';
-    import { StyleRule } from 'src/stores/settings/types/style-rules-types';
-    import DropTarget from './dnd/drop-target.svelte';
     import { lang } from 'src/lang/lang';
-    import { AllRuleMatchesStore } from 'src/stores/view/derived/style-rules';
+    import StyleRulesList from './components/style-rules-list.svelte';
+    import StyleRulesFooter from './components/style-rules-footer.svelte';
 
     const view = getView();
-    const documentPath = view.file?.path as string;
     const rulesStore = DocumentStyleRulesStore(view);
-    const dragState = writable<{
-        draggedRule: StyleRule | null;
-        dropTarget: StyleRule | null;
-        dropPosition: 'before' | 'after';
-    } | null>(null);
-    const allMatches = AllRuleMatchesStore(view);
-
-    const addRule = () => {
-        view.plugin.settings.dispatch({
-            type: 'settings/style-rules/add',
-            payload: { documentPath },
-        });
-    };
-
-    const setDraggedRule = (rule: StyleRule,) => {
-        dragState.update((dragState) => {
-            return {
-                dropTarget: dragState?.dropTarget || null,
-                dropPosition: dragState?.dropPosition || 'before',
-                draggedRule: rule,
-            };
-        });
-    };
-    const setDropTarget = (rule: StyleRule, position: 'before' | 'after') => {
-        dragState.update((dragState) => {
-            return {
-                draggedRule: dragState?.draggedRule || null,
-                dropTarget: rule,
-                dropPosition: position,
-            };
-        });
-    };
-
-    const resetDragState = () => {
-        dragState.set(null);
-    };
 </script>
 
-<div class="lineage-modal" on:mouseleave={resetDragState}>
+<div class="lineage-modal">
     <div class="modal-content">
         {#if $rulesStore.length === 0}
-            <div class="pane-empty" >{lang.modals_rules_no_rules}</div>
+            <div class="pane-empty">{lang.modals_rules_no_rules}</div>
         {:else}
-            <div
-                class={'rules-list' +
-                    ($dragState?.draggedRule ? ' dragging' : '')}
-            >
-                {#each $rulesStore as rule  (rule.id)}
-                    <div class="rule-container">
-                        {#if $dragState?.dropTarget?.id === rule.id}
-                            <DropTarget
-                                {rule}
-                                {resetDragState}
-                                dropPosition={$dragState.dropPosition}
-                                draggedRule={$dragState.draggedRule}
-                            >
-                                <ConditionEditor
-                                    {rule}
-                                    {setDraggedRule}
-                                    {setDropTarget}
-                                    {resetDragState}
-                                    results={$allMatches.get(rule.id)}
-                                />
-                            </DropTarget>
-                        {:else if $dragState?.draggedRule !== rule}
-                            <ConditionEditor
-                                {rule}
-                                {setDraggedRule}
-                                {setDropTarget}
-                                {resetDragState}
-                                results={$allMatches.get(rule.id)}
-                            />
-                        {/if}
-                    </div>
-                {/each}
-            </div>
+            <StyleRulesList rules={$rulesStore} />
         {/if}
-
-        <button class="add-rule" on:click={addRule}>{lang.modals_rules_add_rule}</button>
+        <StyleRulesFooter />
     </div>
 </div>
 
 <style>
     .modal-content {
         padding-bottom: 10px;
-        width: 800px;
-        max-width:80vw;
+        width: fit-content;
+        max-width: 90vw;
+        overflow-x: auto;
         min-height: 180px;
         max-height: 90vh;
         overflow-y: auto;
@@ -107,28 +35,12 @@
         justify-content: space-between;
     }
 
-    .add-rule {
-        padding: 8px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        align-self: end;
-        margin-right: 10px;
-    }
-
-    .rules-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 10px;
-    }
-    .rules-list.dragging {
-        background-color: var(--interactive-hover);
-    }
-
     .pane-empty {
         flex: 1;
         display: flex;
         align-items: center;
+        justify-content: center;
+        /* min width of a rule*/
+        width:936px;
     }
 </style>
