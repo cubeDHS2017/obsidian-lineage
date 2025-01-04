@@ -1,4 +1,5 @@
 import {
+    basicOperator,
     ConditionNode,
     StyleRule,
 } from 'src/stores/settings/types/style-rules-types';
@@ -33,7 +34,8 @@ export const processStyleRules = (
                     if (!rule.enabled) continue;
                     if (
                         typeof rule.condition.value === 'string' &&
-                        rule.condition.value.length === 0
+                        rule.condition.value.length === 0 &&
+                        !basicOperator.has(rule.condition.operator)
                     ) {
                         continue;
                     }

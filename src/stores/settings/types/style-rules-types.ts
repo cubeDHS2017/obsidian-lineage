@@ -1,3 +1,9 @@
+export const basicOperator = new Set<ComparisonOperator>([
+    'equals',
+    'not-equals',
+    'empty',
+    'not-empty',
+]);
 export type BaseOperator = 'equals' | 'not-equals' | 'empty' | 'not-empty';
 
 export type StringOperator =
