@@ -37,9 +37,9 @@
     .draggable:hover .drag-handle {
         background-size: 2px 4px;
         background-image: linear-gradient(
-            0deg,
-            hsla(0, 0%, 44.7%, 0.25) 20%,
-            transparent 40%
+                0deg,
+                hsla(0, 0%, 60%, 0.35) 20%,
+                transparent 40%
         );
     }
     .content {

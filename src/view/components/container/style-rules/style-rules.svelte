@@ -4,12 +4,13 @@
     import { lang } from 'src/lang/lang';
     import StyleRulesList from './components/style-rules-list.svelte';
     import StyleRulesFooter from './components/style-rules-footer.svelte';
+    import DraggableModal from '../shared/draggable-modal/draggable-modal.svelte';
 
     const view = getView();
     const rulesStore = DocumentStyleRulesStore(view);
 </script>
 
-<div class="lineage-modal">
+<DraggableModal>
     <div class="modal-content">
         {#if $rulesStore.length === 0}
             <div class="pane-empty">{lang.modals_rules_no_rules}</div>
@@ -18,8 +19,7 @@
         {/if}
         <StyleRulesFooter />
     </div>
-</div>
-
+</DraggableModal>
 <style>
     .modal-content {
         padding-bottom: 10px;
@@ -41,6 +41,6 @@
         align-items: center;
         justify-content: center;
         /* min width of a rule*/
-        width:936px;
+        width: 936px;
     }
 </style>
