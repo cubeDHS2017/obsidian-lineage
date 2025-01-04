@@ -17,6 +17,7 @@ import { loadPinnedNodesToDocument } from 'src/stores/view/subscriptions/actions
 import { attachCloseModalsListener } from 'src/stores/view/subscriptions/attach-close-modals-listener';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 import { attachCheckboxListener } from 'src/stores/view/subscriptions/effects/checkbox-listener/attach-checkbox-listener';
+import { applyViewSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-view-size';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -60,4 +61,5 @@ export const onViewMount = (view: LineageView) => {
     attachCloseModalsListener(view);
     view.rulesProcessor.onRulesUpdate();
     view.zoomFactor = view.plugin.settings.getValue().view.zoomLevel;
+    applyViewSize(view);
 };

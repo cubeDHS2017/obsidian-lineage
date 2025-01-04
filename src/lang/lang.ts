@@ -149,7 +149,7 @@ export const lang = {
     tlb_search_toggle: 'Toggle search input',
     tlb_search_show_all_cards: 'Show all cards',
     tlb_search_fuzzy_search: 'Fuzzy search',
-    tlb_search_previous_result: 'Prervious result',
+    tlb_search_previous_result: 'Previous result',
     tlb_search_next_result: 'Next result',
     tlb_search_clear: 'Clear',
     hk_toggle_search_input: 'Toggle search',

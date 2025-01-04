@@ -2,9 +2,12 @@
     import RuleInfo from './components/rule-info.svelte';
     import RuleEditor from './components/rule-editor.svelte';
     import { GripVertical } from 'lucide-svelte';
-    import { StyleRule } from '../../../../../../stores/settings/types/style-rules-types';
-    import { ruleDndAction } from './components/actions/rule-dnd';
-    import { getView } from '../../../context';
+    import { StyleRule } from '../../../../../../../../stores/settings/types/style-rules-types';
+    import {
+        ruleDndAction
+    } from 'src/view/components/container/style-rules/components/style-rules-list/components/style-rule/components/actions/rule-dnd';
+    import { getView } from '../../../../../context';
+    import RuleActions from './components/rule-actions.svelte';
 
     export let setDraggedRule: (rule: StyleRule) => void;
     export let setDropTarget: (
@@ -32,18 +35,21 @@
     <div class="drag-handle">
         <GripVertical class="svg-icon" />
     </div>
-    <RuleInfo {rule} {results}/>
-    <RuleEditor {rule}/>
+    <RuleInfo {rule} {results} />
+    <RuleEditor {rule} />
+    <RuleActions {rule} />
 </div>
 
 <style>
     .rule-container {
+        margin-top: 10px;
         display: flex;
         border-radius: 4px;
         overflow: hidden;
         background-color: var(--color-base-20);
         padding: 12px;
-        gap: 4px 8px;
+        gap: 8px;
+        flex-wrap: wrap;
     }
 
     .drag-handle {
@@ -56,5 +62,8 @@
 
     .drag-handle:hover {
         color: var(--text-normal);
+    }
+    .rule-container:nth-child(-n + 1) {
+        margin-top: 0;
     }
 </style>

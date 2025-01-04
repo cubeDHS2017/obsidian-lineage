@@ -26,7 +26,7 @@
     }
     @media (max-width: 720px) {
         .groups {
-            width: initial;
+            width: fit-content;
         }
     }
 </style>

@@ -28,17 +28,9 @@
         border-radius: 4px;
         gap: 8px;
         background-color: var(--color-base-30);
+        flex-wrap:wrap;
     }
-    @media (max-width: 720px) {
-        .command {
-            flex-direction: column;
-            align-items: start;
-            width: 190px;
-        }
-        .hotkeys {
-            align-self: center;
-        }
-    }
+
     .hotkeys {
         display: flex;
         flex-direction: column;

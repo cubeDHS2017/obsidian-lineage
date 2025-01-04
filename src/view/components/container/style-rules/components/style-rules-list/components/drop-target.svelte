@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { StyleRule } from '../../../../../stores/settings/types/style-rules-types';
-    import { getView } from '../../context';
+    import { StyleRule } from '../../../../../../../stores/settings/types/style-rules-types';
+    import { getView } from '../../../../context';
 
     export let rule: StyleRule;
     export let resetDragState: () => void;

@@ -1,10 +1,9 @@
 <script lang="ts">
-    import { StyleRule } from '../../../../../../../stores/settings/types/style-rules-types';
-    import { getView } from '../../../../context';
-    import { Trash } from 'lucide-svelte';
-    import { numericOperators, properties, stringOperators, targets } from '../../../helpers/constants';
-    import { ruleEventHandlers } from '../../../helpers/rule-event-handlers';
-    import { styleRulesLang } from '../../../../../../../lang/style-rules-lang';
+    import { StyleRule } from '../../../../../../../../../stores/settings/types/style-rules-types';
+    import { getView } from '../../../../../../context';
+    import { numericOperators, properties, stringOperators, targets } from '../../../../../helpers/constants';
+    import { ruleEventHandlers } from '../../../../../helpers/rule-event-handlers';
+    import { styleRulesLang } from '../../../../../../../../../lang/style-rules-lang';
 
     export let rule: StyleRule;
     const view = getView();
@@ -19,7 +18,7 @@
         rule.condition.property === 'headings';
 </script>
 
-<div class="rule">
+<div class="rule-editor">
     <input type="color" value={rule.color} on:input={h.handleColorChange} />
 
     <div class="select-elements">
@@ -90,32 +89,20 @@
             />
         {/if}
     </div>
-    <input
-        type="checkbox"
-        checked={rule.enabled}
-        on:change={h.handleToggleChange}
-        aria-label="Enable"
-    />
-    <div
-        class="clickable-icon delete-button"
-        on:click={h.deleteRule}
-        aria-label="Delete"
-    >
-        <Trash class="svg-icon" />
-    </div>
+
     <!--    <div class="debug-node-id">{rule.id}</div>-->
 </div>
 
 <style>
-    .rule {
+    .rule-editor {
 
         display: flex;
         gap: 8px;
         align-items: center;
-        justify-content: space-between;
         position: relative;
         width: 90%;
         flex: 1;
+        flex-wrap:wrap
     }
 
 
@@ -141,14 +128,6 @@
         }
     }
 
-
-    .delete-button {
-        background: #ff4444;
-        border: none;
-
-        color: white;
-        cursor: pointer;
-    }
 
     /* .debug-node-id {
         position: absolute;

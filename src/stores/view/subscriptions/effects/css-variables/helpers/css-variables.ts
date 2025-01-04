@@ -7,4 +7,6 @@ export const cssVariables = {
     nodeGap: '--node-gap-setting',
     minCardHeight: '--min-node-height',
     zoomLevel: '--zoom-level',
+    viewWidth: '--view-width',
+    viewHeight: '--view-height',
 };

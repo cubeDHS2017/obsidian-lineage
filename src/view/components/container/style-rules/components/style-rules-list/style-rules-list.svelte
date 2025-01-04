@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { AllRuleMatchesStore } from '../../../../../stores/view/derived/style-rules';
-    import { StyleRule } from '../../../../../stores/settings/types/style-rules-types';
+    import { AllRuleMatchesStore } from '../../../../../../stores/view/derived/style-rules';
+    import { StyleRule } from '../../../../../../stores/settings/types/style-rules-types';
     import { writable } from 'svelte/store';
-    import { getView } from '../../context';
-    import StyleRuleContainer from './style-rule/style-rule.svelte';
-    import DropTarget from './drop-target.svelte';
+    import { getView } from '../../../context';
+    import StyleRuleContainer from './components/style-rule/style-rule.svelte';
+    import DropTarget from './components/drop-target.svelte';
+    import EmptyList from './components/empty-list.svelte';
 
     export let rules: StyleRule[];
     const view = getView();
@@ -43,8 +44,10 @@
     class={'rules-list' + ($dragState?.draggedRule ? ' dragging' : '')}
     on:mouseleave={resetDragState}
 >
-    {#each rules as rule (rule.id)}
-        <div class="rule-container">
+    {#if rules.length === 0}
+        <EmptyList />
+    {:else}
+        {#each rules as rule (rule.id)}
             {#if $dragState?.dropTarget?.id === rule.id}
                 <DropTarget
                     {rule}
@@ -69,18 +72,17 @@
                     results={$allMatches.get(rule.id)}
                 />
             {/if}
-        </div>
-    {/each}
+        {/each}
+    {/if}
 </div>
 
 <style>
     .rules-list {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
         padding: 10px;
+        height: 100%;
     }
     .rules-list.dragging {
         background-color: var(--interactive-hover);
     }
+    
 </style>

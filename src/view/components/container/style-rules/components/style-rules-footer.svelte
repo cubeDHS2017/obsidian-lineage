@@ -12,16 +12,25 @@
     };
 </script>
 
+<div class="modal-footer">
+
 <button class="add-rule" on:click={addRule}>{lang.modals_rules_add_rule}</button
 >
+</div>
 
 <style>
+    .modal-footer{
+        width:100%;
+        padding-bottom: 10px;
+        display: flex;
+        justify-content: end;
+    }
     .add-rule {
-        padding: 8px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
         align-self: end;
         margin-right: 10px;
+        padding: 8px;
     }
 </style>

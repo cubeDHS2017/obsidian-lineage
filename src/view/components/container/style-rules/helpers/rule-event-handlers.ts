@@ -9,21 +9,7 @@ import { LineageView } from 'src/view/view';
 
 export const ruleEventHandlers = (view: LineageView, ruleId: string) => {
     const documentPath = () => view.file?.path ?? '';
-    const toggleRule = (id: string, enabled: boolean) => {
-        view.plugin.settings.dispatch({
-            type: enabled
-                ? 'settings/style-rules/enable-rule'
-                : 'settings/style-rules/disable-rule',
-            payload: { documentPath: documentPath(), id },
-        });
-    };
 
-    const deleteRule = () => {
-        view.plugin.settings.dispatch({
-            type: 'settings/style-rules/delete',
-            payload: { documentPath: documentPath(), id: ruleId },
-        });
-    };
     const updateRule = (id: string, rule: Partial<StyleRule>) => {
         view.plugin.settings.dispatch({
             type: 'settings/style-rules/update',
@@ -73,11 +59,6 @@ export const ruleEventHandlers = (view: LineageView, ruleId: string) => {
         updateRule(ruleId, { color: target.value });
     };
 
-    const handleToggleChange = (e: Event) => {
-        const target = e.target as HTMLInputElement;
-        toggleRule(ruleId, target.checked);
-    };
-
     return {
         handleScopeChange,
         handlePropertyChange,
@@ -85,7 +66,5 @@ export const ruleEventHandlers = (view: LineageView, ruleId: string) => {
         handleValueChange,
         handleValueBChange,
         handleColorChange,
-        handleToggleChange,
-        deleteRule,
     };
 };
