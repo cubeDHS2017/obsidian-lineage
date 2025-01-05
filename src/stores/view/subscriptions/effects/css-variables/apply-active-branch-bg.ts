@@ -7,8 +7,8 @@ export const applyActiveBranchBg = (
     color: string | undefined,
 ) => {
     if (color) {
-        view.containerEl.style.setProperty(cssVariables.activeBranchBg, color);
+        view.container!.style.setProperty(cssVariables.activeBranchBg, color);
     } else {
-        view.containerEl.style.removeProperty(cssVariables.activeBranchBg);
+        view.container!.style.removeProperty(cssVariables.activeBranchBg);
     }
 };

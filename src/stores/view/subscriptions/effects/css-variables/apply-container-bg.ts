@@ -8,9 +8,7 @@ export const applyContainerBg = (
 ) => {
     if (color) {
         view.containerEl.style.setProperty(cssVariables.containerBg, color);
-        view.containerEl.style.setProperty(cssVariables.inactiveNodeBg, color);
     } else {
         view.containerEl.style.removeProperty(cssVariables.containerBg);
-        view.containerEl.style.removeProperty(cssVariables.inactiveNodeBg);
     }
 };

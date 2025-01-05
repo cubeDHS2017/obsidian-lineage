@@ -1,13 +1,12 @@
 .lineage-main {
     --lineage-accent: #55b1ae;
     --lineage-color-selection: #418cff;
-    --color-active-parent:var(--text-normal);
 }
 .theme-dark {
     --background-container: #373d4c;
     --background-active-node: var(--background-primary);
     --background-active-parent: #5b637a;
-    --background-inactive-node: var(--background-active-parent);
+    --color-active-parent:var(--text-normal);
     --lineage-accent-faint: #628c8c;
     --lineage-color-selection-faint: #567aab;
 }
@@ -15,7 +14,7 @@
     --background-container: #899cb3;
     --background-active-node: var(--background-primary);
     --background-active-parent: #cedbeb;
-    --background-inactive-node: var(--background-active-parent);
+    --color-active-parent:var(--text-normal);
     --lineage-accent-faint: #adccca;
     --lineage-color-selection-faint: #8eaedf;
 }
@@ -47,7 +46,8 @@
 
 .inactive-node {
     opacity: var(--inactive-card-opacity);
-    background-color: var(--background-inactive-node);
+    background-color: var(--background-active-parent);
+    --text-normal: var(--color-active-parent);
     transition: opacity 100ms;
 }
 .inactive-node:hover {
@@ -55,7 +55,9 @@
 }
 
 /* group */
-
+.group{
+    transition: opacity 100ms;
+}
 .group:not([id^='group-r']):hover {
     & .inactive-node {
         opacity: 0.4;

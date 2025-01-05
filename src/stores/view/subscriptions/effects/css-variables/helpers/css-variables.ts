@@ -2,7 +2,6 @@ export const cssVariables = {
     activeBranchBg: '--background-active-parent',
     activeBranchColor: '--color-active-parent',
     containerBg: '--background-container',
-    inactiveNodeBg: '--background-inactive-node',
     cardWidth: '--node-width',
     cardIndentationWidth: '--node-indentation-width',
     nodeGap: '--node-gap-setting',

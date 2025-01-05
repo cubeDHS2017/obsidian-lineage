@@ -6,11 +6,11 @@ export const applyActiveBranchColor = (
     color: string | undefined,
 ) => {
     if (color) {
-        view.containerEl.style.setProperty(
+        view.container!.style.setProperty(
             cssVariables.activeBranchColor,
             color,
         );
     } else {
-        view.containerEl.style.removeProperty(cssVariables.activeBranchColor);
+        view.container!.style.removeProperty(cssVariables.activeBranchColor);
     }
 };
