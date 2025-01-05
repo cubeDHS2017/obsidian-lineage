@@ -7,8 +7,9 @@ import type { RulesWorkerEvent } from 'src/stores/view/subscriptions/effects/sty
 import RulesWorker from 'src/stores/view/subscriptions/effects/style-rules/workers/style-rules.worker';
 import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
 import { WorkerPromise } from 'src/helpers/worker-promise';
+import type { StatusBarWorkerResult } from 'src/obsidian/status-bar/helpers/status-bar.worker';
 // @ts-ignore
-import W from 'src/obsidian/status-bar/helpers/calculate-document-progress.worker';
+import StatusBarWorker from 'src/obsidian/status-bar/helpers/status-bar.worker';
 import { DocumentProgressProps } from 'src/obsidian/status-bar/helpers/calculate-document-prorgess';
 
 export const drawMinimapWorker = new WorkerPromise<
@@ -25,7 +26,7 @@ export const rulesWorker = new WorkerPromise<
     null | StyleRulesResult
 >(new RulesWorker());
 
-export const calculateDocumentProgressW = new WorkerPromise<
+export const statusBarWorker = new WorkerPromise<
     DocumentProgressProps,
-    number
->(new W());
+    StatusBarWorkerResult
+>(new StatusBarWorker());

@@ -1,12 +1,13 @@
 import { LineageView } from 'src/view/view';
 import Lineage from 'src/main';
-import { calculateDocumentProgressW } from 'src/workers/worker-instances';
+import { statusBarWorker } from 'src/workers/worker-instances';
 
 export class StatusBar {
     private container: HTMLElement;
     private elements: {
         numberOfCards: HTMLElement;
         documentProgress: HTMLElement;
+        numberOfChildren: HTMLElement;
     };
 
     constructor(public plugin: Lineage) {
@@ -17,11 +18,15 @@ export class StatusBar {
         this.container = this.plugin.addStatusBarItem();
         this.elements = {
             numberOfCards: this.container.createDiv(),
+            numberOfChildren: this.container.createDiv(),
             documentProgress: this.container.createDiv(),
         };
-        this.elements.documentProgress.style.marginLeft = '5px';
+        this.elements.numberOfCards.style.marginRight = '5px';
+        this.elements.numberOfChildren.style.marginRight = '5px';
         this.elements.documentProgress.ariaLabel =
             'Progress through the document';
+        this.elements.documentProgress.ariaLabel =
+            'Total number of child cards';
         this.plugin.registerEvent(
             this.plugin.app.workspace.on('active-leaf-change', (x) => {
                 const visible = Boolean(x && x.view instanceof LineageView);
@@ -33,10 +38,13 @@ export class StatusBar {
     private setVisibility(visible: boolean) {
         this.container.toggleClass('lineage__hidden-element', !visible);
     }
+    private setElementVisibility(element: HTMLElement, visible: boolean) {
+        element.toggleClass('lineage__hidden-element', !visible);
+    }
 
     updateAll = (view: LineageView) => {
         this.updateCardsNumber(view);
-        this.updateProgressIndicator(view);
+        this.updateProgressIndicatorAndChildCount(view);
     };
 
     updateCardsNumber = (view: LineageView) => {
@@ -47,13 +55,24 @@ export class StatusBar {
             cards + ' card' + (cards === 1 ? '' : 's'),
         );
     };
-    updateProgressIndicator = async (view: LineageView) => {
+    updateProgressIndicatorAndChildCount = async (view: LineageView) => {
         const document = view.documentStore.getValue().document;
         const activeNode = view.viewStore.getValue().document.activeNode;
-        const progress = await calculateDocumentProgressW.run({
+        const result = await statusBarWorker.run({
             document,
             activeNode,
         });
-        this.elements.documentProgress.setText(progress + ' %');
+        this.elements.documentProgress.setText(result.progress + ' %');
+        const totalChildCount = result.totalChildCount;
+        if (totalChildCount > 0) {
+            this.elements.numberOfChildren.setText(
+                totalChildCount +
+                    ' child card' +
+                    (totalChildCount === 1 ? '' : 's'),
+            );
+            this.setElementVisibility(this.elements.numberOfChildren, true);
+        } else {
+            this.setElementVisibility(this.elements.numberOfChildren, false);
+        }
     };
 }

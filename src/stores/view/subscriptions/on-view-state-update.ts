@@ -40,7 +40,7 @@ export const onViewStateUpdate = (
         // this should be handled internally
         updateActiveBranch(viewStore, documentState);
         persistActiveNodeInPluginSettings(view);
-        view.plugin.statusBar.updateProgressIndicator(view);
+        view.plugin.statusBar.updateProgressIndicatorAndChildCount(view);
     }
     if (activeNodeChange) {
         if (view.minimapStore) {

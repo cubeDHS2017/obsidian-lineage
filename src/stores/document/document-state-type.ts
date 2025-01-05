@@ -12,6 +12,7 @@ export type Sections = {
     id_section: Record<string, string>;
 };
 export type DocumentMeta = {
+    /** nodes that are parents*/
     groupParentIds: Set<string>;
 };
 export type DocumentState = {
