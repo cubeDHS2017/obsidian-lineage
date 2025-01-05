@@ -7,10 +7,10 @@ export const CardsGap = (
     element: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
-    const settingsState = settingsStore.getValue();
     let input: SliderComponent;
 
     const setValue = () => {
+        const settingsState = settingsStore.getValue();
         input.setValue(settingsState.view.cardsGap);
     };
     new Setting(element)
@@ -18,6 +18,7 @@ export const CardsGap = (
         .addSlider((cb) => {
             input = cb;
             cb.setLimits(0, 500, 10);
+            setValue();
             cb.onChange((gap) => {
                 settingsStore.dispatch({
                     type: 'SET_CARDS_GAP',
@@ -26,7 +27,6 @@ export const CardsGap = (
                     },
                 });
             }).setDynamicTooltip();
-            setValue();
         })
         .addExtraButton((cb) => {
             cb.setIcon('reset')

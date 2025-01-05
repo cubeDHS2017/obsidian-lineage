@@ -7,8 +7,6 @@ export const ActiveBranchColor = (
     container: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
-    const settingsState = settingsStore.getValue();
-
     let input: ColorComponent;
 
     const onChange = (color: string) => {
@@ -20,6 +18,7 @@ export const ActiveBranchColor = (
         });
     };
     const setValue = () => {
+        const settingsState = settingsStore.getValue();
         input.onChange(() => void undefined);
         input.setValue(
             settingsState.view.theme.activeBranchBg ||

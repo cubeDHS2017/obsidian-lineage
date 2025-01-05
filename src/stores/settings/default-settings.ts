@@ -3,6 +3,7 @@ import { Settings } from './settings-type';
 export const DEFAULT_CARD_WIDTH = 550;
 export const DEFAULT_CARDS_GAP = 100;
 export const DEFAULT_INDENTATION_WIDTH = 60;
+export const DEFAULT_INACTIVE_NODE_OPACITY = 20;
 export const DEFAULT_SETTINGS = (): Settings => ({
     documents: {},
     hotkeys: {
@@ -10,7 +11,9 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     },
     view: {
         fontSize: 16,
-        theme: {},
+        theme: {
+            inactiveNodeOpacity: DEFAULT_INACTIVE_NODE_OPACITY,
+        },
         cardWidth: DEFAULT_CARD_WIDTH,
         cardsGap: DEFAULT_CARDS_GAP,
         scrolling: {

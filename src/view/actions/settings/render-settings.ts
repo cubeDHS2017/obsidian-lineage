@@ -10,6 +10,7 @@ import { CardIndentationWidth } from 'src/view/actions/settings/components/card-
 import { MaintainEditMode } from 'src/view/actions/settings/components/maintain-edit-mode';
 import { Setting } from 'obsidian';
 import { lang } from 'src/lang/lang';
+import { InactiveCardOpacity } from 'src/view/actions/settings/components/inactive-card-opacity';
 
 export const renderSettings = (element: HTMLElement) => {
     const view = getView();
@@ -21,6 +22,7 @@ export const renderSettings = (element: HTMLElement) => {
         BackgroundColor(element, settingsStore);
         ActiveBranchColor(element, settingsStore);
         FontSize(element, settingsStore);
+        InactiveCardOpacity(element, settingsStore);
         new Setting(element).setHeading().setName(lang.settings_layout);
         CardWidth(element, settingsStore);
         CardsGap(element, settingsStore);

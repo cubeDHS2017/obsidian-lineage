@@ -9,4 +9,5 @@ export const cssVariables = {
     zoomLevel: '--zoom-level',
     viewWidth: '--view-width',
     viewHeight: '--view-height',
+    inactiveCardOpacity: '--inactive-card-opacity',
 };

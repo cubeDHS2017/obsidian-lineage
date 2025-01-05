@@ -7,10 +7,11 @@
     import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
     import { setActiveSidebarNode } from 'src/stores/view/subscriptions/actions/set-active-sidebar-node';
     import { NodeStyle } from 'src/stores/view/view-state-type';
-    import { getCursorPosition } from 'src/view/components/container/column/components/group/components/card/components/content/event-handlers/get-cursor-position';
+    import {
+        getCursorPosition
+    } from 'src/view/components/container/column/components/group/components/card/components/content/event-handlers/get-cursor-position';
     import { contentStore } from 'src/stores/document/derived/content-store';
     import { get } from 'svelte/store';
-    import { EditorPosition } from 'obsidian';
 
     export let nodeId: string;
     export let active: ActiveStatus | null;

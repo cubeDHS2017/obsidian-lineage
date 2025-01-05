@@ -9,6 +9,7 @@ import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
+import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -34,6 +35,8 @@ export const onPluginSettingsUpdate = (
         view.saveDocument();
     } else if (type === 'settings/view/set-node-indentation-width') {
         applyCardIndentationWidth(view, state.view.nodeIndentationWidth);
+    } else if (type === 'settings/view/theme/set-inactive-node-opacity') {
+        applyInactiveNodeOpacity(view, state.view.theme.inactiveNodeOpacity);
     }
 
     const shouldAlign =

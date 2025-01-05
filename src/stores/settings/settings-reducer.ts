@@ -147,6 +147,10 @@ export type SettingsActions =
     | {
           type: 'settings/view/set-maintain-edit-mode';
           payload: { maintain: boolean };
+      }
+    | {
+          type: 'settings/view/theme/set-inactive-node-opacity';
+          payload: { opacity: number };
       };
 
 export type PersistActiveNodeAction = {
@@ -275,6 +279,10 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.nodeIndentationWidth = action.payload.width;
     } else if (action.type === 'settings/view/set-maintain-edit-mode') {
         store.view.maintainEditMode = action.payload.maintain;
+    } else if (
+        action.type === 'settings/view/theme/set-inactive-node-opacity'
+    ) {
+        store.view.theme.inactiveNodeOpacity = action.payload.opacity;
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

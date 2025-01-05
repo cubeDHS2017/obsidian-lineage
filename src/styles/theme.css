@@ -6,7 +6,7 @@
     --background-container: #373d4c;
     --background-active-node: var(--background-primary);
     --background-active-parent: #5b637a;
-    --background-inactive-node: var(--background-container);
+    --background-inactive-node: var(--background-active-parent);
     --lineage-accent-faint: #628c8c;
     --lineage-color-selection-faint: #567aab;
 }
@@ -14,7 +14,7 @@
     --background-container: #899cb3;
     --background-active-node: var(--background-primary);
     --background-active-parent: #cedbeb;
-    --background-inactive-node: var(--background-container);
+    --background-inactive-node: var(--background-active-parent);
     --lineage-accent-faint: #adccca;
     --lineage-color-selection-faint: #8eaedf;
 }
@@ -34,37 +34,30 @@
 
 .active-parent {
     background-color: var(--background-active-parent);
-    filter: opacity(0.8);
+    opacity:0.8;
 }
 .active-sibling {
     background-color: var(--background-active-parent);
-    filter: opacity(0.8);
+    opacity:0.8;
     --scrollbar-thumb-bg: var(--text-muted) !important;
     --scrollbar-active-thumb-bg: var(--text-normal) !important;
 }
 .inactive-node {
-    filter: opacity(0.2);
+    opacity: var(--inactive-card-opacity);
     background-color: var(--background-inactive-node);
-    transition: filter 100ms;
+    transition: opacity 100ms;
 }
 .inactive-node:hover {
     background-color: var(--background-active-parent);
-    filter: opacity(0.7);
+    opacity:0.8
 }
 
 
 
-.theme-light {
-    & .inactive-node {
-        filter: opacity(0.4);
-    }
-}
+
+
 /* group */
-.group {
-    background-color: var(--background-inactive-node);
-}
-
-.group-has-active-parent {
+.group-has-active-child {
     background-color: var(--background-active-node);
 }
 
@@ -73,11 +66,11 @@
     /*for single column mode*/
     & .inactive-node {
         background-color: var(--background-active-parent);
-        filter: opacity(0.8);
+        opacity:0.8
     }
     & .inactive-node:hover {
         background-color: var(--background-active-parent);
-        filter: opacity(0.8);
+        opacity:0.8
     }
 }
 /* hotkeys */

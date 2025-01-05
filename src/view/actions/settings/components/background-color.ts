@@ -7,7 +7,6 @@ export const BackgroundColor = (
     element: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
-    const settingsState = settingsStore.getValue();
     let colorPicker: ColorComponent;
 
     const onChange = (color: string) => {
@@ -20,6 +19,7 @@ export const BackgroundColor = (
     };
 
     const setValue = () => {
+        const settingsState = settingsStore.getValue();
         colorPicker.onChange(() => void undefined);
         colorPicker.setValue(
             settingsState.view.theme.containerBg ||

@@ -37,8 +37,12 @@
     <div
         class={clx(
             'group',
+            /*(parentNodes.has(groupId) ||
+                singleColumnMode ||
+                (firstColumn && parentNodes.size > 0)) &&
+                'group-has-active-parent',*/
             (activeChildGroups.has(groupId) || singleColumnMode) &&
-                'group-has-active-parent',
+                'group-has-active-child',
             (activeGroup === groupId || singleColumnMode) &&
                 'group-has-active-node',
         )}
@@ -90,10 +94,9 @@
     .group:last-child {
         margin-bottom: 0;
     }
-    .group-has-active-node {
-    }
-    .group-has-active-parent {
+
+    /*.group-has-active-child {
         border-bottom-left-radius: 6px;
         border-top-left-radius: 6px;
-    }
+    }*/
 </style>

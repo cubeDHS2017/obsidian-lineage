@@ -212,6 +212,7 @@ export const lang = {
     settings_theme_bg: 'Background color',
     settings_theme_active_branch_bg: 'Active branch background',
     settings_appearance_font_size: 'Font size',
+    settings_appearance_inactive_node_opacity: 'Inactive cards opacity',
 
     // layout
     settings_layout_card_width: 'Card width',

@@ -7,10 +7,10 @@ export const CardIndentationWidth = (
     element: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
-    const settingsState = settingsStore.getValue();
     let input: SliderComponent;
 
     const setValue = () => {
+        const settingsState = settingsStore.getValue();
         input.setValue(settingsState.view.nodeIndentationWidth);
     };
     new Setting(element)
@@ -19,6 +19,7 @@ export const CardIndentationWidth = (
         .addSlider((cb) => {
             input = cb;
             cb.setLimits(0, 500, 5);
+            setValue();
             cb.onChange((width) => {
                 settingsStore.dispatch({
                     type: 'settings/view/set-node-indentation-width',
@@ -27,7 +28,6 @@ export const CardIndentationWidth = (
                     },
                 });
             }).setDynamicTooltip();
-            setValue();
         })
         .addExtraButton((cb) => {
             cb.setIcon('reset')

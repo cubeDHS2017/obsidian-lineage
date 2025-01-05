@@ -12,6 +12,7 @@ export type CustomHotkeys = {
 export type Theme = {
     containerBg?: string;
     activeBranchBg?: string;
+    inactiveNodeOpacity: number;
 };
 
 export type ScrollingSettings = {

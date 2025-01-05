@@ -1,9 +1,9 @@
 import { SettingsStore } from 'src/main';
 import { Setting, SliderComponent } from 'obsidian';
-import { DEFAULT_CARD_WIDTH } from 'src/stores/settings/default-settings';
+import { DEFAULT_INACTIVE_NODE_OPACITY } from 'src/stores/settings/default-settings';
 import { lang } from 'src/lang/lang';
 
-export const CardWidth = (
+export const InactiveCardOpacity = (
     element: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
@@ -11,19 +11,21 @@ export const CardWidth = (
 
     const setValue = () => {
         const settingsState = settingsStore.getValue();
-        input.setValue(settingsState.view.cardWidth);
+        input.setValue(
+            Math.round(settingsState.view.theme.inactiveNodeOpacity),
+        );
     };
     new Setting(element)
-        .setName(lang.settings_layout_card_width)
+        .setName(lang.settings_appearance_inactive_node_opacity)
         .addSlider((cb) => {
             input = cb;
-            cb.setLimits(200, 1000, 10);
+            cb.setLimits(0, 100, 5);
             setValue();
-            cb.onChange((width) => {
+            cb.onChange((value) => {
                 settingsStore.dispatch({
-                    type: 'SET_CARD_WIDTH',
+                    type: 'settings/view/theme/set-inactive-node-opacity',
                     payload: {
-                        width,
+                        opacity: value,
                     },
                 });
             }).setDynamicTooltip();
@@ -32,9 +34,9 @@ export const CardWidth = (
             cb.setIcon('reset')
                 .onClick(() => {
                     settingsStore.dispatch({
-                        type: 'SET_CARD_WIDTH',
+                        type: 'settings/view/theme/set-inactive-node-opacity',
                         payload: {
-                            width: DEFAULT_CARD_WIDTH,
+                            opacity: DEFAULT_INACTIVE_NODE_OPACITY,
                         },
                     });
                     setValue();

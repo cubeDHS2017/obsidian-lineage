@@ -18,10 +18,12 @@ import { attachCloseModalsListener } from 'src/stores/view/subscriptions/attach-
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 import { attachCheckboxListener } from 'src/stores/view/subscriptions/effects/checkbox-listener/attach-checkbox-listener';
 import { watchViewSize } from 'src/stores/view/subscriptions/effects/view-size/watch-view-size';
+import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
     applyFontSize(view, state.view.fontSize);
+    applyInactiveNodeOpacity(view, state.view.theme.inactiveNodeOpacity);
     applyContainerBg(view, state.view.theme.containerBg);
     applyActiveBranchBg(view, state.view.theme.activeBranchBg);
     applyCardWidth(view, state.view.cardWidth);

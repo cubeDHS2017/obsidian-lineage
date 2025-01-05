@@ -6,16 +6,17 @@ export const FontSize = (
     element: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
-    const settingsState = settingsStore.getValue();
     let input: SliderComponent;
 
     const setValue = () => {
+        const settingsState = settingsStore.getValue();
         input.setValue(settingsState.view.fontSize);
     };
     new Setting(element)
         .setName(lang.settings_appearance_font_size)
         .addSlider((cb) => {
             input = cb;
+            setValue();
             cb.onChange((fontSize) => {
                 settingsStore.dispatch({
                     type: 'SET_FONT_SIZE',
@@ -25,7 +26,6 @@ export const FontSize = (
                 });
             });
             cb.setLimits(8, 36, 1).setDynamicTooltip();
-            setValue();
         })
         .addExtraButton((cb) => {
             cb.setIcon('reset')
