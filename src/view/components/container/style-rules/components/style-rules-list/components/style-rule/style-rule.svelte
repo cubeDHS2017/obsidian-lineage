@@ -8,6 +8,7 @@
     } from 'src/view/components/container/style-rules/components/style-rules-list/components/style-rule/components/actions/rule-dnd';
     import { getView } from '../../../../../context';
     import RuleActions from './components/rule-actions.svelte';
+    import { lang } from 'src/lang/lang';
 
     export let setDraggedRule: (rule: StyleRule) => void;
     export let setDropTarget: (
@@ -32,7 +33,7 @@
     }}
     draggable="true"
 >
-    <div class="drag-handle">
+    <div class="drag-handle" aria-label={lang.modals_rules_drag_handle}>
         <GripVertical class="svg-icon" />
     </div>
     <RuleInfo {rule} {results} />

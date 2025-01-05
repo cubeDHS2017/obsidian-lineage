@@ -47,6 +47,9 @@ export type ToggleEditModeAction = {
 
 export type DisableEditModeAction = {
     type: 'view/main/disable-edit';
+    context?: {
+        modKey?: boolean;
+    };
 };
 
 export type ViewDocumentAction =
@@ -118,6 +121,9 @@ export type EnableEditInSidebar = {
 
 export type DisableEditInSidebar = {
     type: 'view/sidebar/disable-edit';
+    context?: {
+        modKey?: boolean;
+    };
 };
 
 export type StyleRulesViewActions = UpdateStyleRulesResultAction;

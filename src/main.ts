@@ -57,11 +57,11 @@ export default class Lineage extends Plugin {
             LINEAGE_VIEW_TYPE,
             (leaf) => new LineageView(leaf, this),
         );
+        addCommands(this);
+        loadCommands(this);
         this.registerPatches();
         this.registerEffects();
         this.registerEvents();
-        addCommands(this);
-        loadCommands(this);
         this.statusBar = new StatusBar(this);
         this.loadRibbonIcon();
         this.registerMarkdownPostProcessor(

@@ -71,7 +71,7 @@
         }
         const editingState = view.viewStore.getValue().document.editing;
         if (editingState.activeNodeId && !editingState.isInSidebar) {
-            saveNodeContent(view);
+            saveNodeContent(view,true);
         }
     };
     let containerRef: HTMLElement | null = null;

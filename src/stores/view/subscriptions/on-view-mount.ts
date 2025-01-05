@@ -62,4 +62,5 @@ export const onViewMount = (view: LineageView) => {
     view.rulesProcessor.onRulesUpdate();
     view.zoomFactor = view.plugin.settings.getValue().view.zoomLevel;
     applyViewSize(view);
+    view.alignBranch.align({ type: 'view/life-cycle/mount' });
 };

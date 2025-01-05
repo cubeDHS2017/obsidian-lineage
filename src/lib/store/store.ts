@@ -6,7 +6,7 @@ export type Subscriber<T, U> = (
     firstRun?: boolean,
 ) => void;
 
-export type Reducer<T, U> = (store: T, action: U) => T;
+export type Reducer<T, U> = (store: T, action: U) => T | null;
 
 export type OnError<U> = (
     error: Error,
@@ -69,8 +69,11 @@ export class Store<T, U> implements Writable<T> {
         while (this.actionQueue.length > 0) {
             const action = this.actionQueue.shift();
             try {
-                this.value = this.reducer(this.value, action!);
-                this.notifySubscribers(action);
+                const newValue = this.reducer(this.value, action!);
+                if (newValue) {
+                    this.value = newValue;
+                    this.notifySubscribers(action);
+                }
             } catch (error) {
                 this.onError(error, 'reducer', action);
             }

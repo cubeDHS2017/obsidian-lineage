@@ -43,8 +43,8 @@ const updateDocumentState = (
     let affectedNodeId: null | string = null;
     let affectedNodeContent: Content[string] | null = null;
     if (action.type === 'DOCUMENT/SET_NODE_CONTENT') {
-        const success = setNodeContent(state.document.content, action);
-        if (!success) return;
+        const update = setNodeContent(state.document.content, action);
+        if (!update) return false;
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/INSERT_NODE') {
         newActiveNodeId = insertNode(state.document, action);
@@ -59,13 +59,13 @@ const updateDocumentState = (
         affectedNodeId = action.payload.activeNodeId;
     } else if (action.type === 'DOCUMENT/EXTRACT_BRANCH') {
         affectedNodeContent = state.document.content[action.payload.nodeId];
-        const success = setNodeContent(state.document.content, {
+        const update = setNodeContent(state.document.content, {
             payload: {
                 nodeId: action.payload.nodeId,
                 content: `[[${action.payload.documentName}]]`,
             },
         });
-        if (!success) return;
+        if (!update) return false;
         removeExtractedBranch(state.document, action);
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/SPLIT_NODE') {
@@ -195,12 +195,14 @@ const updateDocumentState = (
         addSnapshot(state.document, state.history, context);
         state.history = { ...state.history };
     }
+    return true;
 };
 
 export const documentReducer = (
     store: DocumentState,
     action: DocumentStoreAction,
-): DocumentState => {
-    updateDocumentState(store, action);
+) => {
+    const update = updateDocumentState(store, action);
+    if (!update) return null;
     return store;
 };

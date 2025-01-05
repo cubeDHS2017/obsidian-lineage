@@ -72,9 +72,8 @@ export const onViewStateUpdate = (
 
     // effects
     if (activeNodeChange || e.search || e.editMainSplit) {
-        const skipAligning =
-            action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
-            action.context?.modKey;
+        // @ts-ignore
+        const skipAligning = 'context' in action && action.context?.modKey;
         if (!skipAligning) {
             view.alignBranch.align();
         }
