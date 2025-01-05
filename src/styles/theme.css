@@ -1,6 +1,7 @@
 .lineage-main {
     --lineage-accent: #55b1ae;
     --lineage-color-selection: #418cff;
+    --color-active-parent:var(--text-normal);
 }
 .theme-dark {
     --background-container: #373d4c;
@@ -33,10 +34,12 @@
 
 .active-parent {
     background-color: var(--background-active-parent);
+    --text-normal: var(--color-active-parent);
     opacity: 0.8;
 }
 .active-sibling {
     background-color: var(--background-active-parent);
+    --text-normal: var(--color-active-parent);
     opacity: 0.8;
     --scrollbar-thumb-bg: var(--text-muted) !important;
     --scrollbar-active-thumb-bg: var(--text-normal) !important;

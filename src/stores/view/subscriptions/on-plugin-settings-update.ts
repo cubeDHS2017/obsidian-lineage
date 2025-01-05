@@ -10,6 +10,7 @@ import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variabl
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
+import { applyActiveBranchColor } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-color';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -37,6 +38,8 @@ export const onPluginSettingsUpdate = (
         applyCardIndentationWidth(view, state.view.nodeIndentationWidth);
     } else if (type === 'settings/view/theme/set-inactive-node-opacity') {
         applyInactiveNodeOpacity(view, state.view.theme.inactiveNodeOpacity);
+    } else if (type === 'settings/view/theme/set-active-branch-color') {
+        applyActiveBranchColor(view, state.view.theme.activeBranchColor);
     }
 
     const shouldAlign =

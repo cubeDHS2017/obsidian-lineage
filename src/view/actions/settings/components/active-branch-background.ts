@@ -3,17 +3,17 @@ import { getDefaultTheme } from 'src/stores/view/subscriptions/effects/css-varia
 import { lang } from 'src/lang/lang';
 import { ColorSetting } from 'src/view/actions/settings/components/shared/color-setting';
 
-export const BackgroundColor = (
+export const ActiveBranchBackground = (
     container: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
     ColorSetting(container, settingsStore, {
-        defaultValue: getDefaultTheme().containerBg,
-        label: lang.settings_theme_bg,
-        valueSelector: (settings) => settings.view.theme.containerBg,
+        defaultValue: getDefaultTheme().activeBranchBg,
+        label: lang.settings_theme_active_branch_bg,
+        valueSelector: (settings) => settings.view.theme.activeBranchBg,
         onChange: (color) => {
             settingsStore.dispatch({
-                type: 'SET_CONTAINER_BG',
+                type: 'SET_ACTIVE_BRANCH_BG',
                 payload: {
                     backgroundColor: color,
                 },

@@ -1,44 +1,27 @@
 import { SettingsStore } from 'src/main';
-import { Setting, SliderComponent } from 'obsidian';
 import { DEFAULT_CARDS_GAP } from 'src/stores/settings/default-settings';
 import { lang } from 'src/lang/lang';
+import { RangeSetting } from 'src/view/actions/settings/components/shared/range-setting';
 
 export const CardsGap = (
     element: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
-    let input: SliderComponent;
-
-    const setValue = () => {
-        const settingsState = settingsStore.getValue();
-        input.setValue(settingsState.view.cardsGap);
-    };
-    new Setting(element)
-        .setName(lang.settings_layout_space_between_cards)
-        .addSlider((cb) => {
-            input = cb;
-            cb.setLimits(0, 500, 10);
-            setValue();
-            cb.onChange((gap) => {
-                settingsStore.dispatch({
-                    type: 'SET_CARDS_GAP',
-                    payload: {
-                        gap,
-                    },
-                });
-            }).setDynamicTooltip();
-        })
-        .addExtraButton((cb) => {
-            cb.setIcon('reset')
-                .onClick(() => {
-                    settingsStore.dispatch({
-                        type: 'SET_CARDS_GAP',
-                        payload: {
-                            gap: DEFAULT_CARDS_GAP,
-                        },
-                    });
-                    setValue();
-                })
-                .setTooltip(lang.settings_reset);
-        });
+    RangeSetting(element, settingsStore, {
+        defaultValue: DEFAULT_CARDS_GAP,
+        onChange: (value) => {
+            settingsStore.dispatch({
+                type: 'SET_CARDS_GAP',
+                payload: {
+                    gap: value,
+                },
+            });
+        },
+        valueSelector: (settingsState) => settingsState.view.cardsGap,
+        label: lang.settings_layout_space_between_cards,
+        desc: lang.settings_layout_space_between_cards_desc,
+        max: 500,
+        min: 0,
+        step: 10,
+    });
 };

@@ -151,6 +151,10 @@ export type SettingsActions =
     | {
           type: 'settings/view/theme/set-inactive-node-opacity';
           payload: { opacity: number };
+      }
+    | {
+          type: 'settings/view/theme/set-active-branch-color';
+          payload: { color: string | undefined };
       };
 
 export type PersistActiveNodeAction = {
@@ -283,6 +287,12 @@ const updateState = (store: Settings, action: SettingsActions) => {
         action.type === 'settings/view/theme/set-inactive-node-opacity'
     ) {
         store.view.theme.inactiveNodeOpacity = action.payload.opacity;
+    } else if (action.type === 'settings/view/theme/set-active-branch-color') {
+        if (action.payload.color) {
+            store.view.theme.activeBranchColor = action.payload.color;
+        } else {
+            delete store.view.theme.activeBranchColor;
+        }
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

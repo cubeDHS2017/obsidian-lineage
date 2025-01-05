@@ -19,6 +19,7 @@ import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects
 import { attachCheckboxListener } from 'src/stores/view/subscriptions/effects/checkbox-listener/attach-checkbox-listener';
 import { watchViewSize } from 'src/stores/view/subscriptions/effects/view-size/watch-view-size';
 import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
+import { applyActiveBranchColor } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-color';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -26,6 +27,7 @@ const applySettingsToView = (view: LineageView) => {
     applyInactiveNodeOpacity(view, state.view.theme.inactiveNodeOpacity);
     applyContainerBg(view, state.view.theme.containerBg);
     applyActiveBranchBg(view, state.view.theme.activeBranchBg);
+    applyActiveBranchColor(view, state.view.theme.activeBranchColor);
     applyCardWidth(view, state.view.cardWidth);
     applyCardIndentationWidth(view, state.view.nodeIndentationWidth);
     applyCardsGap(view, state.view.cardsGap);

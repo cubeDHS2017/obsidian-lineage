@@ -211,6 +211,7 @@ export const lang = {
     // theme
     settings_theme_bg: 'Background color',
     settings_theme_active_branch_bg: 'Active branch background',
+    settings_theme_active_branch_color: 'Active branch color',
     settings_appearance_font_size: 'Font size',
     settings_appearance_inactive_node_opacity: 'Inactive cards opacity',
 
@@ -229,6 +230,8 @@ export const lang = {
     controls_gap_between_cards: 'Space between cards',
     cmd_space_between_cards: `Toggle 'space between cards'`,
     settings_layout_space_between_cards: 'Space between cards',
+    settings_layout_space_between_cards_desc:
+        'Applicable when spaces are enabled',
 
     // sidebar
     toolbar_toggle_left_sidebar: 'Left sidebar',
