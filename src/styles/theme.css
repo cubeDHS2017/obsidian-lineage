@@ -27,36 +27,40 @@
     color: var(--text-normal);
 }
 
-
 .active-child:hover {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .active-parent {
     background-color: var(--background-active-parent);
-    opacity:0.8;
+    opacity: 0.8;
 }
 .active-sibling {
     background-color: var(--background-active-parent);
-    opacity:0.8;
+    opacity: 0.8;
     --scrollbar-thumb-bg: var(--text-muted) !important;
     --scrollbar-active-thumb-bg: var(--text-normal) !important;
 }
+
 .inactive-node {
     opacity: var(--inactive-card-opacity);
     background-color: var(--background-inactive-node);
     transition: opacity 100ms;
 }
 .inactive-node:hover {
-    background-color: var(--background-active-parent);
-    opacity:0.8
+    opacity: 0.8;
 }
 
-
-
-
-
 /* group */
+
+.group:not([id^='group-r']):hover {
+    & .inactive-node {
+        opacity: 0.4;
+    }
+    .inactive-node:hover {
+        opacity: 0.8;
+    }
+}
 .group-has-active-child {
     background-color: var(--background-active-node);
 }
@@ -66,11 +70,11 @@
     /*for single column mode*/
     & .inactive-node {
         background-color: var(--background-active-parent);
-        opacity:0.8
+        opacity: 0.8;
     }
     & .inactive-node:hover {
         background-color: var(--background-active-parent);
-        opacity:0.8
+        opacity: 0.8;
     }
 }
 /* hotkeys */
@@ -81,4 +85,3 @@
 .theme-dark {
     --custom-hotkey-bg: #5f7f93;
 }
-

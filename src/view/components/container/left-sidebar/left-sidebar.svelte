@@ -133,7 +133,7 @@
 
     /*.sidebar {
         & .active-node {
-            outline: 8px solid var(--background-active-parent) !important;
+            outline: 6px solid var(--background-active-parent) !important;
         }
     }*/
 </style>

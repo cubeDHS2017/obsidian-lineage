@@ -129,8 +129,8 @@
     :root {
         --container-left-padding: 100px;
         --column-gap: 0;
-        --node-gap: 4px;
-        --group-gap: 2px;
+        --node-gap: 2px;
+        --group-gap: 0px;
     }
     .columns-container {
         position: relative;
@@ -188,7 +188,7 @@
         }
 
         & .active-node {
-            outline: 8px solid var(--background-active-parent) !important;
+            outline: 6px solid var(--background-active-parent) !important;
         }
     }
     .gap-between-cards {
@@ -211,7 +211,7 @@
         }
 
         & .active-node {
-            outline: 8px solid var(--background-active-parent) !important;
+            outline: 6px solid var(--background-active-parent) !important;
         }
     }
 </style>

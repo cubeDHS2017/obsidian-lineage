@@ -79,11 +79,14 @@
 
     const handleClick = (e: MouseEvent) => {
         if (editing) return;
-        if (active === ActiveStatus.node) return;
         const maintainEditMode =
             view.plugin.settings.getValue().view.maintainEditMode;
 
-        if (view.inlineEditor.nodeId && maintainEditMode) {
+        if (
+            active !== ActiveStatus.node &&
+            view.inlineEditor.nodeId &&
+            maintainEditMode
+        ) {
             const cursor = getCursorPosition(
                 get(contentStore(view, nodeId)),
                 e,

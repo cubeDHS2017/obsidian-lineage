@@ -88,10 +88,14 @@
         flex-direction: column;
         width: fit-content;
         gap: var(--node-gap);
-        padding: 8px;
-        margin-bottom: var(--group-gap);
+        padding: 6px;
+
     }
-    .group:last-child {
+
+    .group-has-active-child{
+        margin-bottom: 3px;
+    }
+    .group-has-active-child:last-child {
         margin-bottom: 0;
     }
 
