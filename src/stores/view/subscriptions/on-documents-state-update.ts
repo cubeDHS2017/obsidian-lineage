@@ -2,7 +2,6 @@ import { LineageView } from 'src/view/view';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { applyViewSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-view-size';
 
 export const onDocumentsStateUpdate = (
     view: LineageView,
@@ -23,9 +22,5 @@ export const onDocumentsStateUpdate = (
             view.plugin.statusBar.updateAll(view);
         }
         view.alignBranch.align(action);
-    }
-
-    if (action.type === 'WORKSPACE/RESIZE') {
-        applyViewSize(view);
     }
 };

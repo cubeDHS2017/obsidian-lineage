@@ -17,7 +17,7 @@ import { loadPinnedNodesToDocument } from 'src/stores/view/subscriptions/actions
 import { attachCloseModalsListener } from 'src/stores/view/subscriptions/attach-close-modals-listener';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 import { attachCheckboxListener } from 'src/stores/view/subscriptions/effects/checkbox-listener/attach-checkbox-listener';
-import { applyViewSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-view-size';
+import { watchViewSize } from 'src/stores/view/subscriptions/effects/view-size/watch-view-size';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -33,11 +33,12 @@ const applySettingsToView = (view: LineageView) => {
 };
 
 export const onViewMount = (view: LineageView) => {
+    const subscriptions: Set<() => void> = new Set();
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const viewStore = view.viewStore;
     // actions
-    if (!view.file) return;
+    if (!view.file) return subscriptions;
     setInitialActiveNode(
         viewStore,
         documentState,
@@ -61,6 +62,8 @@ export const onViewMount = (view: LineageView) => {
     attachCloseModalsListener(view);
     view.rulesProcessor.onRulesUpdate();
     view.zoomFactor = view.plugin.settings.getValue().view.zoomLevel;
-    applyViewSize(view);
+
     view.alignBranch.align({ type: 'view/life-cycle/mount' });
+    subscriptions.add(watchViewSize(view));
+    return subscriptions;
 };

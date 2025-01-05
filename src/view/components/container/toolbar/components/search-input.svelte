@@ -25,7 +25,7 @@
 <div class="search-input-wrapper search-input-container">
     <input
         autofocus={true}
-        class="search-input search-input-element"
+        class={"search-input search-input-element"+($search.query&& $search.results.size===0?' no-results':'')}
         enterkeyhint="search"
         on:input={onInput}
         placeholder={'search'}
@@ -107,5 +107,8 @@
 
     .search-input-container::before {
         display: none;
+    }
+    .no-results{
+        box-shadow: 0 0 0 2px var(--color-red) !important;
     }
 </style>

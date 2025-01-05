@@ -17,10 +17,11 @@ export const viewSubscriptions = (view: LineageView) => {
     const localState = {
         previousActiveNode: '',
     };
+    let onMountSubscriptions = new Set<() => void>();
     const unsubFromView = view.viewStore.subscribe(
         (viewState, action, initialRun) => {
             if (initialRun) {
-                onViewMount(view);
+                onMountSubscriptions = onViewMount(view);
             } else if (action) {
                 onViewStateUpdate(view, action, localState);
             }
@@ -48,5 +49,8 @@ export const viewSubscriptions = (view: LineageView) => {
         unsubFromSettings();
         unsubFromDocuments();
         view.rulesProcessor.onViewUnmount();
+        for (const unsub of onMountSubscriptions) {
+            unsub();
+        }
     };
 };
