@@ -66,3 +66,13 @@
         outline: 6px solid var(--background-active-parent) !important;
     }
 }
+
+
+/* to prevent cards from wobbling when hovering over them */
+#columns-container.zoom-enabled {
+    * {
+        transition: none !important;
+    }
+}
+
+

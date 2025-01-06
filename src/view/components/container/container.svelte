@@ -87,12 +87,12 @@
     class={'columns-container ' +
         ($limitPreviewHeight ? ' limit-card-height' : '') +
         ($applyGap ? ' gap-between-cards' : '') +
-        (singleColumnMode ? ' single-column' : '')}
+        (singleColumnMode ? ' single-column' : '') +
+        ($zoom !== 1 ? ' zoom-enabled' : '')}
     id="columns-container"
     tabindex="0"
     on:click={saveActiveNodeOnClick}
     use:scrollOnDndX
-    data-zoom-in-enabled={$zoom < 1 ? true : false}
 >
     <div class="columns">
         <ColumnsBuffer />

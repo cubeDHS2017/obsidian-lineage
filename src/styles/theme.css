@@ -51,8 +51,11 @@
 }
 .inactive-node:hover {
     opacity: 0.8;
+    transition:opacity 100ms ease
 }
-
+.group{
+    transition:opacity 100ms ease
+}
 /* group */
 .group:not([id^='group-r']):hover {
     & .inactive-node {

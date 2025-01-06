@@ -30,16 +30,3 @@
     opacity: var(--opacity-08);
 }
 
-/* to prevent cards from wobbling when hovering over them */
-#columns-container[data-zoom-in-enabled='true'] {
-    .lineage-card:not(:hover) .lineage-floating-button {
-        opacity: var(--opacity-05);
-        visibility: hidden;
-    }
-}
-
-#columns-container[data-zoom-in-enabled='false'] {
-    & .lineage-floating-button {
-        visibility: visible;
-    }
-}
