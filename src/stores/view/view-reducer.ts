@@ -104,7 +104,7 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         updateActiveBranch(
             state.document,
             action.payload.columns,
-            state.document.activeNodesOfColumn,
+            action.context.changeType,
         );
     } else if (action.type === 'NAVIGATION/NAVIGATE_FORWARD') {
         navigateActiveNodeHistory(state.document, state, true);

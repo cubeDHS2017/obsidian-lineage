@@ -2,6 +2,12 @@ import { describe, expect, it } from 'vitest';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { updateActiveBranch } from 'src/stores/view/reducers/document/helpers/update-active-branch';
 import { ActiveBranch } from 'src/stores/view/default-view-state';
+import { DocumentViewState } from 'src/stores/view/view-state-type';
+
+type State = Pick<
+    DocumentViewState,
+    'activeBranch' | 'activeNode' | 'activeNodesOfColumn'
+>;
 
 describe('update-tree-state', () => {
     it('case 1', () => {
@@ -78,13 +84,16 @@ describe('update-tree-state', () => {
         };
         const input = {
             document: document satisfies LineageDocument,
-            activeBranch: {
-                childGroups: new Set([]),
-                sortedParentNodes: [],
-                group: 'r-lt8upk0k',
-                column: col,
-            } satisfies ActiveBranch,
-            activeNode: activeNodeId,
+            state: {
+                activeBranch: {
+                    childGroups: new Set([]),
+                    sortedParentNodes: [],
+                    group: 'r-lt8upk0k',
+                    column: col,
+                } satisfies ActiveBranch,
+                activeNode: activeNodeId,
+                activeNodesOfColumn: {},
+            } satisfies State,
         };
 
         const output = {
@@ -96,7 +105,7 @@ describe('update-tree-state', () => {
                 column: col,
             } satisfies ActiveBranch,
         };
-        updateActiveBranch(input, input.document.columns, {});
-        expect(input.activeBranch).toEqual(output.activeBranch);
+        updateActiveBranch(input.state, input.document.columns, 'structure');
+        expect(input.state.activeBranch).toEqual(output.activeBranch);
     });
 });

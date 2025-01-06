@@ -3,22 +3,28 @@ import { traverseUp } from 'src/lib/tree-utils/get/traverse-up';
 import { traverseDown } from 'src/lib/tree-utils/get/traverse-down';
 import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id';
 import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
-import {
-    ActiveNodesOfColumn,
-    DocumentViewState,
-} from 'src/stores/view/view-state-type';
+import { DocumentViewState } from 'src/stores/view/view-state-type';
+import { removeStaleActiveNodes } from 'src/stores/view/reducers/document/helpers/remove-stale-active-nodes';
+
+export type ChangeType = 'none' | 'structure';
 
 export type UpdateActiveBranchAction = {
     type: 'UPDATE_ACTIVE_BRANCH';
     payload: {
         columns: Column[];
     };
+    context: {
+        changeType: ChangeType;
+    };
 };
 
 export const updateActiveBranch = (
-    state: Pick<DocumentViewState, 'activeBranch' | 'activeNode'>,
+    state: Pick<
+        DocumentViewState,
+        'activeBranch' | 'activeNode' | 'activeNodesOfColumn'
+    >,
     columns: Column[],
-    activeNodeOfGroup: ActiveNodesOfColumn,
+    changeType: ChangeType,
 ) => {
     if (!state.activeNode) return;
     const sortedParents = traverseUp(columns, state.activeNode).reverse();
@@ -48,16 +54,14 @@ export const updateActiveBranch = (
             column: columnId,
         };
     }
-    if (!activeNodeOfGroup[columnId]) activeNodeOfGroup[columnId] = {};
-    activeNodeOfGroup[columnId][group.parentId] = state.activeNode;
-    for (const column of Object.values(activeNodeOfGroup)) {
-        for (const group in column) {
-            if (
-                column[group] === state.activeNode &&
-                group !== state.activeBranch.group
-            ) {
-                delete column[group];
-            }
-        }
+    if (!state.activeNodesOfColumn[columnId])
+        state.activeNodesOfColumn[columnId] = {};
+    state.activeNodesOfColumn[columnId][group.parentId] = state.activeNode;
+
+    if (changeType === 'structure') {
+        state.activeNodesOfColumn = removeStaleActiveNodes(
+            columns,
+            state.activeNodesOfColumn,
+        );
     }
 };

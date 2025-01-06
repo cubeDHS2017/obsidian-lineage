@@ -49,7 +49,7 @@ export const onViewMount = (view: LineageView) => {
         view.plugin.settings.getValue(),
         view.file.path,
     );
-    updateActiveBranch(viewStore, documentState);
+    updateActiveBranch(viewStore, documentState, 'none');
     if (view.isActive && isEmptyDocument(documentState.document.content)) {
         enableEditMode(viewStore, documentState);
     }

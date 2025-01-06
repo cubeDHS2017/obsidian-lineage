@@ -38,7 +38,7 @@ export const onViewStateUpdate = (
     }
     if (activeNodeChange && activeNodeHasChanged) {
         // this should be handled internally
-        updateActiveBranch(viewStore, documentState);
+        updateActiveBranch(viewStore, documentState, 'none');
         persistActiveNodeInPluginSettings(view);
         view.plugin.statusBar.updateProgressIndicatorAndChildCount(view);
     }

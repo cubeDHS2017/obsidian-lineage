@@ -39,7 +39,7 @@ export const onDocumentStateUpdate = (
         e.createOrDelete || e.dropOrMove || e.changeHistory || e.clipboard;
     if (structuralChange) {
         setActiveNode(view, action);
-        updateActiveBranch(viewStore, documentState);
+        updateActiveBranch(viewStore, documentState, 'structure');
 
         documentStore.dispatch({
             type: 'document/pinned-nodes/remove-stale-nodes',
