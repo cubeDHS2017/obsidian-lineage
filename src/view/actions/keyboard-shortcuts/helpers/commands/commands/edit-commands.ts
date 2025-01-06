@@ -39,6 +39,22 @@ export const editCommands = () => {
             hotkeys: [{ key: 'Enter', modifiers: ['Shift'] }],
         },
         {
+            name: 'enable_edit_mode_and_place_cursor_at_end',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                const nodeId = view.viewStore.getValue().document.activeNode;
+                view.inlineEditor.deleteNodeCursor(nodeId);
+                view.viewStore.dispatch({
+                    type: 'view/main/enable-edit',
+                    payload: {
+                        nodeId: nodeId,
+                    },
+                });
+            },
+            hotkeys: [{ key: 'Enter', modifiers: ['Alt'] }],
+        },
+        {
             name: 'save_changes_and_exit_card',
             check: isActiveAndEditing,
             callback: (view) => {

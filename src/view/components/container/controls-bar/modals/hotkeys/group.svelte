@@ -5,8 +5,8 @@
     export let group: CommandHotkeys[]
 export let groupName: string
 </script>
-<div class="group">
-    <div class="group-name">{groupName}</div>
+<div class="hotkey-group">
+    <div class="hotkey-group-name">{groupName}</div>
     <div class="hotkeys-list">
         {#each group as commandHotkeys (commandHotkeys.name)}
             <Hotkey {commandHotkeys} />
@@ -15,7 +15,7 @@ export let groupName: string
 </div>
 
 <style>
-    .group {
+    .hotkey-group {
         background-color: var(--background-secondary);
         padding: var(--size-4-2);
         border-radius: 3px;
@@ -27,7 +27,7 @@ export let groupName: string
         overflow-y: auto;
     }
 
-    .group-name {
+    .hotkey-group-name {
         padding-bottom: 10px;
         padding-left: 5px;
         font-size: 16px;

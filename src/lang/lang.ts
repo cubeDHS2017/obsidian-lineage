@@ -31,6 +31,8 @@ export const lang = {
     hk_enable_edit_mode: 'Edit card',
     hk_enable_edit_mode_and_place_cursor_at_start:
         'Edit card and place cursor at the start',
+    hk_enable_edit_mode_and_place_cursor_at_end:
+        'Edit card and place cursor at the end',
     hkg_edit_cards: 'Edit cards',
     modals_snapshots_updated_card: 'Updated card ',
 

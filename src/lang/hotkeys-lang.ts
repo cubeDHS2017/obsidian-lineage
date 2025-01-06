@@ -5,6 +5,8 @@ export const hotkeysLang = {
     enable_edit_mode: lang.hk_enable_edit_mode,
     enable_edit_mode_and_place_cursor_at_start:
         lang.hk_enable_edit_mode_and_place_cursor_at_start,
+    enable_edit_mode_and_place_cursor_at_end:
+        lang.hk_enable_edit_mode_and_place_cursor_at_end,
     disable_edit_mode: lang.hk_disable_edit_mode,
     add_child: lang.card_btn_add_child_card,
     add_below: lang.card_btn_add_card_below,

@@ -24,6 +24,7 @@ export const hotkeyGroups = {
     [lang.hkg_edit_cards]: new Set([
         'enable_edit_mode',
         'enable_edit_mode_and_place_cursor_at_start',
+        'enable_edit_mode_and_place_cursor_at_end',
         'disable_edit_mode',
         'save_changes_and_exit_card',
     ]),

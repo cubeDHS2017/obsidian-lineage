@@ -43,6 +43,9 @@ export class InlineEditor {
         return this.inlineView.editor.getCursor();
     }
 
+    deleteNodeCursor(nodeId: string) {
+        this.cursorPositions.delete(nodeId);
+    }
     setNodeCursor(nodeId: string, cursor: EditorPosition) {
         if (this.nodeId && nodeId === this.nodeId) this.setCursor(cursor);
         else this.cursorPositions.set(nodeId, cursor);
