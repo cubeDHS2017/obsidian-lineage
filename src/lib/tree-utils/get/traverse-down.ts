@@ -10,8 +10,8 @@ export const traverseDown = (
     const result: string[] = [];
     let nodeColumnIndex = 0;
     if (cleanDocument) {
-        nodeColumnIndex = findNodeColumn(columns, nodeId);
-        if (nodeColumnIndex >= columns.length - 1) {
+        nodeColumnIndex = findNodeColumn(columns, nodeId) + 1;
+        if (nodeColumnIndex > columns.length - 1) {
             return result;
         }
     }
@@ -20,7 +20,7 @@ export const traverseDown = (
 
     let firstResult = false;
 
-    for (let i = nodeColumnIndex + 1; i < columns.length; i++) {
+    for (let i = nodeColumnIndex; i < columns.length; i++) {
         const column = columns[i];
         let columnResult = false;
         for (const group of column.groups) {

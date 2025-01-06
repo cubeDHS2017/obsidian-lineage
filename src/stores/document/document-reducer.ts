@@ -34,6 +34,7 @@ import { removeStalePinnedNodes } from 'src/stores/document/reducers/pinned-node
 import { loadPinnedNodes } from 'src/stores/document/reducers/pinned-nodes/load-pinned-nodes';
 import { refreshGroupParentIds } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
 import { loadDocumentFromJSON } from 'src/stores/document/reducers/load-document-from-file/load-document-from-json';
+import { NO_UPDATE } from 'src/lib/store/store';
 
 const updateDocumentState = (
     state: DocumentState,
@@ -44,7 +45,7 @@ const updateDocumentState = (
     let affectedNodeContent: Content[string] | null = null;
     if (action.type === 'DOCUMENT/SET_NODE_CONTENT') {
         const update = setNodeContent(state.document.content, action);
-        if (!update) return false;
+        if (!update) return NO_UPDATE;
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/INSERT_NODE') {
         newActiveNodeId = insertNode(state.document, action);
@@ -65,7 +66,7 @@ const updateDocumentState = (
                 content: `[[${action.payload.documentName}]]`,
             },
         });
-        if (!update) return false;
+        if (!update) return NO_UPDATE;
         removeExtractedBranch(state.document, action);
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/SPLIT_NODE') {
@@ -195,14 +196,13 @@ const updateDocumentState = (
         addSnapshot(state.document, state.history, context);
         state.history = { ...state.history };
     }
-    return true;
 };
 
 export const documentReducer = (
     store: DocumentState,
     action: DocumentStoreAction,
 ) => {
-    const update = updateDocumentState(store, action);
-    if (!update) return null;
+    const result = updateDocumentState(store, action);
+    if (result === NO_UPDATE) return NO_UPDATE;
     return store;
 };
