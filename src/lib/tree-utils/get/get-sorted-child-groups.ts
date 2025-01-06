@@ -10,8 +10,8 @@ export const getSortedChildGroups = (
     currentParentNode: NodeId,
     remove = false,
 ) => {
-    const childGroupsArray: NodeId[] = [];
-    traverseDown(childGroupsArray, columns, currentParentNode);
+    const childGroupsArray = traverseDown(columns, currentParentNode, false);
+
     const childGroups = new Set(childGroupsArray);
     const sortedChildGroups: NodeGroup[][] = [];
 

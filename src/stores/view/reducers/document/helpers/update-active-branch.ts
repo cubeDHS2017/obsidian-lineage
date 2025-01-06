@@ -22,19 +22,25 @@ export const updateActiveBranch = (
 ) => {
     if (!state.activeNode) return;
     const sortedParents = traverseUp(columns, state.activeNode).reverse();
-    const childGroups: string[] = [];
-    traverseDown(childGroups, columns, state.activeNode);
+    const childGroups = traverseDown(columns, state.activeNode, true);
     const group = findGroupByNodeId(columns, state.activeNode);
     if (!group)
         throw new Error('could not find group for node ' + state.activeNode);
     const columnId = columns[findNodeColumn(columns, state.activeNode)].id;
-    if (
-        childGroups.join() !==
-            Array.from(state.activeBranch.childGroups).join() ||
-        sortedParents.join() !== state.activeBranch.sortedParentNodes.join() ||
+
+    const needsUpdate =
+        childGroups.length !== state.activeBranch.childGroups.size ||
+        sortedParents.length !== state.activeBranch.sortedParentNodes.length ||
         group.parentId !== state.activeBranch.group ||
-        columnId !== state.activeBranch.column
-    ) {
+        columnId !== state.activeBranch.column ||
+        childGroups.some(
+            (group) => !state.activeBranch.childGroups.has(group),
+        ) ||
+        sortedParents.some(
+            (node, i) => node !== state.activeBranch.sortedParentNodes[i],
+        );
+
+    if (needsUpdate) {
         state.activeBranch = {
             childGroups: new Set<string>(childGroups),
             sortedParentNodes: sortedParents,

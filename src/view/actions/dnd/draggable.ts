@@ -1,5 +1,4 @@
 import { DocumentStore, ViewStore } from 'src/view/view';
-import { NodeId } from 'src/stores/document/document-state-type';
 import { traverseDown } from 'src/lib/tree-utils/get/traverse-down';
 
 const toggleDraggedNodeVisibility = (
@@ -35,11 +34,10 @@ export const draggable = (node: HTMLElement, data: DraggableData) => {
         ) {
             event.dataTransfer.setData('text/plain', data.id);
             setTimeout(() => {
-                const childGroups: NodeId[] = [];
-                traverseDown(
-                    childGroups,
+                const childGroups = traverseDown(
                     data.documentStore.getValue().document.columns,
                     data.id,
+                    false,
                 );
                 data.viewStore.dispatch({
                     type: 'SET_DRAG_STARTED',

@@ -1,30 +1,32 @@
-import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
-import { Columns, NodeId } from 'src/stores/document/document-state-type';
-import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id';
+import { Column } from 'src/stores/document/document-state-type';
+import { findNodeColumnAndParent } from 'src/lib/tree-utils/find/find-node-column-and-parent';
 
-export const traverseUp = (columns: Columns, node: NodeId) => {
-    const parents: NodeId[] = [];
-    const nodeColumnIndex = findNodeColumn(columns, node);
-    if (nodeColumnIndex > 0) {
-        const group = findGroupByNodeId(columns, node);
-        if (group) {
-            let currentParentId = group.parentId;
-            for (let i = nodeColumnIndex - 1; i >= 0; i--) {
-                const column = columns[i];
-                for (const group of column.groups) {
-                    if (!currentParentId) currentParentId = group.parentId;
-                    const parentIndex = group.nodes.findIndex(
-                        (n) => n === currentParentId,
-                    );
-                    if (parentIndex !== -1) {
-                        const parent = group.nodes[parentIndex];
-                        parents.push(parent);
-                        currentParentId = group.parentId;
-                        break;
-                    }
+export const traverseUp = (columns: Column[], nodeId: string): string[] => {
+    const parentIds: string[] = [];
+
+    const columnAndParent = findNodeColumnAndParent(columns, nodeId);
+    if (!columnAndParent) return parentIds;
+
+    let currentParentId: string | undefined = columnAndParent[1];
+
+    const nodeColumnIndex = columnAndParent[0];
+    for (let i = nodeColumnIndex - 1; i >= 0; i--) {
+        if (!currentParentId) break;
+
+        parentIds.push(currentParentId);
+
+        let nextParentId: string | undefined;
+        for (const group of columns[i].groups) {
+            for (const node of group.nodes) {
+                if (node === currentParentId) {
+                    nextParentId = group.parentId;
+                    break;
                 }
             }
+            if (nextParentId) break;
         }
+        currentParentId = nextParentId;
     }
-    return parents;
+
+    return parentIds;
 };
