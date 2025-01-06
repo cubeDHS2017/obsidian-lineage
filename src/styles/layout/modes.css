@@ -1,0 +1,68 @@
+.limit-card-height {
+    & .lng-prev {
+        max-height: 65vh;
+    }
+    & .editor-container {
+        max-height: 65vh;
+    }
+}
+
+.single-column {
+    --node-gap: 60px;
+
+    & .group {
+        background-color: transparent;
+        margin-bottom: 0;
+    }
+
+    & .group-has-active-child {
+        margin-bottom: 0;
+    }
+
+    & .active-parent-bridge-right {
+        display: none;
+    }
+
+    & .active-parent-bridge-left {
+        display: none;
+    }
+    & .active-node-bridge {
+        display: none;
+    }
+
+    & .active-node {
+        outline: 6px solid var(--background-active-parent) !important;
+    }
+}
+
+.gap-between-cards {
+    --node-gap: var(--node-gap-setting);
+    & .columns {
+        gap: var(--node-gap-setting);
+    }
+
+    .group-has-active-child {
+        margin-bottom: 0;
+    }
+
+    & .group {
+        margin-bottom: var(--node-gap-setting);
+        background-color: transparent;
+    }
+
+    & .active-parent-bridge-right {
+        display: none;
+    }
+
+    & .active-parent-bridge-left {
+        display: none;
+    }
+
+    & .active-node-bridge {
+        display: none;
+    }
+
+    & .active-node {
+        outline: 6px solid var(--background-active-parent) !important;
+    }
+}

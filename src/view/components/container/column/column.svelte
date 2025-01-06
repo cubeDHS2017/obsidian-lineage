@@ -64,13 +64,6 @@
 </div>
 
 <style>
-    .column {
-        min-width: fit-content;
-        height: calc(1 / var(--zoom-level) * 100vh);
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
-
     .column::-webkit-scrollbar {
         display: none;
     }

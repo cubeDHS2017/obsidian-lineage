@@ -83,24 +83,5 @@
 {/if}
 
 <style>
-    .group {
-        display: flex;
-        flex-direction: column;
-        width: fit-content;
-        gap: var(--node-gap);
-        padding: 6px;
 
-    }
-
-    .group-has-active-child{
-        margin-bottom: 3px;
-    }
-    .group-has-active-child:last-child {
-        margin-bottom: 0;
-    }
-
-    /*.group-has-active-child {
-        border-bottom-left-radius: 6px;
-        border-top-left-radius: 6px;
-    }*/
 </style>

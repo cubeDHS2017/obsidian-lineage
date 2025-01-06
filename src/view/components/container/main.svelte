@@ -10,7 +10,6 @@
     import Lineage from '../../../main';
     import { setContext } from 'svelte';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
-    import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
     import RightSidebar from './right-sidebar/right-sidebar.svelte';
@@ -25,7 +24,6 @@
     setContext('plugin', plugin);
     setContext('view', view);
     const controls = uiControlsStore(view);
-    const showMinimap = showMinimapStore(view);
 </script>
 
 <div
@@ -66,20 +64,7 @@
         position: relative;
     }
 
-    .lineage-view:not(:focus-within) {
-        & .node-border--active {
-            border-left-color: var(--lineage-accent-faint);
-        }
-        & .node-border--editing {
-            border-left-color: var(--color-base-40);
-        }
-        & .node-border--discard {
-            border-left-color: #e8314660;
-        }
-        & .node-border--selected {
-            border-left-color: var(--lineage-color-selection-faint);
-        }
-    }
+
 
     .lineage-view {
         background-color: var(--background-container);

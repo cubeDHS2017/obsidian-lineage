@@ -170,25 +170,7 @@
     .lineage-card::-webkit-scrollbar {
         display: initial;
     }
-    .node-border--active {
-        border-left: 5px var(--lineage-accent) solid;
-    }
-    .node-border--editing {
-        border-left: 5px var(--color-base-70) solid;
-    }
-    .node-border--discard {
-        border-left: 5px #ff3b3b solid;
-    }
 
-    .node-border--delete {
-        border-left: 5px #ff7b4d solid;
-    }
-    .node-border--selected {
-        border-left: 5px var(--lineage-color-selection) solid;
-    }
-    .node-border--search-match {
-        border-left: 5px #ffc857 solid;
-    }
 
     .node-style-container {
         position: absolute;

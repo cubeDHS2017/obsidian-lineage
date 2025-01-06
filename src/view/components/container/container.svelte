@@ -126,92 +126,15 @@
 </div>
 
 <style>
-    :root {
-        --container-left-padding: 100px;
-        --column-gap: 0;
-        --node-gap: 2px;
-        --group-gap: 0px;
-    }
     .columns-container {
-        position: relative;
-        flex: 1;
-        height: 100%;
-        width: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: start;
-        padding-left: var(--container-left-padding);
-        overflow-y: hidden;
-        overflow-x: auto;
         --scrollbar-thumb-bg: transparent;
         --scrollbar-active-thumb-bg: transparent;
         --scrollbar-bg: transparent;
     }
-    :global(.is-mobile) {
-        --container-left-padding: 10px;
-    }
-    .columns {
-        display: flex;
-        align-items: center;
-        gap: var(--column-gap);
-        transform: scale(var(--zoom-level));
-        height: calc(1 / var(--zoom-level) * 100vh);
-        width: calc(1 / var(--zoom-level) * 100vw);
-    }
+
 
     .columns-container::-webkit-scrollbar {
         display: none;
     }
-    .limit-card-height {
-        & .lng-prev {
-            max-height: 65vh;
-        }
-        & .editor-container {
-            max-height: 65vh;
-        }
-    }
 
-    .single-column {
-        & .group {
-            background-color: transparent;
-        }
-        --node-gap: 60px;
-        & .active-parent-bridge-right {
-            display: none;
-        }
-
-        & .active-parent-bridge-left {
-            display: none;
-        }
-        & .active-node-bridge {
-            display: none;
-        }
-
-        & .active-node {
-            outline: 6px solid var(--background-active-parent) !important;
-        }
-    }
-    .gap-between-cards {
-        & .group {
-            background-color: transparent;
-        }
-        --node-gap: var(--node-gap-setting);
-        --column-gap: var(--node-gap-setting);
-        --group-gap: var(--node-gap-setting);
-
-        & .active-parent-bridge-right {
-            display: none;
-        }
-
-        & .active-parent-bridge-left {
-            display: none;
-        }
-        & .active-node-bridge {
-            display: none;
-        }
-
-        & .active-node {
-            outline: 6px solid var(--background-active-parent) !important;
-        }
-    }
 </style>
