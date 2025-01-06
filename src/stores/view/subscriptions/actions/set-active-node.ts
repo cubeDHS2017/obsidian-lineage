@@ -11,8 +11,9 @@ export const setActiveNode = (
     const viewState = view.viewStore.getValue();
 
     const activeNodeOfView = viewState.document.activeNode;
-    const activeSectionOfView =
-        documentState.sections.id_section[activeNodeOfView];
+    const id_section = documentState.sections.id_section;
+    const section_id = documentState.sections.section_id;
+    const activeSectionOfView = id_section[activeNodeOfView];
     const activeNodeExists = !!activeSectionOfView;
 
     let newActiveSection = documentState.history.context.activeSection;
@@ -24,7 +25,10 @@ export const setActiveNode = (
             const state = documentState.history.state;
             const previousSnapshot: Snapshot =
                 documentState.history.items[state.activeIndex + 1];
-            newActiveSection = previousSnapshot.context.affectedSection;
+            const affectedSection = previousSnapshot.context.affectedSection;
+            if (section_id[affectedSection]) {
+                newActiveSection = affectedSection;
+            }
         }
         // active view of file should always update except for dnd events
         else if (view.isViewOfFile && action.type === 'DOCUMENT/DROP_NODE') {
