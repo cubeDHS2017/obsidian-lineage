@@ -4,8 +4,7 @@ import { isEmptyDocument } from 'src/stores/view/subscriptions/helpers/is-empty-
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-font-size';
-import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-container-bg';
-import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
+import { applyCssColor } from 'src/stores/view/subscriptions/effects/css-variables/apply-css-color';
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-initial-active-node';
@@ -19,15 +18,14 @@ import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects
 import { attachCheckboxListener } from 'src/stores/view/subscriptions/effects/checkbox-listener/attach-checkbox-listener';
 import { watchViewSize } from 'src/stores/view/subscriptions/effects/view-size/watch-view-size';
 import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
-import { applyActiveBranchColor } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-color';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
     applyFontSize(view, state.view.fontSize);
     applyInactiveNodeOpacity(view, state.view.theme.inactiveNodeOpacity);
-    applyContainerBg(view, state.view.theme.containerBg);
-    applyActiveBranchBg(view, state.view.theme.activeBranchBg);
-    applyActiveBranchColor(view, state.view.theme.activeBranchColor);
+    applyCssColor(view, 'containerBg');
+    applyCssColor(view, 'activeBranchBg');
+    applyCssColor(view, 'activeBranchColor');
     applyCardWidth(view, state.view.cardWidth);
     applyCardIndentationWidth(view, state.view.nodeIndentationWidth);
     applyCardsGap(view, state.view.cardsGap);

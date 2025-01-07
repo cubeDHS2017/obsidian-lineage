@@ -2,15 +2,13 @@ import { LineageView } from 'src/view/view';
 import { Settings } from 'src/stores/settings/settings-type';
 import { SettingsActions } from 'src/stores/settings/settings-reducer';
 import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variables/apply-font-size';
-import { applyContainerBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-container-bg';
-import { applyActiveBranchBg } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-bg';
+import { applyCssColor } from 'src/stores/view/subscriptions/effects/css-variables/apply-css-color';
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
 import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variables/apply-cards-gap';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
-import { applyActiveBranchColor } from 'src/stores/view/subscriptions/effects/css-variables/apply-active-branch-color';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -22,9 +20,9 @@ export const onPluginSettingsUpdate = (
     if (type === 'SET_FONT_SIZE') {
         applyFontSize(view, state.view.fontSize);
     } else if (type === 'SET_CONTAINER_BG') {
-        applyContainerBg(view, state.view.theme.containerBg);
+        applyCssColor(view, 'containerBg');
     } else if (type === 'SET_ACTIVE_BRANCH_BG') {
-        applyActiveBranchBg(view, state.view.theme.activeBranchBg);
+        applyCssColor(view, 'activeBranchBg');
     } else if (type === 'SET_CARD_WIDTH') {
         applyCardWidth(view, state.view.cardWidth);
     } else if (type === 'SET_CARDS_GAP') {
@@ -39,7 +37,7 @@ export const onPluginSettingsUpdate = (
     } else if (type === 'settings/view/theme/set-inactive-node-opacity') {
         applyInactiveNodeOpacity(view, state.view.theme.inactiveNodeOpacity);
     } else if (type === 'settings/view/theme/set-active-branch-color') {
-        applyActiveBranchColor(view, state.view.theme.activeBranchColor);
+        applyCssColor(view, 'activeBranchColor');
     }
 
     const shouldAlign =
