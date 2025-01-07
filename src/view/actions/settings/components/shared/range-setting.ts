@@ -1,5 +1,5 @@
 import { SettingsStore } from 'src/main';
-import { Setting, SliderComponent } from 'obsidian';
+import { ExtraButtonComponent, Setting, SliderComponent } from 'obsidian';
 import { lang } from 'src/lang/lang';
 import { Settings } from 'src/stores/settings/settings-type';
 
@@ -20,10 +20,21 @@ export const RangeSetting = (
     props: RangeInputProps,
 ) => {
     let input: SliderComponent;
+    let resetButton: ExtraButtonComponent;
 
+    const updateExtraButton = (currentValue: number) => {
+        if (currentValue === props.defaultValue) {
+            resetButton.setDisabled(true);
+        } else {
+            resetButton.setDisabled(false);
+        }
+    };
     const setValue = () => {
         const settingsState = settingsStore.getValue();
-        input.setValue(props.valueSelector(settingsState));
+        const currentValue =
+            props.valueSelector(settingsState) ?? props.defaultValue;
+        input.setValue(currentValue);
+        updateExtraButton(currentValue);
     };
     const setting = new Setting(element);
     setting.setName(props.label);
@@ -35,12 +46,14 @@ export const RangeSetting = (
         .addSlider((cb) => {
             input = cb;
             cb.setLimits(props.min, props.max, props.step);
-            setValue();
+
             cb.onChange((value) => {
                 props.onChange(value);
+                updateExtraButton(value);
             }).setDynamicTooltip();
         })
         .addExtraButton((cb) => {
+            resetButton = cb;
             cb.setIcon('reset')
                 .onClick(() => {
                     props.onChange(props.defaultValue);
@@ -48,4 +61,5 @@ export const RangeSetting = (
                 })
                 .setTooltip(lang.settings_reset);
         });
+    setValue();
 };

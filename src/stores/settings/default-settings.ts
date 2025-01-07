@@ -3,7 +3,7 @@ import { Settings } from './settings-type';
 export const DEFAULT_CARD_WIDTH = 550;
 export const DEFAULT_CARDS_GAP = 100;
 export const DEFAULT_INDENTATION_WIDTH = 60;
-export const DEFAULT_INACTIVE_NODE_OPACITY = 30;
+export const DEFAULT_INACTIVE_NODE_OPACITY = 25;
 export const DEFAULT_SETTINGS = (): Settings => ({
     documents: {},
     hotkeys: {

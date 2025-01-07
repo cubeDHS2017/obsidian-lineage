@@ -15,6 +15,6 @@
     };
 </script>
 
-<FloatingButton label={lang.card_btn_delete} on:click={_deleteNode} position={'up-right'}>
+<FloatingButton label={lang.card_btn_delete} on:click={_deleteNode} position={'up-right'} classes="delete-card-button">
     <TrashIcon class="svg-con" />
 </FloatingButton>

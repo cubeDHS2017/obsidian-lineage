@@ -9,5 +9,6 @@
 @import url('markers/html-element-marker.css');
 @import url('./overrides.css');
 @import url('./layout/columns.css');
+@import url('./view/settings.css');
 /* should be the last import*/
 @import url('./layout/modes.css');
