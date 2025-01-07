@@ -1,22 +1,13 @@
-import { DocumentState } from 'src/stores/document/document-state-type';
 import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
 import { alignElementHorizontally } from 'src/lib/align-element/align-element-horizontally';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
-export const scrollFirstColumnToTheLeft = (
-    documentState: DocumentState,
-    container: HTMLElement,
-) => {
-    const firstColumnId = documentState.document.columns[0]?.id;
+export const scrollFirstColumnToTheLeft = (context: AlignBranchContext) => {
+    const firstColumnId = context.documentState.document.columns[0]?.id;
     if (!firstColumnId) return;
-    const firstColumnElement = getNodeElement(container, firstColumnId);
+    const firstColumnElement = getNodeElement(context.container, firstColumnId);
     if (!firstColumnElement) return;
     if (firstColumnId) {
-        alignElementHorizontally(
-            container,
-            firstColumnElement,
-            false,
-            'instant',
-            true,
-        );
+        alignElementHorizontally(context, firstColumnElement, false, true);
     }
 };

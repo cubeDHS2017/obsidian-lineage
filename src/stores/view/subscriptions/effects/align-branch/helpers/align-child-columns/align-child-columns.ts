@@ -25,14 +25,7 @@ export const alignChildColumns = (context: AlignBranchContext) => {
         if (activeBranchNode) {
             const element = getNodeElement(context.container, activeBranchNode);
             if (element) {
-                const columnId = alignElementVertically(
-                    context.container,
-                    element,
-                    context.settings.zoomLevel,
-                    true,
-                    context.settings.behavior,
-                );
-
+                const columnId = alignElementVertically(context, element);
                 if (columnId) context.state.columns.add(columnId);
             }
         } else {
@@ -42,20 +35,9 @@ export const alignChildColumns = (context: AlignBranchContext) => {
                 ),
             );
             if (childGroup) {
-                alignChildGroupOfColumn(
-                    context.viewState,
-                    context.container,
-                    column.id,
-                    context.settings.zoomLevel,
-                    context.settings.behavior,
-                );
+                alignChildGroupOfColumn(context, column.id);
             } else if (alignInactiveColumns) {
-                alignInactiveColumn(
-                    column,
-                    context.container,
-                    context.settings.zoomLevel,
-                    context.settings.behavior,
-                );
+                alignInactiveColumn(context, column);
             }
         }
     }

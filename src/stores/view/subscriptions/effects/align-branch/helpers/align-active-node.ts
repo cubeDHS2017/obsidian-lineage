@@ -6,10 +6,11 @@ export const alignActiveNode = (context: AlignBranchContext) => {
     const element = getNodeElement(context.container, context.activeNode);
     if (!element) return;
 
-    const columnId = alignElementVAndH(
-        context.container,
-        element,
-        context.settings,
-    );
-    if (columnId) context.state.columns.add(columnId);
+    const result = alignElementVAndH(context, element);
+    if (result?.columnId) {
+        context.state.columns.add(result.columnId);
+        if (!context.settings.centerActiveNodeV) {
+            context.state.activeNodeRect = result.activeNodeRect;
+        }
+    }
 };

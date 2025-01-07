@@ -10,8 +10,7 @@ export type AlignBranchSettings = {
 
 export const matchActionToSettings = (
     settings: Settings,
-    previousGroupId: string,
-    newGroupId: string,
+    /*  isNewGroup: boolean,*/
     action?: PluginAction,
 ) => {
     const params: AlignBranchSettings = {
@@ -25,8 +24,8 @@ export const matchActionToSettings = (
         params.centerActiveNodeV =
             action?.type === 'view/life-cycle/mount' ||
             action?.type === 'view/align-branch' ||
-            (!settings.view.singleColumnMode &&
-                (!previousGroupId || previousGroupId !== newGroupId));
+            action?.type === 'DOCUMENT/INSERT_NODE'; /* ||
+            (!settings.view.singleColumnMode && isNewGroup);*/
     }
     if (!action) return params;
 

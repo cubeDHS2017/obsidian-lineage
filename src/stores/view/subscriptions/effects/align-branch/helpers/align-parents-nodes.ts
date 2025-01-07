@@ -7,13 +7,8 @@ export const alignParentsNodes = (context: AlignBranchContext) => {
         const element = getNodeElement(context.container, id);
         if (!element) continue;
 
-        const columnId = alignElementVertically(
-            context.container,
-            element,
-            context.settings.zoomLevel,
-            true,
-            context.settings.behavior,
-        );
+        const columnId = alignElementVertically(context, element);
+
         if (columnId) context.state.columns.add(columnId);
     }
 };

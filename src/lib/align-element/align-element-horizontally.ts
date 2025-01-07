@@ -1,31 +1,28 @@
 import { calculateScrollLeft } from 'src/lib/align-element/helpers/calculate-scroll-left';
 
 import { THRESHOLD } from 'src/lib/align-element/constants';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export const alignElementHorizontally = (
-    container: HTMLElement,
+    context: AlignBranchContext,
     element: HTMLElement,
     center: boolean,
-    behavior: ScrollBehavior = 'smooth',
     scrollToTheLeft = false,
 ) => {
     const column = element.matchParent('.column') as HTMLElement;
     if (!column) return;
     const elementRect = element.getBoundingClientRect();
-    const containerRect = (
-        container.parentElement as HTMLElement
-    ).getBoundingClientRect();
 
     const scrollLeft = calculateScrollLeft(
         elementRect,
-        containerRect,
+        context.containerRect,
         center,
         scrollToTheLeft,
     );
     if (Math.abs(scrollLeft) > THRESHOLD)
-        container.scrollBy({
+        context.container.scrollBy({
             left: scrollLeft * -1,
-            behavior,
+            behavior: scrollToTheLeft ? 'instant' : context.settings.behavior,
         });
 
     return column.id;

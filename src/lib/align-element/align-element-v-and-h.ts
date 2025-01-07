@@ -1,47 +1,53 @@
 import { calculateScrollTop } from 'src/lib/align-element/helpers/calculate-scroll-top';
 import { calculateScrollLeft } from 'src/lib/align-element/helpers/calculate-scroll-left';
-
 import { THRESHOLD } from 'src/lib/align-element/constants';
-import { AlignBranchSettings } from 'src/stores/view/subscriptions/effects/align-branch/helpers/match-action-to-settings';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
-export type AlignBranchState = { columns: Set<string> };
+export type PartialDOMRect = Pick<DOMRect, 'top' | 'height'>;
+
+export type AlignBranchState = {
+    columns: Set<string>;
+    activeNodeRect?: PartialDOMRect;
+};
 
 export const alignElementVAndH = (
-    container: HTMLElement,
+    context: AlignBranchContext,
     element: HTMLElement,
-    settings: AlignBranchSettings,
 ) => {
     const column = element.matchParent('.column') as HTMLElement;
 
     if (!column) return;
 
     const elementRect = element.getBoundingClientRect();
-    const containerRect = (
-        container.parentElement as HTMLElement
-    ).getBoundingClientRect();
 
     const scrollLeft = calculateScrollLeft(
         elementRect,
-        containerRect,
-        settings.centerActiveNodeH,
+        context.containerRect,
+        context.settings.centerActiveNodeH,
         false,
     );
     if (Math.abs(scrollLeft) > THRESHOLD)
-        container.scrollBy({
+        context.container.scrollBy({
             left: scrollLeft * -1,
-            behavior: settings.behavior,
+            behavior: context.settings.behavior,
         });
 
     const scrollTop = calculateScrollTop(
         elementRect,
-        containerRect,
-        settings.centerActiveNodeV,
+        context.containerRect,
+        context.settings.centerActiveNodeV,
     );
     if (Math.abs(scrollTop) > THRESHOLD)
         column.scrollBy({
-            top: (scrollTop * -1) / settings.zoomLevel,
-            behavior: settings.behavior,
+            top: (scrollTop * -1) / context.settings.zoomLevel,
+            behavior: context.settings.behavior,
         });
 
-    return column.id;
+    return {
+        columnId: column.id,
+        activeNodeRect: {
+            height: elementRect.height,
+            top: elementRect.top + scrollTop,
+        } satisfies PartialDOMRect,
+    };
 };
