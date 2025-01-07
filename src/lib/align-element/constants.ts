@@ -1,4 +1,5 @@
-export const HORIZONTAL_PADDING = 100;
-export const VERTICAL_PADDING = 20;
-export const BREADCRUMBS_HEIGHT = 40;
+export const LEFT_PADDING = 15;
+export const CONTROLS_BAR_WIDTH = 60;
+export const BREADCRUMBS_HEIGHT = 50;
+export const TOOLBAR_HEIGHT = 50;
 export const THRESHOLD = 5;

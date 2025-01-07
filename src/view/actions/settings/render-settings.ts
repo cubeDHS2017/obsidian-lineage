@@ -23,8 +23,8 @@ export const renderSettings = (element: HTMLElement) => {
         BackgroundColor(element, settingsStore);
         ActiveBranchBackground(element, settingsStore);
         ActiveBranchColor(element, settingsStore);
-        FontSize(element, settingsStore);
         InactiveCardOpacity(element, settingsStore);
+        FontSize(element, settingsStore);
         new Setting(element).setHeading().setName(lang.settings_layout);
         CardWidth(element, settingsStore);
         CardsGap(element, settingsStore);

@@ -1,4 +1,7 @@
-import { HORIZONTAL_PADDING } from 'src/lib/align-element/constants';
+import {
+    CONTROLS_BAR_WIDTH,
+    LEFT_PADDING,
+} from 'src/lib/align-element/constants';
 
 export const calculateScrollLeft = (
     elementRect: DOMRect,
@@ -9,10 +12,9 @@ export const calculateScrollLeft = (
     const viewPortIsWideEnough = containerRect.width > elementRect.width;
 
     const deltaRight =
-        containerRect.right - HORIZONTAL_PADDING - elementRect.right;
+        containerRect.right - CONTROLS_BAR_WIDTH - elementRect.right;
 
-    const deltaLeft =
-        containerRect.left + HORIZONTAL_PADDING - elementRect.left;
+    const deltaLeft = containerRect.left + LEFT_PADDING - elementRect.left;
     const leftSideIsVisible = deltaLeft < 0;
     const rightSideIsVisible = deltaRight > 0;
 

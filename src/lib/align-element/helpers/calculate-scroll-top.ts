@@ -1,6 +1,6 @@
 import {
     BREADCRUMBS_HEIGHT,
-    VERTICAL_PADDING,
+    TOOLBAR_HEIGHT,
 } from 'src/lib/align-element/constants';
 
 export const calculateScrollTop = (
@@ -9,13 +9,10 @@ export const calculateScrollTop = (
     center: boolean,
 ) => {
     const viewPortIsTallEnough = containerRect.height >= elementRect.height;
-    const deltaTop = containerRect.top + VERTICAL_PADDING - elementRect.top;
+    const deltaTop = containerRect.top + TOOLBAR_HEIGHT - elementRect.top;
 
     const deltaBottom =
-        containerRect.bottom -
-        VERTICAL_PADDING -
-        BREADCRUMBS_HEIGHT -
-        elementRect.bottom;
+        containerRect.bottom - BREADCRUMBS_HEIGHT - elementRect.bottom;
     const bottomIsVisible = deltaBottom > 0;
     const topIsVisible = deltaTop < 0;
 

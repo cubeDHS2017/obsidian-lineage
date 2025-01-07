@@ -123,7 +123,7 @@
         display: block;
         white-space: nowrap;
         overflow: hidden;
-        max-width: 250px;
+        max-width: 200px;
         text-overflow: ellipsis;
         font-style: italic;
         opacity: 0.9;
