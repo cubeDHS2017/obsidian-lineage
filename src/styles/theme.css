@@ -51,10 +51,10 @@
 }
 .inactive-node:hover {
     opacity: 0.8;
-    transition:opacity 100ms ease
+    transition: opacity 100ms ease;
 }
-.group{
-    transition:opacity 100ms ease
+.group {
+    transition: opacity 100ms ease;
 }
 /* group */
 .group:not([id^='group-r']):hover {
@@ -122,5 +122,20 @@
     }
     & .node-border--selected {
         border-left-color: var(--lineage-color-selection-faint);
+    }
+}
+
+.lineage-card {
+    transition: box-shadow 200ms ease;
+}
+
+.lineage-card:hover {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+}
+
+.theme-dark {
+    .lineage-card.active-node,
+    .lineage-card.active-child:hover {
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.15);
     }
 }

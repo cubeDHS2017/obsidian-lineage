@@ -1,0 +1,108 @@
+#columns-container {
+    --floating-button-width: 20px;
+    --floating-button-height: 20px;
+    --floating-button-bg: #dbdbdb;
+    --position-tb: -4px;
+    --position-lr: -4px;
+}
+
+.lineage-floating-button {
+    width: var(--floating-button-width);
+    height: var(--floating-button-height);
+    position: absolute;
+    box-shadow: none;
+    border: none;
+    transition: opacity 200ms;
+    padding: 4px !important;
+    cursor: pointer;
+    z-index: 10;
+    & svg {
+        width: 14px;
+        height: 14px;
+    }
+}
+
+.is-disabled {
+    cursor: not-allowed;
+}
+
+/* bg */
+.theme-light {
+    .lineage-floating-button {
+        color: #000 !important;
+        background-color: #ffffffee !important;
+    }
+}
+
+.theme-dark {
+    .lineage-floating-button {
+        color: #fff !important;
+        background-color: #bebebe20 !important;
+    }
+}
+
+/* opacity */
+.theme-light{
+    --opacity-inactive-node: 0.5;
+    --opacity-active-node: 0.5;
+    --opacity-active-button: 0.8;
+}
+.theme-dark {
+    --opacity-inactive-node: 0.6;
+    --opacity-active-node: 0.6;
+    --opacity-active-button: 0.8;
+}
+
+
+.lineage-floating-button {
+    opacity: 0;
+}
+
+.lineage-card:hover .lineage-floating-button {
+    opacity: var(--opacity-inactive-node);
+}
+
+.active-node:hover,
+.active-child:hover {
+    & .lineage-floating-button {
+        opacity: var(--opacity-active-node);
+    }
+}
+
+.lineage-floating-button:not(.is-disabled):hover {
+    opacity: var(--opacity-active-button);
+}
+
+.tree-index:hover {
+    opacity: var(--opacity-active-button);
+}
+
+/* position */
+.position-top {
+    /*top: calc((-1 * var(--height)) / 2);*/
+    top: var(--position-tb);
+    left: calc(50% - calc(var(--floating-button-width) / 2));
+}
+.position-bottom {
+    /*bottom: calc((-1 * var(--height)) / 2);*/
+    bottom: var(--position-tb);
+    left: calc(50% - calc(var(--floating-button-width) / 2));
+}
+.position-right {
+    top: calc(50% - calc(var(--floating-button-height) / 2));
+    right: var(--position-lr);
+}
+
+.position-bottom-right {
+    top: var(--position-lr);
+    right: var(--position-lr);
+}
+.position-top-right {
+    top: var(--position-lr);
+    right: 20px;
+}
+
+.position--section {
+    bottom: 3px;
+    right: 8px;
+}

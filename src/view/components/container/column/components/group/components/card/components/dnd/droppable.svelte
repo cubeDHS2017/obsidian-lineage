@@ -167,6 +167,11 @@
         --scrollbar-thumb-bg: var(--color-base-30);
         --scrollbar-active-thumb-bg: var(--color-base-40);
     }
+
+    .lineage-card:hover {
+        z-index:10
+    }
+
     .lineage-card::-webkit-scrollbar {
         display: initial;
     }

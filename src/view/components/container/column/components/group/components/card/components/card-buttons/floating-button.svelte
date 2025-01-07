@@ -27,57 +27,5 @@
 </button>
 
 <style>
-    :root {
-        --floating-button-width: 30px;
-        --floating-button-height: 30px;
-        --floating-button-bg: #dbdbdb;
-        --position-tb: -10px;
-        --position-lr: -4px;
-    }
-    button {
-        color: var(--color-acive-node) !important;
-        width: var(--floating-button-width);
-        height: var(--floating-button-height);
-        position: absolute;
-        opacity: 0;
-        box-shadow: none;
-        border: none;
-        background-color: transparent;
-        transition: opacity 200ms;
-        padding: 8px !important;
-        cursor: pointer;
-    }
-    .is-disabled {
-        cursor: not-allowed;
-    }
 
-
-    .position-top {
-        /*top: calc((-1 * var(--height)) / 2);*/
-        top: var(--position-tb);
-        left: calc(50% - calc(var(--floating-button-width) / 2));
-    }
-    .position-bottom {
-        /*bottom: calc((-1 * var(--height)) / 2);*/
-        bottom: var(--position-tb);
-        left: calc(50% - calc(var(--floating-button-width) / 2));
-    }
-    .position-right {
-        top: calc(50% - calc(var(--floating-button-height) / 2));
-        right: var(--position-lr);
-    }
-
-    .position-bottom-right {
-        top: var(--position-lr);
-        right: var(--position-lr);
-    }
-    .position-top-right {
-        top: var(--position-lr);
-        right: 20px;
-    }
-
-    .position--section {
-        bottom: 3px;
-        right: 8px;
-    }
 </style>
