@@ -1,5 +1,6 @@
 import { Settings } from 'src/stores/settings/settings-type';
 import { PluginAction } from './match-action-to-params';
+import { getDocumentEventType } from 'src/stores/view/helpers/get-document-event-type';
 
 export type AlignBranchSettings = {
     behavior: ScrollBehavior;
@@ -20,12 +21,16 @@ export const matchActionToSettings = (
         zoomLevel: settings.view.zoomLevel,
     };
 
-    if (!params.centerActiveNodeV) {
+    if (!params.centerActiveNodeV && action) {
+        // @ts-ignore
+        const type = getDocumentEventType(action.type);
         params.centerActiveNodeV =
             action?.type === 'view/life-cycle/mount' ||
             action?.type === 'view/align-branch' ||
-            action?.type === 'DOCUMENT/INSERT_NODE'; /* ||
-            (!settings.view.singleColumnMode && isNewGroup);*/
+            type.dropOrMove ||
+            type.changeHistory ||
+            type.clipboard ||
+            action.type === 'DOCUMENT/DELETE_NODE';
     }
     if (!action) return params;
 

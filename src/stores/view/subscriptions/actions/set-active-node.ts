@@ -31,7 +31,11 @@ export const setActiveNode = (
             }
         }
         // active view of file should always update except for dnd events
-        else if (view.isViewOfFile && action.type === 'DOCUMENT/DROP_NODE') {
+        else if (
+            view.isViewOfFile &&
+            (action.type === 'DOCUMENT/DROP_NODE' ||
+                action.type === 'DOCUMENT/MOVE_NODE')
+        ) {
             shouldSetActiveNode = false;
         }
         // unless the active node does not exist, don't update other views

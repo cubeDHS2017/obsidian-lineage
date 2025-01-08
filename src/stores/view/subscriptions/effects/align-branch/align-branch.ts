@@ -36,9 +36,16 @@ export type AlignBranchContext = {
 };
 
 export class AlignBranch {
-    private state: { previousGroupId: string; previousNodeId: string } = {
+    private state: {
+        previousGroupId: string;
+        previousNodeId: string;
+        previousBehaviorTime: number;
+        previousBehavior: ScrollBehavior | null;
+    } = {
         previousGroupId: '',
         previousNodeId: '',
+        previousBehaviorTime: -1,
+        previousBehavior: null,
     };
     private animationFrameHandle: number;
     constructor(public view: LineageView) {}
@@ -108,6 +115,10 @@ export class AlignBranch {
                 viewState.document.activeBranch.sortedParentNodes.length - 1
             ];
         const activeNode = viewState.document.activeNode;
+        const alignBranchSettings = matchActionToSettings(settings, action);
+
+        this.updateLastBehavior(alignBranchSettings);
+
         const context: AlignBranchContext = {
             activeBranch: viewState.document.activeBranch,
             activeNode,
@@ -115,7 +126,7 @@ export class AlignBranch {
             documentState,
             container,
             containerRect: container.getBoundingClientRect(),
-            settings: matchActionToSettings(settings, action),
+            settings: alignBranchSettings,
             isNewGroup:
                 !this.state.previousGroupId ||
                 this.state.previousGroupId !== newGroupId,
@@ -129,7 +140,10 @@ export class AlignBranch {
         return context;
     };
 
-    updateState(context: AlignBranchContext, action: PluginAction | undefined) {
+    private updateState(
+        context: AlignBranchContext,
+        action: PluginAction | undefined,
+    ) {
         if (
             action?.type === 'view/life-cycle/mount' ||
             action?.type === 'view/align-branch'
@@ -141,5 +155,22 @@ export class AlignBranch {
                 context.viewState.document.activeBranch.group;
             this.state.previousNodeId = context.activeNode;
         }
+    }
+
+    private updateLastBehavior(alignBranchSettings: AlignBranchSettings) {
+        if (!this.state.previousBehavior) {
+            this.state.previousBehavior = alignBranchSettings.behavior;
+        } else if (
+            this.state.previousBehavior !== alignBranchSettings.behavior
+        ) {
+            const timeSinceLastBehavior =
+                Date.now() - this.state.previousBehaviorTime;
+            if (timeSinceLastBehavior < 1000) {
+                alignBranchSettings.behavior = this.state.previousBehavior;
+            } else {
+                this.state.previousBehavior = alignBranchSettings.behavior;
+            }
+        }
+        this.state.previousBehaviorTime = Date.now();
     }
 }

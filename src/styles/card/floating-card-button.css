@@ -94,12 +94,12 @@
 }
 
 .position-bottom-right {
-    top: var(--position-lr);
-    right: var(--position-lr);
+    top: 3px;
+    right: 3px;
 }
 .position-top-right {
-    top: var(--position-lr);
-    right: 20px;
+    top: 3px;
+    right: 26px;
 }
 
 .position--section {
