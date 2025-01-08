@@ -12,7 +12,7 @@ import type { StatusBarWorkerResult } from 'src/obsidian/status-bar/helpers/stat
 import StatusBarWorker from 'src/obsidian/status-bar/helpers/status-bar.worker';
 import { DocumentProgressProps } from 'src/obsidian/status-bar/helpers/calculate-document-prorgess';
 
-export const drawMinimapWorker = new WorkerPromise<
+export const minimapWorker = new WorkerPromise<
     CanvasWorkerProps,
     null | {
         totalDrawnHeight_cpx: number;

@@ -1,6 +1,6 @@
 import { debounce } from 'src/helpers/debounce';
 import { LineageView } from 'src/view/view';
-import { drawMinimapWorker } from 'src/workers/worker-instances';
+import { minimapWorker } from 'src/workers/worker-instances';
 import invariant from 'tiny-invariant';
 
 export const drawDocument = async (view: LineageView) => {
@@ -10,7 +10,7 @@ export const drawDocument = async (view: LineageView) => {
     const canvasId = state.canvasId;
     const activeCardId = state.activeCardId;
 
-    const payload = await drawMinimapWorker.run({
+    const payload = await minimapWorker.run({
         type: 'minimap/set/document',
         payload: {
             document: lineageDocument,
