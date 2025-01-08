@@ -208,7 +208,8 @@ export const lang = {
         'Always center active card horizontally',
     controls_toggle_scrolling_mode_vertical:
         'Always center active card vertically',
-    cmd_toggle_scrolling_mode: `Toggle 'always center active card horizontally'`,
+    cmd_toggle_horizontal_scrolling_mode: `Toggle 'always center active card horizontally'`,
+    cmd_toggle_vertical_scrolling_mode: `Toggle 'always center active card vertically'`,
     card_btn_scroll_to_reveal: 'Scroll to reveal',
     hkg_scrolling: 'Align branch',
 

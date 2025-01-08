@@ -46,7 +46,7 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: lang.cmd_toggle_scrolling_mode,
+        name: lang.cmd_toggle_horizontal_scrolling_mode,
         icon: customIcons.alignH.name,
         checkCallback: (checking) => {
             if (checking) {
@@ -54,6 +54,19 @@ const createCommands = (plugin: Lineage) => {
             }
             plugin.settings.dispatch({
                 type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE',
+            });
+        },
+    });
+
+    commands.push({
+        name: lang.cmd_toggle_vertical_scrolling_mode,
+        icon: customIcons.alignV.name,
+        checkCallback: (checking) => {
+            if (checking) {
+                return Boolean(getActiveLineageView(plugin));
+            }
+            plugin.settings.dispatch({
+                type: 'settings/view/scrolling/toggle-vertical-scrolling-mode',
             });
         },
     });
@@ -169,20 +182,6 @@ const createCommands = (plugin: Lineage) => {
     });
 
     commands.push({
-        name: lang.cmd_toggle_scrolling_mode,
-        icon: customIcons.alignH.name,
-        checkCallback: (checking) => {
-            const view = getActiveLineageView(plugin);
-            if (checking) {
-                return Boolean(view);
-            }
-            view!.plugin.settings.dispatch({
-                type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE',
-            });
-        },
-    });
-
-    commands.push({
         name: lang.cmd_space_between_cards,
         icon: customIcons.gap.name,
         checkCallback: (checking) => {
@@ -196,7 +195,7 @@ const createCommands = (plugin: Lineage) => {
         },
     });
     commands.push({
-        name: lang.cmd_toggle_pin_in_left_sidebar,
+        name: lang.cmd_toggle_single_column,
         icon: 'rectangle-vertical',
         checkCallback: (checking) => {
             const view = getActiveLineageView(plugin);
