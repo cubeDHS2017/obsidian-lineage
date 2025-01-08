@@ -89,6 +89,7 @@ export const lang = {
     hk_paste_node: 'Paste branch',
     modals_snapshots_cut_card: 'Cut card ',
     modals_snapshots_pasted_card: 'Pasted card ',
+    error_cant_paste: 'Paste command failed. Try pasting directly into a card',
 
     // merge
     cm_merge_above: 'Merge with branch above',
