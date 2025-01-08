@@ -7,6 +7,8 @@ export const lang = {
     error_parent_not_found: (full: string) =>
         `Could not find the parent section of ${full}`,
     modals_snapshots_document_loaded: 'Opened document',
+    error_set_empty_data: 'Data is empty, but the file on disk is not',
+    error_save_empty_data: "Can't save empty data",
 
     // create document
     cmd_create_new_document: 'Create new document',

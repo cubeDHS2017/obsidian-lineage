@@ -42,6 +42,8 @@ import {
 import { MinimapStoreAction } from 'src/stores/minimap/minimap-store-actions';
 import { StyleRulesProcessor } from 'src/stores/view/subscriptions/effects/style-rules/style-rules-processor';
 import { AlignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { lang } from 'src/lang/lang';
+import { logger } from 'src/helpers/logger';
 
 export const LINEAGE_VIEW_TYPE = 'lineage';
 
@@ -109,11 +111,26 @@ export class LineageView extends TextFileView {
         if (!this.activeFilePath && this.file) {
             this.activeFilePath = this.file?.path;
             this.loadInitialData();
+        } else if (this.file && data.trim().length === 0) {
+            this.plugin.app.vault.adapter
+                .read(this.file.path)
+                .then((content) => {
+                    if (content.trim().length !== 0) {
+                        throw new Error(lang.error_set_empty_data);
+                    } else {
+                        this.data = data;
+                        this.debouncedLoadDocumentToStore();
+                    }
+                })
+                .catch((error) => {
+                    logger.error('Error reading file:', error);
+                });
         } else {
             this.data = data;
             this.debouncedLoadDocumentToStore();
         }
     }
+
     async onUnloadFile() {
         if (this.component) {
             this.component.$destroy();
@@ -197,6 +214,9 @@ export class LineageView extends TextFileView {
             state.file.frontmatter +
             stringifyDocument(state.document, getDocumentFormat(this));
         if (data !== this.data) {
+            if (data.trim().length === 0) {
+                throw new Error(lang.error_save_empty_data);
+            }
             this.data = data;
             if (immediate) await this.save();
             else this.requestSave();
