@@ -1,7 +1,7 @@
 import {
     CustomHotkeys,
     DocumentPreferences,
-    LeftSidebarActiveTab,
+    LeftSidebarTab,
     LineageDocumentFormat,
     Settings,
     ViewType,
@@ -118,7 +118,7 @@ export type SettingsActions =
     | { type: 'view/left-sidebar/set-width'; payload: { width: number } }
     | {
           type: 'view/left-sidebar/set-active-tab';
-          payload: { tab: LeftSidebarActiveTab };
+          payload: { tab: LeftSidebarTab };
       }
     | {
           type: 'settings/pinned-nodes/persist';

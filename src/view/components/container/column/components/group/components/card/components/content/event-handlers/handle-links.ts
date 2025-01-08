@@ -58,7 +58,7 @@ const handleBlockLink = (view: LineageView, link: string) => {
     }
 };
 
-export const handleClick = (view: LineageView) => (e: MouseEvent) => {
+export const handleLinks = (view: LineageView, e: MouseEvent) => {
     // eslint-disable-next-line no-undef
     if (!(e.target instanceof HTMLAnchorElement)) return;
     if (!e.target.hasClass('internal-link')) return;

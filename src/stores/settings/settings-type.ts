@@ -34,7 +34,7 @@ export type DocumentPreferences = {
     } | null;
 };
 
-export type LeftSidebarActiveTab = 'pinned-cards' | 'recent-cards';
+export type LeftSidebarTab = 'pinned-cards' | 'recent-cards';
 
 export type Settings = {
     documents: Record<string, DocumentPreferences>;
@@ -53,7 +53,7 @@ export type Settings = {
         showMinimap: boolean;
         showLeftSidebar: boolean;
         leftSidebarWidth: number;
-        leftSidebarActiveTab: LeftSidebarActiveTab;
+        leftSidebarActiveTab: LeftSidebarTab;
         applyGapBetweenCards: boolean;
         singleColumnMode: boolean;
         nodeIndentationWidth: number;

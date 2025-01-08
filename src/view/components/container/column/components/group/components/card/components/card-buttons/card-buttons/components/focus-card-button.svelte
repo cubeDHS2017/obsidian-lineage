@@ -1,9 +1,11 @@
 <script lang="ts">
-   import { getView } from '../../../../../../../context';
-   import FloatingButton from './floating-button.svelte';
+   import { getView } from '../../../../../../../../../context';
+   import FloatingButton from '../../shared/floating-button.svelte';
    import { Focus } from 'lucide-svelte';
-   import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-   import { lang } from 'src/lang/lang';
+   import {
+      focusContainer
+   } from '../../../../../../../../../../../../stores/view/subscriptions/effects/focus-container';
+   import { lang } from '../../../../../../../../../../../../lang/lang';
 
    export let nodeId: string;
     const view = getView();

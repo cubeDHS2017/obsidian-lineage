@@ -2,13 +2,13 @@
     import { Clock, Pin } from 'lucide-svelte';
     import ClickableIcon from './components/clickable-icon.svelte';
     import { LeftSidebarActiveTabStore } from '../../../../../../stores/settings/derived/view-settings-store';
-    import { LeftSidebarActiveTab } from '../../../../../../stores/settings/settings-type';
+    import { LeftSidebarTab } from '../../../../../../stores/settings/settings-type';
     import { getView } from '../../../context';
     import { lang } from 'src/lang/lang';
 
     const view = getView();
     const activeTab = LeftSidebarActiveTabStore(view);
-    const setActiveTab = (tab: LeftSidebarActiveTab) => {
+    const setActiveTab = (tab: LeftSidebarTab) => {
         view.plugin.settings.dispatch({
             type: 'view/left-sidebar/set-active-tab',
             payload: { tab },

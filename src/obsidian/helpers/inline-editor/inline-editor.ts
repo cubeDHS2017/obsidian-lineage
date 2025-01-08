@@ -5,13 +5,13 @@ import { vimEnterInsertMode } from 'src/obsidian/helpers/inline-editor/helpers/v
 import { fixVimCursorWhenZooming } from 'src/obsidian/helpers/inline-editor/helpers/fix-vim-cursor-when-zooming';
 import { lockFile } from 'src/obsidian/helpers/inline-editor/helpers/lock-file';
 import { unlockFile } from 'src/obsidian/helpers/inline-editor/helpers/unlock-file';
-import { saveNodeContent } from 'src/obsidian/helpers/inline-editor/helpers/save-node-content';
 
 const noop = async () => {};
 
 export type InlineMarkdownView = MarkdownView & {
     __setViewData__: MarkdownView['setViewData'];
 };
+
 export class InlineEditor {
     private inlineView: InlineMarkdownView;
     private containerEl: HTMLElement;
@@ -219,6 +219,16 @@ export class InlineEditor {
         const nodeId = this.nodeId;
         if (!nodeId) return;
         const content = this.getContent();
-        saveNodeContent(this.view, nodeId, content);
+        const viewState = this.view.viewStore.getValue();
+        this.view.documentStore.dispatch({
+            type: 'DOCUMENT/SET_NODE_CONTENT',
+            payload: {
+                nodeId: nodeId,
+                content: content,
+            },
+            context: {
+                isInSidebar: viewState.document.editing.isInSidebar,
+            },
+        });
     };
 }

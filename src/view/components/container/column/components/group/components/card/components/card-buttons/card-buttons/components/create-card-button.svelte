@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { getView } from '../../../../../../../context';
-    import FloatingButton from './floating-button.svelte';
+    import { getView } from '../../../../../../../../../context';
+    import FloatingButton from '../../shared/floating-button.svelte';
     import { ChevronDown, ChevronRight, ChevronUp } from 'lucide-svelte';
     import {
         saveNodeAndInsertNode
-    } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-and-insert-node';
-    import { Direction } from 'src/stores/document/document-store-actions';
-    import { lang } from 'src/lang/lang';
+    } from '../../../../../../../../../../../actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-and-insert-node';
+    import { Direction } from '../../../../../../../../../../../../stores/document/document-store-actions';
+    import { lang } from '../../../../../../../../../../../../lang/lang';
 
     export let nodeId : string;
     export let position: Direction;

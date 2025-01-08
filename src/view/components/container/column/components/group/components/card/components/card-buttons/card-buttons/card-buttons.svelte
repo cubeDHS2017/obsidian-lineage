@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { ActiveStatus } from '../../../active-status.enum';
-    import DeleteNodeButton from './delete-node-button.svelte';
-    import EditNodeButton from './edit-node-button.svelte';
-    import CreateCardButton from './create-card-button.svelte';
-    import TreeIndex from './tree-index-button.svelte';
-    import Pin from './pin-indicator.svelte';
-    import FocusCardButton from './focus-card-button.svelte';
+    import { ActiveStatus } from '../../../../active-status.enum';
+    import DeleteNodeButton from './components/delete-node-button.svelte';
+    import EditNodeButton from './components/edit-node-button.svelte';
+    import CreateCardButton from './components/create-card-button.svelte';
+    import TreeIndex from '../tree-index-button.svelte';
+    import Pin from '../pin-indicator.svelte';
+    import FocusCardButton from './components/focus-card-button.svelte';
 
     export let editing: boolean;
     export let active: ActiveStatus | null;

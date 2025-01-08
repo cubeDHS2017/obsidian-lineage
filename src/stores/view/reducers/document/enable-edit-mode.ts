@@ -1,5 +1,4 @@
 import { DocumentViewState } from 'src/stores/view/view-state-type';
-import { SilentError } from 'src/lib/errors/errors';
 import { resetPendingConfirmation } from 'src/stores/view/reducers/document/reset-pending-confirmation';
 
 export const enableEditMode = (
@@ -8,18 +7,9 @@ export const enableEditMode = (
     isInSidebar = false,
 ) => {
     if (state.editing.activeNodeId) {
-        const isSameNode = state.editing.activeNodeId === nodeId;
-        const isSameNodeInDifferentSplit =
-            isSameNode && state.editing.isInSidebar !== isInSidebar;
-        if (!isSameNode) {
-            throw new Error('Another card is being edited');
-        } else if (isSameNodeInDifferentSplit) {
-            throw new SilentError(
+        if (state.editing.activeNodeId === nodeId) {
+            throw new Error(
                 `This card is being edited in the ${state.editing.isInSidebar ? 'sidebar' : 'main view'}`,
-            );
-        } else {
-            throw new SilentError(
-                `another node [${state.editing.activeNodeId}] is already in edit mode`,
             );
         }
     }

@@ -13,6 +13,7 @@ import { SetActivePinnedNodeAction } from 'src/stores/view/reducers/pinned-cards
 import { SetActiveRecentNodeAction } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 import { ToggleShowAllNodesAction } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
 import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
+import { LeftSidebarTab } from 'src/stores/settings/settings-type';
 
 export type ViewStoreAction =
     | SearchAction
@@ -116,6 +117,9 @@ export type EnableEditInSidebar = {
     type: 'view/sidebar/enable-edit';
     payload: {
         id: string;
+    };
+    context: {
+        activeSidebarTab: LeftSidebarTab;
     };
 };
 

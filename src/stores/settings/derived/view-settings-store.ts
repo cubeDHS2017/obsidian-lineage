@@ -18,3 +18,6 @@ export const ApplyGapBetweenCardsStore = (view: LineageView) =>
 
 export const SingleColumnMode = (view: LineageView) =>
     derived(view.plugin.settings, (state) => state.view.singleColumnMode);
+
+export const MaintainEditMode = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.maintainEditMode);

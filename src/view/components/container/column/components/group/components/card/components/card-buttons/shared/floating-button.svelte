@@ -1,6 +1,6 @@
 <script lang="ts">
     import classNames from 'classnames';
-    import { Direction } from 'src/stores/document/document-store-actions';
+    import { Direction } from '../../../../../../../../../../../stores/document/document-store-actions';
 
     export let classes = '';
     export let position: Direction | 'down-right' | 'up-right';
@@ -26,6 +26,3 @@
     <slot />
 </button>
 
-<style>
-
-</style>

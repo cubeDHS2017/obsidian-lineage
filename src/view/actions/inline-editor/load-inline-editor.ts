@@ -1,9 +1,7 @@
-import { LineageView } from 'src/view/view';
+import { getView } from 'src/view/components/container/context';
 
-export const loadInlineEditor = (
-    target: HTMLElement,
-    { nodeId, view }: { view: LineageView; nodeId: string },
-) => {
+export const loadInlineEditor = (target: HTMLElement, nodeId: string) => {
+    const view = getView();
     if (!view.file) return;
     view.inlineEditor.loadNode(target, nodeId);
     return {

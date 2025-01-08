@@ -72,6 +72,23 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         }
         enableEditMode(state.document, action.payload.nodeId);
     } else if (action.type === 'view/sidebar/enable-edit') {
+        if (action.context.activeSidebarTab === 'pinned-cards') {
+            if (state.pinnedNodes.activeNode !== action.payload.id) {
+                setActivePinnedNode(
+                    state.document,
+                    state.pinnedNodes,
+                    action.payload.id,
+                );
+            }
+        } else if (action.context.activeSidebarTab === 'recent-cards') {
+            if (state.recentNodes.activeNode !== action.payload.id) {
+                setActiveRecentNode(
+                    state.document,
+                    state.recentNodes,
+                    action.payload.id,
+                );
+            }
+        }
         enableEditMode(state.document, action.payload.id, true);
     } else if (action.type === 'view/confirmation/reset/disable-edit') {
         resetPendingConfirmation(state.document);

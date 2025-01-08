@@ -1,15 +1,12 @@
 <script lang="ts">
-    import { getView } from '../../../../../../../context';
     import { draggable } from 'src/view/actions/dnd/draggable';
 
     export let isInSidebar: boolean;
     export let nodeId: string;
-    const view = getView();
-    const documentStore = view.documentStore;
-    const viewStore = view.viewStore
+
 </script>
 
-<div class="draggable" use:draggable={{ id: nodeId, documentStore, viewStore,isInSidebar }}>
+<div class="draggable" use:draggable={{ id: nodeId,isInSidebar }}>
     {#if !isInSidebar}
         <div class="drag-handle"></div>
     {/if}
