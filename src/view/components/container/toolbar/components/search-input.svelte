@@ -8,7 +8,6 @@
     const viewStore = view.viewStore;
     const search = searchStore(view);
 
-    let focusTimeout: ReturnType<typeof setTimeout>;
     const onInput = (
         // eslint-disable-next-line no-undef
         e: Event & { currentTarget: EventTarget & HTMLInputElement },

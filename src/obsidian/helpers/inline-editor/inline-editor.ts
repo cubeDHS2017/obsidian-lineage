@@ -94,9 +94,25 @@ export class InlineEditor {
         this.inlineView.editor.focus();
     };
 
+    isCursorInRange = (cursor: EditorPosition): boolean => {
+        const docStart = { line: 0, ch: 0 };
+        const lastLine = this.inlineView.editor.lastLine();
+        const docEnd = {
+            line: lastLine,
+            ch: this.inlineView.editor.getLine(lastLine).length,
+        };
+
+        const isLineInRange =
+            cursor.line >= docStart.line && cursor.line <= docEnd.line;
+        const isChInRange =
+            (cursor.line === docStart.line ? cursor.ch >= docStart.ch : true) &&
+            (cursor.line === docEnd.line ? cursor.ch <= docEnd.ch : true);
+
+        return isLineInRange && isChInRange;
+    };
     restoreCursor = () => {
         const existingCursor = this.cursorPositions.get(this.nodeId!);
-        if (existingCursor) {
+        if (existingCursor && this.isCursorInRange(existingCursor)) {
             this.setCursor(existingCursor);
         } else {
             const lastLine = this.inlineView.editor.lastLine();
@@ -108,10 +124,10 @@ export class InlineEditor {
         }
     };
 
-    unloadNode(nodeId?: string) {
+    unloadNode(nodeId?: string, discardChanges = false) {
         const currentNodeId = this.nodeId;
         if (nodeId && nodeId !== currentNodeId) return;
-        if (currentNodeId) {
+        if (currentNodeId && !discardChanges) {
             this.saveContent();
             const cursor = this.getCursor();
             this.cursorPositions.set(currentNodeId, cursor);

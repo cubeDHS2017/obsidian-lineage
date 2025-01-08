@@ -17,4 +17,6 @@ export const deleteCardUsingButton = async () => {
     invariant(button);
     await button.click();
     await delay(SHORT);
+    await button.click();
+    await delay(SHORT);
 };

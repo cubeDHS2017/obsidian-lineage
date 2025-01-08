@@ -17,7 +17,7 @@
     "devDependencies": {
         "@commitlint/cli": "17.4.0",
         "@commitlint/config-conventional": "17.4.0",
-        "@playwright/test": "1.42.1",
+        "@playwright/test": "1.49.1",
         "@tsconfig/svelte": "5.0.2",
         "@types/diff": "5.2.1",
         "@types/electron": "1.6.10",

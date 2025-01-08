@@ -120,7 +120,7 @@ export const lang = {
 
     // undo
     controls_history: 'History',
-    controls_history_undo: 'Undo change',
+    controls_history_undo: 'Undo',
     controls_history_redo: 'Redo',
     hk_undo_change: 'Undo change',
     hk_redo_change: 'Redo change',

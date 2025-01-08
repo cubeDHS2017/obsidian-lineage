@@ -19,6 +19,7 @@ import { toggleSearchUsingHotkey } from '../helpers/interactions/lineage-view/ho
 import { setSearchQuery } from '../helpers/interactions/lineage-view/search/set-search-query';
 import { getTextsOfColumns } from '../helpers/getters/lineage-view/card/get-texts-of-columns';
 import { discardInputChanges } from '../helpers/interactions/lineage-view/hotkeys/discard-input-changes';
+import { toggleShowAllSearchResults } from '../helpers/interactions/lineage-view/search/toggle-show-all-search-results';
 
 test.describe('card hotkeys', () => {
     test('save card, edit card and discard changes using hotkey', async () => {
@@ -359,6 +360,7 @@ test.describe('card hotkeys', () => {
 
         await toggleSearchUsingHotkey();
         await setSearchQuery('4');
+        await toggleShowAllSearchResults();
 
         expect(await getTextsOfColumns()).toEqual([[], [], [n4]]);
 
