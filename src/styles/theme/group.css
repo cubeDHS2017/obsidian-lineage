@@ -1,0 +1,11 @@
+/*.group:hover {
+    transition: opacity 100ms ease;
+}*/
+
+.group-has-active-child {
+    background-color: var(--background-active-node);
+}
+
+.group-has-active-node {
+    background-color: var(--background-active-parent);
+}

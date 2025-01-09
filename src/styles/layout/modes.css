@@ -8,7 +8,7 @@
 }
 
 .single-column {
-    --node-gap: 60px;
+    --node-gap: 30px;
 
     & .group {
         background-color: transparent;
@@ -32,6 +32,17 @@
 
     & .active-node {
         outline: 6px solid var(--background-active-parent) !important;
+    }
+
+    & .group-has-active-node {
+        & .inactive-node {
+            background-color: var(--background-active-parent);
+            opacity: 0.8;
+        }
+        & .inactive-node:hover {
+            background-color: var(--background-active-parent);
+            opacity: 0.8;
+        }
     }
 }
 

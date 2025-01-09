@@ -3,17 +3,22 @@
 </script>
 
 <span class="pin-indicator">
-    <Pin class="svg-icon" size="12" />
+    <Pin class="svg-icon" size="10" />
 </span>
 
 <style>
     .pin-indicator {
         position: absolute;
-        top:0;
-        left: 0;
+        left: -20px;
+        top: 0px;
+
+
        & svg {
             fill: var(--text-muted);
             color: var(--text-muted);
+           width:16px !important;
+           height:16px !important;
+
         }
     }
 </style>

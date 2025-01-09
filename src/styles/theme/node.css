@@ -1,0 +1,126 @@
+/* bg */
+.active-node,
+.active-child {
+    background-color: var(--background-active-node);
+}
+
+.active-parent,
+.active-sibling,
+.inactive-node {
+    background-color: var(--background-active-parent);
+}
+
+/* text color */
+.active-parent,
+.active-sibling,
+.inactive-node {
+    --text-normal: var(--color-active-parent);
+}
+
+/* opacity*/
+.active-parent {
+    opacity: 0.8;
+}
+.active-sibling {
+    opacity: 0.8;
+}
+
+/* change opacity of all group nodes*/
+.group:not([id^='group-r']):hover .inactive-node {
+    opacity: 0.4;
+}
+
+.inactive-node {
+    opacity: var(--inactive-card-opacity);
+}
+
+.inactive-node:hover {
+    opacity: 0.8 !important;
+}
+
+/* box-shadow */
+.theme-dark .lineage-main {
+    .lineage-card:hover {
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+    }
+    .active-child:hover {
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.15);
+    }
+}
+.theme-light .lineage-main {
+    .lineage-card:hover {
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* borders */
+.theme-dark {
+    .node-border--editing {
+        border-left: 5px var(--color-base-70) solid;
+    }
+}
+.theme-light {
+    .node-border--editing {
+        border-left: 5px var(--color-base-40) solid;
+    }
+}
+
+.theme-dark {
+    .lineage-view:not(:focus-within) {
+        .node-border--editing {
+            border-left: 5px var(--color-base-40) solid;
+        }
+    }
+}
+.theme-light {
+    .lineage-view:not(:focus-within) {
+        .node-border--editing {
+            border-left: 5px var(--color-base-30) solid;
+        }
+    }
+}
+
+.node-border--active {
+    border-left: 5px var(--lineage-accent) solid;
+}
+
+.node-border--discard {
+    border-left: 5px #ff3b3b solid;
+}
+
+.node-border--delete {
+    border-left: 5px #ff7b4d solid;
+}
+.node-border--selected {
+    border-left: 5px var(--lineage-color-selection) solid;
+}
+.node-border--search-match {
+    border-left: 5px #ffc857 solid;
+}
+
+.lineage-view:not(:focus-within) {
+    & .node-border--active {
+        border-left-color: var(--lineage-accent-faint);
+    }
+    & .node-border--discard {
+        border-left-color: #e8314660;
+    }
+    & .node-border--selected {
+        border-left-color: var(--lineage-color-selection-faint);
+    }
+}
+
+/*transition*/
+.lineage-card {
+    transition: box-shadow 200ms ease;
+}
+.lineage-card:hover {
+    transition: opacity 100ms ease;
+}
+
+/* scroll bar*/
+.active-parent,
+.active-sibling {
+    --scrollbar-thumb-bg: var(--text-muted) !important;
+    --scrollbar-active-thumb-bg: var(--text-normal) !important;
+}

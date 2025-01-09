@@ -4,7 +4,6 @@
     import EditNodeButton from './components/edit-node-button.svelte';
     import CreateCardButton from './components/create-card-button.svelte';
     import TreeIndex from '../tree-index-button.svelte';
-    import Pin from '../pin-indicator.svelte';
     import FocusCardButton from './components/focus-card-button.svelte';
 
     export let editing: boolean;
@@ -28,7 +27,5 @@
     {/if}
 {/if}
 <EditNodeButton {editing} {nodeId} {isInSidebar} />
-<TreeIndex activeStatus={active} {nodeId} {section} {hasChildren} />
-{#if pinned}
-    <Pin />
-{/if}
+<TreeIndex activeStatus={active} {nodeId} {section} {hasChildren} {pinned}/>
+
