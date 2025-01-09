@@ -25,6 +25,7 @@
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { getAllChildren } from 'src/lib/tree-utils/get/get-all-children';
+    import { textIsSelected } from 'src/view/actions/context-menu/card-context-menu/helpers/text-is-selected';
 
     export let singleColumnMode: boolean;
 
@@ -64,11 +65,12 @@
 
     const applyGap = ApplyGapBetweenCardsStore(view);
     const pendingConfirmation = PendingConfirmationStore(view);
-    const saveActiveNodeOnClick = (event: MouseEvent) => {
+    const saveNodeOnClick = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
         if (target.closest('.lng-prev') || target.closest('.active-node')) {
             return;
         }
+        if (textIsSelected()) return;
         const editingState = view.viewStore.getValue().document.editing;
         if (editingState.activeNodeId && !editingState.isInSidebar) {
             saveNodeContent(view,true);
@@ -91,7 +93,7 @@
         ($zoom !== 1 ? ' zoom-enabled' : '')}
     id="columns-container"
     tabindex="0"
-    on:click={saveActiveNodeOnClick}
+    on:click={saveNodeOnClick}
     use:scrollOnDndX
 >
     <div class="columns">

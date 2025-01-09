@@ -15,6 +15,7 @@ import {
 } from 'src/obsidian/context-menu/render-context-menu';
 import { selectInactiveCard } from 'src/obsidian/context-menu/select-inactive-card';
 import { lang } from 'src/lang/lang';
+import { textIsSelected } from 'src/view/actions/context-menu/card-context-menu/helpers/text-is-selected';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const target = event.target as HTMLElement;
@@ -24,10 +25,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
 
     if (!closestCardElement) return;
 
-    const selectedText = activeWindow.getSelection()?.toString();
-    if (selectedText && selectedText.length > 0) {
-        return;
-    }
+    if (textIsSelected()) return;
 
     const isInSidebar = Boolean(target.closest('.sidebar'));
     const isInRecentCardsList =
