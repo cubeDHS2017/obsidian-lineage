@@ -1,14 +1,6 @@
-import { LineageView } from 'src/view/view';
-import { Hotkey } from 'obsidian';
 import { lang } from 'src/lang/lang';
 import { hotkeysLang } from 'src/lang/hotkeys-lang';
 
-export type PluginCommand = {
-    check: (view: LineageView) => boolean;
-    callback: (view: LineageView, event: KeyboardEvent) => void;
-    hotkeys: Hotkey[];
-    name: CommandName;
-};
 export type CommandName = keyof typeof hotkeysLang;
 export type GroupName = keyof typeof hotkeyGroups;
 

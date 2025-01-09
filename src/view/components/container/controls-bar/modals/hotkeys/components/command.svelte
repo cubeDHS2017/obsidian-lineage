@@ -1,9 +1,9 @@
 <script lang="ts">
     import Hotkey from 'src/view/components/container/controls-bar/modals/hotkeys/components/hotkey/hotkey.svelte';
-    import { CommandHotkeys } from '../../../../../../../stores/hotkeys/hotkey-store';
     import { hotkeysLang } from 'src/lang/hotkeys-lang';
+    import { ViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
-    export let commandHotkeys: CommandHotkeys;
+    export let commandHotkeys: ViewHotkey;
 </script>
 
 <div class="command">

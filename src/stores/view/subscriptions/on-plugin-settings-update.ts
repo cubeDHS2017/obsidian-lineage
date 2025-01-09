@@ -9,6 +9,7 @@ import { applyCardsGap } from 'src/stores/view/subscriptions/effects/css-variabl
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-indentation-width';
 import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
+import { getUsedHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
 
 export const onPluginSettingsUpdate = (
     view: LineageView,
@@ -38,6 +39,18 @@ export const onPluginSettingsUpdate = (
         applyInactiveNodeOpacity(view, state.view.theme.inactiveNodeOpacity);
     } else if (type === 'settings/view/theme/set-active-branch-color') {
         applyCssColor(view, 'activeBranchColor');
+    } else if (
+        type === 'settings/hotkeys/reset-all' ||
+        type === 'settings/hotkeys/apply-preset' ||
+        type === 'settings/hotkeys/reset-custom-hotkey' ||
+        type === 'settings/hotkeys/set-custom-hotkey'
+    ) {
+        view.viewStore.dispatch({
+            type: 'view/hotkeys/update-conflicts',
+            payload: {
+                conflicts: getUsedHotkeys(view.plugin),
+            },
+        });
     }
 
     const shouldAlign =

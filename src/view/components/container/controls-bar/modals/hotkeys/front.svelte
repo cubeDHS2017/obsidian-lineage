@@ -1,12 +1,13 @@
 <script lang="ts">
-    import { hotkeyStore } from '../../../../../../stores/hotkeys/hotkey-store';
     import { lang } from 'src/lang/lang';
+    import { getView } from 'src/view/components/container/context';
 
     let searchTerm = '';
+    const view = getView();
 
     $: {
-        hotkeyStore.dispatch({
-            type: 'UI/SET_SEARCH_TERM',
+        view.viewStore.dispatch({
+            type: 'view/hotkeys/set-search-term',
             payload: {
                 searchTerm,
             },

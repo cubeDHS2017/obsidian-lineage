@@ -7,6 +7,7 @@ import {
     DNDState,
     EditingState,
 } from 'src/stores/view/default-view-state';
+import { ConflictingHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
 
 export type ActiveNodesOfColumn = {
     [columnId: string]: {
@@ -61,6 +62,10 @@ export type ViewState = {
     };
     keyboard: {
         shift: boolean;
+    };
+    hotkeys: {
+        searchTerm: string;
+        conflictingHotkeys: ConflictingHotkeys;
     };
 };
 

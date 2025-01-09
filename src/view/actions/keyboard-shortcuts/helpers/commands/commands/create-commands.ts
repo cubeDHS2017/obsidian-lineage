@@ -1,11 +1,11 @@
 import { saveNodeAndInsertNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-and-insert-node';
 import { addNodeAndSplitAtCursor } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/add-node-and-split-at-cursor';
-import { PluginCommand } from 'src/lang/hotkey-groups';
 import {
     isActive,
     isActiveAndNotEditing,
     isEditing,
 } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const createCommands = () => {
     return [
@@ -76,5 +76,5 @@ export const createCommands = () => {
             },
             hotkeys: [{ key: 'L', modifiers: ['Mod'] }],
         },
-    ] satisfies PluginCommand[];
+    ] satisfies DefaultViewHotkey[];
 };

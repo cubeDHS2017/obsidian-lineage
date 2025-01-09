@@ -1,8 +1,8 @@
-import { PluginCommand } from 'src/lang/hotkey-groups';
 import { isActiveAndNotEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const selectionCommands = () => {
-    const commands: PluginCommand[] = [];
+    const commands: DefaultViewHotkey[] = [];
     commands.push(
         {
             name: 'extend_select_up',

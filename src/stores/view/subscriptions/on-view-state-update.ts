@@ -7,11 +7,11 @@ import {
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe-clear-selection';
 import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
-import { updateConflictingHotkeys } from 'src/stores/view/subscriptions/actions/update-conflicting-hotkeys';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
 import { persistActivePinnedNode } from 'src/stores/view/subscriptions/actions/persist-active-pinned-node';
 import { showSearchResultsInMinimap } from 'src/stores/view/subscriptions/effects/show-search-results-in-minimap';
+import { getUsedHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
 
 export const onViewStateUpdate = (
     view: LineageView,
@@ -65,10 +65,6 @@ export const onViewStateUpdate = (
     if (action.type === 'SEARCH/SET_QUERY') {
         updateSearchResults(view);
     }
-    if (action.type === 'UI/TOGGLE_HELP_SIDEBAR') {
-        if (viewState.ui.controls.showHelpSidebar)
-            updateConflictingHotkeys(view);
-    }
 
     // effects
     if (activeNodeChange || e.search || e.editMainSplit) {
@@ -108,5 +104,16 @@ export const onViewStateUpdate = (
 
     if (type === 'view/pinned-nodes/set-active-node') {
         persistActivePinnedNode(view);
+    }
+
+    if (action.type === 'UI/TOGGLE_HELP_SIDEBAR') {
+        if (viewState.ui.controls.showHelpSidebar) {
+            view.viewStore.dispatch({
+                type: 'view/hotkeys/update-conflicts',
+                payload: {
+                    conflicts: getUsedHotkeys(view.plugin),
+                },
+            });
+        }
     }
 };

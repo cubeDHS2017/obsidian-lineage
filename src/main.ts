@@ -14,8 +14,6 @@ import { registerFileMenuEvent } from 'src/obsidian/events/workspace/register-fi
 import { registerFileRenameEvent } from 'src/obsidian/events/vault/register-file-move-event';
 import { registerFileDeleteEvent } from 'src/obsidian/events/vault/register-file-delete-event';
 import { addCommands } from 'src/obsidian/commands/add-commands';
-import { loadCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/load-commands';
-import { hotkeySubscriptions } from 'src/stores/hotkeys/hotkey-subscriptions';
 import { settingsSubscriptions } from 'src/stores/settings/subscriptions/settings-subscriptions';
 import { DocumentsState } from 'src/stores/documents/documents-state-type';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
@@ -63,7 +61,6 @@ export default class Lineage extends Plugin {
             (leaf) => new LineageView(leaf, this),
         );
         addCommands(this);
-        loadCommands(this);
         this.registerPatches();
         this.registerEffects();
         this.registerEvents();
@@ -108,7 +105,6 @@ export default class Lineage extends Plugin {
     }
 
     private registerEffects() {
-        hotkeySubscriptions(this);
         removeStaleDocuments(this);
     }
 

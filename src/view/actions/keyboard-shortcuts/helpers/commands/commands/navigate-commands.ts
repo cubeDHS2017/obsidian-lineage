@@ -1,4 +1,3 @@
-import { PluginCommand } from 'src/lang/hotkey-groups';
 import {
     isActive,
     isActiveAndNotEditing,
@@ -6,6 +5,7 @@ import {
 import { LineageView } from 'src/view/view';
 import { AllDirections } from 'src/stores/document/document-store-actions';
 import { JumpTarget } from 'src/stores/view/reducers/document/jump-to-node';
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 const singleColumnMode = (view: LineageView) =>
     view.plugin.settings.getValue().view.singleColumnMode;
@@ -43,7 +43,7 @@ const jump = (view: LineageView, target: JumpTarget) => {
     });
 };
 export const navigateCommands = () => {
-    const commands: PluginCommand[] = [];
+    const commands: DefaultViewHotkey[] = [];
     commands.push(
         {
             name: 'go_right',

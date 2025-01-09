@@ -1,5 +1,6 @@
 import { isActiveAndNotEditingAndHasFile } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { PluginCommand } from 'src/lang/hotkey-groups';
+
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const historyCommands = () => {
     return [
@@ -27,5 +28,5 @@ export const historyCommands = () => {
             },
             hotkeys: [{ key: 'Y', modifiers: ['Mod', 'Shift'] }],
         },
-    ] satisfies PluginCommand[];
+    ] satisfies DefaultViewHotkey[];
 };

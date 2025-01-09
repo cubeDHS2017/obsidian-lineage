@@ -173,6 +173,10 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     } else if (action.type === 'view/keyboard/shift/down') {
         state.keyboard.shift = true;
         state.keyboard = { ...state.keyboard };
+    } else if (action.type === 'view/hotkeys/set-search-term') {
+        state.hotkeys.searchTerm = action.payload.searchTerm.toLowerCase();
+    } else if (action.type === 'view/hotkeys/update-conflicts') {
+        state.hotkeys.conflictingHotkeys = action.payload.conflicts;
     }
 };
 export const viewReducer = (

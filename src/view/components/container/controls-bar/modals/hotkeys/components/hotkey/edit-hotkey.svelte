@@ -3,8 +3,7 @@
     import { RotateCcw, X } from 'lucide-svelte';
 
     import { CommandName } from 'src/lang/hotkey-groups';
-    import { hotkeyStore } from 'src/stores/hotkeys/hotkey-store';
-    import { Modifiers } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-commands-dictionary';
+    import { Modifiers } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-view-hotkeys-dictionary';
     import { isMacLike, modKey } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { getView } from 'src/view/components/container/context';
@@ -15,6 +14,7 @@
     export let commandName: CommandName;
     export let isPrimary: boolean;
     export let onCancel: () => void;
+    const view = getView();
 
     let key = hotkey.key;
     let MOD = hotkey.modifiers.includes('Mod');
@@ -26,7 +26,7 @@
     const onKeyDown = (e: KeyboardEvent) => {
         e.preventDefault();
         if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return;
-        if (e.key === ' ' || e.key==="META") return;
+        if (e.key === ' ' || e.key === 'META') return;
         const value = e.key.toUpperCase();
         key = value.length === 1 ? value.toUpperCase() : value;
         save();
@@ -50,32 +50,31 @@
     };
 
     const save = () => {
-        let modifiers: Hotkey['modifiers'] =[]
+        let modifiers: Hotkey['modifiers'] = [];
 
         if (MOD) modifiers.push('Mod');
         if (SHIFT) modifiers.push('Shift');
         if (ALT) modifiers.push('Alt');
         if (CTRL && isMacLike) modifiers.push('Ctrl');
-        hotkeyStore.dispatch({
-            type: 'HOTKEY/UPDATE',
+        view.plugin.settings.dispatch({
+            type: 'settings/hotkeys/set-custom-hotkey',
             payload: {
                 hotkey: {
                     key,
                     modifiers,
                 },
-                primary: isPrimary,
+                type: isPrimary ? 'primary' : 'secondary',
                 command: commandName,
             },
         });
     };
-    const view = getView();
     // eslint-disable-next-line no-undef
     const reset = () => {
-        hotkeyStore.dispatch({
-            type: 'HOTKEY/RESET',
+        view.plugin.settings.dispatch({
+            type: 'settings/hotkeys/reset-custom-hotkey',
             payload: {
                 command: commandName,
-                primary: isPrimary,
+                type: isPrimary ? 'primary' : 'secondary',
             },
         });
         setTimeout(() => {
@@ -83,9 +82,9 @@
             ALT = hotkey.modifiers.includes('Alt');
             SHIFT = hotkey.modifiers.includes('Shift');
             CTRL = hotkey.modifiers.includes('Ctrl');
-            key = hotkey.key
+            key = hotkey.key;
         });
-       focusContainer(view);
+        focusContainer(view);
     };
 </script>
 

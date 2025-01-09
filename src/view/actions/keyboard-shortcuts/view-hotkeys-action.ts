@@ -1,10 +1,10 @@
 import { LineageView } from 'src/view/view';
 import { eventToString } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/event-to-string';
-import { commandsDictionary } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-commands-dictionary';
+import { viewHotkeys } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-view-hotkeys-dictionary';
 import { handleEscapeKey } from 'src/view/actions/on-escape/helpers/handle-escape-key';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
 
-export const keyboardShortcuts = (
+export const viewHotkeysAction = (
     target: HTMLElement,
     {
         view,
@@ -21,7 +21,7 @@ export const keyboardShortcuts = (
             if (contain) return;
         }
         if ((event.target as HTMLElement).localName === 'input') return;
-        const command = commandsDictionary.current[eventToString(event)];
+        const command = viewHotkeys.current[eventToString(event)];
         if (command) {
             if (command.check(view)) {
                 try {

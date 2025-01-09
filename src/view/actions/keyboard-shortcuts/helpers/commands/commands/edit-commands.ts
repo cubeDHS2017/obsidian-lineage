@@ -1,10 +1,10 @@
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 import { cancelChanges } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
-import { PluginCommand } from 'src/lang/hotkey-groups';
 import {
     isActiveAndEditing,
     isActiveAndNotEditing,
 } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const editCommands = () => {
     return [
@@ -71,5 +71,5 @@ export const editCommands = () => {
             },
             hotkeys: [{ key: 'Escape', modifiers: [] }],
         },
-    ] satisfies PluginCommand[];
+    ] satisfies DefaultViewHotkey[];
 };

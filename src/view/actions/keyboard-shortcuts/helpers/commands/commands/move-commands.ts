@@ -1,6 +1,6 @@
 import { moveNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/move-node';
-import { PluginCommand } from 'src/lang/hotkey-groups';
 import { isActive } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const moveCommands = () => {
     return [
@@ -48,5 +48,5 @@ export const moveCommands = () => {
                 { key: 'ArrowLeft', modifiers: ['Alt', 'Shift'] },
             ],
         },
-    ] satisfies PluginCommand[];
+    ] satisfies DefaultViewHotkey[];
 };

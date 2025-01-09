@@ -63,6 +63,10 @@ export const defaultViewState = (): ViewState => ({
     keyboard: {
         shift: false,
     },
+    hotkeys: {
+        searchTerm: '',
+        conflictingHotkeys: new Map(),
+    },
 });
 export type ActiveBranch = {
     childGroups: Set<string>;

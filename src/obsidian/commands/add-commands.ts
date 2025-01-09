@@ -16,7 +16,6 @@ import { exportDocument } from 'src/obsidian/commands/helpers/export-document/ex
 import { onPluginError } from 'src/lib/store/on-plugin-error';
 import { isMacLike } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
 import { AltPrimaryModifier } from 'src/view/actions/keyboard-shortcuts/helpers/commands/presets/alt-primary-modifier';
-import { hotkeyStore } from 'src/stores/hotkeys/hotkey-store';
 
 const createCommands = (plugin: Lineage) => {
     const commands: (Omit<Command, 'id' | 'callback'> & {
@@ -216,8 +215,8 @@ const createCommands = (plugin: Lineage) => {
             if (checking) {
                 return Boolean(view);
             }
-            hotkeyStore.dispatch({
-                type: 'hotkeys/reset-all',
+            plugin.settings.dispatch({
+                type: 'settings/hotkeys/reset-all',
             });
         },
     });
@@ -231,8 +230,8 @@ const createCommands = (plugin: Lineage) => {
                 if (checking) {
                     return Boolean(view);
                 }
-                hotkeyStore.dispatch({
-                    type: 'hotkeys/apply-preset',
+                plugin.settings.dispatch({
+                    type: 'settings/hotkeys/apply-preset',
                     payload: { preset: AltPrimaryModifier },
                 });
             },

@@ -1,8 +1,8 @@
 <script lang="ts">
     import Hotkey from './components/command.svelte';
-    import { CommandHotkeys } from '../../../../../../stores/hotkeys/hotkey-store';
+    import { ViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
-    export let group: CommandHotkeys[]
+    export let group: ViewHotkey[]
 export let groupName: string
 </script>
 <div class="hotkey-group">

@@ -14,6 +14,7 @@ import { SetActiveRecentNodeAction } from 'src/stores/view/reducers/recent-nodes
 import { ToggleShowAllNodesAction } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
 import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
 import { LeftSidebarTab } from 'src/stores/settings/settings-type';
+import { ConflictingHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
 
 export type ViewStoreAction =
     | SearchAction
@@ -23,7 +24,8 @@ export type ViewStoreAction =
     | NodeHistoryNavigationAction
     | SidebarActions
     | StyleRulesViewActions
-    | KeyboardEventAction;
+    | KeyboardEventAction
+    | ViewHotkeysAction;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -146,3 +148,19 @@ export type KeyboardEventAction =
     | {
           type: 'view/keyboard/shift/up';
       };
+
+export type ViewHotkeysAction =
+    | SetSearchTermAction
+    | UpdateConflictingHotkeysAction;
+export type SetSearchTermAction = {
+    type: 'view/hotkeys/set-search-term';
+    payload: {
+        searchTerm: string;
+    };
+};
+export type UpdateConflictingHotkeysAction = {
+    type: 'view/hotkeys/update-conflicts';
+    payload: {
+        conflicts: ConflictingHotkeys;
+    };
+};

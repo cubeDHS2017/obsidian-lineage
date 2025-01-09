@@ -4,11 +4,11 @@
     import clx from 'classnames';
 
     import { CommandName } from 'src/lang/hotkey-groups';
-    import { ExtendedHotkey } from 'src/stores/hotkeys/hotkey-store';
     import { writable } from 'svelte/store';
     import { getView } from 'src/view/components/container/context';
     import { onMount } from 'svelte';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
+    import { ExtendedHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
     export let hotkey: ExtendedHotkey;
     export let commandName: CommandName;

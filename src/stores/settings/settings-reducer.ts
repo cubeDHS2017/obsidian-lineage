@@ -14,6 +14,8 @@ import {
     StyleRulesAction,
     updateStyleRules,
 } from 'src/stores/settings/reducers/update-style-rules/update-style-rules';
+import { Hotkey } from 'obsidian';
+import { CommandName } from 'src/lang/hotkey-groups';
 
 export type SettingsActions =
     | {
@@ -155,13 +157,41 @@ export type SettingsActions =
     | {
           type: 'settings/view/theme/set-active-branch-color';
           payload: { color: string | undefined };
-      };
+      }
+    | HotkeySettingsActions;
 
 export type PersistActiveNodeAction = {
     type: 'DOCUMENT/SET_ACTIVE_NODE';
     payload: {
         path: string;
         sectionNumber: string;
+    };
+};
+
+export type HotkeySettingsActions =
+    | UpdateHotkeyAction
+    | ResetHotkeyAction
+    | {
+          type: 'settings/hotkeys/reset-all';
+      }
+    | {
+          type: 'settings/hotkeys/apply-preset';
+          payload: { preset: CustomHotkeys };
+      };
+
+export type UpdateHotkeyAction = {
+    type: 'settings/hotkeys/set-custom-hotkey';
+    payload: {
+        hotkey: Hotkey;
+        command: CommandName;
+        type: 'primary' | 'secondary';
+    };
+};
+export type ResetHotkeyAction = {
+    type: 'settings/hotkeys/reset-custom-hotkey';
+    payload: {
+        command: CommandName;
+        type: 'primary' | 'secondary';
     };
 };
 
@@ -293,6 +323,31 @@ const updateState = (store: Settings, action: SettingsActions) => {
         } else {
             delete store.view.theme.activeBranchColor;
         }
+    } else if (action.type === 'settings/hotkeys/set-custom-hotkey') {
+        const customHotkey =
+            store.hotkeys.customHotkeys[action.payload.command];
+        if (customHotkey) {
+            customHotkey[action.payload.type] = action.payload.hotkey;
+        } else {
+            store.hotkeys.customHotkeys[action.payload.command] = {
+                [action.payload.type]: action.payload.hotkey,
+            };
+        }
+        store.hotkeys.customHotkeys = { ...store.hotkeys.customHotkeys };
+    } else if (action.type === 'settings/hotkeys/reset-custom-hotkey') {
+        const customHotkey =
+            store.hotkeys.customHotkeys[action.payload.command];
+        if (customHotkey) {
+            delete customHotkey[action.payload.type];
+        }
+        store.hotkeys.customHotkeys = { ...store.hotkeys.customHotkeys };
+    } else if (action.type === 'settings/hotkeys/apply-preset') {
+        store.hotkeys.customHotkeys = {
+            ...store.hotkeys.customHotkeys,
+            ...action.payload.preset,
+        };
+    } else if (action.type === 'settings/hotkeys/reset-all') {
+        store.hotkeys.customHotkeys = {};
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

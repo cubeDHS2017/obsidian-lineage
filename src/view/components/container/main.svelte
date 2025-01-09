@@ -10,7 +10,7 @@
     import Lineage from '../../../main';
     import { setContext } from 'svelte';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
-    import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
+    import { viewHotkeysAction } from 'src/view/actions/keyboard-shortcuts/view-hotkeys-action';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
     import RightSidebar from './right-sidebar/right-sidebar.svelte';
     import { clickAndDrag } from 'src/view/actions/click-and-drag/click-and-drag';
@@ -28,7 +28,7 @@
 
 <div
     class="lineage-view"
-    use:keyboardShortcuts={{ view }}
+    use:viewHotkeysAction="{{ view }}"
     use:contextMenu={view}
     tabindex="0"
 >

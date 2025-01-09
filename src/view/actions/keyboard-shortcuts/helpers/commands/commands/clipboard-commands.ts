@@ -1,9 +1,9 @@
-import { PluginCommand } from 'src/lang/hotkey-groups';
 import { isActiveAndNotEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 import { copyActiveBranchesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-branches-to-clipboard';
 import { cutNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cut-node';
 import { pasteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/paste-node';
 import { copyActiveNodesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-nodes-to-clipboard';
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const clipboardCommands = () => {
     return [
@@ -56,5 +56,5 @@ export const clipboardCommands = () => {
             },
             hotkeys: [{ key: 'V', modifiers: ['Mod'] }],
         },
-    ] satisfies PluginCommand[];
+    ] satisfies DefaultViewHotkey[];
 };

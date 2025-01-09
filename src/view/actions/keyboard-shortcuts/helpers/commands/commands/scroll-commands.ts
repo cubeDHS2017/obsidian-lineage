@@ -1,7 +1,7 @@
 import { isActive } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { PluginCommand } from 'src/lang/hotkey-groups';
 import { scrollNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/scroll-node';
 import { Modifier } from 'obsidian';
+import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const scrollCommands = () => {
     const modifiers: Modifier[] = ['Mod', 'Alt'];
@@ -46,5 +46,5 @@ export const scrollCommands = () => {
             },
             hotkeys: [{ key: 'G', modifiers: modifiers }],
         },
-    ] satisfies PluginCommand[];
+    ] satisfies DefaultViewHotkey[];
 };

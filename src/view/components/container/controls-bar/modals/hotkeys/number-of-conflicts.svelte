@@ -1,12 +1,10 @@
 <script lang="ts">
-    import { numberOfConflictingHotkeysStore } from 'src/stores/hotkeys/derived/number-of-conflicting-hotkeys';
-
-    const numberOfConflictingHotkeys = numberOfConflictingHotkeysStore()
+export let conflicts: number
 </script>
 
-{#if $numberOfConflictingHotkeys}
+{#if conflicts}
     <div class="conflicts-indicator">
-        {$numberOfConflictingHotkeys} command{$numberOfConflictingHotkeys === 1
+        {conflicts} command{conflicts === 1
             ? ''
             : 's'} with conflicts
     </div>
