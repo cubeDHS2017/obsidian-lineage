@@ -30,7 +30,7 @@ export const alignVertically = (
 export const alignElementVertically = (
     context: AlignBranchContext,
     element: HTMLElement,
-    center = true,
+    center: boolean,
 ): string | undefined => {
     const column = element.matchParent('.column') as HTMLElement;
     if (!column) return;

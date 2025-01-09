@@ -21,33 +21,45 @@ export const matchActionToSettings = (
         zoomLevel: settings.view.zoomLevel,
     };
 
+    const actionType = action?.type;
     if (!params.centerActiveNodeV && action) {
         // @ts-ignore
-        const type = getDocumentEventType(action.type);
+        const type = getDocumentEventType(actionType);
         params.centerActiveNodeV =
-            action?.type === 'view/life-cycle/mount' ||
-            action?.type === 'view/align-branch' ||
-            type.dropOrMove ||
-            type.changeHistory ||
-            type.clipboard ||
-            action.type === 'DOCUMENT/DELETE_NODE';
+            actionType === 'view/life-cycle/mount' ||
+            actionType === 'view/align-branch' ||
+            actionType === 'DOCUMENT/LOAD_FILE';
+
+        if (!params.centerActiveNodeV && !settings.view.singleColumnMode) {
+            params.centerActiveNodeV =
+                !!type.dropOrMove ||
+                !!type.changeHistory ||
+                !!type.createOrDelete;
+            if (type.createOrDelete) {
+                if (
+                    action.type === 'DOCUMENT/INSERT_NODE' &&
+                    action.payload.position !== 'right'
+                )
+                    params.centerActiveNodeV = false;
+            }
+        }
     }
     if (!action) return params;
 
-    if (action.type === 'DOCUMENT/MOVE_NODE') {
+    if (action?.type === 'DOCUMENT/MOVE_NODE') {
         const verticalMove =
             action.payload.direction === 'down' ||
             action.payload.direction === 'up';
         if (verticalMove) params.behavior = 'instant';
-    } else if (action.type === 'DOCUMENT/LOAD_FILE') {
+    } else if (actionType === 'DOCUMENT/LOAD_FILE') {
         params.behavior = 'instant';
-    } else if (action.type === 'UI/CHANGE_ZOOM_LEVEL') {
+    } else if (actionType === 'UI/CHANGE_ZOOM_LEVEL') {
         params.behavior = 'instant';
     }
 
     if (
         settings.view.singleColumnMode &&
-        action.type === 'view/life-cycle/mount'
+        actionType === 'view/life-cycle/mount'
     ) {
         params.centerActiveNodeH = true;
     }

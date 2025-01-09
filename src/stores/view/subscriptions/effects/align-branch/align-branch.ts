@@ -89,7 +89,7 @@ export class AlignBranch {
             (context.isNewGroup && !context.isChildOfPreviousNode);
         const shouldAlignChildGroups =
             context.settings.centerActiveNodeV ||
-            !context.isParentOfPreviousNode;
+            (!context.isParentOfPreviousNode && !context.isChildOfPreviousNode);
 
         alignActiveNode(context);
         if (shouldAlignParentNodes) {

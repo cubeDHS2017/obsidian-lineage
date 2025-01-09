@@ -18,5 +18,9 @@ export const alignChildGroupOfColumn = (
         }
     }
 
-    alignGroupOfElementsVertically(context, elements);
+    alignGroupOfElementsVertically(
+        context,
+        elements,
+        context.settings.centerActiveNodeV,
+    );
 };

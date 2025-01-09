@@ -15,5 +15,5 @@ export const alignInactiveColumn = (
         nodes[nodes.length - 1],
     );
     if (!lastNodeElement) return;
-    alignElementVertically(context, lastNodeElement);
+    alignElementVertically(context, lastNodeElement, true);
 };
