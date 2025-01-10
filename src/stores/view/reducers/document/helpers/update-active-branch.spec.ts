@@ -90,6 +90,7 @@ describe('update-tree-state', () => {
                     sortedParentNodes: [],
                     group: 'r-lt8upk0k',
                     column: col,
+                    node: activeNodeId,
                 } satisfies ActiveBranch,
                 activeNode: activeNodeId,
                 activeNodesOfColumn: {},
@@ -103,6 +104,7 @@ describe('update-tree-state', () => {
                 sortedParentNodes: [],
                 group: 'r-lt8upk0k',
                 column: col,
+                node: activeNodeId,
             } satisfies ActiveBranch,
         };
         updateActiveBranch(input.state, input.document.columns, 'structure');

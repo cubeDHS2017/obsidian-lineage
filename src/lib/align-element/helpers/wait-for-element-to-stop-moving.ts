@@ -1,12 +1,12 @@
 import { LineageView } from 'src/view/view';
-import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
+import { getElementById } from 'src/lib/align-element/helpers/get-element-by-id';
 import { delay } from 'src/helpers/delay';
 
 export const waitForElementToStopMoving = async (
     view: LineageView,
     id: string,
 ) => {
-    const element = getNodeElement(view.container!, id);
+    const element = getElementById(view.container!, id);
     if (!element) return;
     let lastRect = element.getBoundingClientRect();
     let retries = 0;

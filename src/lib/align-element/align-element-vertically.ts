@@ -1,19 +1,33 @@
 import { calculateScrollTop } from 'src/lib/align-element/helpers/calculate-scroll-top';
 import { THRESHOLD } from 'src/lib/align-element/constants';
-import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import {
+    AlignBranchContext,
+    PartialDOMRect,
+} from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { calculateScrollTopRelative } from 'src/lib/align-element/helpers/calculate-scroll-top-relative';
+import { getElementById } from 'src/lib/align-element/helpers/get-element-by-id';
 
 export const alignVertically = (
     context: AlignBranchContext,
-    elementRect: DOMRect,
     column: HTMLElement,
+    elementRect: DOMRect,
+    relativeId: string | null,
     center: boolean,
-): string | undefined => {
-    const scrollTop = context.state.activeNodeRect
+) => {
+    let relativeRect: PartialDOMRect | null = null;
+    if (relativeId && context.state.rects.has(relativeId)) {
+        relativeRect = context.state.rects.get(relativeId)!;
+    } else if (relativeId) {
+        const relativeElement = getElementById(context.container, relativeId);
+        if (relativeElement) {
+            relativeRect = relativeElement.getBoundingClientRect();
+        }
+    }
+    const scrollTop = relativeRect
         ? calculateScrollTopRelative(
               elementRect,
               context.containerRect,
-              context.state.activeNodeRect,
+              relativeRect,
           )
         : calculateScrollTop(elementRect, context.containerRect, center);
 
@@ -24,17 +38,35 @@ export const alignVertically = (
         });
     }
 
-    return column.id;
+    return {
+        height: elementRect.height,
+        top: elementRect.top + scrollTop,
+    } satisfies PartialDOMRect;
 };
 
 export const alignElementVertically = (
     context: AlignBranchContext,
-    element: HTMLElement,
+    id: string,
+    relativeId: string | null,
     center: boolean,
 ): string | undefined => {
+    const element = getElementById(context.container, id);
+    if (!element) return;
     const column = element.matchParent('.column') as HTMLElement;
     if (!column) return;
 
     const elementRect = element.getBoundingClientRect();
-    return alignVertically(context, elementRect, column, center);
+    const rect = alignVertically(
+        context,
+        column,
+        elementRect,
+        relativeId,
+        center,
+    );
+    if (
+        !center &&
+        (id === context.activeBranch.group || id === context.activeBranch.node)
+    ) {
+        context.state.rects.set(id, rect);
+    }
 };

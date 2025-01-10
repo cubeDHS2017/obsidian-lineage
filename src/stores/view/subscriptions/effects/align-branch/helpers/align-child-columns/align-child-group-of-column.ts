@@ -1,26 +1,28 @@
-import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
+import { getElementById } from 'src/lib/align-element/helpers/get-element-by-id';
 import { alignGroupOfElementsVertically } from 'src/lib/align-element/align-group-of-elements-vertically';
 import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { Column } from 'src/stores/document/document-state-type';
 
 export const alignChildGroupOfColumn = (
     context: AlignBranchContext,
-    columnId: string,
+    column: Column,
+    relativeId: string | null,
+    center: boolean,
 ) => {
-    const columnElement = getNodeElement(context.container, columnId);
+    const columnElement = getElementById(context.container, column.id);
     if (!columnElement) return;
 
-    const elements: HTMLElement[] = [];
-    for (const childGroup of context.viewState.document.activeBranch
-        .childGroups) {
-        const element = getNodeElement(columnElement, 'group-' + childGroup);
-        if (element) {
-            elements.push(element);
-        }
-    }
+    const childGroups = context.activeBranch.childGroups;
+
+    const childGroupsOfColumn = column.groups
+        .filter((g) => childGroups.has(g.parentId))
+        .map((g) => 'group-' + g.parentId);
 
     alignGroupOfElementsVertically(
         context,
-        elements,
-        context.settings.centerActiveNodeV,
+        columnElement,
+        childGroupsOfColumn,
+        relativeId,
+        center,
     );
 };

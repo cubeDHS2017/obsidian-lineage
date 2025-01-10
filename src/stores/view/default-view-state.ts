@@ -28,6 +28,7 @@ export const defaultViewState = (): ViewState => ({
             childGroups: new Set<string>(),
             sortedParentNodes: [],
             column: '',
+            node: '',
         },
         dnd: {
             node: '',
@@ -73,6 +74,7 @@ export type ActiveBranch = {
     sortedParentNodes: NodeId[];
     group: string;
     column: string;
+    node: string;
 };
 export type DNDState = {
     childGroups: Set<string>;

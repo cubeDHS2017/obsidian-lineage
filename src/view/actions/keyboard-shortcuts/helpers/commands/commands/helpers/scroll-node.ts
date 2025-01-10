@@ -1,11 +1,11 @@
 import { LineageView } from 'src/view/view';
 import { AllDirections } from 'src/stores/document/document-store-actions';
-import { getNodeElement } from 'src/lib/align-element/helpers/get-node-element';
+import { getElementById } from 'src/lib/align-element/helpers/get-element-by-id';
 
 export const scrollNode = (view: LineageView, direction: AllDirections) => {
     const container = view.container;
     if (!container) return;
-    const element = getNodeElement(
+    const element = getElementById(
         container,
         view.viewStore.getValue().document.activeNode,
     );

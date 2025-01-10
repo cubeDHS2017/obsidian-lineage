@@ -35,6 +35,7 @@ export const updateActiveBranch = (
     const columnId = columns[findNodeColumn(columns, state.activeNode)].id;
 
     const needsUpdate =
+        state.activeNode !== state.activeBranch.node ||
         childGroups.length !== state.activeBranch.childGroups.size ||
         sortedParents.length !== state.activeBranch.sortedParentNodes.length ||
         group.parentId !== state.activeBranch.group ||
@@ -52,6 +53,7 @@ export const updateActiveBranch = (
             sortedParentNodes: sortedParents,
             group: group.parentId,
             column: columnId,
+            node: state.activeNode,
         };
     }
     if (!state.activeNodesOfColumn[columnId])

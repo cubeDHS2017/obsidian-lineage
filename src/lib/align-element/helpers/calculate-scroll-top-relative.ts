@@ -2,7 +2,8 @@ import {
     BREADCRUMBS_HEIGHT,
     TOOLBAR_HEIGHT,
 } from 'src/lib/align-element/constants';
-import { PartialDOMRect } from 'src/lib/align-element/align-element-v-and-h';
+
+import { PartialDOMRect } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export const calculateScrollTopRelative = (
     elementRect: DOMRect,

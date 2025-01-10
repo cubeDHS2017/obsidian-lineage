@@ -1,176 +1,153 @@
-import { AlignBranchState } from 'src/lib/align-element/align-element-v-and-h';
-import { alignParentsNodes } from './helpers/align-parents-nodes';
-import { alignChildColumns } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-child-columns/align-child-columns';
-import { alignActiveNode } from 'src/stores/view/subscriptions/effects/align-branch/helpers/align-active-node';
 import { LineageView } from 'src/view/view';
 import { delay } from 'src/helpers/delay';
 import {
-    AlignBranchParams,
-    matchActionToParams,
-    PluginAction,
-} from 'src/stores/view/subscriptions/effects/align-branch/helpers/match-action-to-params';
+    delayAlign,
+    retryAlign,
+} from 'src/stores/view/subscriptions/effects/align-branch/helpers/retry-align';
 import { waitForElementToStopMoving } from 'src/lib/align-element/helpers/wait-for-element-to-stop-moving';
-import { scrollFirstColumnToTheLeft } from 'src/stores/view/subscriptions/effects/align-branch/helpers/scroll-first-column-to-the-left';
-import { ViewState } from 'src/stores/view/view-state-type';
-import { DocumentState } from 'src/stores/document/document-state-type';
-import {
-    AlignBranchSettings,
-    matchActionToSettings,
-} from 'src/stores/view/subscriptions/effects/align-branch/helpers/match-action-to-settings';
+import { ActiveNodesOfColumn } from 'src/stores/view/view-state-type';
+import { Column } from 'src/stores/document/document-state-type';
+import { adjustScrollBehavior } from 'src/stores/view/subscriptions/effects/align-branch/helpers/adjust-scroll-behavior';
 import { ActiveBranch } from 'src/stores/view/default-view-state';
+import { createAlignBranchActions } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/create-align-branch-actions';
+import { runAlignBranchActions } from 'src/stores/view/subscriptions/effects/align-branch/run-align-branch-actions/run-align-branch-actions';
+import { skipAlign } from 'src/stores/view/subscriptions/effects/align-branch/helpers/skip-align';
+import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
+import {
+    ViewDocumentAction,
+    ViewStoreAction,
+} from 'src/stores/view/view-store-actions';
+import { SettingsActions } from 'src/stores/settings/settings-reducer';
+import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
 
+export type PartialDOMRect = Pick<DOMRect, 'top' | 'height'>;
+export type AlignBranchState = {
+    rects: Map<string, PartialDOMRect>;
+};
+export type AlignBranchSettings = {
+    behavior: ScrollBehavior;
+    centerActiveNodeH: boolean;
+    centerActiveNodeV: boolean;
+    zoomLevel: number;
+};
 export type AlignBranchContext = {
-    activeNode: string;
+    previousActiveBranch: ActiveBranch | null;
+    columns: Column[];
     activeBranch: ActiveBranch;
-    viewState: ViewState;
-    documentState: DocumentState;
     container: HTMLElement;
     containerRect: DOMRect;
     settings: AlignBranchSettings;
     state: AlignBranchState;
-    alignInactiveColumns: boolean;
-    activeNodeRect?: DOMRect;
-    isNewGroup: boolean;
-    isChildOfPreviousNode: boolean;
-    isParentOfPreviousNode: boolean;
+    activeNodesOfColumn: ActiveNodesOfColumn;
+};
+
+export type PluginAction =
+    | DocumentStoreAction
+    | ViewDocumentAction
+    | ViewStoreAction
+    | SettingsActions
+    | DocumentsStoreAction
+    | { type: 'view/life-cycle/mount' }
+    | { type: 'view/align-branch' };
+
+export type PreviousScrollBehavior = {
+    timestamp: number;
+    behavior: ScrollBehavior;
 };
 
 export class AlignBranch {
-    private state: {
-        previousGroupId: string;
-        previousNodeId: string;
-        previousBehaviorTime: number;
-        previousBehavior: ScrollBehavior | null;
-    } = {
-        previousGroupId: '',
-        previousNodeId: '',
-        previousBehaviorTime: -1,
-        previousBehavior: null,
-    };
+    private previousActiveBranch: ActiveBranch | null = null;
+    private previousBehavior: PreviousScrollBehavior | null = null;
+
     private animationFrameHandle: number;
     constructor(public view: LineageView) {}
 
     align = async (action?: PluginAction, isRetry = false) => {
+        if (skipAlign(action)) return;
         cancelAnimationFrame(this.animationFrameHandle);
         const settings = this.view.plugin.settings.getValue();
-        const params = matchActionToParams(settings, action);
-        if (!params) return;
-        if (params.delay > 0) await delay(params.delay);
+
+        const delay_ms = delayAlign(action);
+        if (delay_ms > 0) await delay(delay_ms);
         await this.view.inlineEditor.mounting;
 
-        const context = this.createContext(params, action);
+        const context = this.createContext(action);
 
         this.animationFrameHandle = requestAnimationFrame(() => {
-            if (params.scrollFirstColumnToTheLeft) {
-                scrollFirstColumnToTheLeft(context);
-            }
+            const actions = createAlignBranchActions({
+                action,
+                settings: settings.view.scrolling,
+                singleColumnMode: settings.view.singleColumnMode,
+                activeBranch: context.activeBranch,
+                previousActiveBranch: context.previousActiveBranch,
+            });
 
-            if (settings.view.singleColumnMode) {
-                this.alignSingleColumn(context);
-            } else {
-                this.alignActiveBranch(context);
-            }
+            runAlignBranchActions(context, actions);
+
+            this.saveActiveBranch(context, action);
         });
-        this.updateState(context, action);
 
-        if (params.retry && !isRetry) {
-            await waitForElementToStopMoving(this.view, context.activeNode);
+        const retry = action && retryAlign(settings, action);
+        if (retry && !isRetry) {
+            await waitForElementToStopMoving(
+                this.view,
+                context.activeBranch.node,
+            );
             this.align(action, true);
         }
     };
 
-    private alignSingleColumn = (context: AlignBranchContext) => {
-        alignActiveNode(context);
-    };
-
-    private alignActiveBranch = (context: AlignBranchContext) => {
-        const shouldAlignParentNodes =
-            context.settings.centerActiveNodeV ||
-            (context.isNewGroup && !context.isChildOfPreviousNode);
-        const shouldAlignChildGroups =
-            context.settings.centerActiveNodeV ||
-            (!context.isParentOfPreviousNode && !context.isChildOfPreviousNode);
-
-        alignActiveNode(context);
-        if (shouldAlignParentNodes) {
-            alignParentsNodes(context);
-        }
-
-        if (shouldAlignChildGroups) {
-            alignChildColumns(context);
-        }
-    };
-
-    private createContext = (
-        params: AlignBranchParams,
-        action?: PluginAction,
-    ) => {
+    private createContext = (action?: PluginAction) => {
         const settings = this.view.plugin.settings.getValue();
         const container = this.view.container!;
         const documentState = this.view.documentStore.getValue();
         const viewState = this.view.viewStore.getValue();
-        const newGroupId = viewState.document.activeBranch.group;
-        const parentNodeId =
-            viewState.document.activeBranch.sortedParentNodes[
-                viewState.document.activeBranch.sortedParentNodes.length - 1
-            ];
-        const activeNode = viewState.document.activeNode;
-        const alignBranchSettings = matchActionToSettings(settings, action);
+        const activeBranch = viewState.document.activeBranch;
 
-        this.updateLastBehavior(alignBranchSettings);
+        const behavior = action
+            ? adjustScrollBehavior(action, this.previousBehavior)
+            : 'smooth';
+
+        this.saveBehavior(behavior);
 
         const context: AlignBranchContext = {
-            activeBranch: viewState.document.activeBranch,
-            activeNode,
-            viewState,
-            documentState,
+            previousActiveBranch: this.previousActiveBranch,
+            activeBranch: activeBranch,
+            columns: documentState.document.columns,
             container,
+            activeNodesOfColumn: viewState.document.activeNodesOfColumn,
             containerRect: container.getBoundingClientRect(),
-            settings: alignBranchSettings,
-            isNewGroup:
-                !this.state.previousGroupId ||
-                this.state.previousGroupId !== newGroupId,
-            isChildOfPreviousNode: this.state.previousNodeId === parentNodeId,
-            isParentOfPreviousNode: this.state.previousGroupId === activeNode,
-            alignInactiveColumns: params.alignInactiveColumns,
+            settings: {
+                centerActiveNodeH: settings.view.scrolling.centerActiveNodeH,
+                centerActiveNodeV: settings.view.scrolling.centerActiveNodeV,
+                zoomLevel: settings.view.zoomLevel,
+                behavior: behavior,
+            },
             state: {
-                columns: new Set<string>(),
+                rects: new Map(),
             },
         };
         return context;
     };
 
-    private updateState(
+    private saveActiveBranch(
         context: AlignBranchContext,
         action: PluginAction | undefined,
     ) {
-        if (
+        const reset =
             action?.type === 'view/life-cycle/mount' ||
-            action?.type === 'view/align-branch'
-        ) {
-            this.state.previousGroupId = '';
-            this.state.previousNodeId = '';
+            action?.type === 'view/align-branch';
+        if (reset) {
+            this.previousActiveBranch = null;
         } else {
-            this.state.previousGroupId =
-                context.viewState.document.activeBranch.group;
-            this.state.previousNodeId = context.activeNode;
+            this.previousActiveBranch = context.activeBranch;
         }
     }
 
-    private updateLastBehavior(alignBranchSettings: AlignBranchSettings) {
-        if (!this.state.previousBehavior) {
-            this.state.previousBehavior = alignBranchSettings.behavior;
-        } else if (
-            this.state.previousBehavior !== alignBranchSettings.behavior
-        ) {
-            const timeSinceLastBehavior =
-                Date.now() - this.state.previousBehaviorTime;
-            if (timeSinceLastBehavior < 1000) {
-                alignBranchSettings.behavior = this.state.previousBehavior;
-            } else {
-                this.state.previousBehavior = alignBranchSettings.behavior;
-            }
-        }
-        this.state.previousBehaviorTime = Date.now();
+    private saveBehavior(behavior: ScrollBehavior) {
+        this.previousBehavior = {
+            behavior,
+            timestamp: Date.now(),
+        };
     }
 }
