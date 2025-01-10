@@ -11,7 +11,6 @@ export const runAlignBranchActions = (
     context: AlignBranchContext,
     actions: AlignBranchAction[],
 ) => {
-    actions = actions.sort((a, b) => a.action.localeCompare(b.action));
     const activeNode = context.activeBranch.node;
     for (const action of actions) {
         const type = action.action;

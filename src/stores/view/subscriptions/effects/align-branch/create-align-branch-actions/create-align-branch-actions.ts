@@ -2,7 +2,10 @@ import { ScrollingSettings } from 'src/stores/settings/settings-type';
 import { forceCenterActiveNodeV } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/force-center-active-node-v';
 import { lazyVerticalScrollingMode } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/lazy-vertical-scrolling-mode';
 import { ActiveBranch } from 'src/stores/view/default-view-state';
-import { PluginAction } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import {
+    AlignBranchContext,
+    PluginAction,
+} from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export type AlignBranchAction = {
     action:
@@ -26,16 +29,17 @@ export type Props = {
     activeBranch: ActiveBranch;
     previousActiveBranch: ActiveBranch | null;
 };
-export const createAlignBranchActions = (props: Props) => {
+export const createAlignBranchActions = (
+    context: AlignBranchContext,
+    action: PluginAction | undefined,
+) => {
     const actions: AlignBranchAction[] = [];
-    const settings = props.settings;
-    const action = props.action;
-
+    const settings = context.settings;
     const _forceCenterActiveNodeV = action
-        ? forceCenterActiveNodeV(action, props.singleColumnMode)
+        ? forceCenterActiveNodeV(action, context.singleColumnMode)
         : false;
 
-    if (props.singleColumnMode) {
+    if (context.singleColumnMode) {
         if (_forceCenterActiveNodeV) {
             actions.push({ action: '20/active-node/horizontal/center' });
             actions.push({ action: '20/active-node/vertical/center' });
@@ -65,7 +69,7 @@ export const createAlignBranchActions = (props: Props) => {
         actions.push({ action: '30/parents/vertical/center' });
         actions.push({ action: '40/children/vertical/center' });
     } else {
-        actions.push(...lazyVerticalScrollingMode(props));
+        actions.push(...lazyVerticalScrollingMode(context, action));
     }
 
     if (action) {
@@ -85,5 +89,5 @@ export const createAlignBranchActions = (props: Props) => {
             });
         }
     }
-    return actions;
+    return actions.sort((a, b) => a.action.localeCompare(b.action));
 };

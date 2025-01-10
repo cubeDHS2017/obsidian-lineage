@@ -1,12 +1,15 @@
+import { AlignBranchAction } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/create-align-branch-actions';
 import {
-    AlignBranchAction,
-    Props,
-} from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/create-align-branch-actions';
+    AlignBranchContext,
+    PluginAction,
+} from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
-export const lazyVerticalScrollingMode = (props: Props) => {
+export const lazyVerticalScrollingMode = (
+    context: AlignBranchContext,
+    action: PluginAction | undefined,
+) => {
     const actions: AlignBranchAction[] = [];
 
-    const action = props.action;
     const createNodeAction = action && action?.type === 'DOCUMENT/INSERT_NODE';
     if (createNodeAction) {
         if (action.payload.position === 'right') {
@@ -19,12 +22,14 @@ export const lazyVerticalScrollingMode = (props: Props) => {
     } else {
         actions.push({ action: '20/active-node/vertical/reveal' });
         const isChildOfPreviousNode =
-            props.previousActiveBranch &&
-            (props.previousActiveBranch.group === props.activeBranch.group ||
-                props.previousActiveBranch.node === props.activeBranch.group);
+            context.previousActiveBranch &&
+            (context.previousActiveBranch.group ===
+                context.activeBranch.group ||
+                context.previousActiveBranch.node ===
+                    context.activeBranch.group);
         const isParentOfPreviousNode =
-            props.previousActiveBranch &&
-            props.previousActiveBranch.group === props.activeBranch.node;
+            context.previousActiveBranch &&
+            context.previousActiveBranch.group === context.activeBranch.node;
 
         if (!isChildOfPreviousNode) {
             actions.push({

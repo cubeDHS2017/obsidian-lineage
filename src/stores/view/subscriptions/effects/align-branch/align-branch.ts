@@ -36,6 +36,7 @@ export type AlignBranchContext = {
     activeBranch: ActiveBranch;
     container: HTMLElement;
     containerRect: DOMRect;
+    singleColumnMode: boolean;
     settings: AlignBranchSettings;
     state: AlignBranchState;
     activeNodesOfColumn: ActiveNodesOfColumn;
@@ -65,33 +66,25 @@ export class AlignBranch {
     align = async (action?: PluginAction, isRetry = false) => {
         if (skipAlign(action)) return;
         cancelAnimationFrame(this.animationFrameHandle);
-        const settings = this.view.plugin.settings.getValue();
 
         const delay_ms = delayAlign(action);
         if (delay_ms > 0) await delay(delay_ms);
         await this.view.inlineEditor.mounting;
 
+        const settings = this.view.plugin.settings.getValue();
         const context = this.createContext(action);
+        const actions = createAlignBranchActions(context, action);
 
         this.animationFrameHandle = requestAnimationFrame(() => {
-            const actions = createAlignBranchActions({
-                action,
-                settings: settings.view.scrolling,
-                singleColumnMode: settings.view.singleColumnMode,
-                activeBranch: context.activeBranch,
-                previousActiveBranch: context.previousActiveBranch,
-            });
-
             runAlignBranchActions(context, actions);
-
-            this.saveActiveBranch(context, action);
         });
+        this.saveActiveBranch(context, action);
 
         const retry = action && retryAlign(settings, action);
         if (retry && !isRetry) {
             await waitForElementToStopMoving(
                 this.view,
-                context.activeBranch.node,
+                this.previousActiveBranch!.node,
             );
             this.align(action, true);
         }
@@ -117,6 +110,7 @@ export class AlignBranch {
             container,
             activeNodesOfColumn: viewState.document.activeNodesOfColumn,
             containerRect: container.getBoundingClientRect(),
+            singleColumnMode: settings.view.singleColumnMode,
             settings: {
                 centerActiveNodeH: settings.view.scrolling.centerActiveNodeH,
                 centerActiveNodeV: settings.view.scrolling.centerActiveNodeV,

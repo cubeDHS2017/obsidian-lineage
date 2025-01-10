@@ -27,6 +27,13 @@ export const alignElementHorizontally = (
             left: scrollLeft * -1,
             behavior: scrollToTheLeft ? 'instant' : context.settings.behavior,
         });
+    else {
+        // cancel previous pending calls
+        context.container.scrollBy({
+            left: 0,
+            behavior: 'instant',
+        });
+    }
 
     return column.id;
 };

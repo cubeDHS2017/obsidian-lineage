@@ -36,6 +36,12 @@ export const alignVertically = (
             top: (scrollTop * -1) / context.settings.zoomLevel,
             behavior: context.settings.behavior,
         });
+    } else {
+        // cancel previous pending calls
+        column.scrollBy({
+            top: 0,
+            behavior: 'instant',
+        });
     }
 
     return {
