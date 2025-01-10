@@ -216,8 +216,8 @@ export const lang = {
 
     // theme
     settings_theme_bg: 'Background color',
-    settings_theme_active_branch_bg: 'Active branch background',
-    settings_theme_active_branch_color: 'Active branch color',
+    settings_theme_active_branch_bg: 'Active branch background color',
+    settings_theme_active_branch_color: 'Active branch text color',
     settings_appearance_font_size: 'Font size',
     settings_appearance_inactive_node_opacity: 'Inactive cards opacity',
 
@@ -227,10 +227,9 @@ export const lang = {
 
     // single column view
     settings_layout_indentation_width: 'Card indentation',
-    settings_layout_indentation_width_desc:
-        "Applicable in 'single column view'",
-    controls_single_column: 'Single column view',
-    cmd_toggle_single_column: `Toggle 'single column view'`,
+    settings_layout_indentation_width_desc: "Applicable in 'outline mode'",
+    controls_single_column: 'Outline mode',
+    cmd_toggle_single_column: `Toggle 'outline mode'`,
 
     // space between cards
     controls_gap_between_cards: 'Space between cards',

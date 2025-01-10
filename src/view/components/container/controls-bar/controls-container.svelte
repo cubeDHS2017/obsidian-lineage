@@ -6,7 +6,6 @@
         MoreVertical,
         Palette,
         PanelRightInactive as PanelRight,
-        RectangleVertical,
         Redo2 as RedoIcon,
         Settings,
         Undo2 as UndoIcon
@@ -163,7 +162,7 @@
             on:click={toggleSingleColumnMode}
             tooltipPosition="left"
         >
-            <RectangleVertical class="svg-icon" />
+            {@html customIcons.outline.svg}
         </Button>
         <Button
             active={$applyGapBetweenCards}

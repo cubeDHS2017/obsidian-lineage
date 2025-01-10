@@ -37,7 +37,11 @@
 .theme-dark {
     .lineage-floating-button {
         color: #fff !important;
-        background-color: #bebebe20 !important;
+        background-color: #bebebe30 ;
+    }
+    .active-node .lineage-floating-button {
+        color: #fff !important;
+        background-color: rgba(60, 60, 60, 0.3) ;
     }
 }
 
@@ -49,7 +53,7 @@
 }
 .theme-dark {
     --opacity-inactive-node: 0.6;
-    --opacity-active-node: 0.6;
+    --opacity-active-node: 0.4;
     --opacity-active-button: 0.8;
 }
 

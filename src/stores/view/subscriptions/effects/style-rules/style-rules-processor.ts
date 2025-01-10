@@ -60,7 +60,7 @@ export class StyleRulesProcessor {
                 },
             });
         },
-        100,
+        500,
     );
 
     private setRules = () => {

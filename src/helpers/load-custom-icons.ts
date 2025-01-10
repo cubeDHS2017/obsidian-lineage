@@ -66,7 +66,15 @@ const gap: Icon = {
     mode: 'stroke',
 };
 
-export const customIcons = { cards, split, alignH, alignV, gap };
+const outline: Icon = {
+    name: 'outline',
+    svg: `<path d="M 7.563873,12 H 21.24698" />
+  <path d="M 7.56116,18 H 21.159058" />
+  <path d="M3 6h18" /> `,
+    mode: 'stroke',
+};
+
+export const customIcons = { cards, split, alignH, alignV, gap, outline };
 
 export const loadCustomIcons = () => {
     for (const icon of Object.values(customIcons)) {
