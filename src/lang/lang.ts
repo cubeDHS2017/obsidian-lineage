@@ -180,6 +180,7 @@ export const lang = {
     hk_go_to_end_of_group: 'Go to end of group',
     hk_go_to_beginning_of_column: 'Go to start of column',
     hk_go_to_end_of_column: 'Go to end of column',
+    hk_select_parent: 'Select parent card',
     hkg_navigation: 'Navigation',
 
     // navigate node history

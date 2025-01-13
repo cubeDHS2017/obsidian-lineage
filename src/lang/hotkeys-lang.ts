@@ -32,6 +32,7 @@ export const hotkeysLang = {
     go_to_end_of_group: lang.hk_go_to_end_of_group,
     go_to_beginning_of_column: lang.hk_go_to_beginning_of_column,
     go_to_end_of_column: lang.hk_go_to_end_of_column,
+    select_parent: lang.hk_select_parent,
     copy_node: lang.hk_copy_node,
     copy_node_unformatted: lang.hk_copy_node_unformatted,
     copy_node_without_subitems: lang.hk_copy_node_without_subitems,

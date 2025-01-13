@@ -190,6 +190,15 @@ export const navigateCommands = () => {
             },
             hotkeys: [{ key: 'B', modifiers: [] }],
         },
+        {
+            name: 'select_parent',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                spatialNavigation(view, 'left');
+            },
+            hotkeys: [{ key: 'G', modifiers: [] }],
+        },
     );
     return commands;
 };

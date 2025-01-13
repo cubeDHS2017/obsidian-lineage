@@ -44,6 +44,7 @@ export const hotkeyGroups = {
         'navigate_forward',
         'navigate_to_previous_node',
         'navigate_to_next_node',
+        'select_parent',
     ]),
     [lang.hkg_selection]: new Set([
         'extend_select_up',
