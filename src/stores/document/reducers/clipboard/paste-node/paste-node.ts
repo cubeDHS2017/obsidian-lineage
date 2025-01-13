@@ -40,5 +40,8 @@ export const pasteNode = (
     }
     cleanAndSortColumns(document);
     invariant(nextNode);
-    return nextNode;
+    return {
+        nextNode,
+        rootNodes: branches.map((b) => b.nodeId),
+    };
 };

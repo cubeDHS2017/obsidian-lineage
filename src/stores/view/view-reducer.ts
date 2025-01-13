@@ -186,6 +186,8 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         refreshCollapsedNodes(state, action.payload.columns);
     } else if (action.type === 'view/outline/toggle-collapse-all') {
         toggleCollapseAllNodes(state, action.payload.columns);
+    } else if (action.type === 'view/selection/set-selection') {
+        state.document.selectedNodes = new Set(action.payload.ids);
     }
 };
 export const viewReducer = (

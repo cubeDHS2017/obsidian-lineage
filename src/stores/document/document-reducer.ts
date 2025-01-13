@@ -43,6 +43,7 @@ const updateDocumentState = (
     let newActiveNodeId: null | string = null;
     let affectedNodeId: null | string = null;
     let affectedNodeContent: Content[string] | null = null;
+    let affectedNodes: string[] | undefined = undefined;
     if (action.type === 'DOCUMENT/SET_NODE_CONTENT') {
         const update = setNodeContent(state.document.content, action);
         if (!update) return NO_UPDATE;
@@ -117,7 +118,9 @@ const updateDocumentState = (
             state.history.context.activeSection,
         );
     } else if (action.type === 'DOCUMENT/PASTE_NODE') {
-        newActiveNodeId = pasteNode(state.document, action);
+        const result = pasteNode(state.document, action);
+        newActiveNodeId = result.nextNode;
+        affectedNodes = result.rootNodes;
     } else if (action.type === 'DOCUMENT/CUT_NODE') {
         affectedNodeContent = state.document.content[action.payload.nodeId];
         newActiveNodeId = deleteNode(
@@ -192,6 +195,9 @@ const updateDocumentState = (
             numberOfCharacters: Object.values(state.document.content)
                 .map((x) => x.content.length)
                 .reduce((acc, v) => acc + v),
+            affectedSections: affectedNodes
+                ? affectedNodes.map((id) => state.sections.id_section[id])
+                : undefined,
         };
         addSnapshot(state.document, state.history, context);
         state.history = { ...state.history };

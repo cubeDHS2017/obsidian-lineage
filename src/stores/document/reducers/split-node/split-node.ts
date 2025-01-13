@@ -29,7 +29,7 @@ export const splitNode = (
     if (childGroup)
         throw new Error(lang.error_cm_cant_split_card_that_has_children);
 
-    const newActiveNode = pasteNode(document, {
+    const result = pasteNode(document, {
         payload: {
             position: 'down',
             targetNodeId: targetNode,
@@ -37,5 +37,5 @@ export const splitNode = (
         },
     });
     deleteNode(document, targetNode);
-    return newActiveNode;
+    return result.nextNode;
 };

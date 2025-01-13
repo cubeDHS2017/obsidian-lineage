@@ -27,7 +27,8 @@ export type ViewStoreAction =
     | StyleRulesViewActions
     | KeyboardEventAction
     | ViewHotkeysAction
-    | OutlineAction;
+    | OutlineAction
+    | SelectionActions;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -180,3 +181,8 @@ export type OutlineAction =
           type: 'view/outline/toggle-collapse-all';
           payload: { columns: Column[] };
       };
+
+export type SelectionActions = {
+    type: 'view/selection/set-selection';
+    payload: { ids: string[] };
+};

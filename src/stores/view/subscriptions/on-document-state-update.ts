@@ -6,7 +6,6 @@ import {
 } from 'src/stores/view/helpers/get-document-event-type';
 import { setActiveNode } from 'src/stores/view/subscriptions/actions/set-active-node';
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
-import { clearSelectedNodes } from 'src/stores/view/subscriptions/actions/clear-selected-nodes';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/actions/remove-obsolete-navigation-items';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
@@ -14,6 +13,7 @@ import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persis
 import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
 import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
 import { debouncedDrawDocument } from 'src/stores/minimap/subscriptions/effects/draw-document';
+import { updateSelectedNodes } from 'src/stores/view/subscriptions/actions/update-selected-nodes';
 
 export const onDocumentStateUpdate = (
     view: LineageView,
@@ -53,7 +53,7 @@ export const onDocumentStateUpdate = (
     }
 
     if (structuralChange && type !== 'DOCUMENT/MOVE_NODE') {
-        clearSelectedNodes(view);
+        updateSelectedNodes(view, action, e.changeHistory!);
     }
 
     if (type === 'DOCUMENT/INSERT_NODE' && view.isActive) {
