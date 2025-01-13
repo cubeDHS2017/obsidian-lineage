@@ -21,6 +21,8 @@ export const groupsStore = (view: LineageView, columnId: string) => {
 
 export const singleColumnGroupStore = (view: LineageView) => {
     return derived(view.documentStore, (state) => {
-        return state.document.columns[0].groups;
+        return state.document.columns.length > 0
+            ? state.document.columns[0].groups
+            : [];
     });
 };

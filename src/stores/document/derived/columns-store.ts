@@ -6,5 +6,6 @@ export const columnsStore = (view: LineageView) =>
 
 export const singleColumnStore = (view: LineageView) =>
     derived(view.documentStore, (state) => {
-        return [state.document.columns[0]];
+        const column = state.document.columns[0];
+        return column ? [column] : [];
     });
