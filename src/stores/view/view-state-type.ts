@@ -67,6 +67,10 @@ export type ViewState = {
         searchTerm: string;
         conflictingHotkeys: ConflictingHotkeys;
     };
+    outline: {
+        collapsedParents: Set<string>;
+        hiddenNodes: Set<string>;
+    };
 };
 
 export type NodeStyle = {

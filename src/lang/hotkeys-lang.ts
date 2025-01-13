@@ -55,4 +55,6 @@ export const hotkeysLang = {
     zoom_in: lang.hk_zoom_in,
     zoom_out: lang.hk_zoom_out,
     zoom_reset: lang.hk_zoom_reset,
+    toggle_collapse: lang.hk_outline_toggle_collapse,
+    toggle_collapse_all: lang.hk_outline_toggle_collapse_all,
 };

@@ -26,6 +26,8 @@
     export let firstColumn: boolean;
     export let styleRules: Map<string, NodeStyle>;
     export let singleColumnMode: boolean;
+    export let collapsedParents: Set<string>;
+    export let hiddenNodes: Set<string>;
     const view = getView();
     const groups = singleColumnMode
         ? singleColumnGroupStore(view)
@@ -57,6 +59,8 @@
                 {styleRules}
                 {singleColumnMode}
                 {allDndNodes}
+                {collapsedParents}
+                {hiddenNodes}
             />
         {/if}
     {/each}

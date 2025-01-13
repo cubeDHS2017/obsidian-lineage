@@ -5,6 +5,7 @@
     import CreateCardButton from './components/create-card-button.svelte';
     import TreeIndex from '../tree-index-button.svelte';
     import FocusCardButton from './components/focus-card-button.svelte';
+    import CollapseCardButton from './components/collapse-card-button.svelte';
 
     export let editing: boolean;
     export let active: ActiveStatus | null;
@@ -13,6 +14,7 @@
     export let pinned: boolean;
     export let hasChildren: boolean;
     export let isInSidebar = false;
+    export let collapsed: boolean
 </script>
 
 {#if !editing}
@@ -24,6 +26,9 @@
         <DeleteNodeButton {nodeId} />
     {:else}
         <FocusCardButton {nodeId} />
+    {/if}
+    {#if hasChildren}
+        <CollapseCardButton {nodeId} {collapsed} />
     {/if}
 {/if}
 <EditNodeButton {editing} {nodeId} {isInSidebar} />

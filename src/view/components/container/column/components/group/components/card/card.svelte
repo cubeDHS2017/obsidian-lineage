@@ -27,7 +27,8 @@
     export let isSearchMatch = false;
     export let style: NodeStyle | undefined;
     export let singleColumnMode: boolean;
-
+    export let collapsed: boolean;
+    export let hidden: boolean;
     const activeStatusClasses = {
         [ActiveStatus.node]: 'active-node',
         [ActiveStatus.child]: 'active-child',
@@ -45,6 +46,7 @@
         : ''}
     class={clx(
         'lineage-card',
+        hidden? 'hidden-node':'',
         active
             ? activeStatusClasses[active]
             : singleColumnMode
@@ -82,6 +84,7 @@
         {pinned}
         {hasChildren}
         {isInSidebar}
+        {collapsed}
     />
     <Bridges {active} {editing} {hasActiveChildren} {firstColumn} />
     {#if style}
@@ -124,6 +127,7 @@
         height: 100%;
         top: 0;
     }
+
 
     /* .node-border--active,
     .node-border--discard,

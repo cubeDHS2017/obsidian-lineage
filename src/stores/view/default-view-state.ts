@@ -68,6 +68,10 @@ export const defaultViewState = (): ViewState => ({
         searchTerm: '',
         conflictingHotkeys: new Map(),
     },
+    outline: {
+        collapsedParents: new Set(),
+        hiddenNodes: new Set(),
+    },
 });
 export type ActiveBranch = {
     childGroups: Set<string>;

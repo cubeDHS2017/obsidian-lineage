@@ -26,6 +26,7 @@
     import { zoomLevelStore } from 'src/stores/view/derived/zoom-level-store';
     import { getAllChildren } from 'src/lib/tree-utils/get/get-all-children';
     import { textIsSelected } from 'src/view/actions/context-menu/card-context-menu/helpers/text-is-selected';
+    import { OutlineStore } from 'src/stores/view/derived/outline-store';
 
     export let singleColumnMode: boolean;
 
@@ -47,7 +48,8 @@
     $: parentNodes = new Set($activeBranch.sortedParentNodes);
     const groupParentIds = GroupParentIdsStore(view);
     const pinnedNodesArray = PinnedNodesStore(view);
-    $: pinnedNodes = new Set($pinnedNodesArray);
+    const outline = OutlineStore(view);
+    $: pinnedNodes = new Set<string>($pinnedNodesArray);
     const zoom = zoomLevelStore(view);
     let allDndNodes: Set<string> = new Set();
     $: {
@@ -121,6 +123,8 @@
                 styleRules={$styleRules}
                 {singleColumnMode}
                 {allDndNodes}
+                collapsedParents={$outline.collapsedParents}
+                hiddenNodes={$outline.hiddenNodes}
             />
         {/each}
         <ColumnsBuffer />

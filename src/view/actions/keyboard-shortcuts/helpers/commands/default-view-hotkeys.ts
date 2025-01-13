@@ -15,6 +15,8 @@ import { deleteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands
 import { LineageView } from 'src/view/view';
 import { Hotkey } from 'obsidian';
 import { CommandName, GroupName } from 'src/lang/hotkey-groups';
+import { get } from 'svelte/store';
+import { singleColumnStore } from 'src/stores/document/derived/columns-store';
 
 export type DefaultViewHotkey = {
     check: (view: LineageView) => boolean;
@@ -104,5 +106,36 @@ export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
             });
         },
         hotkeys: [{ key: '0', modifiers: ['Mod'] }],
+    },
+    {
+        name: 'toggle_collapse',
+        check: isActive,
+        callback: (view, e) => {
+            e.preventDefault();
+            if (!get(singleColumnStore(view))) return;
+            view.viewStore.dispatch({
+                type: 'view/outline/toggle-collapse-node',
+                payload: {
+                    id: view.viewStore.getValue().document.activeNode,
+                    columns: view.documentStore.getValue().document.columns,
+                },
+            });
+        },
+        hotkeys: [{ key: '=', modifiers: ['Alt'] }],
+    },
+    {
+        name: 'toggle_collapse_all',
+        check: isActive,
+        callback: (view, e) => {
+            e.preventDefault();
+            if (!get(singleColumnStore(view))) return;
+            view.viewStore.dispatch({
+                type: 'view/outline/toggle-collapse-all',
+                payload: {
+                    columns: view.documentStore.getValue().document.columns,
+                },
+            });
+        },
+        hotkeys: [{ key: '=', modifiers: ['Alt', 'Mod'] }],
     },
 ];

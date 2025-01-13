@@ -40,7 +40,12 @@ export const onDocumentStateUpdate = (
     if (structuralChange) {
         setActiveNode(view, action);
         updateActiveBranch(viewStore, documentState, 'structure');
-
+        viewStore.dispatch({
+            type: 'view/outline/refresh-collapsed-nodes',
+            payload: {
+                columns: documentState.document.columns,
+            },
+        });
         documentStore.dispatch({
             type: 'document/pinned-nodes/remove-stale-nodes',
         });

@@ -37,12 +37,15 @@
 .theme-dark {
     .lineage-floating-button {
         color: #fff !important;
-        background-color: #bebebe30 ;
+        background-color: #bebebe30;
     }
     .active-node .lineage-floating-button {
         color: #fff !important;
-        background-color: rgba(60, 60, 60, 0.3) ;
+        background-color: rgba(60, 60, 60, 0.3);
     }
+}
+.collapse-button {
+    background-color: var(--background-active-parent) !important;
 }
 
 /* opacity */
@@ -81,6 +84,13 @@
     opacity: var(--opacity-active-button);
 }
 
+.collapse-button {
+    opacity: 0.3 !important
+}
+.collapse-button:hover {
+    opacity: 0.8 !important
+}
+
 /* position */
 .position-top {
     /*top: calc((-1 * var(--height)) / 2);*/
@@ -109,6 +119,15 @@
 .position--section {
     bottom: 3px;
     right: 8px;
+}
+
+.collapse-button {
+    top: calc(50% - 10px);
+    left: -40px;
+}
+/* to account for the border*/
+.active-node .collapse-button{
+    left: -45px;
 }
 
 /* misc */

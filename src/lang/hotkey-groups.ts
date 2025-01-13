@@ -70,6 +70,7 @@ export const hotkeyGroups = {
         'align_branch',
     ]),
     [lang.hkg_zoom]: new Set(['zoom_in', 'zoom_out', 'zoom_reset']),
+    [lang.hkg_outline]: new Set(['toggle_collapse', 'toggle_collapse_all']),
 } satisfies Record<string, Set<CommandName>>;
 
 export const hotkeysGroups: Record<CommandName, GroupName> = Object.fromEntries(

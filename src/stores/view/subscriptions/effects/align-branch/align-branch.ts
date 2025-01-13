@@ -64,7 +64,7 @@ export class AlignBranch {
     constructor(public view: LineageView) {}
 
     align = async (action?: PluginAction, isRetry = false) => {
-        if (skipAlign(action)) return;
+        if (skipAlign(this.view, action)) return;
         cancelAnimationFrame(this.animationFrameHandle);
 
         const delay_ms = delayAlign(action);

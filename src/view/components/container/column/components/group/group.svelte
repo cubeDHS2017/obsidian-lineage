@@ -27,10 +27,12 @@
     export let styleRules: Map<string, NodeStyle>;
     export let singleColumnMode: boolean;
     export let allDndNodes: Set<string>;
+    export let collapsedParents: Set<string>;
+    export let hiddenNodes: Set<string>;
     const view = getView();
     const nodes = singleColumnMode
-        ? singleColumnNodesStore(view,)
-        : nodesStore(view, columnId,groupId);
+        ? singleColumnNodesStore(view)
+        : nodesStore(view, columnId, groupId);
 </script>
 
 {#if $nodes.length > 0 && (searchQuery.length === 0 || showAllNodes || (searchResults.size > 0 && $nodes.some( (n) => searchResults.has(n) )))}
@@ -76,6 +78,8 @@
                     {firstColumn}
                     style={styleRules.get(node)}
                     {singleColumnMode}
+                    collapsed={collapsedParents.has(node)}
+                    hidden={hiddenNodes.has(node)}
                 />
             {/if}
         {/each}

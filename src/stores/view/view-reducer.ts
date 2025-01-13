@@ -21,6 +21,9 @@ import { setActivePinnedNode } from 'src/stores/view/reducers/pinned-cards/set-a
 import { setActiveRecentNode } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 import { toggleShowAllNodes } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
 import { resetPendingConfirmation } from 'src/stores/view/reducers/document/reset-pending-confirmation';
+import { toggleCollapseNode } from 'src/stores/view/reducers/outline/toggle-collapse-node';
+import { refreshCollapsedNodes } from 'src/stores/view/reducers/outline/refresh-collapsed-nodes';
+import { toggleCollapseAllNodes } from 'src/stores/view/reducers/outline/toggle-collapse-all-nodes';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
@@ -177,6 +180,12 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         state.hotkeys.searchTerm = action.payload.searchTerm.toLowerCase();
     } else if (action.type === 'view/hotkeys/update-conflicts') {
         state.hotkeys.conflictingHotkeys = action.payload.conflicts;
+    } else if (action.type === 'view/outline/toggle-collapse-node') {
+        toggleCollapseNode(state, action.payload.columns, action.payload.id);
+    } else if (action.type === 'view/outline/refresh-collapsed-nodes') {
+        refreshCollapsedNodes(state, action.payload.columns);
+    } else if (action.type === 'view/outline/toggle-collapse-all') {
+        toggleCollapseAllNodes(state, action.payload.columns);
     }
 };
 export const viewReducer = (

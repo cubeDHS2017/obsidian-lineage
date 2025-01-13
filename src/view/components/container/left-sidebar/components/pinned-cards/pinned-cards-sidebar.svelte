@@ -49,6 +49,8 @@
                 pinned={false}
                 style={$styleRules.get(node)}
                 singleColumnMode={false}
+                collapsed={false}
+                hidden={false}
             />
         {/each}
     {:else}

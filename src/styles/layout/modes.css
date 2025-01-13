@@ -44,6 +44,15 @@
             opacity: 0.8;
         }
     }
+
+    & .column{
+        /* to show outline card buttons*/
+        padding-left: 50px;
+    }
+
+    & .hidden-node {
+        display: none !important;
+    }
 }
 
 .gap-between-cards {
