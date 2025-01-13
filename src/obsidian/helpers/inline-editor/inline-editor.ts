@@ -72,7 +72,7 @@ export class InlineEditor {
 
         target.append(this.containerEl);
         this.focus();
-        AdjustHeight(target)();
+        AdjustHeight(this.view, target)();
         this.target = target;
         if (!content) {
             vimEnterInsertMode(this.view.plugin, this.inlineView);
@@ -83,10 +83,7 @@ export class InlineEditor {
         this.nodeId = nodeId;
         this.restoreCursor();
         this.lockFile();
-        const unsub = fixVimCursorWhenZooming(this.view);
-        if (unsub) {
-            this.subscriptions.add(unsub);
-        }
+        this.fixVimWhenZooming();
         setTimeout(() => resolve(), Math.max(16, content.length / 60));
     }
 
@@ -230,5 +227,12 @@ export class InlineEditor {
                 isInSidebar: viewState.document.editing.isInSidebar,
             },
         });
+    };
+
+    fixVimWhenZooming = () => {
+        const unsub = fixVimCursorWhenZooming(this.view);
+        if (unsub) {
+            this.subscriptions.add(unsub);
+        }
     };
 }

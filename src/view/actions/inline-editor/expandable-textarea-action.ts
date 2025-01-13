@@ -1,8 +1,14 @@
+import { LineageView } from 'src/view/view';
+import { getView } from 'src/view/components/container/context';
+import { get } from 'svelte/store';
+import { limitPreviewHeightStore } from 'src/stores/settings/derived/limit-preview-height-store';
+
 const deletionKeys = new Set(['Backspace', 'Delete', 'x', ' ']);
 
-export const AdjustHeight = (el: HTMLElement) => {
+export const AdjustHeight = (view: LineageView, el: HTMLElement) => {
     let previousScrollHeight = 0;
     let x: HTMLElement;
+    const limitCardHeight = get(limitPreviewHeightStore(view));
     return (e?: KeyboardEvent) => {
         if (!x) {
             x = el.querySelector('.cm-scroller') as HTMLElement;
@@ -18,12 +24,18 @@ export const AdjustHeight = (el: HTMLElement) => {
                 previousScrollHeight = x.scrollHeight;
                 el.style.height = previousScrollHeight + 'px';
                 x.style.height = '';
+                if (limitCardHeight) {
+                    view.alignBranch.align({
+                        type: 'view/align-branch/reveal-node',
+                    });
+                }
             }
         });
     };
 };
 export const expandableTextareaAction = (el: HTMLElement) => {
-    const adjustHeight = AdjustHeight(el);
+    const view = getView();
+    const adjustHeight = AdjustHeight(view, el);
 
     el.addEventListener('keydown', adjustHeight);
 

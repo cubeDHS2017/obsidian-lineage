@@ -42,7 +42,9 @@ export const scrollCommands = () => {
             name: 'align_branch',
             check: isActive,
             callback: (view) => {
-                view.alignBranch.align({ type: 'view/align-branch' });
+                view.alignBranch.align({
+                    type: 'view/align-branch/center-node',
+                });
             },
             hotkeys: [{ key: 'G', modifiers: modifiers }],
         },

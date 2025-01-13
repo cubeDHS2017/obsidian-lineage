@@ -39,6 +39,12 @@ export const createAlignBranchActions = (
         ? forceCenterActiveNodeV(action, context.singleColumnMode)
         : false;
 
+    if (action?.type === 'view/align-branch/reveal-node') {
+        actions.push({ action: '20/active-node/vertical/reveal' });
+        actions.push({ action: '20/active-node/horizontal/reveal' });
+        return actions;
+    }
+
     if (context.singleColumnMode) {
         if (_forceCenterActiveNodeV) {
             actions.push({ action: '20/active-node/horizontal/center' });

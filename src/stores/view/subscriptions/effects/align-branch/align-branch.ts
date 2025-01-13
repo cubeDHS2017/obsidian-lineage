@@ -49,7 +49,8 @@ export type PluginAction =
     | SettingsActions
     | DocumentsStoreAction
     | { type: 'view/life-cycle/mount' }
-    | { type: 'view/align-branch' };
+    | { type: 'view/align-branch/center-node' }
+    | { type: 'view/align-branch/reveal-node' };
 
 export type PreviousScrollBehavior = {
     timestamp: number;
@@ -130,7 +131,8 @@ export class AlignBranch {
     ) {
         const reset =
             action?.type === 'view/life-cycle/mount' ||
-            action?.type === 'view/align-branch';
+            action?.type === 'view/align-branch/center-node' ||
+            action?.type === 'view/align-branch/reveal-node';
         if (reset) {
             this.previousActiveBranch = null;
         } else {
