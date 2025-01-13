@@ -79,7 +79,7 @@ export class AlignBranch {
         this.animationFrameHandle = requestAnimationFrame(() => {
             runAlignBranchActions(context, actions);
         });
-        this.saveActiveBranch(context, action);
+        this.saveActiveBranch(context);
 
         const retry = action && retryAlign(settings, action);
         if (retry && !isRetry) {
@@ -125,19 +125,8 @@ export class AlignBranch {
         return context;
     };
 
-    private saveActiveBranch(
-        context: AlignBranchContext,
-        action: PluginAction | undefined,
-    ) {
-        const reset =
-            action?.type === 'view/life-cycle/mount' ||
-            action?.type === 'view/align-branch/center-node' ||
-            action?.type === 'view/align-branch/reveal-node';
-        if (reset) {
-            this.previousActiveBranch = null;
-        } else {
-            this.previousActiveBranch = context.activeBranch;
-        }
+    private saveActiveBranch(context: AlignBranchContext) {
+        this.previousActiveBranch = context.activeBranch;
     }
 
     private saveBehavior(behavior: ScrollBehavior) {
