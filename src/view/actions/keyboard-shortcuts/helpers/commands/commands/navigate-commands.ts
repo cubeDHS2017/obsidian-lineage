@@ -62,27 +62,11 @@ export const navigateCommands = () => {
             ],
         },
         {
-            name: 'go_down',
-            check: isActiveAndNotEditing,
-            callback: (view, event) => {
-                event.preventDefault();
-
-                if (!singleColumnMode(view)) {
-                    spatialNavigation(view, 'down');
-                } else {
-                    sequentialNavigation(view, 'forward');
-                }
-            },
-            hotkeys: [
-                { key: 'J', modifiers: [] },
-                { key: 'ArrowDown', modifiers: [] },
-            ],
-        },
-        {
             name: 'go_left',
             check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
+
                 if (!singleColumnMode(view)) {
                     spatialNavigation(view, 'left');
                 } else {
@@ -92,6 +76,22 @@ export const navigateCommands = () => {
             hotkeys: [
                 { key: 'H', modifiers: [] },
                 { key: 'ArrowLeft', modifiers: [] },
+            ],
+        },
+        {
+            name: 'go_down',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                if (!singleColumnMode(view)) {
+                    spatialNavigation(view, 'down');
+                } else {
+                    sequentialNavigation(view, 'forward');
+                }
+            },
+            hotkeys: [
+                { key: 'J', modifiers: [] },
+                { key: 'ArrowDown', modifiers: [] },
             ],
         },
         {
@@ -109,6 +109,33 @@ export const navigateCommands = () => {
                 { key: 'K', modifiers: [] },
                 { key: 'ArrowUp', modifiers: [] },
             ],
+        },
+        {
+            name: 'select_parent',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                spatialNavigation(view, 'left');
+            },
+            hotkeys: [{ key: 'G', modifiers: [] }],
+        },
+        {
+            name: 'navigate_to_next_node',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                sequentialNavigation(view, 'forward');
+            },
+            hotkeys: [{ key: 'N', modifiers: [] }],
+        },
+        {
+            name: 'navigate_to_previous_node',
+            check: isActiveAndNotEditing,
+            callback: (view, event) => {
+                event.preventDefault();
+                sequentialNavigation(view, 'back');
+            },
+            hotkeys: [{ key: 'B', modifiers: [] }],
         },
         {
             name: 'go_to_beginning_of_group',
@@ -171,33 +198,6 @@ export const navigateCommands = () => {
                 });
             },
             hotkeys: [{ key: 'K', modifiers: ['Alt'] }],
-        },
-        {
-            name: 'navigate_to_next_node',
-            check: isActiveAndNotEditing,
-            callback: (view, event) => {
-                event.preventDefault();
-                sequentialNavigation(view, 'forward');
-            },
-            hotkeys: [{ key: 'N', modifiers: [] }],
-        },
-        {
-            name: 'navigate_to_previous_node',
-            check: isActiveAndNotEditing,
-            callback: (view, event) => {
-                event.preventDefault();
-                sequentialNavigation(view, 'back');
-            },
-            hotkeys: [{ key: 'B', modifiers: [] }],
-        },
-        {
-            name: 'select_parent',
-            check: isActiveAndNotEditing,
-            callback: (view, event) => {
-                event.preventDefault();
-                spatialNavigation(view, 'left');
-            },
-            hotkeys: [{ key: 'G', modifiers: [] }],
         },
     );
     return commands;

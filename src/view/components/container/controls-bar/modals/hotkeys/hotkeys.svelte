@@ -4,16 +4,27 @@
     import NumberOfConflicts from './number-of-conflicts.svelte';
     import { FilteredHotkeysStore } from 'src/stores/settings/derived/view-hotkeys-store';
     import { getView } from 'src/view/components/container/context';
+    import {
+        DynamicLabelState
+    } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
+    import { SingleColumnMode } from 'src/stores/settings/derived/view-settings-store';
 
     const view = getView();
-    const store =FilteredHotkeysStore(view)
+    const store = FilteredHotkeysStore(view);
+    const singleColumnMode = SingleColumnMode(view);
+    let labelState: DynamicLabelState;
+    $: {
+        labelState = {
+            singleColumnMode: $singleColumnMode,
+        };
+    }
 </script>
 
 <div class="lineage-modal lineage-modal--full-height">
     <Front />
     <div class="groups">
         {#each Object.entries($store.hotkeys) as [groupName, group] (groupName)}
-            <Group {groupName} {group} />
+            <Group {groupName} {group} {labelState} />
         {/each}
     </div>
     <NumberOfConflicts conflicts={$store.numberOfConflictingHotkeys}/>

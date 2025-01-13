@@ -1,13 +1,17 @@
 <script lang="ts">
     import Hotkey from 'src/view/components/container/controls-bar/modals/hotkeys/components/hotkey/hotkey.svelte';
-    import { hotkeysLang } from 'src/lang/hotkeys-lang';
     import { ViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import {
+        DynamicLabelState,
+        getDynamicLabel
+    } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
 
     export let commandHotkeys: ViewHotkey;
+    export let labelState: DynamicLabelState
 </script>
 
 <div class="command">
-    <span class="label">{hotkeysLang[commandHotkeys.name]}</span>
+    <span class="label">{getDynamicLabel(labelState,commandHotkeys.name)}</span>
     <div class="hotkeys">
         {#each commandHotkeys.hotkeys as hotkey, i}
             <Hotkey

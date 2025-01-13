@@ -1,15 +1,22 @@
 <script lang="ts">
     import Hotkey from './components/command.svelte';
     import { ViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import {
+        DynamicLabelState
+    } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
 
-    export let group: ViewHotkey[]
-export let groupName: string
+    export let group: ViewHotkey[];
+    export let labelState: DynamicLabelState;
+
+    export let groupName: string;
 </script>
 <div class="hotkey-group">
     <div class="hotkey-group-name">{groupName}</div>
     <div class="hotkeys-list">
         {#each group as commandHotkeys (commandHotkeys.name)}
-            <Hotkey {commandHotkeys} />
+            {#if !(labelState.singleColumnMode && (commandHotkeys.name === 'navigate_to_next_node' || commandHotkeys.name === 'navigate_to_previous_node'))}
+                <Hotkey {commandHotkeys} {labelState} />
+            {/if}
         {/each}
     </div>
 </div>
