@@ -26,9 +26,9 @@
 }
 
 /* change opacity of all group nodes*/
-.group:not([id^='group-r']):hover .inactive-node {
+/*.group:not([id^='group-r']):hover .inactive-node {
     opacity: 0.4;
-}
+}*/
 
 .inactive-node {
     opacity: var(--inactive-card-opacity);
@@ -114,9 +114,9 @@
 .lineage-card {
     transition: box-shadow 200ms ease;
 }
-.lineage-card:hover {
+/*.lineage-card:hover {
     transition: opacity 100ms ease;
-}
+}*/
 
 /* scroll bar*/
 .active-parent,

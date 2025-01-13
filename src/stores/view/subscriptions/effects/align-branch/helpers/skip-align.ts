@@ -1,5 +1,7 @@
 import { PluginAction } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { LineageView } from 'src/view/view';
+import { get } from 'svelte/store';
+import { contentStore } from 'src/stores/document/derived/content-store';
 
 export const skipAlign = (view: LineageView, action?: PluginAction) => {
     if (
@@ -10,6 +12,11 @@ export const skipAlign = (view: LineageView, action?: PluginAction) => {
         return true;
 
     const viewState = view.viewStore.getValue();
-    if (viewState.outline.hiddenNodes.has(viewState.document.activeNode))
-        return true;
+    const activeNode = viewState.document.activeNode;
+    if (viewState.outline.hiddenNodes.has(activeNode)) return true;
+
+    if (action && action.type === 'view/align-branch/reveal-node') {
+        const content = get(contentStore(view, activeNode));
+        if (content.length === 0) return true;
+    }
 };
