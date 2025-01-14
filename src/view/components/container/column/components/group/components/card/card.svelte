@@ -93,7 +93,7 @@
             class="node-style-container"
         />
     {/if}
-    <!--    <div class="debug-node-id">{nodeId}</div>-->
+    <!--    <div class="debug-node-id">{node}</div>-->
 </div>
 
 <style>

@@ -6,11 +6,10 @@ import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
 
 export const findAdjacentNode = (
     columns: Column[],
-    activeNodeId: string,
+    nodeToMove: string,
     direction: AllDirections,
 ) => {
     let targetNode: NodeId | null = null;
-    const nodeToMove = activeNodeId;
     if (direction === 'left') {
         const group = findGroupByNodeId(columns, nodeToMove);
         if (group && !group.parentId.startsWith('r'))

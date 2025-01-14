@@ -16,12 +16,13 @@ export const changeNodePosition = (
     targetNode: NodeId,
     direction: AllDirections,
     type: 'move' | 'drop',
+    moveChildToTheStart: boolean,
 ) => {
     const group = findGroupByNodeId(document.columns, node);
     invariant(group);
     deleteNodeById(document.columns, null, node);
     if (direction === 'right') {
-        moveNodeAsChild(document, node, targetNode);
+        moveNodeAsChild(document, node, targetNode, moveChildToTheStart);
     } else {
         moveNodeAsSibling(
             document.columns,
