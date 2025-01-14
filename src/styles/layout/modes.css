@@ -47,7 +47,7 @@
 
     & .column{
         /* to show outline card buttons*/
-        padding-left: 50px;
+        padding: 0 calc(1 / var(--zoom-level) * 50vw);
     }
 
     & .hidden-node {

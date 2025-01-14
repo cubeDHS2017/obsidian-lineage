@@ -17,6 +17,9 @@ const spatialNavigation = (view: LineageView, direction: AllDirections) => {
             direction: direction,
             columns: view.documentStore.getValue().document.columns,
         },
+        context: {
+            outlineMode: singleColumnMode(view),
+        },
     });
 };
 
@@ -29,6 +32,9 @@ const sequentialNavigation = (
         payload: {
             direction,
             sections: view.documentStore.getValue().sections,
+        },
+        context: {
+            outlineMode: singleColumnMode(view),
         },
     });
 };

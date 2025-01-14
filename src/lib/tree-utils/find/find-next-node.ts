@@ -5,8 +5,14 @@ export const findNextNode = (
     sections: Sections,
     node: string,
     direction: 'back' | 'forward',
+    hiddenNodes: Set<string> | null,
 ) => {
-    const sortedSections = sortSections(Object.keys(sections.section_id));
+    let sortedSections = sortSections(Object.keys(sections.section_id));
+    if (hiddenNodes) {
+        sortedSections = sortedSections.filter(
+            (section) => !hiddenNodes.has(sections.section_id[section]),
+        );
+    }
     const currentSection = sections.id_section[node];
     const currentSectionIndex = sortedSections.findIndex(
         (section) => currentSection === section,

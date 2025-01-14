@@ -58,6 +58,7 @@ const actionCategoryDict: Record<PluginAction['type'], ActionCategory> = {
     'WORKSPACE/ACTIVE_LEAF_CHANGE': 'view/life-cycle',
     'WORKSPACE/RESIZE': 'view/resize',
     'WORKSPACE/LAYOUT_READY': 'view/life-cycle',
+    'WORKSPACE/SET_ACTIVE_LINEAGE_VIEW': 'view/life-cycle',
     'view/life-cycle/mount': 'view/life-cycle',
     'VIEW/TOGGLE_MINIMAP': 'settings/layout',
     'view/left-sidebar/toggle': 'settings/layout',
@@ -138,7 +139,6 @@ const actionCategoryDict: Record<PluginAction['type'], ActionCategory> = {
     'DOCUMENTS/DELETE_DOCUMENT': 'other',
     'DOCUMENTS/UPDATE_DOCUMENT_PATH': 'other',
     'DOCUMENTS/ADD_DOCUMENT': 'other',
-    'WORKSPACE/SET_ACTIVE_LINEAGE_VIEW': 'other',
 } as const;
 
 export const actionCategory = new Map(

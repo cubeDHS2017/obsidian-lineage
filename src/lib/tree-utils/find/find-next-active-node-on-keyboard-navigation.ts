@@ -5,14 +5,32 @@ import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id
 import { findChildGroup } from 'src/lib/tree-utils/find/find-child-group';
 import { ActiveNodesOfColumn } from 'src/stores/view/view-state-type';
 
+const filterHiddenGroups = (
+    columns: Column[],
+    collapsedParents: Set<string>,
+) => {
+    return columns.map((c) => {
+        return {
+            groups: c.groups.filter((g) => {
+                return !collapsedParents.has(g.parentId);
+            }),
+            id: c.id,
+        } as Column;
+    });
+};
+
 export const findNextActiveNodeOnKeyboardNavigation = (
     columns: Column[],
     node: string,
     direction: AllDirections,
     activeNodeOfGroup: ActiveNodesOfColumn,
+    collapsedParents: Set<string> | null,
 ) => {
     if (!node) return;
     let nextNode: NodeId | null = null;
+    if (collapsedParents) {
+        columns = filterHiddenGroups(columns, collapsedParents);
+    }
 
     if (direction === 'left') {
         const group = findGroupByNodeId(columns, node);
