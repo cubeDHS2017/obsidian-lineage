@@ -2,7 +2,7 @@ import { VerticalDirection } from 'src/stores/document/document-store-actions';
 import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
 import { Column, NodeId } from 'src/stores/document/document-state-type';
 
-export const findAdjacentSiblingNode = (
+export const findSiblingNodeInColumn = (
     columns: Column[],
     node: NodeId,
     direction: VerticalDirection,
