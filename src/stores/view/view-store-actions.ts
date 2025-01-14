@@ -94,13 +94,9 @@ type ToggleSettingsSidebarAction = {
     type: 'UI/TOGGLE_SETTINGS_SIDEBAR';
 };
 type SetActiveNodeAction = {
-    type: 'DOCUMENT/SET_ACTIVE_NODE';
+    type: `view/set-active-node/${'mouse' | 'mouse-silent' | 'search' | 'document'}`;
     payload: {
         id: string;
-    };
-    context?: {
-        modKey: boolean;
-        source?: 'mouse';
     };
 };
 export type NodeSelectionAction =

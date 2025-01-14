@@ -2,7 +2,6 @@
     import { ChevronDown, ChevronUp } from 'lucide-svelte';
     import Button from '../../../shared/button.svelte';
     import { getView } from 'src/view/components/container/context';
-    import { onDestroy } from 'svelte';
     import { sortNodeIdsBySectionNumber } from 'src/stores/document/reducers/pinned-nodes/pin-node';
     import { activeNodeStore } from 'src/stores/view/derived/active-node-store';
     import { lang } from 'src/lang/lang';
@@ -30,7 +29,7 @@
         const currentIndex = sortedResults.indexOf($activeNode);
         const nextId = sortedResults[(currentIndex + 1) % sortedResults.length];
         view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            type: 'view/set-active-node/mouse',
             payload: { id: nextId },
         });
     };
@@ -40,7 +39,7 @@
         const currentIndex = sortedResults.indexOf($activeNode) === -1 ? sortedResults.length : sortedResults.indexOf($activeNode);
         const prevId = sortedResults[(currentIndex - 1 + sortedResults.length) % sortedResults.length];
         view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            type: 'view/set-active-node/mouse',
             payload: { id: prevId },
         });
     };

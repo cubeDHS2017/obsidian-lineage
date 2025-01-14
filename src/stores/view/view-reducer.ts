@@ -26,7 +26,12 @@ import { refreshCollapsedNodes } from 'src/stores/view/reducers/outline/refresh-
 import { toggleCollapseAllNodes } from 'src/stores/view/reducers/outline/toggle-collapse-all-nodes';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
-    if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
+    if (
+        action.type === 'view/set-active-node/mouse' ||
+        action.type === 'view/set-active-node/mouse-silent' ||
+        action.type === 'view/set-active-node/document' ||
+        action.type === 'view/set-active-node/search'
+    ) {
         updateActiveNode(state.document, action.payload.id, state);
     } else if (action.type === 'DOCUMENT/NAVIGATE_USING_KEYBOARD') {
         navigateUsingKeyboard(state.document, state, action);

@@ -9,7 +9,7 @@
     const viewStore = view.viewStore;
     const onClick = () => {
         viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            type: 'view/set-active-node/mouse',
             payload: { id: parentId },
         });
     };

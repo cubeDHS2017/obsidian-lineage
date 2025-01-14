@@ -1,10 +1,6 @@
 import { LineageView } from 'src/view/view';
 import { delay } from 'src/helpers/delay';
-import {
-    delayAlign,
-    retryAlign,
-} from 'src/stores/view/subscriptions/effects/align-branch/helpers/retry-align';
-import { waitForElementToStopMoving } from 'src/lib/align-element/helpers/wait-for-element-to-stop-moving';
+import { delayAlign } from 'src/stores/view/subscriptions/effects/align-branch/helpers/retry-align';
 import { ActiveNodesOfColumn } from 'src/stores/view/view-state-type';
 import { Column } from 'src/stores/document/document-state-type';
 import { adjustScrollBehavior } from 'src/stores/view/subscriptions/effects/align-branch/helpers/adjust-scroll-behavior';
@@ -19,17 +15,26 @@ import {
 } from 'src/stores/view/view-store-actions';
 import { SettingsActions } from 'src/stores/settings/settings-reducer';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
+import {
+    ActionCategory,
+    actionCategory,
+    actionCategoryPriority,
+} from 'src/stores/view/subscriptions/effects/align-branch/constants/action-category';
+import { waitForElementToStopMoving } from 'src/lib/align-element/helpers/wait-for-element-to-stop-moving';
 
 export type PartialDOMRect = Pick<DOMRect, 'top' | 'height'>;
+
 export type AlignBranchState = {
     rects: Map<string, PartialDOMRect>;
 };
+
 export type AlignBranchSettings = {
     behavior: ScrollBehavior;
     centerActiveNodeH: boolean;
     centerActiveNodeV: boolean;
     zoomLevel: number;
 };
+
 export type AlignBranchContext = {
     previousActiveBranch: ActiveBranch | null;
     columns: Column[];
@@ -57,38 +62,33 @@ export type PreviousScrollBehavior = {
     behavior: ScrollBehavior;
 };
 
+export type AlignEvent = {
+    category: ActionCategory;
+    action: PluginAction['type'];
+    priority: number;
+    ts: number;
+};
+
 export class AlignBranch {
     private previousActiveBranch: ActiveBranch | null = null;
     private previousBehavior: PreviousScrollBehavior | null = null;
 
-    private animationFrameHandle: number;
+    private previousEvent: AlignEvent | null = null;
     constructor(public view: LineageView) {}
 
-    align = async (action?: PluginAction, isRetry = false) => {
+    align = async (action: PluginAction) => {
         if (skipAlign(this.view, action)) return;
-        cancelAnimationFrame(this.animationFrameHandle);
 
         const delay_ms = delayAlign(action);
         if (delay_ms > 0) await delay(delay_ms);
-        await this.view.inlineEditor.mounting;
+        await this.waitForPreviousEvent(action);
 
-        const settings = this.view.plugin.settings.getValue();
         const context = this.createContext(action);
         const actions = createAlignBranchActions(context, action);
-
-        this.animationFrameHandle = requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
             runAlignBranchActions(context, actions);
         });
         this.saveActiveBranch(context);
-
-        const retry = action && retryAlign(settings, action);
-        if (retry && !isRetry) {
-            await waitForElementToStopMoving(
-                this.view,
-                this.previousActiveBranch!.node,
-            );
-            this.align(action, true);
-        }
     };
 
     private createContext = (action?: PluginAction) => {
@@ -135,4 +135,28 @@ export class AlignBranch {
             timestamp: Date.now(),
         };
     }
+
+    private waitForPreviousEvent = async (action: PluginAction) => {
+        const category = actionCategory.get(action.type)!;
+        if (category === 'other') {
+            throw new Error('unsupported event: ' + action.type);
+        }
+        const event: AlignEvent = {
+            action: action.type,
+            category: category!,
+            priority: actionCategoryPriority.get(category)!,
+            ts: Date.now(),
+        };
+        if (this.previousEvent && this.previousActiveBranch) {
+            if (event.priority < this.previousEvent.priority) {
+                if (event.ts - this.previousEvent.ts < 500) {
+                    await waitForElementToStopMoving(
+                        this.view,
+                        this.previousActiveBranch!.node,
+                    );
+                }
+            }
+        }
+        this.previousEvent = event;
+    };
 }

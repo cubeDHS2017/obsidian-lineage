@@ -31,15 +31,16 @@ export type Props = {
 };
 export const createAlignBranchActions = (
     context: AlignBranchContext,
-    action: PluginAction | undefined,
+    action: PluginAction,
 ) => {
     const actions: AlignBranchAction[] = [];
     const settings = context.settings;
-    const _forceCenterActiveNodeV = action
-        ? forceCenterActiveNodeV(action, context.singleColumnMode)
-        : false;
+    const _forceCenterActiveNodeV = forceCenterActiveNodeV(
+        action,
+        context.singleColumnMode,
+    );
 
-    if (action?.type === 'view/align-branch/reveal-node') {
+    if (action.type === 'view/align-branch/reveal-node') {
         actions.push({ action: '20/active-node/vertical/reveal' });
         actions.push({ action: '20/active-node/horizontal/reveal' });
         return actions;
@@ -70,7 +71,7 @@ export const createAlignBranchActions = (
         actions.push({ action: '20/active-node/horizontal/reveal' });
     }
 
-    if (settings.centerActiveNodeV || (action && _forceCenterActiveNodeV)) {
+    if (settings.centerActiveNodeV || _forceCenterActiveNodeV) {
         actions.push({ action: '20/active-node/vertical/center' });
         actions.push({ action: '30/parents/vertical/center' });
         actions.push({ action: '40/children/vertical/center' });
@@ -78,23 +79,21 @@ export const createAlignBranchActions = (
         actions.push(...lazyVerticalScrollingMode(context, action));
     }
 
-    if (action) {
-        if (
-            action.type === 'DOCUMENT/SPLIT_NODE' ||
-            action.type === 'view/life-cycle/mount' ||
-            action.type === 'DOCUMENT/LOAD_FILE'
-        ) {
-            actions.push({ action: '50/inactive-columns/vertical/move-up' });
-        }
-        if (
-            !settings.centerActiveNodeH &&
-            (action.type === 'view/life-cycle/mount' ||
-                action.type === 'UI/CHANGE_ZOOM_LEVEL')
-        ) {
-            actions.push({
-                action: '10/first-column/horizontal/move-to-the-left',
-            });
-        }
+    if (
+        action.type === 'DOCUMENT/SPLIT_NODE' ||
+        action.type === 'view/life-cycle/mount' ||
+        action.type === 'DOCUMENT/LOAD_FILE'
+    ) {
+        actions.push({ action: '50/inactive-columns/vertical/move-up' });
+    }
+    if (
+        !settings.centerActiveNodeH &&
+        (action.type === 'view/life-cycle/mount' ||
+            action.type === 'UI/CHANGE_ZOOM_LEVEL')
+    ) {
+        actions.push({
+            action: '10/first-column/horizontal/move-to-the-left',
+        });
     }
     return actions.sort((a, b) => a.action.localeCompare(b.action));
 };

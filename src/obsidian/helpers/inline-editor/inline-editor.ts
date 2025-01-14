@@ -18,7 +18,6 @@ export class InlineEditor {
     #nodeId: string | null = null;
     target: HTMLElement | null = null;
     private onChangeSubscriptions: Set<() => void> = new Set();
-    #mounting: Promise<void> = Promise.resolve();
     private subscriptions: Set<() => void> = new Set();
     private cursorPositions: Map<string, EditorPosition> = new Map();
 
@@ -29,10 +28,6 @@ export class InlineEditor {
     }
     set nodeId(value: string | null) {
         this.#nodeId = value;
-    }
-
-    get mounting() {
-        return this.#mounting;
     }
 
     getContent() {
@@ -60,10 +55,6 @@ export class InlineEditor {
         if (this.nodeId) {
             this.unloadNode();
         }
-        let resolve = () => {};
-        this.#mounting = new Promise((_resolve) => {
-            resolve = _resolve;
-        });
 
         const content =
             this.view.documentStore.getValue().document.content[nodeId]
@@ -84,7 +75,6 @@ export class InlineEditor {
         this.restoreCursor();
         this.lockFile();
         this.fixVimWhenZooming();
-        setTimeout(() => resolve(), Math.max(16, content.length / 60));
     }
 
     focus = () => {

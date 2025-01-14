@@ -21,7 +21,8 @@ export const setInitialActiveNode = (
     }
     if (!id) return;
     viewStore.dispatch({
-        type: 'DOCUMENT/SET_ACTIVE_NODE',
+        // type: 'DOCUMENT/SET_ACTIVE_NODE',
+        type: 'view/set-active-node/document',
         payload: {
             id,
         },

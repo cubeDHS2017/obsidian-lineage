@@ -6,12 +6,11 @@ export const setActiveMainSplitNode = (
     nodeId: string,
     e: MouseEvent,
 ) => {
+    const silent = isMacLike ? e.metaKey : e.ctrlKey;
     view.viewStore.dispatch({
-        type: 'DOCUMENT/SET_ACTIVE_NODE',
+        type: silent
+            ? 'view/set-active-node/mouse-silent'
+            : 'view/set-active-node/mouse',
         payload: { id: nodeId },
-        context: {
-            modKey: isMacLike ? e.metaKey : e.ctrlKey,
-            source: 'mouse',
-        },
     });
 };

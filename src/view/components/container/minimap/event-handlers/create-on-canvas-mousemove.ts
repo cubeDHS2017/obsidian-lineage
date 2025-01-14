@@ -29,7 +29,7 @@ export const createOnCanvasMousemove = (view: LineageView) => {
             lastActiveCardId = cardId;
 
             view.viewStore.dispatch({
-                type: 'DOCUMENT/SET_ACTIVE_NODE',
+                type: 'view/set-active-node/mouse',
                 payload: {
                     id: cardId,
                 },

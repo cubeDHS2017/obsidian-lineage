@@ -3,7 +3,7 @@ import { openFileInExistingRightTabGroup } from 'src/view/components/container/c
 
 const selectCard = (view: LineageView, id: string) => {
     view.viewStore.dispatch({
-        type: 'DOCUMENT/SET_ACTIVE_NODE',
+        type: 'view/set-active-node/mouse',
         payload: {
             id: id,
         },

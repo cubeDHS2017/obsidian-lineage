@@ -16,15 +16,15 @@ export const AdjustHeight = (view: LineageView, el: HTMLElement) => {
 
         if (!x) return;
         requestAnimationFrame(() => {
-            if (
-                x.scrollHeight !== previousScrollHeight ||
-                (e && deletionKeys.has(e.key))
-            ) {
+            const scrollHeight = x.scrollHeight;
+            const scrollHeightChange =
+                scrollHeight > 100 && scrollHeight !== previousScrollHeight;
+            if (scrollHeightChange || (e && deletionKeys.has(e.key))) {
                 x.style.height = 'auto';
                 previousScrollHeight = x.scrollHeight;
                 el.style.height = previousScrollHeight + 'px';
                 x.style.height = '';
-                if (limitCardHeight) {
+                if (limitCardHeight && scrollHeightChange) {
                     view.alignBranch.align({
                         type: 'view/align-branch/reveal-node',
                     });

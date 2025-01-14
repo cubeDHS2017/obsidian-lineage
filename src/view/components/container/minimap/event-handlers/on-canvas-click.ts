@@ -28,7 +28,7 @@ export const onCanvasClick = (e: MouseEvent, view: LineageView) => {
     const cardId = findCardAtPosition(y, ranges);
     if (cardId) {
         view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            type: 'view/set-active-node/mouse',
             payload: {
                 id: cardId,
             },

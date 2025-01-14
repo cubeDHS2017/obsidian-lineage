@@ -14,7 +14,10 @@ const searchEvents = new Set<ActionType>([
 ]);
 
 const stateEvents = new Set<ActionType>([
-    'DOCUMENT/SET_ACTIVE_NODE',
+    'view/set-active-node/document',
+    'view/set-active-node/mouse',
+    'view/set-active-node/mouse-silent',
+    'view/set-active-node/search',
     'DOCUMENT/NAVIGATE_USING_KEYBOARD',
     'DOCUMENT/JUMP_TO_NODE',
 ]);

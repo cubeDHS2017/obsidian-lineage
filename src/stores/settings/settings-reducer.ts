@@ -161,7 +161,7 @@ export type SettingsActions =
     | HotkeySettingsActions;
 
 export type PersistActiveNodeAction = {
-    type: 'DOCUMENT/SET_ACTIVE_NODE';
+    type: 'settings/document/persist-active-section';
     payload: {
         path: string;
         sectionNumber: string;
@@ -218,7 +218,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
         if (store.documents[action.payload.path]) {
             store.documents[action.payload.path].viewType = action.payload.type;
         }
-    } else if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
+    } else if (action.type === 'settings/document/persist-active-section') {
         if (store.documents[action.payload.path]) {
             store.documents[action.payload.path].activeSection =
                 action.payload.sectionNumber;

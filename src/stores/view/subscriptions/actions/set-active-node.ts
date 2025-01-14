@@ -46,7 +46,7 @@ export const setActiveNode = (
 
     if (shouldSetActiveNode) {
         view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            type: 'view/set-active-node/document',
             payload: {
                 id: getIdOfSection(documentState.sections, newActiveSection),
             },

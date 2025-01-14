@@ -9,12 +9,10 @@ export const selectInactiveCard = (
     const id = closestCardElement?.id;
     if (!isInSidebar) {
         view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            type: 'view/set-active-node/mouse-silent',
             payload: {
                 id,
             },
-            // to prevent scrolling
-            context: { modKey: true },
         });
     } else if (isInRecentCardsList) {
         view.viewStore.dispatch({

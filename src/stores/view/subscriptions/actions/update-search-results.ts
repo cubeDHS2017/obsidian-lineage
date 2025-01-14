@@ -12,7 +12,7 @@ const updateActiveNodeAfterSearch = (
         );
     if (shouldUpdateActiveNode) {
         view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
+            type: 'view/set-active-node/search',
             payload: {
                 id: results[0].item.id,
             },

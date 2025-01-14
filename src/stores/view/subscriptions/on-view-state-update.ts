@@ -68,11 +68,7 @@ export const onViewStateUpdate = (
 
     // effects
     if (activeNodeChange || e.search || e.editMainSplit) {
-        // @ts-ignore
-        const skipAligning = 'context' in action && action.context?.modKey;
-        if (!skipAligning) {
-            view.alignBranch.align();
-        }
+        view.alignBranch.align(action);
     }
     if (!container || !view.isViewOfFile) return;
 
