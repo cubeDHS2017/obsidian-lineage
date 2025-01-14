@@ -4,7 +4,7 @@ import { expandNode } from 'src/stores/view/reducers/outline/helpers/expand-node
 import { collapseNode } from 'src/stores/view/reducers/outline/helpers/collapse-node';
 
 export const refreshCollapsedNodes = (
-    state: Pick<ViewState, 'outline'>,
+    state: Pick<ViewState, 'outline' | 'document'>,
     columns: Column[],
 ) => {
     const collapsedParents = Array.from(state.outline.collapsedParents);
@@ -13,6 +13,13 @@ export const refreshCollapsedNodes = (
     for (const id of collapsedParents) {
         expandNode(state, columns, id);
         collapseNode(state, columns, id);
+    }
+
+    const parents = state.document.activeBranch.sortedParentNodes;
+    for (const parent of parents) {
+        if (state.outline.collapsedParents.has(parent)) {
+            expandNode(state, columns, parent);
+        }
     }
 
     state.outline = { ...state.outline };
