@@ -23,7 +23,12 @@ export const insertNode = (
     invariant(payload.activeNodeId);
 
     if (payload.position === 'right') {
-        insertChild(document, payload.activeNodeId, newNodeId);
+        insertChild(
+            document,
+            payload.activeNodeId,
+            newNodeId,
+            !!action.payload.content,
+        );
     } else {
         const columnIndex = findNodeColumn(
             document.columns,
