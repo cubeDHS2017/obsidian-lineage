@@ -20,7 +20,7 @@ import {
     actionCategory,
     actionCategoryPriority,
 } from 'src/stores/view/subscriptions/effects/align-branch/constants/action-category';
-import { waitForElementToStopMoving } from 'src/lib/align-element/helpers/wait-for-element-to-stop-moving';
+import { waitForActiveNodeToStopMoving } from 'src/lib/align-element/helpers/wait-for-active-node-to-stop-moving';
 
 export type PartialDOMRect = Pick<DOMRect, 'top' | 'height'>;
 
@@ -147,13 +147,10 @@ export class AlignBranch {
             priority: actionCategoryPriority.get(category)!,
             ts: Date.now(),
         };
-        if (this.previousEvent && this.previousActiveBranch) {
+        if (this.previousEvent) {
             if (event.priority < this.previousEvent.priority) {
                 if (event.ts - this.previousEvent.ts < 500) {
-                    await waitForElementToStopMoving(
-                        this.view,
-                        this.previousActiveBranch!.node,
-                    );
+                    await waitForActiveNodeToStopMoving(this.view);
                 }
             }
         }
