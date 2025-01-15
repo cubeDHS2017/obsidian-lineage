@@ -27,6 +27,7 @@
     import { getAllChildren } from 'src/lib/tree-utils/get/get-all-children';
     import { textIsSelected } from 'src/view/actions/context-menu/card-context-menu/helpers/text-is-selected';
     import { OutlineStore } from 'src/stores/view/derived/outline-store';
+    import { hideFloatingButtons } from 'src/view/actions/hide-floating-buttons';
 
     export let singleColumnMode: boolean;
 
@@ -97,6 +98,7 @@
     tabindex="0"
     on:click={saveNodeOnClick}
     use:scrollOnDndX
+    use:hideFloatingButtons
 >
     <div class="columns">
         <ColumnsBuffer />

@@ -95,4 +95,10 @@
     }
 }
 
-
+.hide-floating-buttons {
+    .lineage-card:not(.active-node) {
+        .lineage-floating-button:not(.collapse-button) {
+            display: none;
+        }
+    }
+}
