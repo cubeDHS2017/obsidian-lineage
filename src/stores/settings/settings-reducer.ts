@@ -16,6 +16,7 @@ import {
 } from 'src/stores/settings/reducers/update-style-rules/update-style-rules';
 import { Hotkey } from 'obsidian';
 import { CommandName } from 'src/lang/hotkey-groups';
+import { toggleEditorState } from 'src/stores/settings/toggle-editor-state';
 
 export type SettingsActions =
     | {
@@ -168,6 +169,11 @@ export type PersistActiveNodeAction = {
     };
 };
 
+export type ToggleEditorStateAction = {
+    type: 'settings/hotkeys/toggle-editor-state';
+    payload: { command: CommandName; type: 'primary' | 'secondary' };
+};
+
 export type HotkeySettingsActions =
     | UpdateHotkeyAction
     | ResetHotkeyAction
@@ -177,7 +183,8 @@ export type HotkeySettingsActions =
     | {
           type: 'settings/hotkeys/apply-preset';
           payload: { preset: CustomHotkeys };
-      };
+      }
+    | ToggleEditorStateAction;
 
 export type UpdateHotkeyAction = {
     type: 'settings/hotkeys/set-custom-hotkey';
@@ -348,6 +355,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         };
     } else if (action.type === 'settings/hotkeys/reset-all') {
         store.hotkeys.customHotkeys = {};
+    } else if (action.type === 'settings/hotkeys/toggle-editor-state') {
+        toggleEditorState(store, action);
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

@@ -1,16 +1,11 @@
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 import { cancelChanges } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
-import {
-    isActiveAndEditing,
-    isActiveAndNotEditing,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+import { DefaultViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const editCommands = () => {
     return [
         {
             name: 'enable_edit_mode',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
@@ -20,11 +15,12 @@ export const editCommands = () => {
                     },
                 });
             },
-            hotkeys: [{ key: 'Enter', modifiers: [] }],
+            hotkeys: [
+                { key: 'Enter', modifiers: [], editorState: 'editor-off' },
+            ],
         },
         {
             name: 'enable_edit_mode_and_place_cursor_at_start',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 const nodeId = view.viewStore.getValue().document.activeNode;
@@ -36,11 +32,16 @@ export const editCommands = () => {
                     },
                 });
             },
-            hotkeys: [{ key: 'Enter', modifiers: ['Shift'] }],
+            hotkeys: [
+                {
+                    key: 'Enter',
+                    modifiers: ['Shift'],
+                    editorState: 'editor-off',
+                },
+            ],
         },
         {
             name: 'enable_edit_mode_and_place_cursor_at_end',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 const nodeId = view.viewStore.getValue().document.activeNode;
@@ -52,24 +53,32 @@ export const editCommands = () => {
                     },
                 });
             },
-            hotkeys: [{ key: 'Enter', modifiers: ['Alt'] }],
+            hotkeys: [
+                { key: 'Enter', modifiers: ['Alt'], editorState: 'editor-off' },
+            ],
         },
         {
             name: 'save_changes_and_exit_card',
-            check: isActiveAndEditing,
             callback: (view) => {
                 saveNodeContent(view);
             },
-            hotkeys: [{ key: 'Enter', modifiers: ['Shift', 'Mod'] }],
+            hotkeys: [
+                {
+                    key: 'Enter',
+                    modifiers: ['Shift', 'Mod'],
+                    editorState: 'editor-on',
+                },
+            ],
         },
 
         {
             name: 'disable_edit_mode',
-            check: isActiveAndEditing,
             callback: (view) => {
                 cancelChanges(view);
             },
-            hotkeys: [{ key: 'Escape', modifiers: [] }],
+            hotkeys: [
+                { key: 'Escape', modifiers: [], editorState: 'editor-on' },
+            ],
         },
-    ] satisfies DefaultViewHotkey[];
+    ] satisfies DefaultViewCommand[];
 };

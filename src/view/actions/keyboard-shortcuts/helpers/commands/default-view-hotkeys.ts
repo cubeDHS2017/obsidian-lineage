@@ -3,10 +3,6 @@ import { editCommands } from 'src/view/actions/keyboard-shortcuts/helpers/comman
 import { createCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/create-commands';
 import { moveCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/move-commands';
 import { mergeCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/merge-commands';
-import {
-    isActive,
-    isActiveAndNotEditing,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 import { historyCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/history-commands';
 import { clipboardCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/clipboard-commands';
 import { selectionCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/selection-commands';
@@ -18,27 +14,32 @@ import { CommandName, GroupName } from 'src/lang/hotkey-groups';
 import { get } from 'svelte/store';
 import { singleColumnStore } from 'src/stores/document/derived/columns-store';
 
-export type DefaultViewHotkey = {
-    check: (view: LineageView) => boolean;
+export type HotkeyEditorState = 'editor-on' | 'editor-off' | 'both';
+export type HotkeyConditions = {
+    editorState: HotkeyEditorState;
+};
+export type ViewHotkey = Hotkey & HotkeyConditions;
+export type PersistedViewHotkey =
+    | Hotkey
+    | HotkeyConditions
+    | (Hotkey & HotkeyConditions);
+export type DefaultViewCommand = {
     callback: (view: LineageView, event: KeyboardEvent) => void;
-    hotkeys: Hotkey[];
+    hotkeys: ViewHotkey[];
     name: CommandName;
 };
-export type ExtendedHotkey = Hotkey & {
+export type StatefulViewHotkey = ViewHotkey & {
     string_representation: string;
     obsidianConflict?: string;
     pluginConflict?: string;
     isCustom?: boolean;
 };
-export type ViewHotkey = {
-    check: (view: LineageView) => boolean;
-    callback: (view: LineageView, event: KeyboardEvent) => void;
-    hotkeys: ExtendedHotkey[];
-    name: CommandName;
+export type StatefulViewCommand = DefaultViewCommand & {
+    hotkeys: StatefulViewHotkey[];
     group: GroupName;
 };
 
-export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
+export const defaultViewHotkeys = (): DefaultViewCommand[] => [
     ...navigateCommands(),
     ...editCommands(),
     ...createCommands(),
@@ -50,30 +51,29 @@ export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
     ...scrollCommands(),
     {
         name: 'delete_card',
-        check: isActiveAndNotEditing,
         callback: (view) => {
             const document = view.viewStore.getValue().document;
 
             deleteNode(view, document.activeNode, true);
         },
-        hotkeys: [{ key: 'Backspace', modifiers: ['Mod'] }],
+        hotkeys: [
+            { key: 'Backspace', modifiers: ['Mod'], editorState: 'editor-off' },
+        ],
     },
     {
         name: 'toggle_search_input',
-        check: isActiveAndNotEditing,
         callback: (view, e) => {
             e.preventDefault();
             e.stopPropagation();
             view.viewStore.dispatch({ type: 'SEARCH/TOGGLE_INPUT' });
         },
         hotkeys: [
-            { key: '/', modifiers: [] },
-            { key: 'f', modifiers: ['Alt'] },
+            { key: '/', modifiers: [], editorState: 'editor-off' },
+            { key: 'f', modifiers: ['Alt'], editorState: 'both' },
         ],
     },
     {
         name: 'zoom_in',
-        check: isActive,
         callback: (view, e) => {
             e.preventDefault();
             view.plugin.settings.dispatch({
@@ -81,11 +81,10 @@ export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
                 payload: { direction: 'in' },
             });
         },
-        hotkeys: [{ key: '=', modifiers: ['Mod'] }],
+        hotkeys: [{ key: '=', modifiers: ['Mod'], editorState: 'both' }],
     },
     {
         name: 'zoom_out',
-        check: isActive,
         callback: (view, e) => {
             e.preventDefault();
             view.plugin.settings.dispatch({
@@ -93,11 +92,10 @@ export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
                 payload: { direction: 'out' },
             });
         },
-        hotkeys: [{ key: '-', modifiers: ['Mod'] }],
+        hotkeys: [{ key: '-', modifiers: ['Mod'], editorState: 'both' }],
     },
     {
         name: 'zoom_reset',
-        check: isActive,
         callback: (view, e) => {
             e.preventDefault();
             view.plugin.settings.dispatch({
@@ -105,11 +103,10 @@ export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
                 payload: { value: 1 },
             });
         },
-        hotkeys: [{ key: '0', modifiers: ['Mod'] }],
+        hotkeys: [{ key: '0', modifiers: ['Mod'], editorState: 'both' }],
     },
     {
         name: 'toggle_collapse',
-        check: isActive,
         callback: (view, e) => {
             e.preventDefault();
             if (!get(singleColumnStore(view))) return;
@@ -121,11 +118,10 @@ export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
                 },
             });
         },
-        hotkeys: [{ key: '=', modifiers: ['Alt'] }],
+        hotkeys: [{ key: '=', modifiers: ['Alt'], editorState: 'both' }],
     },
     {
         name: 'toggle_collapse_all',
-        check: isActive,
         callback: (view, e) => {
             e.preventDefault();
             if (!get(singleColumnStore(view))) return;
@@ -136,6 +132,6 @@ export const defaultViewHotkeys = (): DefaultViewHotkey[] => [
                 },
             });
         },
-        hotkeys: [{ key: '=', modifiers: ['Alt', 'Mod'] }],
+        hotkeys: [{ key: '=', modifiers: ['Alt', 'Mod'], editorState: 'both' }],
     },
 ];

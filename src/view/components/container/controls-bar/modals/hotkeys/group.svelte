@@ -1,11 +1,11 @@
 <script lang="ts">
     import Hotkey from './components/command.svelte';
-    import { ViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import { StatefulViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
     import {
         DynamicLabelState
     } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
 
-    export let group: ViewHotkey[];
+    export let group: StatefulViewCommand[];
     export let labelState: DynamicLabelState;
 
     export let groupName: string;

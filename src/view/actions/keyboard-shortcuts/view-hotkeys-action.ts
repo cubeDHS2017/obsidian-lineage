@@ -3,6 +3,7 @@ import { eventToString } from 'src/view/actions/keyboard-shortcuts/helpers/keybo
 import { viewHotkeys } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-view-hotkeys-dictionary';
 import { handleEscapeKey } from 'src/view/actions/on-escape/helpers/handle-escape-key';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
+import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 
 export const viewHotkeysAction = (
     target: HTMLElement,
@@ -23,7 +24,14 @@ export const viewHotkeysAction = (
         if ((event.target as HTMLElement).localName === 'input') return;
         const command = viewHotkeys.current[eventToString(event)];
         if (command) {
-            if (command.check(view)) {
+            const allow =
+                command.editorState === 'editor-on'
+                    ? isEditing(view)
+                    : command.editorState === 'editor-off'
+                      ? !isEditing(view)
+                      : true;
+
+            if (allow) {
                 try {
                     command.callback(view, event);
                 } catch (error) {

@@ -8,9 +8,9 @@
     import { getView } from 'src/view/components/container/context';
     import { onMount } from 'svelte';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-    import { ExtendedHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import { StatefulViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
-    export let hotkey: ExtendedHotkey;
+    export let hotkey: StatefulViewHotkey;
     export let commandName: CommandName;
     export let isPrimary: boolean;
     const view = getView();
@@ -47,7 +47,6 @@
             onCancel={() => editing.set(false)}
             {isPrimary}
             {commandName}
-            isCustom={hotkey.isCustom}
         />
     {:else}
         <RenderHotkey {hotkey} enableEditing={() => editing.set(true)} />

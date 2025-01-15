@@ -136,6 +136,7 @@ const actionCategoryDict: Record<PluginAction['type'], ActionCategory> = {
     'settings/hotkeys/reset-custom-hotkey': 'other',
     'settings/hotkeys/reset-all': 'other',
     'settings/hotkeys/apply-preset': 'other',
+    'settings/hotkeys/toggle-editor-state': 'other',
     'DOCUMENTS/DELETE_DOCUMENT': 'other',
     'DOCUMENTS/UPDATE_DOCUMENT_PATH': 'other',
     'DOCUMENTS/ADD_DOCUMENT': 'other',

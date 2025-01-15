@@ -37,6 +37,9 @@ export const lang = {
         'Edit card and place cursor at the end',
     hkg_edit_cards: 'Edit cards',
     modals_snapshots_updated_card: 'Updated card ',
+    modal_hk_editor_state_on: 'Enable only when the editor is on',
+    modal_hk_editor_state_off: 'Enable only when the editor is off',
+    modal_hk_editor_state_both: 'Enable both when the editor is on or off',
 
     // save
     card_btn_save: 'Save',

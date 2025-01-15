@@ -1,0 +1,9 @@
+.editor-state--both svg {
+    opacity: 0.3;
+}
+.editor-state--on svg {
+    opacity: 1
+}
+.editor-state--off svg {
+   opacity: 1
+}

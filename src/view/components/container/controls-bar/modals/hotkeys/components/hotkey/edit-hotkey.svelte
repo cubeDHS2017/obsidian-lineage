@@ -8,9 +8,10 @@
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { getView } from 'src/view/components/container/context';
     import { lang } from 'src/lang/lang';
+    import EditEditorState from './editor-state/edit-editor-state.svelte';
+    import { StatefulViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
-    export let isCustom: boolean | undefined;
-    export let hotkey: Hotkey;
+    export let hotkey: StatefulViewHotkey;
     export let commandName: CommandName;
     export let isPrimary: boolean;
     export let onCancel: () => void;
@@ -115,14 +116,18 @@
             type="text"
         />
     </div>
+    <EditEditorState {hotkey} {commandName} {isPrimary}/>
     <div class="save-and-cancel-buttons">
-        <button aria-label={lang.modals_hk_editor_cancel} class="hotkey-button"
-                on:click={onCancel}
-            ><X class="svg-icon" size={8} /></button
+        <button
+            aria-label={lang.modals_hk_editor_cancel}
+            class="hotkey-button"
+            on:click={onCancel}><X class="svg-icon" size={8} /></button
         >
-        <button aria-label={lang.settings_reset} class="hotkey-button" disabled={!isCustom}
-                on:click={reset}
-            ><RotateCcw class="svg-icon" size={8} /></button
+        <button
+            aria-label={lang.settings_reset}
+            class="hotkey-button"
+            disabled={!hotkey.isCustom}
+            on:click={reset}><RotateCcw class="svg-icon" size={8} /></button
         >
     </div>
 </div>
@@ -144,7 +149,7 @@
         width: 115px;
         height: 25px;
         text-align: center;
-        font-size:14px;
+        font-size: 14px;
     }
 
     .modifiers {
@@ -177,9 +182,10 @@
         padding: 2px;
         cursor: pointer;
     }
-    .hotkey-key{
+    .hotkey-key {
         color: lightgrey;
         background-color: #175c5a;
-        border-color: #227f7d
+        border-color: #227f7d;
     }
+
 </style>

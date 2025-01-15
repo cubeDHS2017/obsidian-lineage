@@ -2,8 +2,8 @@ import { LineageView } from 'src/view/view';
 import { derived } from 'svelte/store';
 import {
     defaultViewHotkeys,
-    ExtendedHotkey,
-    ViewHotkey,
+    StatefulViewCommand,
+    StatefulViewHotkey,
 } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 import { GroupName, hotkeysGroups } from 'src/lang/hotkey-groups';
 import { hotkeyToString } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/hotkey-to-string';
@@ -21,20 +21,32 @@ export const CustomHotkeysStore = (plugin: Lineage) =>
 
 export const ViewHotkeysStore = (plugin: Lineage) =>
     derived([CustomHotkeysStore(plugin)], ([customHotkeys]) => {
-        const viewHotkeys: ViewHotkey[] = [];
+        const viewHotkeys: StatefulViewCommand[] = [];
         for (const defaultViewHotkey of defaultViewHotkeys()) {
             const customHotkey = customHotkeys[defaultViewHotkey.name];
 
-            const hotkeys: ExtendedHotkey[] = defaultViewHotkey.hotkeys.map(
+            const hotkeys: StatefulViewHotkey[] = defaultViewHotkey.hotkeys.map(
                 (hotkey, i) => {
                     let isCustom = false;
-                    if (i === 0 && customHotkey?.primary) {
-                        hotkey = customHotkey.primary;
-                        isCustom = true;
-                    } else if (i === 1 && customHotkey?.secondary) {
-                        hotkey = customHotkey.secondary;
-                        isCustom = true;
+                    const persistedHotkey =
+                        i === 0 && customHotkey?.primary
+                            ? customHotkey.primary
+                            : i === 1 && customHotkey?.secondary
+                              ? customHotkey?.secondary
+                              : null;
+
+                    if (persistedHotkey) {
+                        if ('key' in persistedHotkey) {
+                            hotkey.key = persistedHotkey.key;
+                            hotkey.modifiers = persistedHotkey.modifiers;
+                            isCustom = true;
+                        }
+                        if ('editorState' in persistedHotkey) {
+                            hotkey.editorState = persistedHotkey.editorState;
+                            isCustom = true;
+                        }
                     }
+
                     return {
                         ...hotkey,
                         string_representation: hotkeyToString(hotkey),
@@ -57,7 +69,7 @@ export const ConflictLabeledHotkeysStore = (view: LineageView) =>
         [ViewHotkeysStore(view.plugin), ConflictingHotkeys(view)],
         ([hotkeys, conflicts]) => {
             let numberOfConflictingHotkeys = 0;
-            const groupedByHotkey = new Map<string, Set<ViewHotkey>>();
+            const groupedByHotkey = new Map<string, Set<StatefulViewCommand>>();
             for (const viewHotkey of hotkeys) {
                 for (const hotkey of viewHotkey.hotkeys) {
                     delete hotkey.obsidianConflict;
@@ -110,12 +122,12 @@ export const ConflictLabeledHotkeysStore = (view: LineageView) =>
         },
     );
 
-type GroupedHotkeys = Record<GroupName, ViewHotkey[]>;
+type GroupedHotkeys = Record<GroupName, StatefulViewCommand[]>;
 export const FilteredHotkeysStore = (view: LineageView) =>
     derived(
         [ConflictLabeledHotkeysStore(view), HotkeysSearchTerm(view)],
         ([hotkeys, searchTerm]) => {
-            let array: ViewHotkey[] = [];
+            let array: StatefulViewCommand[] = [];
             if (searchTerm) {
                 array = hotkeys.hotkeys.filter((c) => {
                     const fullName = hotkeysLang[c.name].toLowerCase();

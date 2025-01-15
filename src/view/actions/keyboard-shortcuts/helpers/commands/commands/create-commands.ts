@@ -1,17 +1,12 @@
 import { saveNodeAndInsertNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-and-insert-node';
 import { addNodeAndSplitAtCursor } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/add-node-and-split-at-cursor';
-import {
-    isActive,
-    isActiveAndNotEditing,
-    isEditing,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
+import { DefaultViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const createCommands = () => {
     return [
         {
             name: 'add_above',
-            check: isActiveAndNotEditing,
             callback: (view) => {
                 saveNodeAndInsertNode(view, 'up');
             },
@@ -19,13 +14,13 @@ export const createCommands = () => {
                 {
                     key: 'ArrowUp',
                     modifiers: ['Mod'],
+                    editorState: 'editor-off',
                 },
             ],
         },
 
         {
             name: 'add_below',
-            check: isActiveAndNotEditing,
             callback: (view) => {
                 saveNodeAndInsertNode(view, 'down');
             },
@@ -33,12 +28,12 @@ export const createCommands = () => {
                 {
                     key: 'ArrowDown',
                     modifiers: ['Mod'],
+                    editorState: 'editor-off',
                 },
             ],
         },
         {
             name: 'add_child',
-            check: isActiveAndNotEditing,
             callback: (view) => {
                 saveNodeAndInsertNode(view, 'right');
             },
@@ -46,35 +41,35 @@ export const createCommands = () => {
                 {
                     key: 'ArrowRight',
                     modifiers: ['Mod'],
+                    editorState: 'editor-off',
                 },
             ],
         },
         {
             name: 'add_above_and_split',
-            check: isActive,
             callback: (view) => {
                 if (isEditing(view)) addNodeAndSplitAtCursor(view, 'up');
                 else saveNodeAndInsertNode(view, 'up');
             },
-            hotkeys: [{ key: 'K', modifiers: ['Mod'] }],
+            hotkeys: [{ key: 'K', modifiers: ['Mod'], editorState: 'both' }],
         },
         {
             name: 'add_below_and_split',
-            check: isActive,
             callback: (view) => {
                 if (isEditing(view)) addNodeAndSplitAtCursor(view, 'down');
                 else saveNodeAndInsertNode(view, 'down');
             },
-            hotkeys: [{ key: 'J', modifiers: ['Mod'] }],
+            hotkeys: [{ key: 'J', modifiers: ['Mod'], editorState: 'both' }],
         },
         {
             name: 'add_child_and_split',
-            check: isActive,
             callback: (view) => {
                 if (isEditing(view)) addNodeAndSplitAtCursor(view, 'right');
                 else saveNodeAndInsertNode(view, 'right');
             },
-            hotkeys: [{ key: 'L', modifiers: ['Mod'] }],
+            hotkeys: [
+                { key: 'L', modifiers: ['Mod'], editorState: 'editor-off' },
+            ],
         },
-    ] satisfies DefaultViewHotkey[];
+    ] satisfies DefaultViewCommand[];
 };

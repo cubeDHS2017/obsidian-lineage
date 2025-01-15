@@ -1,11 +1,7 @@
-import {
-    isActive,
-    isActiveAndNotEditing,
-} from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
 import { LineageView } from 'src/view/view';
 import { AllDirections } from 'src/stores/document/document-store-actions';
 import { JumpTarget } from 'src/stores/view/reducers/document/jump-to-node';
-import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+import { DefaultViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 const singleColumnMode = (view: LineageView) =>
     view.plugin.settings.getValue().view.singleColumnMode;
@@ -49,11 +45,10 @@ const jump = (view: LineageView, target: JumpTarget) => {
     });
 };
 export const navigateCommands = () => {
-    const commands: DefaultViewHotkey[] = [];
+    const commands: DefaultViewCommand[] = [];
     commands.push(
         {
             name: 'go_right',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 if (!singleColumnMode(view)) {
@@ -63,13 +58,12 @@ export const navigateCommands = () => {
                 }
             },
             hotkeys: [
-                { key: 'L', modifiers: [] },
-                { key: 'ArrowRight', modifiers: [] },
+                { key: 'L', modifiers: [], editorState: 'editor-off' },
+                { key: 'ArrowRight', modifiers: [], editorState: 'editor-off' },
             ],
         },
         {
             name: 'go_left',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
 
@@ -80,13 +74,12 @@ export const navigateCommands = () => {
                 }
             },
             hotkeys: [
-                { key: 'H', modifiers: [] },
-                { key: 'ArrowLeft', modifiers: [] },
+                { key: 'H', modifiers: [], editorState: 'editor-off' },
+                { key: 'ArrowLeft', modifiers: [], editorState: 'editor-off' },
             ],
         },
         {
             name: 'go_down',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 if (!singleColumnMode(view)) {
@@ -96,13 +89,12 @@ export const navigateCommands = () => {
                 }
             },
             hotkeys: [
-                { key: 'J', modifiers: [] },
-                { key: 'ArrowDown', modifiers: [] },
+                { key: 'J', modifiers: [], editorState: 'editor-off' },
+                { key: 'ArrowDown', modifiers: [], editorState: 'editor-off' },
             ],
         },
         {
             name: 'go_up',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 if (!singleColumnMode(view)) {
@@ -112,98 +104,95 @@ export const navigateCommands = () => {
                 }
             },
             hotkeys: [
-                { key: 'K', modifiers: [] },
-                { key: 'ArrowUp', modifiers: [] },
+                { key: 'K', modifiers: [], editorState: 'editor-off' },
+                { key: 'ArrowUp', modifiers: [], editorState: 'editor-off' },
             ],
         },
         {
             name: 'select_parent',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 spatialNavigation(view, 'left');
             },
-            hotkeys: [{ key: 'G', modifiers: [] }],
+            hotkeys: [{ key: 'G', modifiers: [], editorState: 'editor-off' }],
         },
         {
             name: 'navigate_to_next_node',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 sequentialNavigation(view, 'forward');
             },
-            hotkeys: [{ key: 'N', modifiers: [] }],
+            hotkeys: [{ key: 'N', modifiers: [], editorState: 'editor-off' }],
         },
         {
             name: 'navigate_to_previous_node',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 sequentialNavigation(view, 'back');
             },
-            hotkeys: [{ key: 'B', modifiers: [] }],
+            hotkeys: [{ key: 'B', modifiers: [], editorState: 'editor-off' }],
         },
         {
             name: 'go_to_beginning_of_group',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 jump(view, 'start-of-group');
             },
-            hotkeys: [{ key: 'PageUp', modifiers: [] }],
+            hotkeys: [
+                { key: 'PageUp', modifiers: [], editorState: 'editor-off' },
+            ],
         },
         {
             name: 'go_to_end_of_group',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 jump(view, 'end-of-group');
             },
-            hotkeys: [{ key: 'PageDown', modifiers: [] }],
+            hotkeys: [
+                { key: 'PageDown', modifiers: [], editorState: 'editor-off' },
+            ],
         },
         {
             name: 'go_to_beginning_of_column',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 jump(view, 'start-of-column');
             },
-            hotkeys: [{ key: 'Home', modifiers: [] }],
+            hotkeys: [
+                { key: 'Home', modifiers: [], editorState: 'editor-off' },
+            ],
         },
         {
             name: 'go_to_end_of_column',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 jump(view, 'end-of-column');
             },
-            hotkeys: [{ key: 'End', modifiers: [] }],
+            hotkeys: [{ key: 'End', modifiers: [], editorState: 'editor-off' }],
         },
         {
             name: 'navigate_back',
-            check: isActive,
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
                     type: 'NAVIGATION/NAVIGATE_BACK',
                 });
             },
-            hotkeys: [{ key: 'J', modifiers: ['Alt'] }],
+            hotkeys: [{ key: 'J', modifiers: ['Alt'], editorState: 'both' }],
         },
         {
             name: 'navigate_forward',
-            check: isActive,
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
                     type: 'NAVIGATION/NAVIGATE_FORWARD',
                 });
             },
-            hotkeys: [{ key: 'K', modifiers: ['Alt'] }],
+            hotkeys: [{ key: 'K', modifiers: ['Alt'], editorState: 'both' }],
         },
     );
     return commands;

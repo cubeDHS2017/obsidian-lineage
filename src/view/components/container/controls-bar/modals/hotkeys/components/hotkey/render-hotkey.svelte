@@ -1,14 +1,15 @@
 <script lang="ts">
     import { Pen } from 'lucide-svelte';
-    import { Hotkey } from 'obsidian';
     import { modKeyDictionary } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key-dictionary';
+    import { ViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import EditorState from './editor-state/render-editor-state.svelte';
 
     export let enableEditing: () => void;
-    export let hotkey: Hotkey;
+    export let hotkey: ViewHotkey;
 </script>
 
-<div class="hotkey-buttons">
-    <button class="hotkey-button" on:click={enableEditing}
+<div class="hotkey-buttons" on:click={enableEditing}>
+    <button class="hotkey-button"
         ><Pen class="svg-icon" size={8} /></button
     >
 </div>
@@ -16,6 +17,7 @@
 {#each hotkey.modifiers as modifier}
     <kbd>{modKeyDictionary[modifier]}</kbd>
 {/each}
+<EditorState {hotkey} />
 
 <style>
     .hotkey-buttons {

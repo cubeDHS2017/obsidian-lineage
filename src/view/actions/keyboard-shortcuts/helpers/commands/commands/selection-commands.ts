@@ -1,12 +1,10 @@
-import { isActiveAndNotEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { DefaultViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+import { DefaultViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const selectionCommands = () => {
-    const commands: DefaultViewHotkey[] = [];
+    const commands: DefaultViewCommand[] = [];
     commands.push(
         {
             name: 'extend_select_up',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
@@ -24,13 +22,16 @@ export const selectionCommands = () => {
                 });
             },
             hotkeys: [
-                { key: 'K', modifiers: ['Shift'] },
-                { key: 'ArrowUp', modifiers: ['Shift'] },
+                { key: 'K', modifiers: ['Shift'], editorState: 'editor-off' },
+                {
+                    key: 'ArrowUp',
+                    modifiers: ['Shift'],
+                    editorState: 'editor-off',
+                },
             ],
         },
         {
             name: 'extend_select_down',
-            check: isActiveAndNotEditing,
             callback: (view, event) => {
                 event.preventDefault();
                 view.viewStore.dispatch({
@@ -48,13 +49,16 @@ export const selectionCommands = () => {
                 });
             },
             hotkeys: [
-                { key: 'J', modifiers: ['Shift'] },
-                { key: 'ArrowDown', modifiers: ['Shift'] },
+                { key: 'J', modifiers: ['Shift'], editorState: 'editor-off' },
+                {
+                    key: 'ArrowDown',
+                    modifiers: ['Shift'],
+                    editorState: 'editor-off',
+                },
             ],
         },
         {
             name: 'extend_select_to_end_of_column',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -69,11 +73,12 @@ export const selectionCommands = () => {
                     },
                 });
             },
-            hotkeys: [{ key: 'End', modifiers: ['Shift'] }],
+            hotkeys: [
+                { key: 'End', modifiers: ['Shift'], editorState: 'editor-off' },
+            ],
         },
         {
             name: 'extend_select_to_start_of_column',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -88,11 +93,16 @@ export const selectionCommands = () => {
                     },
                 });
             },
-            hotkeys: [{ key: 'Home', modifiers: ['Shift'] }],
+            hotkeys: [
+                {
+                    key: 'Home',
+                    modifiers: ['Shift'],
+                    editorState: 'editor-off',
+                },
+            ],
         },
         {
             name: 'extend_select_to_end_of_group',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -107,11 +117,16 @@ export const selectionCommands = () => {
                     },
                 });
             },
-            hotkeys: [{ key: 'PageDown', modifiers: ['Shift'] }],
+            hotkeys: [
+                {
+                    key: 'PageDown',
+                    modifiers: ['Shift'],
+                    editorState: 'editor-off',
+                },
+            ],
         },
         {
             name: 'extend_select_to_start_of_group',
-            check: isActiveAndNotEditing,
             callback: (view, e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -126,7 +141,13 @@ export const selectionCommands = () => {
                     },
                 });
             },
-            hotkeys: [{ key: 'PageUp', modifiers: ['Shift'] }],
+            hotkeys: [
+                {
+                    key: 'PageUp',
+                    modifiers: ['Shift'],
+                    editorState: 'editor-off',
+                },
+            ],
         },
     );
     return commands;

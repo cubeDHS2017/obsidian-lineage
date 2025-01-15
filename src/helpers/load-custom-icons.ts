@@ -74,7 +74,32 @@ const outline: Icon = {
     mode: 'stroke',
 };
 
-export const customIcons = { cards, split, alignH, alignV, gap, outline };
+const cursorOff: Icon = {
+    name: 'cursor-off',
+    svg: `<path d="m 8.0036101,3.8555957 h 1 a 3,3 0 0 1 2.9999999,3 3,3 0 0 1 3,-3 h 1" />
+  <path d="m 16.00361,19.855596 h -1 a 3,3 0 0 1 -3,-3 3,3 0 0 1 -2.9999999,3 h -1" />
+  <path d="M 12.00361,6.8555957 V 16.855596" />
+  <path d="M 3.0758124,4.7436822 20.548737,18.693141" />`,
+    mode: 'stroke',
+};
+
+const cursor: Icon = {
+    name: 'cursor',
+    svg: `<path d="m 8.0036101,3.8555957 h 1 a 3,3 0 0 1 2.9999999,3 3,3 0 0 1 3,-3 h 1" />
+  <path d="m 16.00361,19.855596 h -1 a 3,3 0 0 1 -3,-3 3,3 0 0 1 -2.9999999,3 h -1" />
+  <path d="M 12.00361,6.8555957 V 16.855596" />`,
+    mode: 'stroke',
+};
+export const customIcons = {
+    cards,
+    split,
+    alignH,
+    alignV,
+    gap,
+    outline,
+    cursor,
+    cursorOff,
+};
 
 export const loadCustomIcons = () => {
     for (const icon of Object.values(customIcons)) {

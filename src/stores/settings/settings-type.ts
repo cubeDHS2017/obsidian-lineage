@@ -1,12 +1,11 @@
-import { Hotkey } from 'obsidian';
-
 import { CommandName } from 'src/lang/hotkey-groups';
 import { StyleRule } from 'src/stores/settings/types/style-rules-types';
+import { PersistedViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export type CustomHotkeys = {
     [command in CommandName]?: {
-        primary?: Hotkey;
-        secondary?: Hotkey;
+        primary?: PersistedViewHotkey;
+        secondary?: PersistedViewHotkey;
     };
 };
 export type Theme = {
