@@ -1,15 +1,12 @@
-import { ViewStore } from 'src/view/view';
-import { DocumentState } from 'src/stores/document/document-state-type';
-import { Settings } from 'src/stores/settings/settings-type';
+import { LineageView } from 'src/view/view';
 import { maybeGetIdOfSection } from 'src/stores/view/subscriptions/helpers/maybe-get-id-of-section';
 
-export const setInitialActiveNode = (
-    viewStore: ViewStore,
-    documentState: DocumentState,
-    settings: Settings,
-    path: string,
-) => {
+export const setInitialActiveNode = (view: LineageView) => {
     let id: string | null = null;
+    const viewStore = view.viewStore;
+    const documentState = view.documentStore.getValue();
+    const settings = view.plugin.settings.getValue();
+    const path = view.file!.path;
     const persistedSection = settings.documents[path]?.activeSection;
     const sections = documentState.sections;
     if (persistedSection) {
@@ -21,7 +18,6 @@ export const setInitialActiveNode = (
     }
     if (!id) return;
     viewStore.dispatch({
-        // type: 'DOCUMENT/SET_ACTIVE_NODE',
         type: 'view/set-active-node/document',
         payload: {
             id,

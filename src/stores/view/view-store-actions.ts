@@ -28,7 +28,8 @@ export type ViewStoreAction =
     | KeyboardEventAction
     | ViewHotkeysAction
     | OutlineAction
-    | SelectionActions;
+    | SelectionActions
+    | PersistedStateActions;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -181,4 +182,14 @@ export type OutlineAction =
 export type SelectionActions = {
     type: 'view/selection/set-selection';
     payload: { ids: string[] };
+};
+
+export type PersistedStateActions = {
+    type: 'view/persisted-state/load-persisted-collapsed-parents';
+    payload: {
+        collapsedIds: string[];
+    };
+    context: {
+        columns: Column[];
+    };
 };

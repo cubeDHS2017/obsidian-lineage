@@ -24,6 +24,7 @@ import { resetPendingConfirmation } from 'src/stores/view/reducers/document/rese
 import { toggleCollapseNode } from 'src/stores/view/reducers/outline/toggle-collapse-node';
 import { refreshCollapsedNodes } from 'src/stores/view/reducers/outline/refresh-collapsed-nodes';
 import { toggleCollapseAllNodes } from 'src/stores/view/reducers/outline/toggle-collapse-all-nodes';
+import { collapseNode } from 'src/stores/view/reducers/outline/helpers/collapse-node';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (
@@ -193,6 +194,12 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         toggleCollapseAllNodes(state, action.payload.columns);
     } else if (action.type === 'view/selection/set-selection') {
         state.document.selectedNodes = new Set(action.payload.ids);
+    } else if (
+        action.type === 'view/persisted-state/load-persisted-collapsed-parents'
+    ) {
+        for (const id of action.payload.collapsedIds) {
+            collapseNode(state, action.context.columns, id);
+        }
     }
 };
 export const viewReducer = (

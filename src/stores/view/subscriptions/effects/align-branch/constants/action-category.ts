@@ -18,7 +18,9 @@ export type ActionCategory =
     | 'settings/scrolling'
     | 'other';
 
-const actionCategoryDict: Record<PluginAction['type'], ActionCategory> = {
+const actionCategoryDict: Partial<
+    Record<PluginAction['type'], ActionCategory>
+> = {
     'view/align-branch/center-node': 'manual',
     'view/align-branch/reveal-node': 'manual',
     'DOCUMENT/LOAD_FILE': 'document/reset',

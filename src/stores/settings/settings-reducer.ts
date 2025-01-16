@@ -16,9 +16,10 @@ import {
 } from 'src/stores/settings/reducers/update-style-rules/update-style-rules';
 import { Hotkey } from 'obsidian';
 import { CommandName } from 'src/lang/hotkey-groups';
-import { toggleEditorState } from 'src/stores/settings/toggle-editor-state';
-import { setHotkeyAsBlank } from 'src/stores/settings/set-hotkey-as-blank';
+import { toggleEditorState } from 'src/stores/settings/reducers/toggle-editor-state';
+import { setHotkeyAsBlank } from 'src/stores/settings/reducers/set-hotkey-as-blank';
 import { PersistedViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+import { persistCollapsedSections } from 'src/stores/settings/reducers/persist-collapsed-sections';
 
 export type SettingsActions =
     | {
@@ -161,8 +162,16 @@ export type SettingsActions =
           type: 'settings/view/theme/set-active-branch-color';
           payload: { color: string | undefined };
       }
-    | HotkeySettingsActions;
+    | HotkeySettingsActions
+    | PersistCollapsedSectionsAction;
 
+export type PersistCollapsedSectionsAction = {
+    type: 'settings/document/persist-collapsed-sections';
+    payload: {
+        path: string;
+        sections: string[];
+    };
+};
 export type PersistActiveNodeAction = {
     type: 'settings/document/persist-active-section';
     payload: {
@@ -225,6 +234,9 @@ const updateState = (store: Settings, action: SettingsActions) => {
                 pinnedSections: {
                     sections: [],
                     activeSection: null,
+                },
+                outline: {
+                    collapsedSections: [],
                 },
             };
         } else {
@@ -391,6 +403,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         toggleEditorState(store, action);
     } else if (action.type === 'settings/hotkeys/set-blank') {
         setHotkeyAsBlank(store, action);
+    } else if (action.type === 'settings/document/persist-collapsed-sections') {
+        persistCollapsedSections(store, action);
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

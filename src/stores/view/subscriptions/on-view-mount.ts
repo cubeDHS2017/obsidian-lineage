@@ -7,7 +7,7 @@ import { applyFontSize } from 'src/stores/view/subscriptions/effects/css-variabl
 import { applyCssColor } from 'src/stores/view/subscriptions/effects/css-variables/apply-css-color';
 import { applyCardWidth } from 'src/stores/view/subscriptions/effects/css-variables/apply-card-width';
 import { applyZoomLevel } from './effects/css-variables/apply-zoom-level';
-import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/set-initial-active-node';
+import { setInitialActiveNode } from 'src/stores/view/subscriptions/actions/view/set-initial-active-node';
 import { markUnresolvedLinks } from 'src/stores/view/subscriptions/effects/mark-unresolved-links/mark-unresolved-links';
 import { attachHoverPreviewListener } from 'src/stores/view/subscriptions/event-listeners/attach-hover-preview-listener';
 import { attachWheelScrollListener } from 'src/stores/view/subscriptions/event-listeners/attach-wheel-scroll-listener';
@@ -18,6 +18,7 @@ import { applyCardIndentationWidth } from 'src/stores/view/subscriptions/effects
 import { attachCheckboxListener } from 'src/stores/view/subscriptions/effects/checkbox-listener/attach-checkbox-listener';
 import { watchViewSize } from 'src/stores/view/subscriptions/effects/view-size/watch-view-size';
 import { applyInactiveNodeOpacity } from 'src/stores/view/subscriptions/effects/css-variables/apply-inactive-node-opacity';
+import { loadCollapsedSectionsFromSettings } from 'src/stores/view/subscriptions/actions/view/load-collapsed-sections-from-settings';
 
 const applySettingsToView = (view: LineageView) => {
     const state = view.plugin.settings.getValue();
@@ -41,12 +42,8 @@ export const onViewMount = (view: LineageView) => {
     const viewStore = view.viewStore;
     // actions
     if (!view.file) return subscriptions;
-    setInitialActiveNode(
-        viewStore,
-        documentState,
-        view.plugin.settings.getValue(),
-        view.file.path,
-    );
+    setInitialActiveNode(view);
+    loadCollapsedSectionsFromSettings(view);
     updateActiveBranch(viewStore, documentState, 'none');
     if (view.isActive && isEmptyDocument(documentState.document.content)) {
         enableEditMode(viewStore, documentState);

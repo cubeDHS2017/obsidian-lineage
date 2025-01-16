@@ -11,6 +11,7 @@ const sample: DocumentPreferences = {
     viewType: 'lineage',
     activeSection: null,
     pinnedSections: null,
+    outline: null,
 };
 describe('filterStaleDocuments', () => {
     it('should return 0 if allFiles is empty', () => {

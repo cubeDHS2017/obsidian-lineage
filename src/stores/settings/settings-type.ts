@@ -31,6 +31,9 @@ export type DocumentPreferences = {
         sections: string[];
         activeSection: string | null;
     } | null;
+    outline: {
+        collapsedSections: string[];
+    } | null;
 };
 
 export type LeftSidebarTab = 'pinned-cards' | 'recent-cards';

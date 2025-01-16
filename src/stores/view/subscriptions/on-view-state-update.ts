@@ -12,6 +12,7 @@ import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions
 import { persistActivePinnedNode } from 'src/stores/view/subscriptions/actions/persist-active-pinned-node';
 import { showSearchResultsInMinimap } from 'src/stores/view/subscriptions/effects/show-search-results-in-minimap';
 import { getUsedHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
+import { persistCollapsedSections } from 'src/stores/view/subscriptions/actions/settings/persist-collapsed-sections';
 
 export const onViewStateUpdate = (
     view: LineageView,
@@ -111,5 +112,13 @@ export const onViewStateUpdate = (
                 },
             });
         }
+    }
+
+    if (
+        action.type === 'view/outline/toggle-collapse-all' ||
+        action.type === 'view/outline/toggle-collapse-node' ||
+        action.type === 'view/outline/refresh-collapsed-nodes'
+    ) {
+        persistCollapsedSections(view);
     }
 };
