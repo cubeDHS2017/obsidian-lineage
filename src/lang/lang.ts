@@ -290,6 +290,8 @@ export const lang = {
     modals_hk_load_alt_hotkeys_preset:
         "Apply preset: use 'Alt' as the primary modifier",
 
+    modals_hk_load_nav_while_editing_preset:
+        "Apply preset: navigate while editing using 'Alt+Shift+Arrow keys'",
     error_generic:
         'Something went wrong\nYou might find additional details in the developer console',
 } as const;

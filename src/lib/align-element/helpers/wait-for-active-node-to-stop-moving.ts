@@ -4,7 +4,7 @@ import { delay } from 'src/helpers/delay';
 
 const LOOP_DELAY_MS = 10;
 const MAX_ATTEMPTS = 100;
-const REQUIRED_MATCHES = 20;
+const REQUIRED_MATCHES = 10;
 
 export const waitForActiveNodeToStopMoving = async (view: LineageView) => {
     const activeBranch = view.viewStore.getValue().document.activeBranch;

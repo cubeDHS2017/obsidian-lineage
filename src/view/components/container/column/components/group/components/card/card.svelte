@@ -41,7 +41,7 @@
 </script>
 
 <div
-    style={singleColumnMode
+    style={singleColumnMode && depth>0
         ? `margin-left: calc(var(--node-indentation-width) * ${depth})`
         : ''}
     class={clx(

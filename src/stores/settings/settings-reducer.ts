@@ -18,6 +18,7 @@ import { Hotkey } from 'obsidian';
 import { CommandName } from 'src/lang/hotkey-groups';
 import { toggleEditorState } from 'src/stores/settings/toggle-editor-state';
 import { setHotkeyAsBlank } from 'src/stores/settings/set-hotkey-as-blank';
+import { PersistedViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export type SettingsActions =
     | {
@@ -342,11 +343,14 @@ const updateState = (store: Settings, action: SettingsActions) => {
     } else if (action.type === 'settings/hotkeys/set-custom-hotkey') {
         const customHotkey =
             store.hotkeys.customHotkeys[action.payload.command];
-        if (customHotkey) {
-            customHotkey[action.payload.type] = action.payload.hotkey;
-        } else {
+        if (!customHotkey) {
             store.hotkeys.customHotkeys[action.payload.command] = {
                 [action.payload.type]: action.payload.hotkey,
+            };
+        } else {
+            customHotkey[action.payload.type] = {
+                ...customHotkey[action.payload.type],
+                ...action.payload.hotkey,
             };
         }
         store.hotkeys.customHotkeys = { ...store.hotkeys.customHotkeys };
@@ -358,9 +362,28 @@ const updateState = (store: Settings, action: SettingsActions) => {
         }
         store.hotkeys.customHotkeys = { ...store.hotkeys.customHotkeys };
     } else if (action.type === 'settings/hotkeys/apply-preset') {
+        const entries = Object.entries(action.payload.preset) as [
+            command: CommandName,
+            hotkeys: {
+                primary?: PersistedViewHotkey;
+                secondary?: PersistedViewHotkey;
+            },
+        ][];
+        for (const [command, customHotkeys] of entries) {
+            if (!store.hotkeys.customHotkeys[command]) {
+                store.hotkeys.customHotkeys[command] = {};
+            }
+            if (customHotkeys.primary) {
+                store.hotkeys.customHotkeys[command]!.primary =
+                    customHotkeys.primary;
+            }
+            if (customHotkeys.secondary) {
+                store.hotkeys.customHotkeys[command]!.secondary =
+                    customHotkeys.secondary;
+            }
+        }
         store.hotkeys.customHotkeys = {
             ...store.hotkeys.customHotkeys,
-            ...action.payload.preset,
         };
     } else if (action.type === 'settings/hotkeys/reset-all') {
         store.hotkeys.customHotkeys = {};

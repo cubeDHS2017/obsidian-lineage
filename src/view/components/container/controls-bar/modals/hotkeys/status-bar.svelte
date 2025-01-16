@@ -6,6 +6,9 @@
     import {
         AltPrimaryModifier
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/presets/alt-primary-modifier';
+    import {
+        NavigateWhileEditing
+    } from 'src/view/actions/keyboard-shortcuts/helpers/commands/presets/navigate-while-editing';
 
     export let conflicts: number;
     const view = getView();
@@ -28,6 +31,25 @@
                     type: 'settings/hotkeys/apply-preset',
                     payload: { preset: AltPrimaryModifier },
                 });
+            });
+        });
+        menu.addItem((item) => {
+            item.setTitle(lang.modals_hk_load_nav_while_editing_preset);
+            item.onClick(() => {
+                view.plugin.settings.dispatch({
+                    type: 'settings/hotkeys/apply-preset',
+                    payload: { preset: NavigateWhileEditing },
+                });
+                const maintainEditMode =
+                    view.plugin.settings.getValue().view.maintainEditMode;
+                if (!maintainEditMode) {
+                    view.plugin.settings.dispatch({
+                        type: 'settings/view/set-maintain-edit-mode',
+                        payload: {
+                            maintain: true
+                        }
+                    });
+                }
             });
         });
         menu.showAtMouseEvent(e);

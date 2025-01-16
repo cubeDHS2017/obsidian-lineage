@@ -2,11 +2,30 @@ import { LineageView } from 'src/view/view';
 import { AllDirections } from 'src/stores/document/document-store-actions';
 import { JumpTarget } from 'src/stores/view/reducers/document/jump-to-node';
 import { DefaultViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+import { enableEditModeInMainSplit } from 'src/view/components/container/column/components/group/components/card/components/content/store-actions/enable-edit-mode-in-main-split';
 
 const singleColumnMode = (view: LineageView) =>
     view.plugin.settings.getValue().view.singleColumnMode;
 
+const maintainEditMode = (view: LineageView) =>
+    view.plugin.settings.getValue().view.maintainEditMode;
+
+const maybeEnableEditMode = (view: LineageView) => {
+    const viewState = view.viewStore.getValue();
+    const isEditing = viewState.document.editing.activeNodeId;
+    const activeNode = viewState.document.activeNode;
+    if (isEditing && maintainEditMode(view)) {
+        setTimeout(() => {
+            const newActiveNode = view.viewStore.getValue().document.activeNode;
+            if (newActiveNode !== activeNode) {
+                enableEditModeInMainSplit(view, newActiveNode);
+            }
+        }, 16);
+    }
+};
+
 const spatialNavigation = (view: LineageView, direction: AllDirections) => {
+    maybeEnableEditMode(view);
     view.viewStore.dispatch({
         type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
         payload: {
@@ -23,6 +42,7 @@ const sequentialNavigation = (
     view: LineageView,
     direction: 'forward' | 'back',
 ) => {
+    maybeEnableEditMode(view);
     view.viewStore.dispatch({
         type: 'NAVIGATION/SELECT_NEXT_NODE',
         payload: {
@@ -36,6 +56,7 @@ const sequentialNavigation = (
 };
 
 const jump = (view: LineageView, target: JumpTarget) => {
+    maybeEnableEditMode(view);
     view.viewStore.dispatch({
         type: 'DOCUMENT/JUMP_TO_NODE',
         payload: {
