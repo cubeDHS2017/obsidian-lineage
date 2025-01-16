@@ -106,6 +106,15 @@ export const defaultViewHotkeys = (): DefaultViewCommand[] => [
         hotkeys: [{ key: '0', modifiers: ['Mod'], editorState: 'both' }],
     },
     {
+        name: 'toggle_outline_mode',
+        callback: (view) => {
+            view!.plugin.settings.dispatch({
+                type: 'settings/view/modes/toggle-single-column',
+            });
+        },
+        hotkeys: [{ key: 'o', modifiers: ['Alt'], editorState: 'both' }],
+    },
+    {
         name: 'toggle_collapse',
         callback: (view, e) => {
             e.preventDefault();

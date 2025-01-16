@@ -220,13 +220,6 @@ export const lang = {
     card_btn_scroll_to_reveal: 'Scroll to reveal',
     hkg_scrolling: 'Align branch',
 
-    // outline
-    card_btn_collapse_card: 'Collapse',
-    card_btn_expand_card: 'Expand',
-    hk_outline_toggle_collapse: 'Collapse/expand card',
-    hk_outline_toggle_collapse_all: 'Collapse/expand all cards',
-    hkg_outline: 'Outline',
-
     // theme
     settings_theme_bg: 'Background color',
     settings_theme_active_branch_bg: 'Active branch background color',
@@ -238,11 +231,16 @@ export const lang = {
     settings_layout_card_width: 'Card width',
     settings_layout_limit_card_height: 'Limit card height',
 
-    // single column view
+    // outline
     settings_layout_indentation_width: 'Card indentation',
     settings_layout_indentation_width_desc: "Applicable in 'outline mode'",
     controls_single_column: 'Outline mode',
-    cmd_toggle_single_column: `Toggle 'outline mode'`,
+    hk_toggle_outline_mode: `Toggle outline mode`,
+    card_btn_collapse_card: 'Collapse',
+    card_btn_expand_card: 'Expand',
+    hk_outline_toggle_collapse: 'Collapse/expand card',
+    hk_outline_toggle_collapse_all: 'Collapse/expand all cards',
+    hkg_outline: 'Outline',
 
     // space between cards
     controls_gap_between_cards: 'Space between cards',

@@ -191,19 +191,6 @@ const createCommands = (plugin: Lineage) => {
             });
         },
     });
-    commands.push({
-        name: lang.cmd_toggle_single_column,
-        icon: 'rectangle-vertical',
-        checkCallback: (checking) => {
-            const view = getActiveLineageView(plugin);
-            if (checking) {
-                return Boolean(view);
-            }
-            view!.plugin.settings.dispatch({
-                type: 'settings/view/modes/toggle-single-column',
-            });
-        },
-    });
 
     return commands;
 };
