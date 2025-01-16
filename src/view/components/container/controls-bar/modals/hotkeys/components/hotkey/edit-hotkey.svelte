@@ -28,8 +28,7 @@
         e.preventDefault();
         if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return;
         if (e.key === ' ' || e.key === 'META') return;
-        const value = e.key.toUpperCase();
-        key = value.length === 1 ? value.toUpperCase() : value;
+        key = e.key;
         save();
     };
 
@@ -90,6 +89,7 @@
 </script>
 
 <div class="container">
+    <EditEditorState {hotkey} {commandName} {isPrimary}/>
     <div class="hotkey-container">
         <div class="modifiers">
             {#if isMacLike}
@@ -116,7 +116,6 @@
             type="text"
         />
     </div>
-    <EditEditorState {hotkey} {commandName} {isPrimary}/>
     <div class="save-and-cancel-buttons">
         <button
             aria-label={lang.modals_hk_editor_cancel}
@@ -126,7 +125,7 @@
         <button
             aria-label={lang.settings_reset}
             class="hotkey-button"
-            disabled={!hotkey.isCustom}
+            disabled={(hotkey.key.length>0 && !hotkey.isCustom)}
             on:click={reset}><RotateCcw class="svg-icon" size={8} /></button
         >
     </div>

@@ -23,4 +23,4 @@
     };
 </script>
 
-<EditorState {hotkey} fullHeight={true} {onClick} />
+<EditorState {hotkey}  {onClick} />

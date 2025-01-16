@@ -15,14 +15,14 @@ import { get } from 'svelte/store';
 import { singleColumnStore } from 'src/stores/document/derived/columns-store';
 
 export type HotkeyEditorState = 'editor-on' | 'editor-off' | 'both';
-export type HotkeyConditions = {
+export type HotkeyPreferences = {
     editorState: HotkeyEditorState;
 };
-export type ViewHotkey = Hotkey & HotkeyConditions;
+export type ViewHotkey = Hotkey & HotkeyPreferences;
 export type PersistedViewHotkey =
     | Hotkey
-    | HotkeyConditions
-    | (Hotkey & HotkeyConditions);
+    | HotkeyPreferences
+    | (Hotkey & HotkeyPreferences);
 export type DefaultViewCommand = {
     callback: (view: LineageView, event: KeyboardEvent) => void;
     hotkeys: ViewHotkey[];

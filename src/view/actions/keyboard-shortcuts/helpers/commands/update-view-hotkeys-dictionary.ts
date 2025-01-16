@@ -26,6 +26,8 @@ export const updateViewHotkeysDictionary = (hotkeys: StatefulViewCommand[]) => {
     for (const viewHotkey of hotkeys) {
         for (const hotkey of viewHotkey.hotkeys) {
             invariant(hotkey.editorState);
+            if (hotkey.key === '') continue;
+
             viewHotkeys.current[hotkeyToString(hotkey)] = {
                 ...viewHotkey,
                 editorState: hotkey.editorState,

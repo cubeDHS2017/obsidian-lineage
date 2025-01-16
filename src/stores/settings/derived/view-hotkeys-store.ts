@@ -37,13 +37,19 @@ export const ViewHotkeysStore = (plugin: Lineage) =>
 
                     if (persistedHotkey) {
                         if ('key' in persistedHotkey) {
+                            isCustom =
+                                persistedHotkey.key.length > 0 &&
+                                (hotkey.key !== persistedHotkey.key ||
+                                    hotkey.modifiers.join('') !==
+                                        persistedHotkey.modifiers.join(''));
                             hotkey.key = persistedHotkey.key;
                             hotkey.modifiers = persistedHotkey.modifiers;
-                            isCustom = true;
                         }
                         if ('editorState' in persistedHotkey) {
+                            isCustom =
+                                persistedHotkey.editorState !==
+                                hotkey.editorState;
                             hotkey.editorState = persistedHotkey.editorState;
-                            isCustom = true;
                         }
                     }
 
@@ -105,6 +111,7 @@ export const ConflictLabeledHotkeysStore = (view: LineageView) =>
                     .join(', ');
                 for (const pluginHotkey of hotkeys) {
                     for (const hotkey of pluginHotkey.hotkeys) {
+                        if (!hotkey.key) continue;
                         if (
                             hotkey.string_representation ===
                             string_representation

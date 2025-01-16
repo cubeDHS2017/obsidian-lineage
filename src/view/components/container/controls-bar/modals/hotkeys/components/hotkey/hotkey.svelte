@@ -25,6 +25,16 @@
             }
         });
     });
+
+    const makeBlank = () => {
+        view.plugin.settings.dispatch({
+            type: 'settings/hotkeys/set-blank',
+            payload: {
+                command: commandName,
+                type: isPrimary ? 'primary' : 'secondary',
+            },
+        });
+    };
 </script>
 
 <div
@@ -49,7 +59,11 @@
             {commandName}
         />
     {:else}
-        <RenderHotkey {hotkey} enableEditing={() => editing.set(true)} />
+        <RenderHotkey
+            {hotkey}
+            enableEditing={() => editing.set(true)}
+            {makeBlank}
+        />
     {/if}
 </div>
 

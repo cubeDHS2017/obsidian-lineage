@@ -15,7 +15,9 @@ export const settingsSubscriptions = (plugin: Lineage) => {
                 action.type === 'settings/hotkeys/reset-all' ||
                 action.type === 'settings/hotkeys/apply-preset' ||
                 action.type === 'settings/hotkeys/reset-custom-hotkey' ||
-                action.type === 'settings/hotkeys/set-custom-hotkey'
+                action.type === 'settings/hotkeys/set-custom-hotkey' ||
+                action.type === 'settings/hotkeys/toggle-editor-state' ||
+                action.type === 'settings/hotkeys/set-blank'
             ) {
                 updateViewHotkeysDictionary(get(ViewHotkeysStore(plugin)));
             }

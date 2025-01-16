@@ -8,7 +8,6 @@
     import { lang } from '../../../../../../../../../lang/lang';
 
     export let hotkey: ViewHotkey;
-    export let fullHeight = false;
     export let onClick: (() => void) | undefined = undefined;
 
     const classes: Record<HotkeyEditorState, string> = {
@@ -44,8 +43,7 @@
 
 <kbd
     class={'editor-state ' +
-        classes[hotkey.editorState] +
-        (fullHeight ? ' editor-state--full-height' : '')}
+        classes[hotkey.editorState]}
     aria-label={label[hotkey.editorState]}
     on:click={wrappedOnClick}>{@html cursorIcon[hotkey.editorState]}</kbd
 >
@@ -56,14 +54,16 @@
         align-items: center;
         justify-content: center;
         padding: 2px;
-
+        background-color: var(--color-base-100);
+        color: var(--color-base-00);
+       /* position: absolute;
+        left: -25px;
+        top: calc(50% - 9px);*/
         & svg {
             width: 14px;
             height: 14px;
         }
     }
 
-    .editor-state--full-height {
-        height: 100%;
-    }
+
 </style>

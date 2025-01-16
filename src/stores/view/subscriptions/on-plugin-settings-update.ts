@@ -43,7 +43,8 @@ export const onPluginSettingsUpdate = (
         type === 'settings/hotkeys/reset-all' ||
         type === 'settings/hotkeys/apply-preset' ||
         type === 'settings/hotkeys/reset-custom-hotkey' ||
-        type === 'settings/hotkeys/set-custom-hotkey'
+        type === 'settings/hotkeys/set-custom-hotkey' ||
+        type === 'settings/hotkeys/set-blank'
     ) {
         view.viewStore.dispatch({
             type: 'view/hotkeys/update-conflicts',

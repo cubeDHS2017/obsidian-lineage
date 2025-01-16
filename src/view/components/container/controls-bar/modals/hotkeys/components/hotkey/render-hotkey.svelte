@@ -1,23 +1,36 @@
 <script lang="ts">
-    import { Pen } from 'lucide-svelte';
+    import { Pen, Trash } from 'lucide-svelte';
     import { modKeyDictionary } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key-dictionary';
     import { ViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
     import EditorState from './editor-state/render-editor-state.svelte';
 
     export let enableEditing: () => void;
+    export let makeBlank: () => void;
+
     export let hotkey: ViewHotkey;
 </script>
 
-<div class="hotkey-buttons" on:click={enableEditing}>
-    <button class="hotkey-button"
+<div class="hotkey-buttons">
+    <button class="hotkey-button" on:click={enableEditing}
         ><Pen class="svg-icon" size={8} /></button
     >
+    {#if hotkey.key}
+        <button class="hotkey-button" on:click={makeBlank}
+            ><Trash class="svg-icon" size={8} /></button
+        >
+    {/if}
 </div>
-<kbd class="hotkey-key">{hotkey.key}</kbd>
-{#each hotkey.modifiers as modifier}
-    <kbd>{modKeyDictionary[modifier]}</kbd>
-{/each}
-<EditorState {hotkey} />
+{#if !hotkey.key}
+    <kbd class="blank-hotkey">blank</kbd>
+{:else}
+    {#if hotkey.editorState !== 'both'}
+        <EditorState {hotkey}/>
+    {/if}
+    <kbd class="hotkey-key">{hotkey.key}</kbd>
+    {#each hotkey.modifiers as modifier}
+        <kbd>{modKeyDictionary[modifier]}</kbd>
+    {/each}
+{/if}
 
 <style>
     .hotkey-buttons {
@@ -50,5 +63,9 @@
     .hotkey-key {
         color: var(--text-on-accent);
         background-color: #175c5a;
+    }
+
+    .blank-hotkey {
+        background-color: var(--color-base-30);
     }
 </style>

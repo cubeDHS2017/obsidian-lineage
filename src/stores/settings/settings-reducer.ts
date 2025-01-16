@@ -17,6 +17,7 @@ import {
 import { Hotkey } from 'obsidian';
 import { CommandName } from 'src/lang/hotkey-groups';
 import { toggleEditorState } from 'src/stores/settings/toggle-editor-state';
+import { setHotkeyAsBlank } from 'src/stores/settings/set-hotkey-as-blank';
 
 export type SettingsActions =
     | {
@@ -174,6 +175,13 @@ export type ToggleEditorStateAction = {
     payload: { command: CommandName; type: 'primary' | 'secondary' };
 };
 
+export type SetHotkeyBlankAction = {
+    type: 'settings/hotkeys/set-blank';
+    payload: {
+        command: CommandName;
+        type: 'primary' | 'secondary';
+    };
+};
 export type HotkeySettingsActions =
     | UpdateHotkeyAction
     | ResetHotkeyAction
@@ -184,7 +192,8 @@ export type HotkeySettingsActions =
           type: 'settings/hotkeys/apply-preset';
           payload: { preset: CustomHotkeys };
       }
-    | ToggleEditorStateAction;
+    | ToggleEditorStateAction
+    | SetHotkeyBlankAction;
 
 export type UpdateHotkeyAction = {
     type: 'settings/hotkeys/set-custom-hotkey';
@@ -357,6 +366,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.hotkeys.customHotkeys = {};
     } else if (action.type === 'settings/hotkeys/toggle-editor-state') {
         toggleEditorState(store, action);
+    } else if (action.type === 'settings/hotkeys/set-blank') {
+        setHotkeyAsBlank(store, action);
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

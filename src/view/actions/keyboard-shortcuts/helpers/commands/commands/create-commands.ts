@@ -67,9 +67,7 @@ export const createCommands = () => {
                 if (isEditing(view)) addNodeAndSplitAtCursor(view, 'right');
                 else saveNodeAndInsertNode(view, 'right');
             },
-            hotkeys: [
-                { key: 'L', modifiers: ['Mod'], editorState: 'editor-off' },
-            ],
+            hotkeys: [{ key: 'L', modifiers: ['Mod'], editorState: 'both' }],
         },
     ] satisfies DefaultViewCommand[];
 };
