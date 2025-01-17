@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { findNextActiveNodeOnKeyboardNavigation as findNext } from 'src/lib/tree-utils/find/find-next-active-node-on-keyboard-navigation';
+import {
+    findNextActiveNodeOnKeyboardNavigation,
+    findNextActiveNodeOnKeyboardNavigation as findNext,
+} from 'src/lib/tree-utils/find/find-next-active-node-on-keyboard-navigation';
 import { ActiveNodesOfColumn } from 'src/stores/view/view-state-type';
 
 const c0 = 'cAKE';
@@ -207,5 +210,105 @@ describe('find next active node after deletion', () => {
         expect(findNext(input.columns, n3_2_2_2, 'right', gs, null)).toEqual(
             null,
         );
+    });
+});
+
+describe('outline mode/up down', () => {
+    const c0 = 'c0';
+    const c1 = 'c1';
+    const root = 'root';
+    const n1 = 'n1';
+    const n2 = 'n2';
+    const n1_1 = 'n1_1';
+    const n1_2 = 'n1_2';
+    const n2_1 = 'n2_1';
+    const document = {
+        columns: [
+            { id: c0, groups: [{ nodes: [n1, n2], parentId: root }] },
+            {
+                id: c1,
+                groups: [
+                    { nodes: [n1_1, n1_2], parentId: n1 },
+                    { nodes: [n2_1], parentId: n2 },
+                ],
+            },
+        ],
+    };
+    const activeNodeOfGroup = {
+        cjpyfuL9U: { n1ZyHkTKt: 'nnOzP4kiW', 'ncasVHuo-': 'nuqAISMxY' },
+    };
+    it('should select parent when moving up and node is the first node of the group', () => {
+        const input = {
+            node: n2_1,
+            direction: 'up',
+            activeNodeOfGroup,
+            collapsedParents: new Set<string>(),
+        } as const;
+
+        const actual = findNextActiveNodeOnKeyboardNavigation(
+            document.columns,
+            input.node,
+            input.direction,
+            input.activeNodeOfGroup,
+            input.collapsedParents,
+        );
+        const output = n2;
+        expect(actual).toEqual(output);
+    });
+    it('should select next parent when moving down and node is the last node of the group', () => {
+        const input = {
+            node: n1_2,
+            direction: 'down',
+            activeNodeOfGroup,
+            collapsedParents: new Set<string>(),
+        } as const;
+
+        const actual = findNextActiveNodeOnKeyboardNavigation(
+            document.columns,
+            input.node,
+            input.direction,
+            input.activeNodeOfGroup,
+            input.collapsedParents,
+        );
+        const output = n2;
+        expect(actual).toEqual(output);
+    });
+
+    it('should not move up if node is the first in the entire document', () => {
+        const input = {
+            node: n1,
+            direction: 'up',
+            activeNodeOfGroup,
+            collapsedParents: new Set<string>(),
+        } as const;
+
+        const actual = findNextActiveNodeOnKeyboardNavigation(
+            document.columns,
+            input.node,
+            input.direction,
+            input.activeNodeOfGroup,
+            input.collapsedParents,
+        );
+        const output = null;
+        expect(actual).toEqual(output);
+    });
+
+    it('should not move down if node is the last in the entire document', () => {
+        const input = {
+            node: n2,
+            direction: 'down',
+            activeNodeOfGroup,
+            collapsedParents: new Set<string>(),
+        } as const;
+
+        const actual = findNextActiveNodeOnKeyboardNavigation(
+            document.columns,
+            input.node,
+            input.direction,
+            input.activeNodeOfGroup,
+            input.collapsedParents,
+        );
+        const output = null;
+        expect(actual).toEqual(output);
     });
 });

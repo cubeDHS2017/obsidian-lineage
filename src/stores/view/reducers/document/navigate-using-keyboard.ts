@@ -28,6 +28,7 @@ export const navigateUsingKeyboard = (
         action.payload.direction,
         documentState.activeNodesOfColumn,
         action.context.outlineMode ? state.outline.collapsedParents : null,
+        action.context.shiftKey,
     );
     if (nextNode) {
         updateSelectionState(documentState, nextNode, action);
