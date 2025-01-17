@@ -5,13 +5,12 @@ import {
 } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 
 export const lazyVerticalScrollingMode = (
-    context: AlignBranchContext,
-    action: PluginAction | undefined,
+    context: Pick<AlignBranchContext, 'previousActiveBranch' | 'activeBranch'>,
+    action: PluginAction,
 ) => {
     const actions: AlignBranchAction[] = [];
 
-    const createNodeAction = action && action?.type === 'DOCUMENT/INSERT_NODE';
-    if (createNodeAction) {
+    if (action.type === 'DOCUMENT/INSERT_NODE') {
         if (action.payload.position === 'right') {
             actions.push({
                 action: '20/active-node/vertical/align-with-parent',
@@ -21,25 +20,32 @@ export const lazyVerticalScrollingMode = (
         }
     } else {
         actions.push({ action: '20/active-node/vertical/reveal' });
-        const isChildOfPreviousNode =
-            context.previousActiveBranch &&
-            (context.previousActiveBranch.group ===
-                context.activeBranch.group ||
-                context.previousActiveBranch.node ===
-                    context.activeBranch.group);
-        const isParentOfPreviousNode =
-            context.previousActiveBranch &&
-            context.previousActiveBranch.group === context.activeBranch.node;
+        const previousActiveBranch = context.previousActiveBranch;
+        const activeBranch = context.activeBranch;
+        if (previousActiveBranch) {
+            const isChildOfPreviousNode =
+                previousActiveBranch.group === activeBranch.group ||
+                previousActiveBranch.node === activeBranch.group;
+            const isParentOfPreviousNode =
+                previousActiveBranch.group === activeBranch.node;
 
-        if (!isChildOfPreviousNode) {
-            actions.push({
-                action: '30/parents/vertical/align-with-active-node',
-            });
-        }
-        if (!isParentOfPreviousNode) {
-            actions.push({
-                action: '40/children/vertical/align-with-active-node',
-            });
+            const isMovingLeft =
+                isParentOfPreviousNode ||
+                (!isChildOfPreviousNode &&
+                    activeBranch.sortedParentNodes.every((p, i) => {
+                        return previousActiveBranch!.sortedParentNodes[i] === p;
+                    }));
+
+            if (!(isChildOfPreviousNode || isMovingLeft)) {
+                actions.push({
+                    action: '30/parents/vertical/align-with-active-node',
+                });
+            }
+            if (!isParentOfPreviousNode) {
+                actions.push({
+                    action: '40/children/vertical/align-with-active-node',
+                });
+            }
         }
     }
     return actions;

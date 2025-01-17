@@ -25,7 +25,9 @@ export const alignElementHorizontally = (
     if (Math.abs(scrollLeft) > THRESHOLD)
         context.container.scrollBy({
             left: scrollLeft * -1,
-            behavior: scrollToTheLeft ? 'instant' : context.settings.behavior,
+            behavior: scrollToTheLeft
+                ? 'instant'
+                : context.alignBranchSettings.behavior,
         });
     else {
         // cancel previous pending calls

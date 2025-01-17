@@ -1,7 +1,5 @@
-import { ScrollingSettings } from 'src/stores/settings/settings-type';
 import { forceCenterActiveNodeV } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/force-center-active-node-v';
 import { lazyVerticalScrollingMode } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/lazy-vertical-scrolling-mode';
-import { ActiveBranch } from 'src/stores/view/default-view-state';
 import {
     AlignBranchContext,
     PluginAction,
@@ -22,19 +20,19 @@ export type AlignBranchAction = {
         | '50/inactive-columns/vertical/move-up';
 };
 
-export type Props = {
-    settings: ScrollingSettings;
-    singleColumnMode: boolean;
-    action: PluginAction | undefined;
-    activeBranch: ActiveBranch;
-    previousActiveBranch: ActiveBranch | null;
-};
+type Context = Pick<
+    AlignBranchContext,
+    | 'previousActiveBranch'
+    | 'activeBranch'
+    | 'singleColumnMode'
+    | 'alignBranchSettings'
+>;
 export const createAlignBranchActions = (
-    context: AlignBranchContext,
+    context: Context,
     action: PluginAction,
 ) => {
     const actions: AlignBranchAction[] = [];
-    const settings = context.settings;
+    const settings = context.alignBranchSettings;
     const _forceCenterActiveNodeV = forceCenterActiveNodeV(
         action,
         context.singleColumnMode,

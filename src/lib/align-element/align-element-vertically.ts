@@ -33,8 +33,8 @@ export const alignVertically = (
 
     if (Math.abs(scrollTop) > THRESHOLD) {
         column.scrollBy({
-            top: (scrollTop * -1) / context.settings.zoomLevel,
-            behavior: context.settings.behavior,
+            top: (scrollTop * -1) / context.alignBranchSettings.zoomLevel,
+            behavior: context.alignBranchSettings.behavior,
         });
     } else {
         // cancel previous pending calls
