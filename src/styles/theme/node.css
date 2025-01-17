@@ -54,6 +54,12 @@
 }
 
 /* borders */
+
+.lineage-card{
+    /* to prevent layout shift */
+    border-left: 5px solid transparent;
+}
+
 .theme-dark {
     .node-border--editing {
         border-left: 5px var(--color-base-70) solid;

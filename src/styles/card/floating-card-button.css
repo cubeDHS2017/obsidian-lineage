@@ -125,10 +125,6 @@
     top: calc(50% - 10px);
     left: -40px;
 }
-/* to account for the border*/
-.active-node .collapse-button{
-    left: -45px;
-}
 
 /* misc */
 .delete-card-button:hover{
