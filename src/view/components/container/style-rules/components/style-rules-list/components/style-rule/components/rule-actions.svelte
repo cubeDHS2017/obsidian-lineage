@@ -45,6 +45,13 @@
         display: flex;
         align-items: center;
         gap:  8px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+        padding-left: 8px;
+        border-left: 1px solid var(--text-faint);
+
+        /*background-color: var(--color-base-30);*/
+        justify-content: center;
     }
     .delete-button{
         color:var(--color-red)

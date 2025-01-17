@@ -27,7 +27,10 @@ describe('depth.self', () => {
                 value: 3,
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 
@@ -55,7 +58,10 @@ describe('depth.self', () => {
                     enabled: true,
                     valueB: 3,
                 },
-                color: '#fafafa',
+                style: {
+                    color: '#fafafa',
+                    styleVariant: 'left-border',
+                },
                 priority: 0,
             },
         ] satisfies StyleRule[];

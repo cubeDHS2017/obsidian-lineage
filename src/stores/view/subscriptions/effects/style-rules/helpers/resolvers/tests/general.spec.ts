@@ -28,7 +28,10 @@ describe('general', () => {
                     value: 'COBOL',
                     enabled: true,
                 },
-                color: '#111111',
+                style: {
+                    color: '#111111',
+                    styleVariant: 'left-border',
+                },
                 priority: 0,
             },
             {
@@ -43,7 +46,10 @@ describe('general', () => {
                     value: 'COBOL',
                     enabled: true,
                 },
-                color: '#222222',
+                style: {
+                    color: '#222222',
+                    styleVariant: 'left-border',
+                },
                 priority: 1,
             },
         ];
@@ -56,6 +62,7 @@ describe('general', () => {
         );
         expect(result.nodeStyles.get('nztGACkf5')).toEqual({
             color: '#111111',
+            styleVariant: 'left-border',
         });
     });
 
@@ -72,7 +79,10 @@ describe('general', () => {
                 value: 'COBOL',
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 
@@ -98,7 +108,10 @@ describe('general', () => {
                 value: '',
                 enabled: true,
             },
-            color: '#fb7979',
+            style: {
+                color: '#fb7979',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 

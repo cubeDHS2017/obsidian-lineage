@@ -5,7 +5,7 @@ import { wikipedia_cobol } from 'src/lib/data-conversion/test-data/wikipedia_cob
 import { TargetNodeResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/target-node-resolver';
 import { NodePropertyResolver } from 'src/stores/view/subscriptions/effects/style-rules/helpers/resolvers/node-property-resolver/node-property-resolver';
 
-const style_1 = { color: '#000000' };
+const style_1 = { color: '#000000', styleVariant: 'left-border' };
 const propertyResolver = new TargetNodeResolver(
     wikipedia_cobol.columns.columns,
 );
@@ -27,7 +27,10 @@ describe('content.self', () => {
                 value: 'COBOL',
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 
@@ -54,7 +57,10 @@ describe('content.self', () => {
                 value: 'cobol',
                 enabled: true,
             },
-            color: '#fb7979',
+            style: {
+                color: '#fb7979',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
         const result = processStyleRules(
@@ -81,7 +87,10 @@ describe('content.direct-children', () => {
                 value: 'legacy',
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 
@@ -116,7 +125,10 @@ describe('content.any-children', () => {
                 value: 'legacy',
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 
@@ -144,7 +156,10 @@ describe('content.any-parent', () => {
                 value: 'language',
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 

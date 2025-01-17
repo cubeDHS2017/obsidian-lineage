@@ -1,4 +1,8 @@
-import { StyleRule, StyleRuleCondition } from '../../types/style-rules-types';
+import {
+    NodeStyle,
+    StyleRule,
+    StyleRuleCondition,
+} from '../../types/style-rules-types';
 import { id } from 'src/helpers/id';
 import { Settings } from 'src/stores/settings/settings-type';
 import { fixConditionTypes } from 'src/stores/settings/reducers/update-style-rules/helpers/fix-condition-types';
@@ -19,6 +23,14 @@ export type StyleRulesAction =
               documentPath: string;
               id: string;
               rule: Partial<StyleRule>;
+          };
+      }
+    | {
+          type: 'settings/style-rules/update-style';
+          payload: {
+              documentPath: string;
+              id: string;
+              style: Partial<NodeStyle>;
           };
       }
     | {
@@ -74,7 +86,10 @@ export const updateStyleRules = (
                 value: '',
                 enabled: true,
             },
-            color: '#fff',
+            style: {
+                color: '#fff',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
         state.rules = [...state.rules, newRule];
@@ -92,6 +107,19 @@ export const updateStyleRules = (
         );
     } else if (action.type === 'settings/style-rules/move') {
         state.rules = handleDND(state.rules, action.payload);
+    } else if (action.type === 'settings/style-rules/update-style') {
+        const index = state.rules.findIndex((r) => r.id === action.payload.id);
+        if (index !== -1) {
+            state.rules[index] = {
+                ...state.rules[index],
+                // @ts-ignore
+                style: {
+                    ...state.rules[index].style,
+                    ...action.payload.style,
+                },
+            };
+            state.rules = [...state.rules];
+        }
     } else if (action.type === 'settings/style-rules/update-condition') {
         const { ruleId, updates } = action.payload;
         const index = state.rules.findIndex((r) => r.id === ruleId);

@@ -4,8 +4,9 @@
     import { getView } from 'src/view/components/container/context';
     import clx from 'classnames';
     import { EditingState } from 'src/stores/view/default-view-state';
-    import { NodeStyle, PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
+    import { PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
     import { nodesStore, singleColumnNodesStore } from 'src/stores/document/derived/nodes-store';
+    import { NodeStyle } from 'src/stores/settings/types/style-rules-types';
 
     export let groupId: string;
     export let columnId: string;

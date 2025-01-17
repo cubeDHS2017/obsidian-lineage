@@ -4,7 +4,8 @@
     import { scrollOnDndY } from 'src/view/actions/dnd/scroll-on-dnd-y';
     import { groupsStore, singleColumnGroupStore } from 'src/stores/document/derived/groups-store';
     import { EditingState } from 'src/stores/view/default-view-state';
-    import { NodeStyle, PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
+    import { PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
+    import { NodeStyle } from 'src/stores/settings/types/style-rules-types';
 
     export let columnId: string;
     export let activeChildGroups: Set<string>;

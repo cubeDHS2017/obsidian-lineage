@@ -6,13 +6,14 @@
     import Content from './components/content/content.svelte';
     import CardButtons
         from 'src/view/components/container/column/components/group/components/card/components/card-buttons/card-buttons/card-buttons.svelte';
-    import { NodeStyle } from 'src/stores/view/view-state-type';
+    import { NodeStyle } from 'src/stores/settings/types/style-rules-types';
     import clx from 'classnames';
     import Bridges
         from 'src/view/components/container/column/components/group/components/card/components/bridges/bridges.svelte';
     import { droppable } from 'src/view/actions/dnd/droppable';
     import TreeIndex
         from 'src/view/components/container/column/components/group/components/card/components/card-buttons/tree-index-button.svelte';
+    import CardStyle from './components/card-style.svelte';
 
     export let node: NodeId;
     export let editing: boolean;
@@ -72,8 +73,11 @@
     id={node}
     use:droppable
 >
+    {#if style}
+        <CardStyle {style} />
+    {/if}
     {#if active === ActiveStatus.node && editing}
-        <InlineEditor nodeId={node} />
+        <InlineEditor nodeId={node} {style} />
     {:else}
         <Draggable nodeId={node} {isInSidebar}>
             <Content nodeId={node} {isInSidebar} {active} />
@@ -95,13 +99,8 @@
         {hasChildren}
         {pinned}
     />
-    <Bridges {active} {editing} {hasActiveChildren} {firstColumn} />
-    {#if style}
-        <div
-            style={`background-color: ${style.color}`}
-            class="node-style-container"
-        />
-    {/if}
+    <Bridges {active} {editing} {hasActiveChildren} {firstColumn} {style} />
+
     <!--    <div class="debug-node-id">{node}</div>-->
 </div>
 
@@ -127,14 +126,6 @@
 
     .lineage-card::-webkit-scrollbar {
         display: initial;
-    }
-
-    .node-style-container {
-        position: absolute;
-        width: 5px;
-        left: 0;
-        height: 100%;
-        top: 0;
     }
 
     /* .node-border--active,

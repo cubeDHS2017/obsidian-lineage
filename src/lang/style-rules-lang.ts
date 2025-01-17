@@ -4,6 +4,7 @@ import {
     StringOperator,
     StringProperty,
     StyleRuleTarget,
+    StyleVariant,
 } from 'src/stores/settings/types/style-rules-types';
 
 export const styleRulesLang = {
@@ -44,4 +45,8 @@ export const styleRulesLang = {
         headings: 'Headings',
         'headings-word-count': 'Headings word count',
     } satisfies Record<NumericProperty | StringProperty, string>,
+    styleVariants: {
+        'left-border': 'Left border',
+        'background-color': 'Background color',
+    } satisfies Record<StyleVariant, string>,
 };

@@ -4,6 +4,7 @@ import {
     StringOperator,
     StringProperty,
     StyleRuleTarget,
+    StyleVariant,
 } from 'src/stores/settings/types/style-rules-types';
 
 export const targets: StyleRuleTarget[] = [
@@ -50,4 +51,9 @@ export const properties: (NumericProperty | StringProperty)[] = [
     'line-count',
     'direct-children-count',
     'total-children-count',
+];
+
+export const styleVariants: StyleVariant[] = [
+    'background-color',
+    'left-border',
 ];

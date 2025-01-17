@@ -18,10 +18,14 @@ const mapColorsToRules = (colors: string[]) =>
                 },
                 enabled: true,
                 priority: 0,
-                color,
+                style: {
+                    color,
+                    styleVariant: 'left-border',
+                },
             }) satisfies StyleRule,
     );
-const mapStyleToColors = (rules: StyleRule[]) => rules.map((r) => r.color);
+const mapStyleToColors = (rules: StyleRule[]) =>
+    rules.map((r) => r.style.color);
 describe('handle-dnd', () => {
     test('case 1: dropped>target, before target', () => {
         const input = ['red', 'green', 'blue', 'yellow'];

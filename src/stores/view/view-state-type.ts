@@ -8,6 +8,7 @@ import {
     EditingState,
 } from 'src/stores/view/default-view-state';
 import { ConflictingHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
+import { NodeStyle } from 'src/stores/settings/types/style-rules-types';
 
 export type ActiveNodesOfColumn = {
     [columnId: string]: {
@@ -71,8 +72,4 @@ export type ViewState = {
         collapsedParents: Set<string>;
         hiddenNodes: Set<string>;
     };
-};
-
-export type NodeStyle = {
-    color: string;
 };

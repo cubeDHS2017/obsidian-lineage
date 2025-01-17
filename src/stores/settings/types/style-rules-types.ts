@@ -74,11 +74,17 @@ export type ConditionGroup = {
 
 export type StyleRuleCondition = ConditionNode /*| ConditionGroup*/;
 
+export type StyleVariant = 'left-border' | 'background-color';
+
+export type NodeStyle = {
+    color: string;
+    styleVariant: StyleVariant;
+};
 export type StyleRule = {
     id: string;
     name: string;
     enabled: boolean;
     condition: StyleRuleCondition;
-    color: string;
+    style: NodeStyle;
     priority: number;
 };

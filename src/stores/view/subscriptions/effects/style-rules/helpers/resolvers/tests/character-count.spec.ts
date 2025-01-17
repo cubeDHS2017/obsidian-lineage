@@ -27,7 +27,10 @@ describe('character-count.self', () => {
                 value: 50,
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 

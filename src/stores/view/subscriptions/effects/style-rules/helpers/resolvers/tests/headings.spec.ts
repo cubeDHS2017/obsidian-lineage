@@ -27,7 +27,10 @@ describe('headings.self', () => {
                 value: 'cobol',
                 enabled: true,
             },
-            color: '#fb7979',
+            style: {
+                color: '#fb7979',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
         const result = processStyleRules(
@@ -52,7 +55,10 @@ describe('headings.self', () => {
                 value: 'cob.l',
                 enabled: true,
             },
-            color: '#fb7979',
+            style: {
+                color: '#fb7979',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
         const result = processStyleRules(

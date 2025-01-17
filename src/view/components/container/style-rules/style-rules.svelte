@@ -18,9 +18,9 @@
 
 <style>
     .modal-content {
-        width: 950px;
+        width: 1022px;
         max-width: 100%;
-        height: 390px;
+        height: 230px;
         overflow: auto;
     }
 </style>

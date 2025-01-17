@@ -28,7 +28,10 @@ describe('headings-word-count.self', () => {
                 valueB: 3,
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 

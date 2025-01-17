@@ -27,7 +27,10 @@ describe('direct-children-count.self', () => {
                 value: 3,
                 enabled: true,
             },
-            color: '#000000',
+            style: {
+                color: '#000000',
+                styleVariant: 'left-border',
+            },
             priority: 0,
         };
 

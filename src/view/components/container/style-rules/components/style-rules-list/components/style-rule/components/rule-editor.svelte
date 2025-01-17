@@ -1,7 +1,13 @@
 <script lang="ts">
     import { StyleRule } from '../../../../../../../../../stores/settings/types/style-rules-types';
     import { getView } from '../../../../../../context';
-    import { numericOperators, properties, stringOperators, targets } from '../../../../../helpers/constants';
+    import {
+        numericOperators,
+        properties,
+        stringOperators,
+        styleVariants,
+        targets
+    } from '../../../../../helpers/constants';
     import { ruleEventHandlers } from '../../../../../helpers/rule-event-handlers';
     import { styleRulesLang } from '../../../../../../../../../lang/style-rules-lang';
 
@@ -19,8 +25,6 @@
 </script>
 
 <div class="rule-editor">
-    <input type="color" value={rule.color} on:input={h.handleColorChange} />
-
     <div class="select-elements">
         <select
             value={rule.condition.property}
@@ -84,25 +88,44 @@
                 value={'valueB' in rule.condition ? rule.condition.valueB : 0}
                 on:input={h.handleValueBChange}
                 placeholder={'Number'}
-                style={'width: 75px'}
+                style={'width: 60px'}
                 aria-label="Value 2"
             />
         {/if}
     </div>
+    <div class="rule-style-config">
+        <input
+            type="color"
+            value={rule.style.color}
+            on:input={h.handleColorChange}
+        />
 
+        <div class="select-elements">
+            <select
+                value={rule.style.styleVariant}
+                on:change={h.handleStyleVariantChange}
+                aria-label="Style type"
+            >
+                {#each styleVariants as styleType}
+                    <option value={styleType}
+                        >{styleRulesLang.styleVariants[styleType]}</option
+                    >
+                {/each}
+            </select>
+        </div>
+    </div>
     <!--    <div class="debug-node-id">{rule.id}</div>-->
 </div>
 
 <style>
     .rule-editor {
-
         display: flex;
         gap: 8px;
         align-items: center;
         position: relative;
         width: 90%;
         flex: 1;
-        flex-wrap:wrap
+        flex-wrap: wrap;
     }
 
 
@@ -114,17 +137,19 @@
         justify-content: space-between;
         flex-wrap: wrap;
         & select {
-            width: 150px;
+            font-size: 12px;
+            width: 130px;
         }
     }
     .input-elements {
-        width: 150px;
+        width: 130px;
         display: flex;
         gap: 8px;
         align-items: center;
         justify-content: space-between;
         & input {
-            width:100%
+            font-size: 12px;
+            width: 100%;
         }
     }
 
@@ -137,4 +162,16 @@
         color: var(--text-on-accent);
         background-color: var(--color-accent);
     }*/
+
+    .rule-style-config {
+        width: fit-content;
+        padding: 4px;
+        padding-right: 0px;
+        border-left: 1px solid var(--text-faint);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        /*background-color: var(--color-base-30);*/
+        justify-content: center;
+    }
 </style>

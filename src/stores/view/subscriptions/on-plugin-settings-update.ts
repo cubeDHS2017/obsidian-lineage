@@ -80,7 +80,8 @@ export const onPluginSettingsUpdate = (
         type === 'settings/style-rules/update-condition' ||
         type === 'settings/style-rules/enable-rule' ||
         type === 'settings/style-rules/disable-rule' ||
-        type === 'settings/style-rules/move';
+        type === 'settings/style-rules/move' ||
+        type === 'settings/style-rules/update-style';
     if (shouldUpdateStyleRules) {
         view.rulesProcessor.onRulesUpdate();
     }
