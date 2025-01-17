@@ -71,7 +71,6 @@ export type AlignEvent = {
 
 export class AlignBranch {
     private previousActiveBranch: ActiveBranch | null = null;
-    private previousBehavior: PreviousScrollBehavior | null = null;
 
     private previousEvent: AlignEvent | null = null;
     constructor(public view: LineageView) {}
@@ -85,24 +84,21 @@ export class AlignBranch {
 
         const context = this.createContext(action);
         const actions = createAlignBranchActions(context, action);
+
         requestAnimationFrame(() => {
             runAlignBranchActions(context, actions);
         });
         this.saveActiveBranch(context);
     };
 
-    private createContext = (action?: PluginAction) => {
+    private createContext = (action: PluginAction) => {
         const settings = this.view.plugin.settings.getValue();
         const container = this.view.container!;
         const documentState = this.view.documentStore.getValue();
         const viewState = this.view.viewStore.getValue();
         const activeBranch = viewState.document.activeBranch;
 
-        const behavior = action
-            ? adjustScrollBehavior(action, this.previousBehavior)
-            : 'smooth';
-
-        this.saveBehavior(behavior);
+        const behavior = adjustScrollBehavior(action);
 
         const context: AlignBranchContext = {
             previousActiveBranch: this.previousActiveBranch,
@@ -127,13 +123,6 @@ export class AlignBranch {
 
     private saveActiveBranch(context: AlignBranchContext) {
         this.previousActiveBranch = context.activeBranch;
-    }
-
-    private saveBehavior(behavior: ScrollBehavior) {
-        this.previousBehavior = {
-            behavior,
-            timestamp: Date.now(),
-        };
     }
 
     private waitForPreviousEvent = async (action: PluginAction) => {
