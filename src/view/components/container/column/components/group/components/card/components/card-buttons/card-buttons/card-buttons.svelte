@@ -1,17 +1,12 @@
 <script lang="ts">
-    import { ActiveStatus } from '../../../../active-status.enum';
     import DeleteNodeButton from './components/delete-node-button.svelte';
     import EditNodeButton from './components/edit-node-button.svelte';
     import CreateCardButton from './components/create-card-button.svelte';
-    import TreeIndex from '../tree-index-button.svelte';
     import FocusCardButton from './components/focus-card-button.svelte';
     import CollapseCardButton from './components/collapse-card-button.svelte';
 
     export let editing: boolean;
-    export let active: ActiveStatus | null;
     export let nodeId: string;
-    export let section: string;
-    export let pinned: boolean;
     export let hasChildren: boolean;
     export let isInSidebar = false;
     export let collapsed: boolean
@@ -32,5 +27,5 @@
     {/if}
 {/if}
 <EditNodeButton {editing} {nodeId} {isInSidebar} />
-<TreeIndex activeStatus={active} {nodeId} {section} {hasChildren} {pinned}/>
+
 

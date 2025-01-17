@@ -230,6 +230,9 @@ export const lang = {
     // layout
     settings_layout_card_width: 'Card width',
     settings_layout_limit_card_height: 'Limit card height',
+    settings_always_show_card_buttons: 'Show buttons on all cards',
+    settings_always_show_card_buttons_desc:
+        'Show card buttons on all cards, not just the active one',
 
     // outline
     settings_layout_indentation_width: 'Card indentation',

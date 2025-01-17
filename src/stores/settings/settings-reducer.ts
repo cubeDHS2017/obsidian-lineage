@@ -163,7 +163,13 @@ export type SettingsActions =
           payload: { color: string | undefined };
       }
     | HotkeySettingsActions
-    | PersistCollapsedSectionsAction;
+    | PersistCollapsedSectionsAction
+    | {
+          type: 'settings/view/set-always-show-card-buttons';
+          payload: {
+              show: boolean;
+          };
+      };
 
 export type PersistCollapsedSectionsAction = {
     type: 'settings/document/persist-collapsed-sections';
@@ -405,6 +411,8 @@ const updateState = (store: Settings, action: SettingsActions) => {
         setHotkeyAsBlank(store, action);
     } else if (action.type === 'settings/document/persist-collapsed-sections') {
         persistCollapsedSections(store, action);
+    } else if (action.type === 'settings/view/set-always-show-card-buttons') {
+        store.view.alwaysShowCardButtons = action.payload.show;
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

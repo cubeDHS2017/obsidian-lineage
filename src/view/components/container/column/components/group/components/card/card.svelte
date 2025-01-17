@@ -11,6 +11,8 @@
     import Bridges
         from 'src/view/components/container/column/components/group/components/card/components/bridges/bridges.svelte';
     import { droppable } from 'src/view/actions/dnd/droppable';
+    import TreeIndex
+        from 'src/view/components/container/column/components/group/components/card/components/card-buttons/tree-index-button.svelte';
 
     export let node: NodeId;
     export let editing: boolean;
@@ -29,6 +31,7 @@
     export let singleColumnMode: boolean;
     export let collapsed: boolean;
     export let hidden: boolean;
+    export let alwaysShowCardButtons: boolean;
     const activeStatusClasses = {
         [ActiveStatus.node]: 'active-node',
         [ActiveStatus.child]: 'active-child',
@@ -41,12 +44,12 @@
 </script>
 
 <div
-    style={singleColumnMode && depth>0
+    style={singleColumnMode && depth > 0
         ? `margin-left: calc(var(--node-indentation-width) * ${depth})`
         : ''}
     class={clx(
         'lineage-card',
-        hidden? 'hidden-node':'',
+        hidden ? 'hidden-node' : '',
         active
             ? activeStatusClasses[active]
             : singleColumnMode
@@ -76,15 +79,21 @@
             <Content nodeId={node} {isInSidebar} {active} />
         </Draggable>
     {/if}
-    <CardButtons
-        {active}
-        {editing}
+    {#if active === ActiveStatus.node || alwaysShowCardButtons}
+        <CardButtons
+            {editing}
+            nodeId={node}
+            {hasChildren}
+            {isInSidebar}
+            {collapsed}
+        />
+    {/if}
+    <TreeIndex
+        activeStatus={active}
         nodeId={node}
         {section}
-        {pinned}
         {hasChildren}
-        {isInSidebar}
-        {collapsed}
+        {pinned}
     />
     <Bridges {active} {editing} {hasActiveChildren} {firstColumn} />
     {#if style}
@@ -127,7 +136,6 @@
         height: 100%;
         top: 0;
     }
-
 
     /* .node-border--active,
     .node-border--discard,

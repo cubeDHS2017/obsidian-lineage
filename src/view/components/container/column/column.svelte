@@ -28,6 +28,7 @@
     export let singleColumnMode: boolean;
     export let collapsedParents: Set<string>;
     export let hiddenNodes: Set<string>;
+    export let alwaysShowCardButtons: boolean;
     const view = getView();
     const groups = singleColumnMode
         ? singleColumnGroupStore(view)
@@ -61,6 +62,7 @@
                 {allDndNodes}
                 {collapsedParents}
                 {hiddenNodes}
+                {alwaysShowCardButtons}
             />
         {/if}
     {/each}

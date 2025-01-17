@@ -51,6 +51,7 @@
                 singleColumnMode={false}
                 collapsed={false}
                 hidden={false}
+                alwaysShowCardButtons={true}
             />
         {/each}
     {:else}
@@ -60,7 +61,6 @@
 
 <style>
     .pinned-cards-container {
-        overflow-y: auto;
         height: 100%;
         width: 100%;
 

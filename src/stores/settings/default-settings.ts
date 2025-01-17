@@ -30,6 +30,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         singleColumnMode: false,
         nodeIndentationWidth: DEFAULT_INDENTATION_WIDTH,
         maintainEditMode: false,
+        alwaysShowCardButtons: false,
     },
     general: {
         defaultDocumentFormat: 'sections',

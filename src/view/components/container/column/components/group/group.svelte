@@ -29,6 +29,7 @@
     export let allDndNodes: Set<string>;
     export let collapsedParents: Set<string>;
     export let hiddenNodes: Set<string>;
+    export let alwaysShowCardButtons: boolean;
     const view = getView();
     const nodes = singleColumnMode
         ? singleColumnNodesStore(view)
@@ -80,6 +81,7 @@
                     {singleColumnMode}
                     collapsed={collapsedParents.has(node)}
                     hidden={hiddenNodes.has(node)}
+                    {alwaysShowCardButtons}
                 />
             {/if}
         {/each}

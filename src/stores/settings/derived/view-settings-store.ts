@@ -21,3 +21,6 @@ export const SingleColumnMode = (view: LineageView) =>
 
 export const MaintainEditMode = (view: LineageView) =>
     derived(view.plugin.settings, (state) => state.view.maintainEditMode);
+
+export const AlwaysShowCardButtons = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.alwaysShowCardButtons);

@@ -66,7 +66,7 @@
         opacity: 0.8;
         font-size: 12px;
         cursor: pointer;
-        transition: opacity 200ms;
+
     }
     .is-active {
         opacity: 0.3;

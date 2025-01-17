@@ -12,6 +12,7 @@ import { Setting } from 'obsidian';
 import { lang } from 'src/lang/lang';
 import { InactiveCardOpacity } from 'src/view/actions/settings/components/inactive-card-opacity';
 import { ActiveBranchColor } from 'src/view/actions/settings/components/active-branch-color';
+import { AlwaysShowCardButtons } from 'src/view/actions/settings/components/always-show-card-buttons';
 
 export const renderSettings = (element: HTMLElement) => {
     const view = getView();
@@ -19,6 +20,7 @@ export const renderSettings = (element: HTMLElement) => {
     const render = () => {
         DefaultDocumentFormat(element, settingsStore);
         MaintainEditMode(element, settingsStore);
+        AlwaysShowCardButtons(element, settingsStore);
         new Setting(element).setHeading().setName(lang.settings_appearance);
         BackgroundColor(element, settingsStore);
         ActiveBranchBackground(element, settingsStore);

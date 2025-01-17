@@ -60,6 +60,7 @@ export type Settings = {
         singleColumnMode: boolean;
         nodeIndentationWidth: number;
         maintainEditMode: boolean;
+        alwaysShowCardButtons: boolean;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;

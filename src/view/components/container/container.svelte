@@ -15,7 +15,7 @@
     import { selectedNodesStore } from 'src/stores/view/derived/selected-nodes-store';
     import { PinnedNodesStore } from 'src/stores/document/derived/pinned-nodes-store';
     import { GroupParentIdsStore } from 'src/stores/document/derived/meta';
-    import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
+    import { AlwaysShowCardButtons, ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
     import {
         saveNodeContent
     } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
@@ -50,9 +50,11 @@
     const groupParentIds = GroupParentIdsStore(view);
     const pinnedNodesArray = PinnedNodesStore(view);
     const outline = OutlineStore(view);
+    const alwaysShowCardButtons = AlwaysShowCardButtons(view);
     $: pinnedNodes = new Set<string>($pinnedNodesArray);
     const zoom = zoomLevelStore(view);
     let allDndNodes: Set<string> = new Set();
+
     $: {
         if (singleColumnMode && $dnd.node) {
             allDndNodes = new Set(
@@ -127,6 +129,7 @@
                 {allDndNodes}
                 collapsedParents={$outline.collapsedParents}
                 hiddenNodes={$outline.hiddenNodes}
+                alwaysShowCardButtons={$alwaysShowCardButtons}
             />
         {/each}
         <ColumnsBuffer />

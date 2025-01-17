@@ -82,6 +82,7 @@
                 singleColumnMode={false}
                 collapsed={false}
                 hidden={false}
+                alwaysShowCardButtons={true}
             />
         {/each}
     {:else}
@@ -91,7 +92,6 @@
 
 <style>
     .recent-cards-container {
-        overflow-y:  overlay;
         height: 100%;
         width: 100%;
 
