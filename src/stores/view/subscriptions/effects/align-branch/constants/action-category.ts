@@ -73,7 +73,7 @@ const actionCategoryDict: Partial<
     SET_LIMIT_PREVIEW_HEIGHT: 'settings/layout',
     'UI/CHANGE_ZOOM_LEVEL': 'settings/zoom',
     'view/modes/gap-between-cards/toggle': 'settings/layout',
-    'settings/view/modes/toggle-single-column': 'settings/layout',
+    'settings/view/modes/toggle-outline-mode': 'settings/layout',
     'settings/view/set-node-indentation-width': 'settings/layout',
     'FS/SET_FILE_PATH': 'other',
     'DOCUMENT/COPY_NODE': 'other',

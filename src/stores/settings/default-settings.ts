@@ -27,7 +27,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         leftSidebarWidth: 500,
         leftSidebarActiveTab: 'pinned-cards',
         applyGapBetweenCards: false,
-        singleColumnMode: false,
+        outlineMode: false,
         nodeIndentationWidth: DEFAULT_INDENTATION_WIDTH,
         maintainEditMode: false,
         alwaysShowCardButtons: false,

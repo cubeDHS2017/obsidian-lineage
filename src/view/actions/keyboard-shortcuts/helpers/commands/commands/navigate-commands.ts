@@ -4,8 +4,8 @@ import { JumpTarget } from 'src/stores/view/reducers/document/jump-to-node';
 import { DefaultViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 import { enableEditModeInMainSplit } from 'src/view/components/container/column/components/group/components/card/components/content/store-actions/enable-edit-mode-in-main-split';
 
-const singleColumnMode = (view: LineageView) =>
-    view.plugin.settings.getValue().view.singleColumnMode;
+const outlineModeSelector = (view: LineageView) =>
+    view.plugin.settings.getValue().view.outlineMode;
 
 const maintainEditMode = (view: LineageView) =>
     view.plugin.settings.getValue().view.maintainEditMode;
@@ -33,7 +33,7 @@ const spatialNavigation = (view: LineageView, direction: AllDirections) => {
             columns: view.documentStore.getValue().document.columns,
         },
         context: {
-            outlineMode: singleColumnMode(view),
+            outlineMode: outlineModeSelector(view),
         },
     });
 };
@@ -50,7 +50,7 @@ const sequentialNavigation = (
             sections: view.documentStore.getValue().sections,
         },
         context: {
-            outlineMode: singleColumnMode(view),
+            outlineMode: outlineModeSelector(view),
         },
     });
 };
@@ -72,7 +72,7 @@ export const navigateCommands = () => {
             name: 'go_right',
             callback: (view, event) => {
                 event.preventDefault();
-                if (!singleColumnMode(view)) {
+                if (!outlineModeSelector(view)) {
                     spatialNavigation(view, 'right');
                 } else {
                     spatialNavigation(view, 'down');
@@ -88,7 +88,7 @@ export const navigateCommands = () => {
             callback: (view, event) => {
                 event.preventDefault();
 
-                if (!singleColumnMode(view)) {
+                if (!outlineModeSelector(view)) {
                     spatialNavigation(view, 'left');
                 } else {
                     spatialNavigation(view, 'up');
@@ -103,7 +103,7 @@ export const navigateCommands = () => {
             name: 'go_down',
             callback: (view, event) => {
                 event.preventDefault();
-                if (!singleColumnMode(view)) {
+                if (!outlineModeSelector(view)) {
                     spatialNavigation(view, 'down');
                 } else {
                     sequentialNavigation(view, 'forward');
@@ -118,7 +118,7 @@ export const navigateCommands = () => {
             name: 'go_up',
             callback: (view, event) => {
                 event.preventDefault();
-                if (!singleColumnMode(view)) {
+                if (!outlineModeSelector(view)) {
                     spatialNavigation(view, 'up');
                 } else {
                     sequentialNavigation(view, 'back');

@@ -41,7 +41,7 @@ export type AlignBranchContext = {
     activeBranch: ActiveBranch;
     container: HTMLElement;
     containerRect: DOMRect;
-    singleColumnMode: boolean;
+    outlineMode: boolean;
     alignBranchSettings: AlignBranchSettings;
     state: AlignBranchState;
     activeNodesOfColumn: ActiveNodesOfColumn;
@@ -107,7 +107,7 @@ export class AlignBranch {
             container,
             activeNodesOfColumn: viewState.document.activeNodesOfColumn,
             containerRect: container.getBoundingClientRect(),
-            singleColumnMode: settings.view.singleColumnMode,
+            outlineMode: settings.view.outlineMode,
             alignBranchSettings: {
                 centerActiveNodeH: settings.view.scrolling.centerActiveNodeH,
                 centerActiveNodeV: settings.view.scrolling.centerActiveNodeV,

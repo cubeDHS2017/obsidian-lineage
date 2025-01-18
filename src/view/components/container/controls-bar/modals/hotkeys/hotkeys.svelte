@@ -7,15 +7,15 @@
     import {
         DynamicLabelState
     } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
-    import { SingleColumnMode } from 'src/stores/settings/derived/view-settings-store';
+    import { OutlineModeStore } from 'src/stores/settings/derived/view-settings-store';
 
     const view = getView();
     const store = FilteredHotkeysStore(view);
-    const singleColumnMode = SingleColumnMode(view);
+    const outlineMode = OutlineModeStore(view);
     let labelState: DynamicLabelState;
     $: {
         labelState = {
-            singleColumnMode: $singleColumnMode,
+            outlineMode: $outlineMode,
         };
     }
 </script>

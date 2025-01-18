@@ -3,7 +3,7 @@ import { PluginAction } from 'src/stores/view/subscriptions/effects/align-branch
 
 export const forceCenterActiveNodeV = (
     action: PluginAction,
-    singleColumnMode: boolean,
+    outlineMode: boolean,
 ) => {
     const actionType = action.type;
     let centerActiveNodeV = false;
@@ -14,7 +14,7 @@ export const forceCenterActiveNodeV = (
         actionType === 'view/align-branch/center-node' ||
         actionType === 'DOCUMENT/LOAD_FILE';
 
-    if (!centerActiveNodeV && !singleColumnMode) {
+    if (!centerActiveNodeV && !outlineMode) {
         centerActiveNodeV =
             !!type.dropOrMove ||
             !!type.changeHistory ||

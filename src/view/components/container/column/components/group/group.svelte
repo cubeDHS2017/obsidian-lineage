@@ -26,13 +26,13 @@
     export let groupParentIds: Set<string>;
     export let firstColumn: boolean;
     export let styleRules: Map<string, NodeStyle>;
-    export let singleColumnMode: boolean;
+    export let outlineMode: boolean;
     export let allDndNodes: Set<string>;
     export let collapsedParents: Set<string>;
     export let hiddenNodes: Set<string>;
     export let alwaysShowCardButtons: boolean;
     const view = getView();
-    const nodes = singleColumnMode
+    const nodes = outlineMode
         ? singleColumnNodesStore(view)
         : nodesStore(view, columnId, groupId);
 </script>
@@ -42,12 +42,12 @@
         class={clx(
             'group',
             /*(parentNodes.has(groupId) ||
-                singleColumnMode ||
+                outlineMode ||
                 (firstColumn && parentNodes.size > 0)) &&
                 'group-has-active-parent',*/
-            (activeChildGroups.has(groupId) || singleColumnMode) &&
+            (activeChildGroups.has(groupId) || outlineMode) &&
                 'group-has-active-child',
-            (activeGroup === groupId || singleColumnMode) &&
+            (activeGroup === groupId || outlineMode) &&
                 'group-has-active-node',
         )}
         id={'group-' + groupId}
@@ -79,7 +79,7 @@
                     isSearchMatch={searchResults.has(node)}
                     {firstColumn}
                     style={styleRules.get(node)}
-                    {singleColumnMode}
+                    {outlineMode}
                     collapsed={collapsedParents.has(node)}
                     hidden={hiddenNodes.has(node)}
                     {alwaysShowCardButtons}

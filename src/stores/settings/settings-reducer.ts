@@ -142,7 +142,7 @@ export type SettingsActions =
           };
       }
     | { type: 'view/modes/gap-between-cards/toggle' }
-    | { type: 'settings/view/modes/toggle-single-column' }
+    | { type: 'settings/view/modes/toggle-outline-mode' }
     | StyleRulesAction
     | {
           type: 'settings/view/set-node-indentation-width';
@@ -336,9 +336,9 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.leftSidebarActiveTab = action.payload.tab;
     } else if (action.type === 'view/modes/gap-between-cards/toggle') {
         store.view.applyGapBetweenCards = !store.view.applyGapBetweenCards;
-    } else if (action.type === 'settings/view/modes/toggle-single-column') {
-        store.view.singleColumnMode = !store.view.singleColumnMode;
-        if (store.view.singleColumnMode) {
+    } else if (action.type === 'settings/view/modes/toggle-outline-mode') {
+        store.view.outlineMode = !store.view.outlineMode;
+        if (store.view.outlineMode) {
             store.view.scrolling.centerActiveNodeH = false;
             store.view.scrolling = {
                 ...store.view.scrolling,

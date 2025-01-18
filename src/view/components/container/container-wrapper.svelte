@@ -1,6 +1,6 @@
 <script lang="ts">
     import { getView } from './context';
-    import { SingleColumnMode } from '../../../stores/settings/derived/view-settings-store';
+    import { OutlineModeStore } from '../../../stores/settings/derived/view-settings-store';
     import { onDestroy } from 'svelte';
     import Container from './container.svelte';
 
@@ -9,7 +9,7 @@
     let unmounting = false;
     let interval: ReturnType<typeof setTimeout> | null = null;
 
-    const unsubscribe = SingleColumnMode(view).subscribe((state,action,isInitialRun) => {
+    const unsubscribe = OutlineModeStore(view).subscribe((state, action, isInitialRun) => {
         if(isInitialRun) return
         unmounting = true;
         if (interval) clearTimeout(interval);
@@ -21,9 +21,9 @@
         unsubscribe();
     });
 
-    const singleColumnMode = SingleColumnMode(view);
+    const outlineMode = OutlineModeStore(view);
 </script>
 
 {#if !unmounting}
-    <Container singleColumnMode={$singleColumnMode} />
+    <Container outlineMode={$outlineMode} />
 {/if}

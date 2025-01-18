@@ -7,7 +7,7 @@
     }
 }
 
-.single-column {
+.outline-mode {
     --node-gap: 30px;
 
     & .group {
@@ -95,6 +95,7 @@
     }
 }
 
+/* hides floating buttons when the mouse is inactive*/
 .hide-floating-buttons {
     .lineage-card:not(.active-node) {
         .lineage-floating-button:not(.collapse-button) {

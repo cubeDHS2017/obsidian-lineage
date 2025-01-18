@@ -24,7 +24,7 @@ type Context = Pick<
     AlignBranchContext,
     | 'previousActiveBranch'
     | 'activeBranch'
-    | 'singleColumnMode'
+    | 'outlineMode'
     | 'alignBranchSettings'
 >;
 export const createAlignBranchActions = (
@@ -35,7 +35,7 @@ export const createAlignBranchActions = (
     const settings = context.alignBranchSettings;
     const _forceCenterActiveNodeV = forceCenterActiveNodeV(
         action,
-        context.singleColumnMode,
+        context.outlineMode,
     );
 
     if (action.type === 'view/align-branch/reveal-node') {
@@ -44,7 +44,7 @@ export const createAlignBranchActions = (
         return actions;
     }
 
-    if (context.singleColumnMode) {
+    if (context.outlineMode) {
         if (_forceCenterActiveNodeV) {
             actions.push({ action: '20/active-node/horizontal/center' });
             actions.push({ action: '20/active-node/vertical/center' });

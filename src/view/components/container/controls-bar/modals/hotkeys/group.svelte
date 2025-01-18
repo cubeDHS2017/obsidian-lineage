@@ -14,7 +14,7 @@
     <div class="hotkey-group-name">{groupName}</div>
     <div class="hotkeys-list">
         {#each group as commandHotkeys (commandHotkeys.name)}
-            {#if !(labelState.singleColumnMode && (commandHotkeys.name === 'navigate_to_next_node' || commandHotkeys.name === 'navigate_to_previous_node'))}
+            {#if !(labelState.outlineMode && (commandHotkeys.name === 'navigate_to_next_node' || commandHotkeys.name === 'navigate_to_previous_node'))}
                 <Hotkey {commandHotkeys} {labelState} />
             {/if}
         {/each}

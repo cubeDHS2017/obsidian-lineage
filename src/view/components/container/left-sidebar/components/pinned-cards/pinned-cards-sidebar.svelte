@@ -48,7 +48,7 @@
                 selected={false}
                 pinned={false}
                 style={$styleRules.get(node)}
-                singleColumnMode={false}
+                outlineMode={false}
                 collapsed={false}
                 hidden={false}
                 alwaysShowCardButtons={true}

@@ -109,7 +109,7 @@ export const defaultViewHotkeys = (): DefaultViewCommand[] => [
         name: 'toggle_outline_mode',
         callback: (view) => {
             view!.plugin.settings.dispatch({
-                type: 'settings/view/modes/toggle-single-column',
+                type: 'settings/view/modes/toggle-outline-mode',
             });
         },
         hotkeys: [{ key: 'o', modifiers: ['Alt'], editorState: 'both' }],

@@ -26,12 +26,12 @@
     export let idSection: Record<string, string>;
     export let firstColumn: boolean;
     export let styleRules: Map<string, NodeStyle>;
-    export let singleColumnMode: boolean;
+    export let outlineMode: boolean;
     export let collapsedParents: Set<string>;
     export let hiddenNodes: Set<string>;
     export let alwaysShowCardButtons: boolean;
     const view = getView();
-    const groups = singleColumnMode
+    const groups = outlineMode
         ? singleColumnGroupStore(view)
         : groupsStore(view, columnId);
 </script>
@@ -59,7 +59,7 @@
                 {firstColumn}
                 {pendingConfirmation}
                 {styleRules}
-                {singleColumnMode}
+                {outlineMode}
                 {allDndNodes}
                 {collapsedParents}
                 {hiddenNodes}

@@ -29,11 +29,11 @@
     import { OutlineStore } from 'src/stores/view/derived/outline-store';
     import { hideFloatingButtons } from 'src/view/actions/hide-floating-buttons';
 
-    export let singleColumnMode: boolean;
+    export let outlineMode: boolean;
 
     const view = getView();
 
-    const columns = singleColumnMode
+    const columns = outlineMode
         ? singleColumnStore(view)
         : columnsStore(view);
     const dnd = dndStore(view);
@@ -56,7 +56,7 @@
     let allDndNodes: Set<string> = new Set();
 
     $: {
-        if (singleColumnMode && $dnd.node) {
+        if (outlineMode && $dnd.node) {
             allDndNodes = new Set(
                 getAllChildren(
                     view.documentStore.getValue().document.columns,
@@ -94,7 +94,7 @@
     class={'columns-container ' +
         ($limitPreviewHeight ? ' limit-card-height' : '') +
         ($applyGap ? ' gap-between-cards' : '') +
-        (singleColumnMode ? ' single-column' : '') +
+        (outlineMode ? ' outline-mode' : '') +
         ($zoom !== 1 ? ' zoom-enabled' : '')}
     id="columns-container"
     tabindex="0"
@@ -125,7 +125,7 @@
                 groupParentIds={$groupParentIds}
                 firstColumn={i === 0}
                 styleRules={$styleRules}
-                {singleColumnMode}
+                {outlineMode}
                 {allDndNodes}
                 collapsedParents={$outline.collapsedParents}
                 hiddenNodes={$outline.hiddenNodes}

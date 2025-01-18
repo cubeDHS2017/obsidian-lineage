@@ -57,7 +57,7 @@ export type Settings = {
         leftSidebarWidth: number;
         leftSidebarActiveTab: LeftSidebarTab;
         applyGapBetweenCards: boolean;
-        singleColumnMode: boolean;
+        outlineMode: boolean;
         nodeIndentationWidth: number;
         maintainEditMode: boolean;
         alwaysShowCardButtons: boolean;

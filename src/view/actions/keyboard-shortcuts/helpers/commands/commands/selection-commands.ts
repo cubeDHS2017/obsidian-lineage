@@ -16,8 +16,7 @@ export const selectionCommands = () => {
                     context: {
                         shiftKey: true,
                         outlineMode:
-                            view.plugin.settings.getValue().view
-                                .singleColumnMode,
+                            view.plugin.settings.getValue().view.outlineMode,
                     },
                 });
             },
@@ -43,8 +42,7 @@ export const selectionCommands = () => {
                     context: {
                         shiftKey: true,
                         outlineMode:
-                            view.plugin.settings.getValue().view
-                                .singleColumnMode,
+                            view.plugin.settings.getValue().view.outlineMode,
                     },
                 });
             },

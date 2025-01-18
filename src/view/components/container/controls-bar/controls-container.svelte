@@ -18,7 +18,7 @@
     import Button from '../shared/button.svelte';
     import { ScrollSettingsStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { customIcons } from 'src/helpers/load-custom-icons';
-    import { ApplyGapBetweenCardsStore, SingleColumnMode } from 'src/stores/settings/derived/view-settings-store';
+    import { ApplyGapBetweenCardsStore, OutlineModeStore } from 'src/stores/settings/derived/view-settings-store';
     import ZoomButtons from './components/zoom-buttons.svelte';
 
     const view = getView();
@@ -85,10 +85,10 @@
             type: 'view/modes/gap-between-cards/toggle',
         });
     };
-    const singleColumnMode = SingleColumnMode(view);
-    const toggleSingleColumnMode = () => {
+    const outlineMode = OutlineModeStore(view);
+    const toggleOutlineMode = () => {
         view.plugin.settings.dispatch({
-            type: 'settings/view/modes/toggle-single-column',
+            type: 'settings/view/modes/toggle-outline-mode',
         });
     };
 </script>
@@ -156,10 +156,10 @@
         data-visible={$showControls}
     >
         <Button
-            active={$singleColumnMode}
+            active={$outlineMode}
             classes="control-item"
             label={lang.controls_single_column}
-            on:click={toggleSingleColumnMode}
+            on:click={toggleOutlineMode}
             tooltipPosition="left"
         >
             {@html customIcons.outline.svg}

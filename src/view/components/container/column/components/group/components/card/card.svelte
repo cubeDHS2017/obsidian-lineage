@@ -29,7 +29,7 @@
     export let isInSidebar = false;
     export let isSearchMatch = false;
     export let style: NodeStyle | undefined;
-    export let singleColumnMode: boolean;
+    export let outlineMode: boolean;
     export let collapsed: boolean;
     export let hidden: boolean;
     export let alwaysShowCardButtons: boolean;
@@ -45,7 +45,7 @@
 </script>
 
 <div
-    style={singleColumnMode && depth > 0
+    style={outlineMode && depth > 0
         ? `margin-left: calc(var(--node-indentation-width) * ${depth})`
         : ''}
     class={clx(
@@ -53,7 +53,7 @@
         hidden ? 'hidden-node' : '',
         active
             ? activeStatusClasses[active]
-            : singleColumnMode
+            : outlineMode
               ? ' active-sibling'
               : ' inactive-node',
         confirmDelete
@@ -83,15 +83,17 @@
             <Content nodeId={node} {isInSidebar} {active} />
         </Draggable>
     {/if}
-    {#if active === ActiveStatus.node || alwaysShowCardButtons}
-        <CardButtons
-            {editing}
-            nodeId={node}
-            {hasChildren}
-            {isInSidebar}
-            {collapsed}
-        />
-    {/if}
+
+    <CardButtons
+        {editing}
+        nodeId={node}
+        {hasChildren}
+        {isInSidebar}
+        {collapsed}
+        {active}
+        {alwaysShowCardButtons}
+        {outlineMode}
+    />
     <TreeIndex
         activeStatus={active}
         nodeId={node}
