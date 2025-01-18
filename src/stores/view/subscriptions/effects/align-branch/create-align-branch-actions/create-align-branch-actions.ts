@@ -4,6 +4,8 @@ import {
     AlignBranchContext,
     PluginAction,
 } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { outlineScrollingActions } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/outline-scrolling-actions';
+import { forceCenterActiveNodeH } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/force-center-active-node-h';
 
 export type AlignBranchAction = {
     action:
@@ -20,7 +22,7 @@ export type AlignBranchAction = {
         | '50/inactive-columns/vertical/move-up';
 };
 
-type Context = Pick<
+export type CreateActionsContext = Pick<
     AlignBranchContext,
     | 'previousActiveBranch'
     | 'activeBranch'
@@ -28,9 +30,9 @@ type Context = Pick<
     | 'alignBranchSettings'
 >;
 export const createAlignBranchActions = (
-    context: Context,
+    context: CreateActionsContext,
     action: PluginAction,
-) => {
+): AlignBranchAction[] => {
     const actions: AlignBranchAction[] = [];
 
     if (action.type === 'view/align-branch/reveal-node') {
@@ -46,37 +48,18 @@ export const createAlignBranchActions = (
         return actions;
     }
 
-    const settings = context.alignBranchSettings;
-    const _forceCenterActiveNodeV = forceCenterActiveNodeV(
-        action,
-        context.outlineMode,
-    );
     if (context.outlineMode) {
-        if (_forceCenterActiveNodeV) {
-            actions.push({ action: '20/active-node/horizontal/center' });
-            actions.push({ action: '20/active-node/vertical/center' });
-        } else {
-            if (settings.centerActiveNodeH) {
-                actions.push({ action: '20/active-node/horizontal/center' });
-            } else {
-                actions.push({ action: '20/active-node/horizontal/reveal' });
-            }
-            if (settings.centerActiveNodeV) {
-                actions.push({ action: '20/active-node/vertical/center' });
-            } else {
-                actions.push({ action: '20/active-node/vertical/reveal' });
-            }
-        }
-        return actions;
+        return outlineScrollingActions(context, action);
     }
 
-    if (settings.centerActiveNodeH) {
+    const settings = context.alignBranchSettings;
+    if (settings.centerActiveNodeH || forceCenterActiveNodeH(context, action)) {
         actions.push({ action: '20/active-node/horizontal/center' });
     } else {
         actions.push({ action: '20/active-node/horizontal/reveal' });
     }
 
-    if (settings.centerActiveNodeV || _forceCenterActiveNodeV) {
+    if (settings.centerActiveNodeV || forceCenterActiveNodeV(action)) {
         actions.push({ action: '20/active-node/vertical/center' });
         actions.push({ action: '30/parents/vertical/center' });
         actions.push({ action: '40/children/vertical/center' });
@@ -85,8 +68,8 @@ export const createAlignBranchActions = (
     }
 
     if (
-        action.type === 'DOCUMENT/SPLIT_NODE' ||
         action.type === 'view/life-cycle/mount' ||
+        action.type === 'DOCUMENT/SPLIT_NODE' ||
         action.type === 'DOCUMENT/LOAD_FILE'
     ) {
         actions.push({ action: '50/inactive-columns/vertical/move-up' });
@@ -100,5 +83,5 @@ export const createAlignBranchActions = (
             action: '10/first-column/horizontal/move-to-the-left',
         });
     }
-    return actions.sort((a, b) => a.action.localeCompare(b.action));
+    return actions;
 };

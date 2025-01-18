@@ -13,7 +13,7 @@
     export let collapsed: boolean;
     export let active: ActiveStatus | null;
     export let alwaysShowCardButtons: boolean;
-    export let outlineMode: boolean
+    export let outlineMode: boolean;
 </script>
 
 {#if active === ActiveStatus.node || alwaysShowCardButtons}
@@ -27,8 +27,8 @@
             <FocusCardButton {nodeId} />
         {/if}
     {/if}
+    <EditNodeButton {editing} {nodeId} {isInSidebar} />
 {/if}
 {#if outlineMode && hasChildren}
     <CollapseCardButton {nodeId} {collapsed} />
 {/if}
-<EditNodeButton {editing} {nodeId} {isInSidebar} />
