@@ -11,6 +11,7 @@
         position: absolute;
         left: -20px;
         top: 0px;
+        cursor: default;
 
 
        & svg {

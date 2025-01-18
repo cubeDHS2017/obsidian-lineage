@@ -16,6 +16,7 @@ import {
 import { selectInactiveCard } from 'src/obsidian/context-menu/select-inactive-card';
 import { lang } from 'src/lang/lang';
 import { textIsSelected } from 'src/view/actions/context-menu/card-context-menu/helpers/text-is-selected';
+import { Notice } from 'obsidian';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
     const target = event.target as HTMLElement;
@@ -56,8 +57,14 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
         {
             title: lang.cm_split_card,
             icon: customIcons.split.name,
-            action: () => openSplitNodeModal(view),
-            disabled: multipleNodesAreSelected || isInSidebar || hasChildren,
+            action: () => {
+                if (hasChildren) {
+                    new Notice(lang.error_cm_cant_split_card_that_has_children);
+                } else {
+                    openSplitNodeModal(view);
+                }
+            },
+            disabled: multipleNodesAreSelected || isInSidebar,
         },
         { type: 'separator' },
         {
