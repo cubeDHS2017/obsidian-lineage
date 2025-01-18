@@ -32,18 +32,25 @@ export const createAlignBranchActions = (
     action: PluginAction,
 ) => {
     const actions: AlignBranchAction[] = [];
+
+    if (action.type === 'view/align-branch/reveal-node') {
+        /* used to keep active node visible while editing*/
+        actions.push({ action: '20/active-node/vertical/reveal' });
+        actions.push({ action: '20/active-node/horizontal/reveal' });
+        return actions;
+    } else if (action.type === 'view/align-branch/center-node') {
+        actions.push({ action: '20/active-node/vertical/center' });
+        actions.push({ action: '20/active-node/horizontal/center' });
+        actions.push({ action: '30/parents/vertical/center' });
+        actions.push({ action: '40/children/vertical/center' });
+        return actions;
+    }
+
     const settings = context.alignBranchSettings;
     const _forceCenterActiveNodeV = forceCenterActiveNodeV(
         action,
         context.outlineMode,
     );
-
-    if (action.type === 'view/align-branch/reveal-node') {
-        actions.push({ action: '20/active-node/vertical/reveal' });
-        actions.push({ action: '20/active-node/horizontal/reveal' });
-        return actions;
-    }
-
     if (context.outlineMode) {
         if (_forceCenterActiveNodeV) {
             actions.push({ action: '20/active-node/horizontal/center' });

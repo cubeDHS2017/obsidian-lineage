@@ -11,7 +11,6 @@ export const forceCenterActiveNodeV = (
     const type = getDocumentEventType(actionType);
     centerActiveNodeV =
         actionType === 'view/life-cycle/mount' ||
-        actionType === 'view/align-branch/center-node' ||
         actionType === 'DOCUMENT/LOAD_FILE';
 
     if (!centerActiveNodeV && !outlineMode) {
