@@ -1,20 +1,14 @@
 <script lang="ts">
     import { StyleRule } from '../../../../../../../../../stores/settings/types/style-rules-types';
     import { getView } from '../../../../../../context';
-    import {
-        numericOperators,
-        properties,
-        stringOperators,
-        styleVariants,
-        targets
-    } from '../../../../../helpers/constants';
-    import { ruleEventHandlers } from '../../../../../helpers/rule-event-handlers';
+    import { numericOperators, properties, stringOperators, targets } from '../../../../../helpers/constants';
+    import { ruleEditorEventHandlers } from '../../../../../helpers/rule-editor-event-handlers';
     import { styleRulesLang } from '../../../../../../../../../lang/style-rules-lang';
 
     export let rule: StyleRule;
     const view = getView();
 
-    const h = ruleEventHandlers(view, rule.id);
+    const h = ruleEditorEventHandlers(view, rule.id);
 
     $: operatorIsBetween =
         rule.condition.operator === 'between' ||
@@ -93,27 +87,7 @@
             />
         {/if}
     </div>
-    <div class="rule-style-config">
-        <input
-            type="color"
-            value={rule.style.color}
-            on:input={h.handleColorChange}
-        />
 
-        <div class="select-elements">
-            <select
-                value={rule.style.styleVariant}
-                on:change={h.handleStyleVariantChange}
-                aria-label="Style type"
-            >
-                {#each styleVariants as styleType}
-                    <option value={styleType}
-                        >{styleRulesLang.styleVariants[styleType]}</option
-                    >
-                {/each}
-            </select>
-        </div>
-    </div>
     <!--    <div class="debug-node-id">{rule.id}</div>-->
 </div>
 
@@ -163,15 +137,5 @@
         background-color: var(--color-accent);
     }*/
 
-    .rule-style-config {
-        width: fit-content;
-        padding: 4px;
-        padding-right: 0px;
-        border-left: 1px solid var(--text-faint);
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        /*background-color: var(--color-base-30);*/
-        justify-content: center;
-    }
+
 </style>

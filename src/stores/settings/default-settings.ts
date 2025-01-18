@@ -29,7 +29,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         applyGapBetweenCards: false,
         outlineMode: false,
         nodeIndentationWidth: DEFAULT_INDENTATION_WIDTH,
-        maintainEditMode: false,
+        maintainEditMode: true,
         alwaysShowCardButtons: false,
     },
     general: {

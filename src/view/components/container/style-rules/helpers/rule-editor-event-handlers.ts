@@ -1,22 +1,13 @@
 import {
     ComparisonOperator,
     ConditionNode,
-    NodeStyle,
     StyleRuleCondition,
     StyleRuleTarget,
-    StyleVariant,
 } from 'src/stores/settings/types/style-rules-types';
 import { LineageView } from 'src/view/view';
 
-export const ruleEventHandlers = (view: LineageView, ruleId: string) => {
+export const ruleEditorEventHandlers = (view: LineageView, ruleId: string) => {
     const documentPath = () => view.file?.path ?? '';
-
-    const updateStyle = (id: string, style: Partial<NodeStyle>) => {
-        view.plugin.settings.dispatch({
-            type: 'settings/style-rules/update-style',
-            payload: { documentPath: documentPath(), id, style },
-        });
-    };
 
     const updateCondition = (updates: Partial<StyleRuleCondition>) => {
         view.plugin.settings.dispatch({
@@ -55,25 +46,11 @@ export const ruleEventHandlers = (view: LineageView, ruleId: string) => {
         updateCondition({ valueB: parseFloat(target.value) });
     };
 
-    const handleColorChange = (e: Event) => {
-        const target = e.target as HTMLInputElement;
-        updateStyle(ruleId, { color: target.value });
-    };
-
-    const handleStyleVariantChange = (e: Event) => {
-        const target = e.target as HTMLInputElement;
-        updateStyle(ruleId, {
-            styleVariant: target.value as StyleVariant,
-        });
-    };
-
     return {
         handleScopeChange,
         handlePropertyChange,
         handleOperatorChange,
         handleValueChange,
         handleValueBChange,
-        handleColorChange,
-        handleStyleVariantChange,
     };
 };

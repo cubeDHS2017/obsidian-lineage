@@ -1,6 +1,7 @@
 <script lang="ts">
     import RuleInfo from './components/rule-info.svelte';
     import RuleEditor from './components/rule-editor.svelte';
+    import RuleStyleEditor from './components/rule-style-editor.svelte';
     import { GripVertical } from 'lucide-svelte';
     import { StyleRule } from '../../../../../../../../stores/settings/types/style-rules-types';
     import {
@@ -38,6 +39,7 @@
     </div>
     <RuleInfo {rule} {results} />
     <RuleEditor {rule} />
+    <RuleStyleEditor {rule}/>
     <RuleActions {rule} />
 </div>
 
