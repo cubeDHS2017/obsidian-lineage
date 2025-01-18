@@ -10,7 +10,11 @@ export const skipAlign = (view: LineageView, action: PluginAction) => {
 
     if (action.type === 'view/set-active-node/mouse-silent') return true;
 
-    const viewState = view.viewStore.getValue();
-    const activeNode = viewState.document.activeNode;
-    if (viewState.outline.hiddenNodes.has(activeNode)) return true;
+    const outlineMode = view.plugin.settings.getValue().view.outlineMode;
+    if (outlineMode) {
+        const viewState = view.viewStore.getValue();
+        const activeNode = viewState.document.activeNode;
+        if (viewState.outline.hiddenNodes.has(activeNode) && outlineMode)
+            return true;
+    }
 };

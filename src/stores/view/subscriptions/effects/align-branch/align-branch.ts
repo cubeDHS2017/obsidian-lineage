@@ -21,6 +21,7 @@ import {
     actionCategoryPriority,
 } from 'src/stores/view/subscriptions/effects/align-branch/constants/action-category';
 import { waitForActiveNodeToStopMoving } from 'src/lib/align-element/helpers/wait-for-active-node-to-stop-moving';
+import { SilentError } from 'src/lib/errors/errors';
 
 export type PartialDOMRect = Pick<DOMRect, 'top' | 'height'>;
 
@@ -128,7 +129,7 @@ export class AlignBranch {
     private waitForPreviousEvent = async (action: PluginAction) => {
         const category = actionCategory.get(action.type)!;
         if (category === 'other') {
-            throw new Error('unsupported event: ' + action.type);
+            throw new SilentError('unsupported event: ' + action.type);
         }
         const event: AlignEvent = {
             action: action.type,
