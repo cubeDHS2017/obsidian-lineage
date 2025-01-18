@@ -25,6 +25,7 @@ import { toggleCollapseNode } from 'src/stores/view/reducers/outline/toggle-coll
 import { refreshCollapsedNodes } from 'src/stores/view/reducers/outline/refresh-collapsed-nodes';
 import { toggleCollapseAllNodes } from 'src/stores/view/reducers/outline/toggle-collapse-all-nodes';
 import { collapseNode } from 'src/stores/view/reducers/outline/helpers/collapse-node';
+import { expandParentsOfActiveNode } from 'src/stores/view/reducers/outline/expand-parents-of-active-node';
 
 const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     if (
@@ -200,6 +201,8 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         for (const id of action.payload.collapsedIds) {
             collapseNode(state, action.context.columns, id);
         }
+        expandParentsOfActiveNode(state, action.context.columns);
+        state.outline = { ...state.outline };
     }
 };
 export const viewReducer = (

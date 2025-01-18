@@ -173,7 +173,11 @@
         >
             {@html customIcons.gap.svg}
         </Button>
-
+    </div>
+    <div
+        class="buttons-group buttons-group--vertical"
+        data-visible={$showControls}
+    >
         <Button
             active={$scrollSettingsStore.centerActiveNodeH}
             classes="control-item"
