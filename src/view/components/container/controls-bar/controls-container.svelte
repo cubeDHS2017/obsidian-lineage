@@ -156,29 +156,6 @@
         data-visible={$showControls}
     >
         <Button
-            active={$outlineMode}
-            classes="control-item"
-            label={lang.controls_single_column}
-            on:click={toggleOutlineMode}
-            tooltipPosition="left"
-        >
-            {@html customIcons.outline.svg}
-        </Button>
-        <Button
-            active={$applyGapBetweenCards}
-            classes="control-item"
-            label={lang.controls_gap_between_cards}
-            on:click={toggleGap}
-            tooltipPosition="left"
-        >
-            {@html customIcons.gap.svg}
-        </Button>
-    </div>
-    <div
-        class="buttons-group buttons-group--vertical"
-        data-visible={$showControls}
-    >
-        <Button
             active={$scrollSettingsStore.centerActiveNodeH}
             classes="control-item"
             label={lang.controls_toggle_scrolling_mode_horizontal}
@@ -197,6 +174,30 @@
             {@html customIcons.alignV.svg}
         </Button>
     </div>
+    <div
+        class="buttons-group buttons-group--vertical"
+        data-visible={$showControls}
+    >
+        <Button
+            active={$outlineMode}
+            classes="control-item"
+            label={lang.controls_single_column}
+            on:click={toggleOutlineMode}
+            tooltipPosition="left"
+        >
+            {@html customIcons.outline.svg}
+        </Button>
+        <Button
+            active={$applyGapBetweenCards}
+            classes="control-item"
+            label={lang.controls_gap_between_cards}
+            on:click={toggleGap}
+            tooltipPosition="left"
+        >
+            {@html customIcons.gap.svg}
+        </Button>
+    </div>
+
     <div
         class="buttons-group buttons-group--vertical"
         data-visible={$showControls}

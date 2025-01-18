@@ -43,8 +43,10 @@ export const createAlignBranchActions = (
     } else if (action.type === 'view/align-branch/center-node') {
         actions.push({ action: '20/active-node/vertical/center' });
         actions.push({ action: '20/active-node/horizontal/center' });
-        actions.push({ action: '30/parents/vertical/center' });
-        actions.push({ action: '40/children/vertical/center' });
+        if (!context.outlineMode) {
+            actions.push({ action: '30/parents/vertical/center' });
+            actions.push({ action: '40/children/vertical/center' });
+        }
         return actions;
     }
 

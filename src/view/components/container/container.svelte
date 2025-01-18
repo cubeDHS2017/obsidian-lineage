@@ -70,7 +70,7 @@
 
     const applyGap = ApplyGapBetweenCardsStore(view);
     const pendingConfirmation = PendingConfirmationStore(view);
-    const saveNodeOnClick = (event: MouseEvent) => {
+    const saveNode = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
         if (target.closest('.lng-prev') || target.closest('.active-node')) {
             return;
@@ -81,6 +81,17 @@
             saveNodeContent(view,true);
         }
     };
+
+    const centerActiveNode = (event: MouseEvent)=>{
+        const target = event.target as HTMLElement;
+        if (target.closest('.lng-prev') || target.closest('.active-node')) {
+            return;
+        }
+        view.alignBranch.align({
+            type: 'view/align-branch/center-node',
+        });
+    }
+
     let containerRef: HTMLElement | null = null;
     onMount(() => {
         view.container = containerRef;
@@ -98,7 +109,8 @@
         ($zoom !== 1 ? ' zoom-enabled' : '')}
     id="columns-container"
     tabindex="0"
-    on:click={saveNodeOnClick}
+    on:click={saveNode}
+    on:dblclick={centerActiveNode}
     use:scrollOnDndX
     use:hideFloatingButtons
 >
