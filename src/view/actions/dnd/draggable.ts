@@ -1,6 +1,8 @@
 import { traverseDown } from 'src/lib/tree-utils/get/traverse-down';
 import { getView } from 'src/view/components/container/context';
 
+export const DND_ACTIVE_CLASS = 'is-dragged';
+
 const toggleDraggedNodeVisibility = (
     node: HTMLElement,
     data: DraggableData,
@@ -10,6 +12,8 @@ const toggleDraggedNodeVisibility = (
         const parent = node.matchParent('#' + data.id) as HTMLElement;
         if (parent) {
             parent.style.display = visible ? 'flex' : 'none';
+            /* used to find the right most non-empty column*/
+            parent.toggleClass(DND_ACTIVE_CLASS, !visible);
         }
     });
 };

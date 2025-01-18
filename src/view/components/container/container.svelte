@@ -1,7 +1,7 @@
 <script lang="ts">
     import Column from './column/column.svelte';
     import { getView } from 'src/view/components/container/context';
-    import { scrollOnDndX } from 'src/view/actions/dnd/scroll-on-dnd-x';
+    import { scrollOnDndX } from 'src/view/actions/dnd/scroll-on-dnd-x/scroll-on-dnd-x';
     import { columnsStore, singleColumnStore } from 'src/stores/document/derived/columns-store';
     import ColumnsBuffer from './buffers/columns-buffer.svelte';
     import { dndStore } from 'src/stores/view/derived/dnd-store';
@@ -28,6 +28,7 @@
     import { textIsSelected } from 'src/view/actions/context-menu/card-context-menu/helpers/text-is-selected';
     import { OutlineStore } from 'src/stores/view/derived/outline-store';
     import { hideFloatingButtons } from 'src/view/actions/hide-floating-buttons';
+    import { scrollOnDndY } from 'src/view/actions/dnd/scroll-on-dnd-y/scroll-on-dnd-y';
 
     export let outlineMode: boolean;
 
@@ -112,6 +113,7 @@
     on:click={saveNode}
     on:dblclick={centerActiveNode}
     use:scrollOnDndX
+    use:scrollOnDndY
     use:hideFloatingButtons
 >
     <div class="columns">

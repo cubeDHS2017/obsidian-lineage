@@ -29,18 +29,18 @@
 
     let zoomValueBeforeReset = -1;
     const restoreZoom = () => {
-        if (zoomValueBeforeReset === -1) {
+        if (showUndoRestZoomButton) {
+            view.plugin.settings.dispatch({
+                type: 'UI/CHANGE_ZOOM_LEVEL',
+                payload: { value: zoomValueBeforeReset }
+            });
+            zoomValueBeforeReset = -1;
+        } else {
             zoomValueBeforeReset = get(zoomLevelStore(view));
             view.plugin.settings.dispatch({
                 type: 'UI/CHANGE_ZOOM_LEVEL',
-                payload: { value: 1 },
+                payload: { value: 1 }
             });
-        } else {
-            view.plugin.settings.dispatch({
-                type: 'UI/CHANGE_ZOOM_LEVEL',
-                payload: { value: zoomValueBeforeReset },
-            });
-            zoomValueBeforeReset = -1;
         }
     };
 

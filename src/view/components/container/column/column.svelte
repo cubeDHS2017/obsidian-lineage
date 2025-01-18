@@ -1,7 +1,6 @@
 <script lang="ts">
     import Group from './components/group/group.svelte';
     import { getView } from 'src/view/components/container/context';
-    import { scrollOnDndY } from 'src/view/actions/dnd/scroll-on-dnd-y';
     import { groupsStore, singleColumnGroupStore } from 'src/stores/document/derived/groups-store';
     import { EditingState } from 'src/stores/view/default-view-state';
     import { PendingDocumentConfirmation } from 'src/stores/view/view-state-type';
@@ -36,7 +35,7 @@
         : groupsStore(view, columnId);
 </script>
 
-<div class="column" id={columnId} use:scrollOnDndY>
+<div class="column" id={columnId} >
     <div class="column-buffer" />
     {#each $groups as group (group.parentId)}
         {#if !dndChildGroups.has(group.parentId)}

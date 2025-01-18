@@ -16,7 +16,7 @@
     import { clickAndDrag } from 'src/view/actions/click-and-drag/click-and-drag';
     import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
-
+    import DNDEdges from './dnd/dnd-edges.svelte';
     import StyleRules from './style-rules/style-rules.svelte';
 
     export let plugin: Lineage;
@@ -28,7 +28,7 @@
 
 <div
     class="lineage-view"
-    use:viewHotkeysAction="{{ view }}"
+    use:viewHotkeysAction={{ view }}
     use:contextMenu={view}
     tabindex="0"
 >
@@ -49,6 +49,7 @@
             <StyleRules />
         {/if}
 
+        <DNDEdges />
     </div>
     <RightSidebar />
 </div>
