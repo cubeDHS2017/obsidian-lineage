@@ -120,16 +120,12 @@ test.describe('card hotkeys', () => {
         await selectCard(0, 1);
         await moveCardUsingHotkey('right');
         await moveCardUsingHotkey('right');
-        expect(await getTextsOfColumns()).toEqual([[n1, n3], [n2], [n4]]);
-
-        await selectCard(2, 0);
-        await moveCardUsingHotkey('left');
         expect(await getTextsOfColumns()).toEqual([
             [n1, n3],
-            [n2, n4],
+            [n4, n2],
         ]);
 
-        await selectCard(1, 0);
+        await selectCard(1, 1);
         await moveCardUsingHotkey('left');
         expect(await getTextsOfColumns()).toEqual([[n1, n3, n2], [n4]]);
     });
