@@ -1,6 +1,6 @@
 import { LineageView } from 'src/view/view';
 import { delay } from 'src/helpers/delay';
-import { delayAlign } from 'src/stores/view/subscriptions/effects/align-branch/helpers/retry-align';
+import { delayAlign } from 'src/stores/view/subscriptions/effects/align-branch/helpers/delay-align';
 import { ActiveNodesOfColumn } from 'src/stores/view/view-state-type';
 import { Column } from 'src/stores/document/document-state-type';
 import { adjustScrollBehavior } from 'src/stores/view/subscriptions/effects/align-branch/helpers/adjust-scroll-behavior';

@@ -7,6 +7,8 @@ export const delayAlign = (action: PluginAction) => {
         action.type === 'VIEW/TOGGLE_MINIMAP'
     ) {
         delay = 300;
+    } else if (action.type === 'DOCUMENT/DROP_NODE') {
+        delay = 32;
     }
     return delay;
 };

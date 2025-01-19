@@ -45,7 +45,7 @@
         }
     }
 
-    & .column {
+    & .column{
         /* to show outline card buttons*/
         padding: 0 calc(1 / var(--zoom-level) * 50vw);
     }
@@ -94,9 +94,13 @@
         transition: none !important;
     }
 }
+
 #columns-container.zoom-enabled {
-    .lineage-floating-button {
-        opacity: 0.5 !important;
+    .lineage-floating-button{
+        opacity: 0.5 !important
+    }
+    .lineage-card:not(:hover) .lineage-floating-button:not(.collapse-button) {
+        visibility: hidden;
     }
 }
 
