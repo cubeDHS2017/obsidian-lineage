@@ -28,7 +28,7 @@ export const lang = {
     // edit
     settings_general_maintain_edit_mode: 'Maintain edit mode',
     settings_general_maintain_edit_mode_desc:
-        'Keeps edit mode active when switching to a different card using the mouse',
+        'Keeps edit mode active when switching to a different card using the mouse or keyboard',
     card_btn_edit: 'Edit',
     hk_enable_edit_mode: 'Edit card',
     hk_enable_edit_mode_and_place_cursor_at_start:
@@ -37,9 +37,9 @@ export const lang = {
         'Edit card and place cursor at the end',
     hkg_edit_cards: 'Edit cards',
     modals_snapshots_updated_card: 'Updated card ',
-    modal_hk_editor_state_on: 'Enable only when the editor is on',
-    modal_hk_editor_state_off: 'Enable only when the editor is off',
-    modal_hk_editor_state_both: 'Enable both when the editor is on or off',
+    modal_hk_editor_state_on: 'Enable only when the editor is active',
+    modal_hk_editor_state_off: 'Enable only when the editor is inactive',
+    modal_hk_editor_state_both: "Enable regardless of the editor's state",
 
     // save
     card_btn_save: 'Save',
