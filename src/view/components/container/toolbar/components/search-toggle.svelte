@@ -3,6 +3,7 @@
     import { getView } from '../../context';
     import { searchStore } from 'src/stores/view/derived/search-store';
     import Button from '../../shared/button.svelte';
+    import { lang } from 'src/lang/lang';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -12,7 +13,7 @@
 <div class="search-container buttons-group">
     <Button
         active={$search.showInput}
-        label={'Toggle search input'}
+        label={lang.tlb_search_toggle}
         on:click={() => {
             viewStore.dispatch({ type: 'SEARCH/TOGGLE_INPUT' });
         }}

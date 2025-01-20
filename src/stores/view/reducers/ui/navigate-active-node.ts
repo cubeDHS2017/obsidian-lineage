@@ -9,17 +9,21 @@ export type NodeNavigationAction = {
         sections: Sections;
         direction: 'back' | 'forward';
     };
+    context: {
+        outlineMode: boolean;
+    };
 };
 
 export const navigateActiveNode = (
     documentState: DocumentViewState,
-    state: Pick<ViewState, 'navigationHistory'>,
+    state: Pick<ViewState, 'navigationHistory' | 'outline'>,
     action: NodeNavigationAction,
 ) => {
     const nextNode = findNextNode(
         action.payload.sections,
         documentState.activeNode,
         action.payload.direction,
+        action.context.outlineMode ? state.outline.hiddenNodes : null,
     );
     if (nextNode && nextNode !== documentState.activeNode)
         updateActiveNode(documentState, nextNode, state);

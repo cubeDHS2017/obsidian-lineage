@@ -10,7 +10,8 @@ export const maybeClearSelection = (
 
     if (selectedNodes.size > 1) {
         const selectedNodeIsWithinSelection =
-            action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
+            action.type.startsWith('view/set-active-node') &&
+            // @ts-ignore
             selectedNodes.has(action.payload.id);
         if (!selectedNodeIsWithinSelection) {
             clearSelectedNodes(view);

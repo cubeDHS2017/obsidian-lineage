@@ -1,12 +1,23 @@
 import { LineageView } from 'src/view/view';
 import { insertBlockId } from 'src/view/actions/context-menu/card-context-menu/helpers/insert-block-id';
 import { Notice } from 'obsidian';
+import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 
 export const copyLinkToBlock = async (view: LineageView) => {
     const file = view.file;
     if (!file) return;
     const viewState = view.viewStore.getValue();
     const activeNode = viewState.document.activeNode;
+
+    const isEditing = Boolean(viewState.document.editing.activeNodeId);
+    if (isEditing) {
+        saveNodeContent(view);
+        setTimeout(() => {
+            copyLinkToBlock(view);
+        }, 100);
+        return;
+    }
+
     const documentState = view.documentStore.getValue();
     const content = documentState.document.content[activeNode];
     const text = content?.content;

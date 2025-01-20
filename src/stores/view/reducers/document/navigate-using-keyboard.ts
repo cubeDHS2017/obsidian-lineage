@@ -11,14 +11,15 @@ export type ChangeActiveNodeAction = {
         direction: AllDirections;
         columns: Column[];
     };
-    context?: {
-        shiftKey: boolean;
+    context: {
+        shiftKey?: boolean;
+        outlineMode: boolean;
     };
 };
 
 export const navigateUsingKeyboard = (
     documentState: DocumentViewState,
-    state: Pick<ViewState, 'navigationHistory'>,
+    state: Pick<ViewState, 'navigationHistory' | 'outline'>,
     action: ChangeActiveNodeAction,
 ) => {
     const nextNode = findNextActiveNodeOnKeyboardNavigation(
@@ -26,6 +27,8 @@ export const navigateUsingKeyboard = (
         documentState.activeNode,
         action.payload.direction,
         documentState.activeNodesOfColumn,
+        action.context.outlineMode ? state.outline.collapsedParents : null,
+        action.context.shiftKey,
     );
     if (nextNode) {
         updateSelectionState(documentState, nextNode, action);

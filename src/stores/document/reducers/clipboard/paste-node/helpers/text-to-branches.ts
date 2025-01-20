@@ -5,15 +5,19 @@ import { getBranch } from 'src/view/actions/keyboard-shortcuts/helpers/commands/
 import { detectDocumentFormat } from 'src/lib/format-detection/detect-document-format';
 import { outlineToJson } from 'src/lib/data-conversion/x-to-json/outline-to-json';
 import { htmlElementToJson } from 'src/lib/data-conversion/x-to-json/html-element-to-json';
+import { TreeNode } from 'src/lib/data-conversion/x-to-json/columns-to-json';
 
 export const textToBranches = (text: string) => {
     const detectedFormat = detectDocumentFormat(text, false);
     const tree =
-        detectedFormat === 'outline'
-            ? outlineToJson(text)
-            : detectedFormat === 'html-element'
-              ? htmlElementToJson(text)
-              : htmlCommentToJson(text);
+        text.trim().length > 0
+            ? detectedFormat === 'outline'
+                ? outlineToJson(text)
+                : detectedFormat === 'html-element'
+                  ? htmlElementToJson(text)
+                  : htmlCommentToJson(text)
+            : [{ children: [], content: '' } satisfies TreeNode];
+
     const document = jsonToColumns(tree);
 
     const branches: ClipboardBranch[] = [];

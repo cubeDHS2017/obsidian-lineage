@@ -1,15 +1,12 @@
 <script lang="ts">
-    import { getView } from '../../../../../../../context';
     import { draggable } from 'src/view/actions/dnd/draggable';
 
     export let isInSidebar: boolean;
     export let nodeId: string;
-    const view = getView();
-    const documentStore = view.documentStore;
-    const viewStore = view.viewStore
+
 </script>
 
-<div class="draggable" use:draggable={{ id: nodeId, documentStore, viewStore,isInSidebar }}>
+<div class="draggable" use:draggable={{ id: nodeId,isInSidebar }}>
     {#if !isInSidebar}
         <div class="drag-handle"></div>
     {/if}
@@ -31,15 +28,18 @@
         background-color: transparent;
         cursor: grab;
         position: absolute;
-        left: 0;
-        z-index: 1;
+        left: -5px;
+        z-index: 10;
+    }
+    :global(.active-node) .drag-handle{
+        left:0;
     }
     .draggable:hover .drag-handle {
         background-size: 2px 4px;
         background-image: linear-gradient(
-            0deg,
-            hsla(0, 0%, 44.7%, 0.25) 20%,
-            transparent 40%
+                0deg,
+                hsla(0, 0%, 60%, 0.5) 20%,
+                transparent 40%
         );
     }
     .content {

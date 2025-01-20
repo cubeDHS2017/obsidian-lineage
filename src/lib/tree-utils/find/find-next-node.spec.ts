@@ -60,21 +60,25 @@ describe('find-next-node', () => {
     ];
     for (const tuple of tuples) {
         test('forward: ' + tuple.join(' - '), () => {
-            expect(findNextNode(sections, tuple[0], 'forward')).toBe(tuple[1]);
+            expect(findNextNode(sections, tuple[0], 'forward', null)).toBe(
+                tuple[1],
+            );
         });
         test('back: ' + tuple.join(' - '), () => {
-            expect(findNextNode(sections, tuple[1], 'back')).toBe(tuple[0]);
+            expect(findNextNode(sections, tuple[1], 'back', null)).toBe(
+                tuple[0],
+            );
         });
     }
     test('edges', () => {
-        expect(findNextNode(sections, n1, 'back')).toBe(n1);
-        expect(findNextNode(sections, n10, 'forward')).toBe(n10);
+        expect(findNextNode(sections, n1, 'back', null)).toBe(n1);
+        expect(findNextNode(sections, n10, 'forward', null)).toBe(n10);
     });
 
     test('case: 1', () => {
-        expect(findNextNode(sections, n1_3, 'forward')).toBe(n2);
+        expect(findNextNode(sections, n1_3, 'forward', null)).toBe(n2);
     });
     test('case: 2', () => {
-        expect(findNextNode(sections, n10, 'back')).toBe(n9);
+        expect(findNextNode(sections, n10, 'back', null)).toBe(n9);
     });
 });

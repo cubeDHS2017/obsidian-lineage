@@ -1,12 +1,47 @@
 <script lang="ts">
-    import { minimapAction } from '../../../actions/minimap/minimap-action';
     import { getView } from 'src/view/components/container/context';
+    import Indicators from './components/indicators.svelte';
+    import { onCanvasClick } from 'src/view/components/container/minimap/event-handlers/on-canvas-click';
+    import { onCanvasWheel } from 'src/view/components/container/minimap/event-handlers/on-canvas-wheel';
+    import {
+        createOnCanvasMousemove
+    } from 'src/view/components/container/minimap/event-handlers/create-on-canvas-mousemove';
+    import { onMount } from 'svelte';
+    import { OnError, Store } from 'src/lib/store/store';
+    import { defaultMinimapState } from 'src/stores/minimap/default-minimap-state';
+    import { minimapReducer } from 'src/stores/minimap/minimap-reducer';
+    import { MinimapStoreAction } from 'src/stores/minimap/minimap-store-actions';
+    import { minimapSubscriptions } from 'src/stores/minimap/subscriptions/minimap-subscriptions';
 
     const view = getView();
+    view.minimapStore = new Store(
+        defaultMinimapState(),
+        minimapReducer,
+        this.onViewStoreError as OnError<MinimapStoreAction>,
+    );
+
+    const onClick = (e: MouseEvent) => onCanvasClick(e, view);
+    const onWheel = (e: WheelEvent) => onCanvasWheel(e, view);
+    const onMousemove = createOnCanvasMousemove(view);
+
+    onMount(() => {
+        let unsub: (() => void) | null = null;
+        setTimeout(() => {
+            unsub = minimapSubscriptions(view);
+        }, 300);
+
+
+        return () => {
+            if (unsub) unsub();
+        };
+    });
 </script>
 
-<div class="minimap-container" use:minimapAction={view}>
-    <canvas id="minimap"></canvas>
+<div class="minimap-container" on:wheel={onWheel}>
+    <div class="canvas-container" on:click={onClick} on:mousemove={onMousemove}>
+        <Indicators />
+        <canvas id="minimap"></canvas>
+    </div>
     <div class="scroll-indicator" id="scrollIndicator"></div>
 </div>
 
@@ -28,7 +63,11 @@
     canvas {
         width: 176px;
         margin-right: 4px;
+    }
+
+    .canvas-container {
         transition: transform 0.1s ease-out;
+        width: 176px;
     }
 
     .scroll-indicator {

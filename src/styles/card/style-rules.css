@@ -1,0 +1,25 @@
+.card-left-border-style {
+    position: absolute;
+    width: 5px;
+    left: -5px;
+    height: 100%;
+    top: 0;
+}
+
+.card-background-style {
+    position: absolute;
+    left: -5px;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+.active-node,
+.node-border--delete,
+.node-border--selected,
+.node-border--search-match {
+    & .card-left-border-style,
+    .card-background-style {
+        left: 0;
+    }
+}

@@ -6,7 +6,20 @@ export const handleEscapeKey = (view: LineageView) => {
     const search = value.search;
     const controls = value.ui.controls;
     const selection = value.document.selectedNodes;
-    if (search.query) {
+    if (
+        controls.showHelpSidebar ||
+        controls.showHistorySidebar ||
+        controls.showSettingsSidebar ||
+        controls.showStyleRulesModal
+    ) {
+        viewStore.dispatch({
+            type: 'CLOSE_MODALS',
+            payload: {
+                closeAllModals: true,
+            },
+        });
+        return true;
+    } else if (search.query) {
         viewStore.dispatch({
             type: 'SEARCH/SET_QUERY',
             payload: {
@@ -14,21 +27,14 @@ export const handleEscapeKey = (view: LineageView) => {
             },
         });
         return true;
+    } else if (value.document.pendingConfirmation.deleteNode.size > 0) {
+        viewStore.dispatch({
+            type: 'view/confirmation/reset/delete-node',
+        });
+        return true;
     } else if (search.showInput) {
         viewStore.dispatch({
             type: 'SEARCH/TOGGLE_INPUT',
-        });
-        return true;
-    } else if (
-        controls.showHelpSidebar ||
-        controls.showHistorySidebar ||
-        controls.showSettingsSidebar
-    ) {
-        viewStore.dispatch({
-            type: 'CLOSE_MODALS',
-            payload: {
-                closeAllModals: true,
-            },
         });
         return true;
     } else if (selection.size > 1) {

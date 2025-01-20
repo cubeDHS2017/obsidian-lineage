@@ -14,8 +14,6 @@ import { registerFileMenuEvent } from 'src/obsidian/events/workspace/register-fi
 import { registerFileRenameEvent } from 'src/obsidian/events/vault/register-file-move-event';
 import { registerFileDeleteEvent } from 'src/obsidian/events/vault/register-file-delete-event';
 import { addCommands } from 'src/obsidian/commands/add-commands';
-import { loadCommands } from 'src/view/actions/keyboard-shortcuts/helpers/commands/load-commands';
-import { hotkeySubscriptions } from 'src/stores/hotkeys/hotkey-subscriptions';
 import { settingsSubscriptions } from 'src/stores/settings/subscriptions/settings-subscriptions';
 import { DocumentsState } from 'src/stores/documents/documents-state-type';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
@@ -35,6 +33,11 @@ import { getActiveFile } from 'src/obsidian/commands/helpers/get-active-file';
 import { createLineageDocument } from 'src/obsidian/events/workspace/effects/create-lineage-document';
 import { registerFilesMenuEvent } from 'src/obsidian/events/workspace/register-files-menu-event';
 import { removeHtmlElementMarkerInPreviewMode } from 'src/obsidian/markdown-post-processors/remove-html-element-marker-in-preview-mode';
+import {
+    minimapWorker,
+    rulesWorker,
+    statusBarWorker,
+} from 'src/workers/worker-instances';
 
 export type SettingsStore = Store<Settings, SettingsActions>;
 export type DocumentsStore = Store<DocumentsState, DocumentsStoreAction>;
@@ -57,11 +60,10 @@ export default class Lineage extends Plugin {
             LINEAGE_VIEW_TYPE,
             (leaf) => new LineageView(leaf, this),
         );
+        addCommands(this);
         this.registerPatches();
         this.registerEffects();
         this.registerEvents();
-        addCommands(this);
-        loadCommands(this);
         this.statusBar = new StatusBar(this);
         this.loadRibbonIcon();
         this.registerMarkdownPostProcessor(
@@ -103,7 +105,6 @@ export default class Lineage extends Plugin {
     }
 
     private registerEffects() {
-        hotkeySubscriptions(this);
         removeStaleDocuments(this);
     }
 
@@ -130,5 +131,8 @@ export default class Lineage extends Plugin {
         for (const timeout of this.timeoutReferences) {
             clearTimeout(timeout);
         }
+        minimapWorker.terminate();
+        rulesWorker.terminate();
+        statusBarWorker.terminate();
     }
 }

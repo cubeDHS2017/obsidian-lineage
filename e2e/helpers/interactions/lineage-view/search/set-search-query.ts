@@ -3,7 +3,7 @@ import { getActiveView } from '../../../getters/lineage-view/card/get-active-vie
 import { delay, SHORT } from '../../../general/delay';
 import { __obsidian__ } from '../../../getters/obsidian/load-obsidian';
 
-export const SEL_SEARCH_INPUT = `input[aria-label="Search document"]`;
+export const SEL_SEARCH_INPUT = `input.search-input-element`;
 
 export const setSearchQuery = async (query: string) => {
     const input = await getSearchInput();

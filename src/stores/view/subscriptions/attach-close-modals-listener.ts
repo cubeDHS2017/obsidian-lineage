@@ -16,9 +16,10 @@ export const attachCloseModalsListener = (view: LineageView) => {
     const controls = uiControlsStore(view);
     const unsub = controls.subscribe((controls) => {
         if (
-            controls.showHelpSidebar ||
+            /*controls.showHelpSidebar ||*/
             controls.showHistorySidebar ||
-            controls.showSettingsSidebar
+            controls.showSettingsSidebar /*||
+            controls.showStyleRulesModal*/
         ) {
             setTimeout(() => {
                 view.contentEl.addEventListener('click', listener);

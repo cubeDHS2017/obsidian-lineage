@@ -25,7 +25,7 @@ import { formatHeadings } from 'src/stores/document/reducers/content/format-cont
 import { pasteNode } from 'src/stores/document/reducers/clipboard/paste-node/paste-node';
 import { updateSectionsDictionary } from 'src/stores/document/reducers/state/update-sections-dictionary';
 import { getIdOfSection } from 'src/stores/view/subscriptions/helpers/get-id-of-section';
-import { extractNode } from 'src/stores/document/reducers/extract-node/extract-node';
+import { removeExtractedBranch } from 'src/stores/document/reducers/extract-node/remove-extracted-branch';
 import { getSectionOfId } from 'src/stores/view/subscriptions/helpers/get-section-of-id';
 import { splitNode } from 'src/stores/document/reducers/split-node/split-node';
 import { pinNode } from 'src/stores/document/reducers/pinned-nodes/pin-node';
@@ -33,6 +33,8 @@ import { unpinNode } from 'src/stores/document/reducers/pinned-nodes/unpin-node'
 import { removeStalePinnedNodes } from 'src/stores/document/reducers/pinned-nodes/remove-stale-pinned-nodes';
 import { loadPinnedNodes } from 'src/stores/document/reducers/pinned-nodes/load-pinned-nodes';
 import { refreshGroupParentIds } from 'src/stores/document/reducers/meta/refresh-group-parent-ids';
+import { loadDocumentFromJSON } from 'src/stores/document/reducers/load-document-from-file/load-document-from-json';
+import { NO_UPDATE } from 'src/lib/store/store';
 
 const updateDocumentState = (
     state: DocumentState,
@@ -41,8 +43,10 @@ const updateDocumentState = (
     let newActiveNodeId: null | string = null;
     let affectedNodeId: null | string = null;
     let affectedNodeContent: Content[string] | null = null;
+    let affectedNodes: string[] | undefined = undefined;
     if (action.type === 'DOCUMENT/SET_NODE_CONTENT') {
-        setNodeContent(state.document.content, action);
+        const update = setNodeContent(state.document.content, action);
+        if (!update) return NO_UPDATE;
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/INSERT_NODE') {
         newActiveNodeId = insertNode(state.document, action);
@@ -57,7 +61,14 @@ const updateDocumentState = (
         affectedNodeId = action.payload.activeNodeId;
     } else if (action.type === 'DOCUMENT/EXTRACT_BRANCH') {
         affectedNodeContent = state.document.content[action.payload.nodeId];
-        extractNode(state.document, action);
+        const update = setNodeContent(state.document.content, {
+            payload: {
+                nodeId: action.payload.nodeId,
+                content: `[[${action.payload.documentName}]]`,
+            },
+        });
+        if (!update) return NO_UPDATE;
+        removeExtractedBranch(state.document, action);
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/SPLIT_NODE') {
         affectedNodeId = action.payload.target;
@@ -76,7 +87,14 @@ const updateDocumentState = (
         newActiveNodeId = mergeNode(state.document, action);
         affectedNodeId = action.payload.activeNodeId;
     } else if (action.type === 'DOCUMENT/LOAD_FILE') {
-        newActiveNodeId = loadDocumentFromFile(state, action);
+        if (action.payload.__test_document__) {
+            newActiveNodeId = loadDocumentFromJSON(
+                state,
+                action.payload.__test_document__,
+            );
+        } else {
+            newActiveNodeId = loadDocumentFromFile(state, action);
+        }
     } else if (action.type === 'RESET_STORE') {
         const newState = defaultDocumentState();
         state.document = newState.document;
@@ -100,7 +118,9 @@ const updateDocumentState = (
             state.history.context.activeSection,
         );
     } else if (action.type === 'DOCUMENT/PASTE_NODE') {
-        newActiveNodeId = pasteNode(state.document, action);
+        const result = pasteNode(state.document, action);
+        newActiveNodeId = result.nextNode;
+        affectedNodes = result.rootNodes;
     } else if (action.type === 'DOCUMENT/CUT_NODE') {
         affectedNodeContent = state.document.content[action.payload.nodeId];
         newActiveNodeId = deleteNode(
@@ -175,6 +195,9 @@ const updateDocumentState = (
             numberOfCharacters: Object.values(state.document.content)
                 .map((x) => x.content.length)
                 .reduce((acc, v) => acc + v),
+            affectedSections: affectedNodes
+                ? affectedNodes.map((id) => state.sections.id_section[id])
+                : undefined,
         };
         addSnapshot(state.document, state.history, context);
         state.history = { ...state.history };
@@ -184,7 +207,8 @@ const updateDocumentState = (
 export const documentReducer = (
     store: DocumentState,
     action: DocumentStoreAction,
-): DocumentState => {
-    updateDocumentState(store, action);
+) => {
+    const result = updateDocumentState(store, action);
+    if (result === NO_UPDATE) return NO_UPDATE;
     return store;
 };

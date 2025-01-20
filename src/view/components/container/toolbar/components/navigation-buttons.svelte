@@ -3,6 +3,7 @@
     import { ArrowLeft, ArrowRight } from 'lucide-svelte';
     import { navigationHistoryStore } from 'src/stores/view/derived/navigation-history-store';
     import Button from '../../shared/button.svelte';
+    import { lang } from 'src/lang/lang';
 
     const view = getView();
     const viewStore = view.viewStore;
@@ -13,7 +14,7 @@
     <div class="navigation-history buttons-group">
         <Button
             disabled={!$navigationHistory.state.canGoBack}
-            label={'Navigate back'}
+            label={lang.tlb_navigation_navigate_back}
             on:click={() => {
                 viewStore.dispatch({ type: 'NAVIGATION/NAVIGATE_BACK' });
             }}
@@ -23,7 +24,7 @@
         </Button>
         <Button
             disabled={!$navigationHistory.state.canGoForward}
-            label={'Navigate forward'}
+            label={lang.tlb_navigation_navigate_forward}
             on:click={() => {
                 viewStore.dispatch({ type: 'NAVIGATION/NAVIGATE_FORWARD' });
             }}

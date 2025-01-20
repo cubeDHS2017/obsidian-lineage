@@ -26,12 +26,80 @@ const split: Icon = {
     mode: 'stroke',
 };
 
-const align: Icon = {
-    name: 'lineage-align',
-    svg: `<g> <rect width="20" height="12" x="2" y="6" rx="2"/> <line x1="12" y1="0" x2="12" y2="24" stroke-dasharray="4 3" /></g> `,
+const alignH: Icon = {
+    name: 'lineage-align-horizontal',
+    svg: `<g> 
+            <rect width="20" height="12" x="2" y="6" rx="2"/> 
+            <line x1="12" y1="0" x2="12" y2="24" stroke-dasharray="4 3" />
+    </g> `,
     mode: 'stroke',
 };
-export const customIcons = { cards, split, align };
+
+const alignV: Icon = {
+    name: 'lineage-align-vertical',
+    svg: `<g> 
+            <rect width="18" height="12" x="3" y="6" rx="2"/> 
+        
+         <path
+      <path
+       style="stroke-width:2;stroke-dasharray:8, 2;stroke-dashoffset:0"
+       d="m -14.007348,12.000818 c 15.3564398,3.95e-4 30.79516,0.16535 46.069016,5.77e-4"
+       id="path5"
+       sodipodi:nodetypes="cc" />
+
+    </g> `,
+    mode: 'stroke',
+};
+
+const gap: Icon = {
+    name: 'cards-gap',
+    svg: `  
+                <rect width="20" height="12" x="-11.600009" y="6" rx="2" />
+                <rect
+                    width="20"
+                    height="12"
+                    x="16.534304"
+                    y="5.9783392"
+                    rx="2"
+                />
+          `,
+    mode: 'stroke',
+};
+
+const outline: Icon = {
+    name: 'outline',
+    svg: `<path d="M 7.563873,12 H 21.24698" />
+  <path d="M 7.56116,18 H 21.159058" />
+  <path d="M3 6h18" /> `,
+    mode: 'stroke',
+};
+
+const cursorOff: Icon = {
+    name: 'cursor-off',
+    svg: `<path d="m 8.0036101,3.8555957 h 1 a 3,3 0 0 1 2.9999999,3 3,3 0 0 1 3,-3 h 1" />
+  <path d="m 16.00361,19.855596 h -1 a 3,3 0 0 1 -3,-3 3,3 0 0 1 -2.9999999,3 h -1" />
+  <path d="M 12.00361,6.8555957 V 16.855596" />
+  <path d="M 3.0758124,4.7436822 20.548737,18.693141" />`,
+    mode: 'stroke',
+};
+
+const cursor: Icon = {
+    name: 'cursor',
+    svg: `<path d="m 8.0036101,3.8555957 h 1 a 3,3 0 0 1 2.9999999,3 3,3 0 0 1 3,-3 h 1" />
+  <path d="m 16.00361,19.855596 h -1 a 3,3 0 0 1 -3,-3 3,3 0 0 1 -2.9999999,3 h -1" />
+  <path d="M 12.00361,6.8555957 V 16.855596" />`,
+    mode: 'stroke',
+};
+export const customIcons = {
+    cards,
+    split,
+    alignH,
+    alignV,
+    gap,
+    outline,
+    cursor,
+    cursorOff,
+};
 
 export const loadCustomIcons = () => {
     for (const icon of Object.values(customIcons)) {

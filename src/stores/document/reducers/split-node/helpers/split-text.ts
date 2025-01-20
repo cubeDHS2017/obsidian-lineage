@@ -6,7 +6,7 @@ import { SplitNodeMode } from 'src/stores/document/reducers/split-node/split-nod
 export const splitText = (text: string, mode: SplitNodeMode) => {
     if (mode === 'headings') {
         return headingsToHtmlComment(text);
-    } else if (mode === 'paragraphs') {
+    } else if (mode === 'blocks') {
         return paragraphsToHtmlComment(text);
     } else {
         return outlineToHtmlComment(text);

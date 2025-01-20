@@ -1,6 +1,9 @@
 import { jsonToColumns } from 'src/lib/data-conversion/json-to-x/json-to-columns';
 import { htmlCommentToJson } from 'src/lib/data-conversion/x-to-json/html-comment-to-json';
-import { DocumentState } from 'src/stores/document/document-state-type';
+import {
+    DocumentState,
+    LineageDocument,
+} from 'src/stores/document/document-state-type';
 import { SavedDocument } from 'src/stores/document/document-store-actions';
 import { insertFirstNode } from 'src/lib/tree-utils/insert/insert-first-node';
 import invariant from 'tiny-invariant';
@@ -14,6 +17,7 @@ export type LoadDocumentAction = {
         document: SavedDocument;
         format: LineageDocumentFormat;
         activeSection: string | null;
+        __test_document__?: LineageDocument;
     };
 };
 

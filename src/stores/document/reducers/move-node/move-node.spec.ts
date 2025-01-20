@@ -1055,71 +1055,87 @@ describe('move-node', () => {
         expect(input.columns).toEqual(output.columns);
     });
     test('*|1|* >*|2|* right', () => {
+        const n2_1 = 'n5JK';
         const action = {
             type: 'DOCUMENT/MOVE_NODE',
-            payload: { direction: 'right', activeNodeId: 'n5JK' },
+            payload: { direction: 'right', activeNodeId: n2_1 },
         } as const;
-        const col0 = 'cfMV';
-        const col1 = 'cHzC';
-        const col2 = 'cNRG';
+        const col0 = 'col0';
+        const col1 = 'col1';
+        const col2 = 'col2';
+        const n1 = 'n1';
+        const n2 = 'n2';
+        const n1_1 = 'n1_1';
+        const n1_2 = 'n1_2';
+        const n2_2 = 'n2_2';
+        const n1_1_1 = 'n1_1_1';
+        const n1_1_2 = 'n1_1_2';
+        const n1_2_1 = 'n1_2_1';
+        const n1_2_2 = 'n1_2_2';
+        const n2_1_1 = 'n2_1_1';
+        const n2_1_2 = 'n2_1_2';
+        const n2_2_1 = 'n2_2_1';
+        const n2_2_2 = 'n2_2_2';
+        const n0 = 'n0';
         const input = {
             columns: [
                 {
                     id: col0,
-                    groups: [{ nodes: ['neHE', 'n42q'], parentId: 'rVHp' }],
+                    groups: [{ nodes: [n1, n2], parentId: n0 }],
                 },
                 {
                     id: col1,
                     groups: [
-                        { nodes: ['nUcm', 'nqdD'], parentId: 'neHE' },
-                        { nodes: ['n5JK', 'n_D6'], parentId: 'n42q' },
+                        { nodes: [n1_1, n1_2], parentId: n1 },
+                        { nodes: [n2_1, n2_2], parentId: n2 },
                     ],
                 },
                 {
                     id: col2,
                     groups: [
-                        { nodes: ['n_DG', 'nITI'], parentId: 'nUcm' },
-                        { nodes: ['nwUp', 'njV2'], parentId: 'nqdD' },
-                        { nodes: ['n1If', 'nACn'], parentId: 'n5JK' },
-                        { nodes: ['n-EP', 'nNN0'], parentId: 'n_D6' },
+                        { nodes: [n1_1_1, n1_1_2], parentId: n1_1 },
+                        { nodes: [n1_2_1, n1_2_2], parentId: n1_2 },
+                        { nodes: [n2_1_1, n2_1_2], parentId: n2_1 },
+                        { nodes: [n2_2_1, n2_2_2], parentId: n2_2 },
                     ],
                 },
             ],
         };
-        const col3 = 'cF6B';
+        /* const col3 = 'col3';
         const output = {
             columns: [
                 {
                     id: col0,
-                    groups: [{ nodes: ['neHE', 'n42q'], parentId: 'rVHp' }],
+                    groups: [{ nodes: [n1, n2], parentId: n0 }],
                 },
                 {
                     id: col1,
                     groups: [
-                        { nodes: ['nUcm', 'nqdD'], parentId: 'neHE' },
-                        { nodes: ['n_D6'], parentId: 'n42q' },
+                        { nodes: [n1_1, n1_2], parentId: n1 },
+                        { nodes: [n2_2], parentId: n2 },
                     ],
                 },
                 {
                     id: col2,
                     groups: [
-                        { nodes: ['n_DG', 'nITI'], parentId: 'nUcm' },
-                        { nodes: ['nwUp', 'njV2', 'n5JK'], parentId: 'nqdD' },
-                        { nodes: ['n-EP', 'nNN0'], parentId: 'n_D6' },
+                        { nodes: [n1_1_1, n1_1_2], parentId: n1_1 },
+                        { nodes: [n1_2_1, n1_2_2, n2_1], parentId: n1_2 },
+                        { nodes: [n2_2_1, n2_2_2], parentId: n2_2 },
                     ],
                 },
                 {
                     id: col3,
-                    groups: [{ nodes: ['n1If', 'nACn'], parentId: 'n5JK' }],
+                    groups: [{ nodes: [n2_1_1, n2_1_2], parentId: n2_1 }],
                 },
             ],
             state: {
-                activeNode: 'n5JK',
+                activeNode: n2_1,
             },
-        };
-        moveNode(input, action);
-        input.columns[3].id = col3;
-        expect(input.columns).toEqual(output.columns);
+        };*/
+        // input.columns[3].id = col3;
+        expect(() => moveNode(input, action)).toThrow(
+            'could not find adjacent node',
+        );
     });
     test('*|1|* >*|2|* left', () => {
         const action = {
@@ -1273,6 +1289,106 @@ describe('move-node', () => {
                         { nodes: [n3_2], parentId: n3 },
                     ],
                 },
+            ],
+        };
+        moveNode(input, action);
+        expect(input.columns).toEqual(output.columns);
+    });
+
+    test('move node down, no group sibling, childless parent sibling', () => {
+        const c0 = 'c0';
+        const c1 = 'c1';
+        const c2 = 'c2';
+        const r0 = 'r0';
+        const n1 = 'n1';
+        const n2 = 'n2';
+        const n3 = 'n3';
+        const n1_1 = 'n1_1';
+        const n1_1_1 = 'n1_1_1';
+        const n3_1 = 'n3_1';
+        const action = {
+            type: 'DOCUMENT/MOVE_NODE',
+            payload: {
+                direction: 'down',
+                activeNodeId: n1_1,
+                selectedNodes: new Set([]),
+            },
+        } as const;
+        const input = {
+            columns: [
+                { id: c0, groups: [{ parentId: r0, nodes: [n1, n2, n3] }] },
+                {
+                    id: c1,
+                    groups: [
+                        { nodes: [n1_1], parentId: n1 },
+                        { nodes: [n3_1], parentId: n3 },
+                    ],
+                },
+                { id: c2, groups: [{ parentId: n1_1, nodes: [n1_1_1] }] },
+            ],
+        };
+
+        const output = {
+            columns: [
+                { id: c0, groups: [{ parentId: r0, nodes: [n1, n2, n3] }] },
+                {
+                    id: c1,
+                    groups: [
+                        { nodes: [n1_1], parentId: n2 },
+                        { nodes: [n3_1], parentId: n3 },
+                    ],
+                },
+                { id: c2, groups: [{ parentId: n1_1, nodes: [n1_1_1] }] },
+            ],
+        };
+        moveNode(input, action);
+        expect(input.columns).toEqual(output.columns);
+    });
+
+    test('move node up, no group sibling, childless parent sibling', () => {
+        const c0 = 'c0';
+        const c1 = 'c1';
+        const c2 = 'c2';
+        const r0 = 'r0';
+        const n1 = 'n1';
+        const n2 = 'n2';
+        const n3 = 'n3';
+        const n1_1 = 'n1_1';
+        const n1_1_1 = 'n1_1_1';
+        const n3_1 = 'n3_1';
+        const action = {
+            type: 'DOCUMENT/MOVE_NODE',
+            payload: {
+                direction: 'up',
+                activeNodeId: n3_1,
+                selectedNodes: new Set([]),
+            },
+        } as const;
+        const input = {
+            columns: [
+                { id: c0, groups: [{ parentId: r0, nodes: [n1, n2, n3] }] },
+                {
+                    id: c1,
+                    groups: [
+                        { nodes: [n1_1], parentId: n1 },
+                        { nodes: [n3_1], parentId: n3 },
+                    ],
+                },
+                { id: c2, groups: [{ parentId: n1_1, nodes: [n1_1_1] }] },
+            ],
+        };
+
+        const output = {
+            columns: [
+                { id: c0, groups: [{ parentId: r0, nodes: [n1, n2, n3] }] },
+                {
+                    id: c1,
+                    groups: [
+                        { nodes: [n1_1], parentId: n1 },
+                        { nodes: [n3_1], parentId: n2 },
+                    ],
+                },
+                { id: c2, groups: [{ parentId: n1_1, nodes: [n1_1_1] }] },
             ],
         };
         moveNode(input, action);

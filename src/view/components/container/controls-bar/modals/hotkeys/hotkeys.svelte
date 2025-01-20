@@ -1,32 +1,47 @@
 <script lang="ts">
-    import { filteredHotkeys } from 'src/stores/hotkeys/derived/filtered-hotkeys';
     import Group from './group.svelte';
     import Front from './front.svelte';
-    import NumberOfConflicts from './number-of-conflicts.svelte';
+    import NumberOfConflicts from './status-bar.svelte';
+    import { FilteredHotkeysStore } from 'src/stores/settings/derived/view-hotkeys-store';
+    import { getView } from 'src/view/components/container/context';
+    import {
+        DynamicLabelState
+    } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
+    import { OutlineModeStore } from 'src/stores/settings/derived/view-settings-store';
+
+    const view = getView();
+    const store = FilteredHotkeysStore(view);
+    const outlineMode = OutlineModeStore(view);
+    let labelState: DynamicLabelState;
+    $: {
+        labelState = {
+            outlineMode: $outlineMode,
+        };
+    }
 </script>
 
-<div class="lineage-modal" tabindex="0">
+<div class="lineage-modal lineage-modal--full-height">
     <Front />
     <div class="groups">
-        {#each Object.entries($filteredHotkeys) as [groupName, group] (groupName)}
-            <Group {groupName} {group} />
+        {#each Object.entries($store.hotkeys) as [groupName, group] (groupName)}
+            <Group {groupName} {group} {labelState} />
         {/each}
     </div>
-    <NumberOfConflicts />
+    <NumberOfConflicts conflicts={$store.numberOfConflictingHotkeys}/>
 </div>
 
 <style>
     .groups {
-        min-width: 430px;
+        width:500px;
         display: flex;
         flex-direction: column;
         gap: var(--size-4-2);
-        max-height: 70vh;
         overflow-y: auto;
+        flex:1
     }
     @media (max-width: 720px) {
         .groups {
-            min-width: unset;
+            width: fit-content;
         }
     }
 </style>

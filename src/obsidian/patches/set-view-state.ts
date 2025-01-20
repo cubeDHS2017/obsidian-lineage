@@ -9,7 +9,9 @@ export function setViewState(next: (...params: unknown[]) => unknown) {
         const path = state?.state?.file;
         if (
             isMarkdownView &&
+            // @ts-ignore
             fileViewTypeCache[path]?.viewType === LINEAGE_VIEW_TYPE &&
+            // @ts-ignore
             !state.state.inlineEditor
         ) {
             const newState = {

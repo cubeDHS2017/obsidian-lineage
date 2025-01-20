@@ -7,12 +7,12 @@ import {
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe-clear-selection';
 import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
-import { updateConflictingHotkeys } from 'src/stores/view/subscriptions/actions/update-conflicting-hotkeys';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
 import { persistActivePinnedNode } from 'src/stores/view/subscriptions/actions/persist-active-pinned-node';
 import { showSearchResultsInMinimap } from 'src/stores/view/subscriptions/effects/show-search-results-in-minimap';
+import { getUsedHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
+import { persistCollapsedSections } from 'src/stores/view/subscriptions/actions/settings/persist-collapsed-sections';
 
 export const onViewStateUpdate = (
     view: LineageView,
@@ -39,10 +39,19 @@ export const onViewStateUpdate = (
     }
     if (activeNodeChange && activeNodeHasChanged) {
         // this should be handled internally
-        updateActiveBranch(viewStore, documentState);
+        updateActiveBranch(viewStore, documentState, 'none');
         persistActiveNodeInPluginSettings(view);
-        view.minimapStore.setActiveCardId(viewState.document.activeNode);
-        view.plugin.statusBar.updateProgressIndicator(view);
+        view.plugin.statusBar.updateProgressIndicatorAndChildCount(view);
+    }
+    if (activeNodeChange) {
+        if (view.minimapStore) {
+            view.minimapStore.dispatch({
+                type: 'minimap/set-active-node',
+                payload: {
+                    id: viewState.document.activeNode,
+                },
+            });
+        }
     }
 
     if (
@@ -57,26 +66,13 @@ export const onViewStateUpdate = (
     if (action.type === 'SEARCH/SET_QUERY') {
         updateSearchResults(view);
     }
-    if (action.type === 'UI/TOGGLE_HELP_SIDEBAR') {
-        if (viewState.ui.controls.showHelpSidebar)
-            updateConflictingHotkeys(view);
-    }
 
     // effects
     if (activeNodeChange || e.search || e.editMainSplit) {
-        const skipAligning =
-            action.type === 'DOCUMENT/SET_ACTIVE_NODE' &&
-            action.context?.modKey;
-        if (!skipAligning) {
-            alignBranch(view);
-        }
+        view.alignBranch.align(action);
     }
     if (!container || !view.isViewOfFile) return;
-    const postInlineEditor = type === 'DOCUMENT/CONFIRM_DISABLE_EDIT';
-    if (postInlineEditor) {
-        const maybeViewIsClosing = !view.isActive;
-        view.saveDocument(maybeViewIsClosing, postInlineEditor);
-    }
+
     if (type === 'SEARCH/TOGGLE_FUZZY_MODE') {
         view.documentSearch.resetIndex();
     }
@@ -105,5 +101,24 @@ export const onViewStateUpdate = (
 
     if (type === 'view/pinned-nodes/set-active-node') {
         persistActivePinnedNode(view);
+    }
+
+    if (action.type === 'UI/TOGGLE_HELP_SIDEBAR') {
+        if (viewState.ui.controls.showHelpSidebar) {
+            view.viewStore.dispatch({
+                type: 'view/hotkeys/update-conflicts',
+                payload: {
+                    conflicts: getUsedHotkeys(view.plugin),
+                },
+            });
+        }
+    }
+
+    if (
+        action.type === 'view/outline/toggle-collapse-all' ||
+        action.type === 'view/outline/toggle-collapse-node' ||
+        action.type === 'view/outline/refresh-collapsed-nodes'
+    ) {
+        persistCollapsedSections(view);
     }
 };

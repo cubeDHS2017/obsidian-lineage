@@ -1,26 +1,21 @@
 import { Column, NodeId } from 'src/stores/document/document-state-type';
 import { AllDirections } from 'src/stores/document/document-store-actions';
 import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id';
-import { findAdjacentSiblingNode } from 'src/lib/tree-utils/find/find-adjacent-sibling-node';
+import { findSiblingNode } from 'src/lib/tree-utils/find/find-sibling-node';
 import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
 
 export const findAdjacentNode = (
     columns: Column[],
-    activeNodeId: string,
+    nodeToMove: string,
     direction: AllDirections,
 ) => {
     let targetNode: NodeId | null = null;
-    const nodeToMove = activeNodeId;
     if (direction === 'left') {
         const group = findGroupByNodeId(columns, nodeToMove);
         if (group && !group.parentId.startsWith('r'))
             targetNode = group.parentId;
     } else {
-        targetNode = findAdjacentSiblingNode(
-            columns,
-            nodeToMove,
-            direction === 'right' ? 'up' : direction,
-        );
+        targetNode = findSiblingNode(columns, nodeToMove, direction);
     }
 
     // if first node of column is trying to move right, move it under the node below
@@ -29,7 +24,7 @@ export const findAdjacentNode = (
         const isFirstNodeOfColumn =
             columns[columnIndex].groups[0]?.nodes[0] === nodeToMove;
         if (isFirstNodeOfColumn) {
-            targetNode = findAdjacentSiblingNode(columns, nodeToMove, 'down');
+            targetNode = findSiblingNode(columns, nodeToMove, 'down');
         }
     }
     return targetNode;

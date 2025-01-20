@@ -1,4 +1,10 @@
-import { IconName, Notice, TextFileView, WorkspaceLeaf } from 'obsidian';
+import {
+    debounce,
+    IconName,
+    Notice,
+    TextFileView,
+    WorkspaceLeaf,
+} from 'obsidian';
 
 import Component from './components/container/main.svelte';
 import Lineage from '../main';
@@ -16,7 +22,7 @@ import { defaultViewState } from 'src/stores/view/default-view-state';
 import { viewReducer } from 'src/stores/view/view-reducer';
 import { viewSubscriptions } from 'src/stores/view/subscriptions/view-subscriptions';
 import { onPluginError } from 'src/lib/store/on-plugin-error';
-import { InlineEditor } from 'src/obsidian/helpers/inline-editor';
+import { InlineEditor } from 'src/obsidian/helpers/inline-editor/inline-editor';
 import { id } from 'src/helpers/id';
 import invariant from 'tiny-invariant';
 import { customIcons } from 'src/helpers/load-custom-icons';
@@ -28,23 +34,37 @@ import { getOrDetectDocumentFormat } from 'src/obsidian/events/workspace/helpers
 import { maybeGetDocumentFormat } from 'src/obsidian/events/workspace/helpers/maybe-get-document-format';
 import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
 import { toggleObsidianViewType } from 'src/obsidian/events/workspace/effects/toggle-obsidian-view-type';
-import { Minimap } from 'src/view/actions/minimap/minimap';
 import { DocumentSearch } from 'src/view/helpers/document-search';
+import {
+    MinimapDomElements,
+    MinimapState,
+} from 'src/stores/minimap/minimap-state-type';
+import { MinimapStoreAction } from 'src/stores/minimap/minimap-store-actions';
+import { StyleRulesProcessor } from 'src/stores/view/subscriptions/effects/style-rules/style-rules-processor';
+import { AlignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { lang } from 'src/lang/lang';
+import { logger } from 'src/helpers/logger';
 
 export const LINEAGE_VIEW_TYPE = 'lineage';
 
 export type DocumentStore = Store<DocumentState, DocumentStoreAction>;
 export type ViewStore = Store<ViewState, ViewStoreAction>;
+export type MinimapStore = Store<MinimapState, MinimapStoreAction>;
 
 export class LineageView extends TextFileView {
     component: Component;
     documentStore: DocumentStore;
     viewStore: ViewStore;
-    minimapStore: Minimap;
+    minimapStore: MinimapStore | null;
     container: HTMLElement | null;
     inlineEditor: InlineEditor;
     documentSearch: DocumentSearch;
+    rulesProcessor: StyleRulesProcessor;
+    alignBranch: AlignBranch;
     id: string;
+    zoomFactor: number;
+    private minimapDom: MinimapDomElements | null = null;
+
     private readonly onDestroyCallbacks: Set<Unsubscriber> = new Set();
     private activeFilePath: null | string;
     constructor(
@@ -62,9 +82,11 @@ export class LineageView extends TextFileView {
             viewReducer,
             this.onViewStoreError as OnError<ViewStoreAction>,
         );
-        this.minimapStore = new Minimap(this);
+
         this.id = id.view();
         this.documentSearch = new DocumentSearch(this);
+        this.rulesProcessor = new StyleRulesProcessor(this);
+        this.alignBranch = new AlignBranch(this);
     }
 
     get isActive() {
@@ -89,11 +111,26 @@ export class LineageView extends TextFileView {
         if (!this.activeFilePath && this.file) {
             this.activeFilePath = this.file?.path;
             this.loadInitialData();
+        } else if (this.file && data.trim().length === 0) {
+            this.plugin.app.vault.adapter
+                .read(this.file.path)
+                .then((content) => {
+                    if (content.trim().length !== 0) {
+                        throw new Error(lang.error_set_empty_data);
+                    } else {
+                        this.data = data;
+                        this.debouncedLoadDocumentToStore();
+                    }
+                })
+                .catch((error) => {
+                    logger.error('Error reading file:', error);
+                });
         } else {
             this.data = data;
-            this.loadDocumentToStore();
+            this.debouncedLoadDocumentToStore();
         }
     }
+
     async onUnloadFile() {
         if (this.component) {
             this.component.$destroy();
@@ -170,13 +207,16 @@ export class LineageView extends TextFileView {
         onPluginError(error, location, action);
     };
 
-    saveDocument = async (immediate = false, force = false) => {
+    saveDocument = async (immediate = false) => {
         invariant(this.file);
         const state = clone(this.documentStore.getValue());
         const data: string =
             state.file.frontmatter +
             stringifyDocument(state.document, getDocumentFormat(this));
-        if (data !== this.data || force) {
+        if (data !== this.data) {
+            if (data.trim().length === 0) {
+                throw new Error(lang.error_save_empty_data);
+            }
             this.data = data;
             if (immediate) await this.save();
             else this.requestSave();
@@ -206,7 +246,7 @@ export class LineageView extends TextFileView {
                 view: this,
             },
         });
-        this.container = this.contentEl.querySelector('#columns-container');
+
         invariant(this.container);
         this.onDestroyCallbacks.add(viewSubscriptions(this));
     };
@@ -288,4 +328,23 @@ export class LineageView extends TextFileView {
             }
         }
     };
+
+    private debouncedLoadDocumentToStore = debounce(
+        this.loadDocumentToStore,
+        250,
+    );
+
+    setMinimapDom(dom: MinimapDomElements) {
+        this.minimapDom = dom;
+    }
+
+    getMinimapDom() {
+        invariant(this.minimapDom);
+        return this.minimapDom;
+    }
+
+    getMinimapStore() {
+        invariant(this.minimapStore);
+        return this.minimapStore;
+    }
 }

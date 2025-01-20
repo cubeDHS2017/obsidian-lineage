@@ -1,48 +1,23 @@
 import { SettingsStore } from 'src/main';
-import { ColorComponent, Setting } from 'obsidian';
 import { getDefaultTheme } from 'src/stores/view/subscriptions/effects/css-variables/helpers/get-default-theme';
+import { lang } from 'src/lang/lang';
+import { ColorSetting } from 'src/view/actions/settings/components/shared/color-setting';
 
 export const BackgroundColor = (
-    element: HTMLElement,
+    container: HTMLElement,
     settingsStore: SettingsStore,
 ) => {
-    const settingsState = settingsStore.getValue();
-    let colorPicker: ColorComponent;
-
-    const onChange = (color: string) => {
-        settingsStore.dispatch({
-            type: 'SET_CONTAINER_BG',
-            payload: {
-                backgroundColor: color,
-            },
-        });
-    };
-
-    const setValue = () => {
-        colorPicker.onChange(() => void undefined);
-        colorPicker.setValue(
-            settingsState.view.theme.containerBg ||
-                getDefaultTheme().containerBg,
-        );
-        colorPicker.onChange(onChange);
-    };
-    new Setting(element)
-        .setName('Background color')
-        .addColorPicker((cb) => {
-            colorPicker = cb;
-            setValue();
-        })
-        .addExtraButton((cb) => {
-            cb.setIcon('reset')
-                .onClick(() => {
-                    settingsStore.dispatch({
-                        type: 'SET_CONTAINER_BG',
-                        payload: {
-                            backgroundColor: undefined,
-                        },
-                    });
-                    setValue();
-                })
-                .setTooltip('Reset');
-        });
+    ColorSetting(container, settingsStore, {
+        defaultValue: getDefaultTheme().containerBg,
+        label: lang.settings_theme_bg,
+        valueSelector: (settings) => settings.view.theme.containerBg,
+        onChange: (color) => {
+            settingsStore.dispatch({
+                type: 'SET_CONTAINER_BG',
+                payload: {
+                    backgroundColor: color,
+                },
+            });
+        },
+    });
 };

@@ -6,6 +6,7 @@ import invariant from 'tiny-invariant';
 import { SilentError } from 'src/lib/errors/errors';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { findAdjacentNodeOfSelection } from 'src/lib/tree-utils/find/find-adjacent-node-of-selection';
+import { findAdjacentParent } from 'src/lib/tree-utils/find/find-adjacent-parent';
 
 export type MoveNodeAction = {
     type: 'DOCUMENT/MOVE_NODE';
@@ -26,33 +27,46 @@ export const moveNode = (
         ? [...selectedNodes]
         : [action.payload.activeNodeId];
 
+    let direction = action.payload.direction;
+
     const shouldReverseOrder =
-        isSelection &&
-        (action.payload.direction === 'down' ||
-            action.payload.direction === 'left');
+        isSelection && (direction === 'down' || direction === 'left');
     if (shouldReverseOrder) nodes.reverse();
     invariant(action.payload.activeNodeId);
 
-    const targetNode = isSelection
+    let targetNode = isSelection
         ? findAdjacentNodeOfSelection(
               document,
               action.payload.activeNodeId,
               selectedNodes,
-              action.payload.direction,
+              direction,
           )
         : findAdjacentNode(
               document.columns,
               action.payload.activeNodeId,
-              action.payload.direction,
+              direction,
           );
+
+    let moveNodeToTheStart = false;
+    if (!targetNode && (direction === 'down' || direction === 'up')) {
+        targetNode = findAdjacentParent(
+            document.columns,
+            action.payload.activeNodeId,
+            direction,
+        );
+        moveNodeToTheStart = direction === 'down';
+        direction = 'right';
+    }
+
     if (!targetNode) throw new SilentError('could not find adjacent node');
     for (const nodeToMove of nodes) {
         changeNodePosition(
             document,
             nodeToMove,
             targetNode,
-            action.payload.direction,
+            direction,
             'move',
+            moveNodeToTheStart,
         );
         cleanAndSortColumns(document);
     }

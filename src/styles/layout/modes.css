@@ -1,0 +1,114 @@
+.limit-card-height {
+    & .lng-prev {
+        max-height: 65vh;
+    }
+    & .editor-container {
+        max-height: 65vh;
+    }
+}
+
+.outline-mode {
+    --node-gap: 30px;
+
+    & .group {
+        background-color: transparent;
+        margin-bottom: 0;
+    }
+
+    & .group-has-active-child {
+        margin-bottom: 0;
+    }
+
+    & .active-parent-bridge-right {
+        display: none;
+    }
+
+    & .active-parent-bridge-left {
+        display: none;
+    }
+    & .active-node-bridge {
+        display: none;
+    }
+
+    & .active-node {
+        outline: 6px solid var(--background-active-parent) !important;
+    }
+
+    & .group-has-active-node {
+        & .inactive-node {
+            background-color: var(--background-active-parent);
+            opacity: 0.8;
+        }
+        & .inactive-node:hover {
+            background-color: var(--background-active-parent);
+            opacity: 0.8;
+        }
+    }
+
+    & .column{
+        /* to show outline card buttons*/
+        padding: 0 calc(1 / var(--zoom-level) * 50vw);
+    }
+
+    & .hidden-node {
+        display: none !important;
+    }
+}
+
+.gap-between-cards {
+    --node-gap: var(--node-gap-setting);
+    & .columns {
+        gap: var(--node-gap-setting);
+    }
+
+    .group-has-active-child {
+        margin-bottom: 0;
+    }
+
+    & .group {
+        margin-bottom: var(--node-gap-setting);
+        background-color: transparent;
+    }
+
+    & .active-parent-bridge-right {
+        display: none;
+    }
+
+    & .active-parent-bridge-left {
+        display: none;
+    }
+
+    & .active-node-bridge {
+        display: none;
+    }
+
+    & .active-node {
+        outline: 6px solid var(--background-active-parent) !important;
+    }
+}
+
+
+/* to prevent cards from wobbling when hovering over them */
+#columns-container.zoom-enabled {
+    * {
+        transition: none !important;
+    }
+}
+
+#columns-container.zoom-enabled {
+    .lineage-floating-button{
+        opacity: 0.5 !important
+    }
+    .lineage-card:not(:hover) .lineage-floating-button:not(.collapse-button) {
+        visibility: hidden;
+    }
+}
+
+/* hides floating buttons when the mouse is inactive*/
+.hide-floating-buttons {
+    .lineage-card:not(.active-node) {
+        .lineage-floating-button:not(.collapse-button) {
+            display: none;
+        }
+    }
+}

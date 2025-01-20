@@ -4,6 +4,7 @@
         HistoryIcon,
         Keyboard,
         MoreVertical,
+        Palette,
         PanelRightInactive as PanelRight,
         Redo2 as RedoIcon,
         Settings,
@@ -17,7 +18,7 @@
     import Button from '../shared/button.svelte';
     import { ScrollSettingsStore, showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
     import { customIcons } from 'src/helpers/load-custom-icons';
-    import { ApplyGapBetweenCardsStore } from 'src/stores/settings/derived/view-settings-store';
+    import { ApplyGapBetweenCardsStore, OutlineModeStore } from 'src/stores/settings/derived/view-settings-store';
     import ZoomButtons from './components/zoom-buttons.svelte';
 
     const view = getView();
@@ -46,6 +47,10 @@
     const toggleHelp = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_HELP_SIDEBAR' });
     };
+
+    const toggleStyleRules = () => {
+        viewStore.dispatch({ type: 'view/modals/toggle-style-rules' });
+    };
     const toggleSettings = () => {
         viewStore.dispatch({ type: 'UI/TOGGLE_SETTINGS_SIDEBAR' });
     };
@@ -61,9 +66,14 @@
             type: 'VIEW/TOGGLE_MINIMAP',
         });
     };
-    const toggleScrollMode = () => {
+    const toggleScrollModeH = () => {
         view.plugin.settings.dispatch({
             type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE',
+        });
+    };
+    const toggleScrollModeV = () => {
+        view.plugin.settings.dispatch({
+            type: 'settings/view/scrolling/toggle-vertical-scrolling-mode',
         });
     };
 
@@ -75,13 +85,19 @@
             type: 'view/modes/gap-between-cards/toggle',
         });
     };
+    const outlineMode = OutlineModeStore(view);
+    const toggleOutlineMode = () => {
+        view.plugin.settings.dispatch({
+            type: 'settings/view/modes/toggle-outline-mode',
+        });
+    };
 </script>
 
 <div class="controls-container">
     <div class="buttons-group controls-toggle">
         <Button
             active={$showControls}
-            label={'Toggle controls'}
+            label={lang.controls_toggle_bar}
             on:click={toggleShowControls}
             tooltipPosition="left"
         >
@@ -96,16 +112,21 @@
         <Button
             active={$showMinimap}
             classes="control-item"
-            label={'Toggle minimap'}
+            label={lang.controls_toggle_minimap}
             on:click={toggleMinimap}
             tooltipPosition="left"
         >
             <PanelRight class="svg-icon" />
         </Button>
+    </div>
+    <div
+        class="buttons-group buttons-group--vertical"
+        data-visible={$showControls}
+    >
         <Button
             active={$controls.showSettingsSidebar}
             classes="control-item"
-            label={'Settings'}
+            label={lang.controls_settings}
             on:click={toggleSettings}
             tooltipPosition="left"
         >
@@ -114,11 +135,20 @@
         <Button
             active={$controls.showHelpSidebar}
             classes="control-item"
-            label="Keyboard shortcuts"
+            label={lang.controls_hotkeys}
             on:click={toggleHelp}
             tooltipPosition="left"
         >
             <Keyboard class="svg-icon" />
+        </Button>
+        <Button
+            active={$controls.showStyleRulesModal}
+            classes="control-item"
+            label={lang.controls_rules}
+            on:click={toggleStyleRules}
+            tooltipPosition="left"
+        >
+            <Palette class="svg-icon" />
         </Button>
     </div>
     <div
@@ -126,40 +156,48 @@
         data-visible={$showControls}
     >
         <Button
-            active={$scrollSettingsStore.horizontalScrollingMode ===
-                'keep-active-card-at-center'}
+            active={$scrollSettingsStore.centerActiveNodeH}
             classes="control-item"
-            label={lang.toggle_scrolling_mode}
-            on:click={toggleScrollMode}
+            label={lang.controls_toggle_scrolling_mode_horizontal}
+            on:click={toggleScrollModeH}
             tooltipPosition="left"
         >
-            {@html customIcons.align.svg}
+            {@html customIcons.alignH.svg}
+        </Button>
+        <Button
+            active={$scrollSettingsStore.centerActiveNodeV}
+            classes="control-item"
+            label={lang.controls_toggle_scrolling_mode_vertical}
+            on:click={toggleScrollModeV}
+            tooltipPosition="left"
+        >
+            {@html customIcons.alignV.svg}
+        </Button>
+    </div>
+    <div
+        class="buttons-group buttons-group--vertical"
+        data-visible={$showControls}
+    >
+        <Button
+            active={$outlineMode}
+            classes="control-item"
+            label={lang.controls_single_column}
+            on:click={toggleOutlineMode}
+            tooltipPosition="left"
+        >
+            {@html customIcons.outline.svg}
         </Button>
         <Button
             active={$applyGapBetweenCards}
             classes="control-item"
-            label={'Gap between cards'}
+            label={lang.controls_gap_between_cards}
             on:click={toggleGap}
             tooltipPosition="left"
         >
-            <svg
-                viewBox="0 0 24 24"
-                class="svg-icon"
-                stroke="currentColor"
-                fill="transparent"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <rect width="20" height="12" x="-11.600009" y="6" rx="2" />
-                <rect
-                    width="20"
-                    height="12"
-                    x="16.534304"
-                    y="5.9783392"
-                    rx="2"
-                />
-            </svg>
+            {@html customIcons.gap.svg}
         </Button>
     </div>
+
     <div
         class="buttons-group buttons-group--vertical"
         data-visible={$showControls}
@@ -168,7 +206,7 @@
             active={$controls.showHistorySidebar}
             classes="control-item"
             disabled={$history.items.length === 0}
-            label="History"
+            label={lang.controls_history}
             on:click={() => {
                 viewStore.dispatch({ type: 'UI/TOGGLE_HISTORY_SIDEBAR' });
             }}
@@ -180,7 +218,7 @@
         <Button
             classes="control-item"
             disabled={!$history.state.canGoBack}
-            label="Undo"
+            label={lang.controls_history_undo}
             on:click={handlePreviousClick}
             tooltipPosition="left"
         >
@@ -189,7 +227,7 @@
         <Button
             classes="control-item"
             disabled={!$history.state.canGoForward}
-            label="Redo"
+            label={lang.controls_history_redo}
             on:click={handleNextClick}
             tooltipPosition="left"
         >

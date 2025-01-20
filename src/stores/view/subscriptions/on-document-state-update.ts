@@ -4,17 +4,16 @@ import {
     DocumentEventType,
     getDocumentEventType,
 } from 'src/stores/view/helpers/get-document-event-type';
-import { unloadInlineEditor } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cancel-changes';
 import { setActiveNode } from 'src/stores/view/subscriptions/actions/set-active-node';
 import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
-import { clearSelectedNodes } from 'src/stores/view/subscriptions/actions/clear-selected-nodes';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/actions/remove-obsolete-navigation-items';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-import { alignBranchAfterDocumentSave } from 'src/stores/view/subscriptions/effects/align-branch/wrappers/align-branch-after-document-save';
 import { persistPinnedNodes } from 'src/stores/view/subscriptions/actions/persist-pinned-nodes';
 import { updateStaleActivePinnedNode } from 'src/stores/view/subscriptions/actions/update-stale-active-pinned-node';
 import { setActivePinnedNode } from 'src/stores/view/subscriptions/actions/set-active-pinned-node';
+import { debouncedDrawDocument } from 'src/stores/minimap/subscriptions/effects/draw-document';
+import { updateSelectedNodes } from 'src/stores/view/subscriptions/actions/update-selected-nodes';
 
 export const onDocumentStateUpdate = (
     view: LineageView,
@@ -33,17 +32,20 @@ export const onDocumentStateUpdate = (
     if (type === 'DOCUMENT/LOAD_FILE') {
         // needed when the file was modified externally
         // to prevent saving a node with an obsolete node-id
-        unloadInlineEditor(view);
+        view.inlineEditor.unloadNode();
     }
 
     const structuralChange =
         e.createOrDelete || e.dropOrMove || e.changeHistory || e.clipboard;
     if (structuralChange) {
         setActiveNode(view, action);
-        updateActiveBranch(viewStore, documentState);
-        view.minimapStore.setActiveCardId(
-            viewStore.getValue().document.activeNode,
-        );
+        updateActiveBranch(viewStore, documentState, 'structure');
+        viewStore.dispatch({
+            type: 'view/outline/refresh-collapsed-nodes',
+            payload: {
+                columns: documentState.document.columns,
+            },
+        });
         documentStore.dispatch({
             type: 'document/pinned-nodes/remove-stale-nodes',
         });
@@ -51,7 +53,7 @@ export const onDocumentStateUpdate = (
     }
 
     if (structuralChange && type !== 'DOCUMENT/MOVE_NODE') {
-        clearSelectedNodes(view);
+        updateSelectedNodes(view, action, e.changeHistory!);
     }
 
     if (type === 'DOCUMENT/INSERT_NODE' && view.isActive) {
@@ -71,7 +73,9 @@ export const onDocumentStateUpdate = (
 
     // effects
     if (structuralChange || e.content) {
-        alignBranchAfterDocumentSave(view, action);
+        view.alignBranch.align(action);
+
+        view.rulesProcessor.onDocumentUpdate(action);
     }
 
     if (!container || !view.isViewOfFile) return;
@@ -82,8 +86,20 @@ export const onDocumentStateUpdate = (
     }
 
     if (e.content || structuralChange) {
+        if (view.minimapStore) {
+            debouncedDrawDocument(view);
+        }
+
         view.documentSearch.resetIndex();
-        view.minimapStore.setDocument(documentState.document);
+        const query = viewStore.getValue().search.query;
+        if (query) {
+            view.viewStore.dispatch({
+                type: 'SEARCH/SET_QUERY',
+                payload: {
+                    query,
+                },
+            });
+        }
     }
     if (structuralChange) {
         view.plugin.statusBar.updateAll(view);

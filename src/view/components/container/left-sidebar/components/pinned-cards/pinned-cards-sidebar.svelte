@@ -6,13 +6,13 @@
     import { documentStateStore } from '../../../../../../stores/view/derived/editing-store';
     import { IdSectionStore } from '../../../../../../stores/document/derived/id-section-store';
     import { ActivePinnedCardStore } from '../../../../../../stores/view/derived/pinned-cards-sidebar';
-    import {
-        scrollCardIntoView
-    } from 'src/view/components/container/left-sidebar/components/recent-cards/helpers/scroll-card-into-view';
-    import { onDestroy } from 'svelte';
     import NoItems from '../no-items/no-items.svelte';
+    import { PendingConfirmationStore } from 'src/stores/view/derived/pending-confirmation';
+    import { NodeStylesStore } from 'src/stores/view/derived/style-rules';
+    import {
+        scrollActivePinnedNode
+    } from 'src/view/components/container/left-sidebar/components/pinned-cards/actions/scroll-active-pinned-node';
 
-    let containerRef: HTMLElement | null = null;
     const view = getView();
     const pinnedNodesArray = PinnedNodesStore(view);
 
@@ -20,36 +20,13 @@
     const editingStateStore = documentStateStore(view);
 
     const activePinnedCard = ActivePinnedCardStore(view);
+    const pendingConfirmation = PendingConfirmationStore(view);
+    const styleRules = NodeStylesStore(view);
 
-    const subscriptions: (() => void)[] = [];
-    subscriptions.push(
-        ActivePinnedCardStore(view).subscribe((activeNodeId) => {
-            setTimeout(() => {
-                if (!containerRef) return;
-                if (!activeNodeId) return;
-                scrollCardIntoView(containerRef, activeNodeId);
-            }, 200);
-        }),
-    );
-    subscriptions.push(
-        PinnedNodesStore(view).subscribe(() => {
-            setTimeout(() => {
-                if (!containerRef) return;
-                const activeNodeId =
-                    view.viewStore.getValue().pinnedNodes.activeNode;
-                if (!activeNodeId) return;
-                scrollCardIntoView(containerRef, activeNodeId);
-            }, 200);
-        }),
-    );
-    onDestroy(() => {
-        for (const unsub of subscriptions) {
-            unsub();
-        }
-    });
+
 </script>
 
-<div class="pinned-cards-container" bind:this={containerRef}>
+<div class="pinned-cards-container" use:scrollActivePinnedNode>
     {#if $pinnedNodesArray.length > 0}
         {#each $pinnedNodesArray as node (node)}
             <Node
@@ -59,10 +36,10 @@
                     : ActiveStatus.sibling}
                 editing={$editingStateStore.activeNodeId === node &&
                     $editingStateStore.isInSidebar === true}
-                disableEditConfirmation={$editingStateStore.activeNodeId ===
-                    node &&
-                    $editingStateStore.disableEditConfirmation &&
+                confirmDisableEdit={$editingStateStore.activeNodeId === node &&
+                    $pendingConfirmation.disableEdit === node &&
                     $editingStateStore.isInSidebar === true}
+                confirmDelete={$pendingConfirmation.deleteNode.has(node)}
                 isInSidebar={true}
                 firstColumn={true}
                 section={$idSection[node]}
@@ -70,6 +47,11 @@
                 hasChildren={false}
                 selected={false}
                 pinned={false}
+                style={$styleRules.get(node)}
+                outlineMode={false}
+                collapsed={false}
+                hidden={false}
+                alwaysShowCardButtons={true}
             />
         {/each}
     {:else}
@@ -79,7 +61,6 @@
 
 <style>
     .pinned-cards-container {
-        overflow-y: auto;
         height: 100%;
         width: 100%;
 

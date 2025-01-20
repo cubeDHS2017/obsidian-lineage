@@ -27,6 +27,7 @@ export const dropNode = (
         targetNode,
         action.payload.position,
         'drop',
+        false,
     );
 
     cleanAndSortColumns(document);

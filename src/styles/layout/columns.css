@@ -1,0 +1,51 @@
+:root {
+    --node-gap: 2px;
+}
+
+.columns-container {
+    position: relative;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
+.columns {
+    display: flex;
+    align-items: center;
+    transform: scale(var(--zoom-level));
+    height: calc(1 / var(--zoom-level) * 100vh);
+    width: calc(1 / var(--zoom-level) * 100vw);
+}
+
+.column {
+    min-width: fit-content;
+    height: calc(1 / var(--zoom-level) * 100vh);
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.group {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: var(--node-gap);
+    padding: 6px;
+}
+
+.group-has-active-child {
+    margin-bottom: 3px;
+}
+
+.group-has-active-child:last-child {
+    margin-bottom: 0;
+}
+
+/*.group-has-active-child {
+    border-bottom-left-radius: 6px;
+    border-top-left-radius: 6px;
+}*/

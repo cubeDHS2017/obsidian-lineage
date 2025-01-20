@@ -1,5 +1,8 @@
 import { LineageView } from 'src/view/view';
-import { Menu } from 'obsidian';
+import {
+    MenuItemObject,
+    renderContextMenu,
+} from 'src/obsidian/context-menu/render-context-menu';
 import { getDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-document-format';
 import { lang } from 'src/lang/lang';
 import { setDocumentFormat } from 'src/obsidian/events/workspace/actions/set-document-format';
@@ -10,7 +13,6 @@ import { hasNHeadings } from 'src/lib/format-detection/has-n-headings';
 export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
     const file = view.file;
     if (!file) return;
-    const menu = new Menu();
 
     const format = getDocumentFormat(view);
     const isOutline = format === 'outline';
@@ -18,61 +20,52 @@ export const showViewContextMenu = (event: MouseEvent, view: LineageView) => {
     const isHtmlComments = format === 'sections';
 
     const _hasHeading = hasNHeadings(view.data, 1);
-    menu.addItem((item) =>
-        item
-            .setTitle(lang.format_headings)
-            .setIcon('heading-1')
-            .onClick(() => {
+    const menuItems: MenuItemObject[] = [
+        {
+            title: lang.cm_format_headings,
+            icon: 'heading-1',
+            action: () => {
                 saveNodeContent(view);
                 view.documentStore.dispatch({
                     type: 'DOCUMENT/FORMAT_HEADINGS',
                 });
-            })
-            .setDisabled(!_hasHeading),
-    );
-
-    menu.addSeparator();
-
-    menu.addItem((item) =>
-        item
-            .setTitle(lang.change_format_to_html_element)
-            .setIcon('file-cog')
-            .onClick(() => {
+            },
+            disabled: !_hasHeading,
+        },
+        { type: 'separator' },
+        {
+            title: lang.cm_change_format_to_html_element,
+            icon: 'file-cog',
+            action: () => {
                 setDocumentFormat(view.plugin, file.path, 'html-element');
-            })
-            .setChecked(isHtmlElement),
-    );
-
-    menu.addItem((item) =>
-        item
-            .setTitle(lang.change_format_to_document)
-            .setIcon('file-cog')
-            .onClick(() => {
+            },
+            checked: isHtmlElement,
+        },
+        {
+            title: lang.cm_change_format_to_document,
+            icon: 'file-cog',
+            action: () => {
                 setDocumentFormat(view.plugin, file.path, 'sections');
-            })
-            .setChecked(isHtmlComments),
-    );
-
-    menu.addItem((item) =>
-        item
-            .setTitle(lang.change_format_to_outline)
-            .setIcon('file-cog')
-            .onClick(() => {
+            },
+            checked: isHtmlComments,
+        },
+        {
+            title: lang.cm_change_format_to_outline,
+            icon: 'file-cog',
+            action: () => {
                 setDocumentFormat(view.plugin, file.path, 'outline');
-            })
-            .setChecked(isOutline),
-    );
-
-    menu.addSeparator();
-
-    menu.addItem((item) =>
-        item
-            .setTitle(lang.export_document)
-            .setIcon('file-text')
-            .onClick(() => {
+            },
+            checked: isOutline,
+        },
+        { type: 'separator' },
+        {
+            title: lang.cm_export_document,
+            icon: 'file-text',
+            action: () => {
                 exportDocument(view);
-            }),
-    );
+            },
+        },
+    ];
 
-    menu.showAtMouseEvent(event);
+    renderContextMenu(event, menuItems);
 };

@@ -1,6 +1,6 @@
 <script lang="ts">
     import ControlsBar from './controls-bar/controls-container.svelte';
-    import Container from './container.svelte';
+    import Container from './container-wrapper.svelte';
     import Breadcrumbs from './breadcrumbs/breadcrumbs.svelte';
     import Toolbar from './toolbar/toolbar.svelte';
     import Settings from './controls-bar/modals/settings/settings.svelte';
@@ -10,31 +10,31 @@
     import Lineage from '../../../main';
     import { setContext } from 'svelte';
     import { uiControlsStore } from 'src/stores/view/derived/ui-controls-store';
-    import { showMinimapStore } from 'src/stores/settings/derived/scrolling-store';
-    import { keyboardShortcuts } from 'src/view/actions/keyboard-shortcuts/keyboard-shortcuts';
+    import { viewHotkeysAction } from 'src/view/actions/keyboard-shortcuts/view-hotkeys-action';
     import { mouseWheelZoom } from 'src/view/actions/mouse-wheel-zoom';
-    import Minimap from './minimap/minimap.svelte';
-    import { dragToPan } from 'src/view/actions/drag-to-pan/drag-to-pan';
+    import RightSidebar from './right-sidebar/right-sidebar.svelte';
+    import { clickAndDrag } from 'src/view/actions/click-and-drag/click-and-drag';
     import LeftSidebar from 'src/view/components/container/left-sidebar/left-sidebar.svelte';
     import { contextMenu } from 'src/view/actions/context-menu/context-menu';
+    import DNDEdges from './dnd/dnd-edges.svelte';
+    import StyleRules from './style-rules/style-rules.svelte';
 
     export let plugin: Lineage;
     export let view: LineageView;
     setContext('plugin', plugin);
     setContext('view', view);
     const controls = uiControlsStore(view);
-    const showMinimap = showMinimapStore(view);
 </script>
 
 <div
     class="lineage-view"
-    use:keyboardShortcuts={{ view }}
+    use:viewHotkeysAction={{ view }}
     use:contextMenu={view}
     tabindex="0"
 >
     <LeftSidebar />
 
-    <div class={`lineage-main`} use:mouseWheelZoom={view} use:dragToPan={view}>
+    <div class={`lineage-main`} use:mouseWheelZoom={view} use:clickAndDrag="{view}">
         <Container />
         <Toolbar />
         <Breadcrumbs />
@@ -45,12 +45,13 @@
             <Hotkeys />
         {:else if $controls.showSettingsSidebar}
             <Settings />
+        {:else if $controls.showStyleRulesModal}
+            <StyleRules />
         {/if}
 
+        <DNDEdges />
     </div>
-    {#if $showMinimap}
-        <Minimap />
-    {/if}
+    <RightSidebar />
 </div>
 
 <style>
@@ -64,20 +65,7 @@
         position: relative;
     }
 
-    .lineage-view:not(:focus-within) {
-        & .node-border--active {
-            border-left-color: var(--lineage-accent-faint);
-        }
-        & .node-border--editing {
-            border-left-color: var(--color-base-40);
-        }
-        & .node-border--discard {
-            border-left-color: #e8314660;
-        }
-        & .node-border--selected {
-            border-left-color: var(--lineage-color-selection-faint);
-        }
-    }
+
 
     .lineage-view {
         background-color: var(--background-container);

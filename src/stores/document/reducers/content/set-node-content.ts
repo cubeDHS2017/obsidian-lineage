@@ -1,5 +1,4 @@
 import { Content } from 'src/stores/document/document-state-type';
-import { SilentError } from 'src/lib/errors/errors';
 
 export type SetNodeContentAction = {
     type: 'DOCUMENT/SET_NODE_CONTENT';
@@ -17,9 +16,9 @@ export const setNodeContent = (
 ) => {
     const nodeContent = content[action.payload.nodeId];
     const contentString = nodeContent?.content || '';
-    if (contentString === action.payload.content)
-        throw new SilentError('identical content');
+    if (contentString === action.payload.content) return false;
     const nodeId = action.payload.nodeId;
     if (!nodeContent) content[nodeId] = { content: action.payload.content };
     else nodeContent.content = action.payload.content;
+    return true;
 };

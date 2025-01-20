@@ -6,4 +6,6 @@ export const deleteCardUsingHotkey = async () => {
     await __obsidian__.waitForSelector(LINEAGE_CARD_ACTIVE);
     await __obsidian__.keyboard.press('Control+Backspace');
     await delay(SHORT);
+    await __obsidian__.keyboard.press('Control+Backspace');
+    await delay(SHORT);
 };

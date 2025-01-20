@@ -2,12 +2,12 @@
     import { getView } from '../../context';
     import { searchStore } from 'src/stores/view/derived/search-store';
     import { Eye, Text } from 'lucide-svelte';
+    import { lang } from 'src/lang/lang';
 
     const view = getView();
     const viewStore = view.viewStore;
     const search = searchStore(view);
 
-    let focusTimeout: ReturnType<typeof setTimeout>;
     const onInput = (
         // eslint-disable-next-line no-undef
         e: Event & { currentTarget: EventTarget & HTMLInputElement },
@@ -23,9 +23,8 @@
 
 <div class="search-input-wrapper search-input-container">
     <input
-        aria-label="Search document"
         autofocus={true}
-        class="search-input search-input-element"
+        class={"search-input search-input-element"+($search.query&& $search.results.size===0?' no-results':'')}
         enterkeyhint="search"
         on:input={onInput}
         placeholder={'search'}
@@ -34,7 +33,7 @@
         value={$search.query}
     />
     <div
-        aria-label={'Clear'}
+        aria-label={lang.tlb_search_clear}
         class="search-input-clear-button"
         on:click={() => {
             viewStore.dispatch({
@@ -49,7 +48,7 @@
 
     {#if $search.query.length > 0}
         <div
-            aria-label="Show all cards"
+            aria-label={lang.tlb_search_show_all_cards}
             class={'input-right-decorator clickable-icon' +
                 ($search.showAllNodes ? ' is-active' : '')}
             on:click={() => {
@@ -63,7 +62,7 @@
         </div>
     {/if}
     <div
-        aria-label="Fuzzy search"
+        aria-label={lang.tlb_search_fuzzy_search}
         class={'input-right-decorator clickable-icon' +
             ($search.fuzzySearch ? ' is-active' : '')}
         on:click={() => {
@@ -107,5 +106,8 @@
 
     .search-input-container::before {
         display: none;
+    }
+    .no-results{
+        box-shadow: 0 0 0 2px var(--color-red) !important;
     }
 </style>

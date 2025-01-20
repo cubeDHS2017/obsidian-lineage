@@ -1,50 +1,24 @@
 import { LineageView } from 'src/view/view';
-import { Menu } from 'obsidian';
 import { extractBranch } from 'src/obsidian/commands/helpers/extract-branch/extract-branch';
 import { mergeNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/merge-node';
-import { copyNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/copy-node';
+import { copyActiveBranchesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-branches-to-clipboard';
+import { copyActiveNodesToClipboard } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/copy-active-nodes-to-clipboard';
 import { cutNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/cut-node';
 import { pasteNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/paste-node';
 import { openSplitNodeModal } from 'src/view/modals/split-node-modal/open-split-node-modal';
 import { customIcons } from 'src/helpers/load-custom-icons';
 import { copyLinkToBlock } from 'src/view/actions/context-menu/card-context-menu/helpers/copy-link-to-block';
 import { exportColumn } from 'src/view/actions/context-menu/card-context-menu/helpers/export-column';
-
-const selectInactiveCard = (
-    view: LineageView,
-    closestCardElement: HTMLElement,
-    isInSidebar: boolean,
-    isInRecentCardsList: boolean,
-) => {
-    const id = closestCardElement?.id;
-    if (!isInSidebar) {
-        view.viewStore.dispatch({
-            type: 'DOCUMENT/SET_ACTIVE_NODE',
-            payload: {
-                id,
-            },
-            // to prevent scrolling
-            context: { modKey: true },
-        });
-    } else if (isInRecentCardsList) {
-        view.viewStore.dispatch({
-            type: 'view/recent-nodes/set-active-node',
-            payload: {
-                id,
-            },
-        });
-    } else {
-        view.viewStore.dispatch({
-            type: 'view/pinned-nodes/set-active-node',
-            payload: {
-                id,
-            },
-        });
-    }
-};
+import {
+    MenuItemObject,
+    renderContextMenu,
+} from 'src/obsidian/context-menu/render-context-menu';
+import { selectInactiveCard } from 'src/obsidian/context-menu/select-inactive-card';
+import { lang } from 'src/lang/lang';
+import { textIsSelected } from 'src/view/actions/context-menu/card-context-menu/helpers/text-is-selected';
+import { Notice } from 'obsidian';
 
 export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
-    const menu = new Menu();
     const target = event.target as HTMLElement;
     const closestCardElement = target.closest(
         '.lineage-card',
@@ -52,10 +26,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
 
     if (!closestCardElement) return;
 
-    const selectedText = activeWindow.getSelection()?.toString();
-    if (selectedText && selectedText.length > 0) {
-        return;
-    }
+    if (textIsSelected()) return;
 
     const isInSidebar = Boolean(target.closest('.sidebar'));
     const isInRecentCardsList =
@@ -70,121 +41,129 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             isInRecentCardsList,
         );
     }
+
     const viewState = view.viewStore.getValue();
-    const multipleNodesAreSelected = viewState.document.selectedNodes.size > 1;
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Split card')
-            .setIcon(customIcons.split.name)
-            .onClick(() => {
-                openSplitNodeModal(view);
-            })
-            .setDisabled(isInSidebar),
-    );
-
-    menu.addSeparator();
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Merge with the card above')
-            .setIcon('merge')
-            .onClick(() => {
-                mergeNode(view, 'up');
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
-    menu.addItem((item) =>
-        item
-            .setTitle('Merge with the card below')
-            .setIcon('merge')
-            .onClick(() => {
-                mergeNode(view, 'down');
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
-
-    menu.addSeparator();
-    menu.addItem((item) =>
-        item
-            .setTitle('Copy link to block')
-            .setIcon('links-coming-in')
-            .onClick(() => {
-                copyLinkToBlock(view);
-            }),
-    );
-
-    menu.addSeparator();
-    menu.addItem((item) =>
-        item
-            .setTitle('Copy')
-            .setIcon('documents')
-            .onClick(() => {
-                copyNode(view);
-            }),
-    );
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Cut')
-            .setIcon('scissors')
-            .onClick(() => {
-                cutNode(view);
-            })
-            .setDisabled(isInSidebar),
-    );
-
-    menu.addItem((item) =>
-        item
-            .setTitle('Paste')
-            .setIcon('paste')
-            .onClick(() => {
-                pasteNode(view);
-            })
-            .setDisabled(isInSidebar),
-    );
-
-    menu.addSeparator();
+    const multipleNodesAreSelected =
+        !isInSidebar && viewState.document.selectedNodes.size > 1;
     const documentStore = view.documentStore;
     const documentState = documentStore.getValue();
     const activeNode = viewState.document.activeNode;
     const isPinned =
         (isInSidebar && !isInRecentCardsList) ||
         documentState.pinnedNodes.Ids.includes(activeNode);
-    menu.addItem((item) =>
-        item
-            .setTitle(isPinned ? 'Unpin' : 'Pin')
-            .setIcon(isPinned ? 'pin-off' : 'pin')
-            .onClick(() => {
+
+    const hasChildren = documentState.meta.groupParentIds.has(activeNode);
+    const menuItems: MenuItemObject[] = [
+        {
+            title: lang.cm_split_card,
+            icon: customIcons.split.name,
+            action: () => {
+                if (hasChildren) {
+                    new Notice(lang.error_cm_cant_split_card_that_has_children);
+                } else {
+                    openSplitNodeModal(view);
+                }
+            },
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        { type: 'separator' },
+        {
+            title: lang.cm_merge_above,
+            icon: 'merge',
+            action: () => mergeNode(view, 'up'),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        {
+            title: lang.cm_merge_below,
+            icon: 'merge',
+            action: () => mergeNode(view, 'down'),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        { type: 'separator' },
+        {
+            title: lang.cm_copy_link_to_block,
+            icon: 'links-coming-in',
+            action: () => copyLinkToBlock(view),
+            disabled: multipleNodesAreSelected,
+        },
+        { type: 'separator' },
+        !multipleNodesAreSelected && !hasChildren
+            ? {
+                  title: lang.cm_copy,
+                  icon: 'documents',
+                  action: () => copyActiveNodesToClipboard(view),
+              }
+            : {
+                  title: lang.cm_copy,
+                  icon: 'documents',
+                  submenu: [
+                      {
+                          title: multipleNodesAreSelected
+                              ? lang.cm_copy_branches
+                              : lang.cm_copy_branch,
+                          icon: 'lineage-cards',
+                          action: () =>
+                              copyActiveBranchesToClipboard(view, true),
+                      },
+                      {
+                          title: multipleNodesAreSelected
+                              ? lang.cm_copy_branches_wo_formatting
+                              : lang.cm_copy_branch_wo_formatting,
+                          icon: 'file-text',
+                          action: () =>
+                              copyActiveBranchesToClipboard(view, false),
+                      },
+                      {
+                          title: multipleNodesAreSelected
+                              ? lang.cm_copy_section_wo_subitems
+                              : lang.cm_copy_sections_wo_subitems,
+                          icon: 'file-text',
+                          action: () => copyActiveNodesToClipboard(view),
+                      },
+                  ],
+              },
+        {
+            title: lang.cm_cut,
+            icon: 'scissors',
+            action: () => cutNode(view),
+            disabled: isInSidebar,
+        },
+        {
+            title: lang.cm_paste,
+            icon: 'paste',
+            action: () => pasteNode(view),
+            disabled: isInSidebar,
+        },
+        { type: 'separator' },
+        {
+            title: isPinned
+                ? lang.cm_unpin_from_left_sidebar
+                : lang.cm_pin_in_left_sidebar,
+            icon: isPinned ? 'pin-off' : 'pin',
+            action: () => {
                 documentStore.dispatch({
                     type: isPinned
                         ? 'document/pinned-nodes/unpin'
                         : 'document/pinned-nodes/pin',
                     payload: { id: activeNode },
                 });
-            })
-            .setDisabled(isInRecentCardsList),
-    );
-    menu.addSeparator();
-    menu.addItem((item) =>
-        item
-            .setTitle('Extract branch')
-            .setIcon(customIcons.cards.name)
-            .onClick(() => {
-                extractBranch(view);
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
+            },
+            disabled: isInRecentCardsList || multipleNodesAreSelected,
+        },
+        { type: 'separator' },
+        {
+            title: lang.cm_extract_branch,
+            icon: customIcons.cards.name,
+            action: () => extractBranch(view),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+        {
+            title: lang.cm_export_column,
+            icon: 'file-text',
+            action: () => exportColumn(view),
+            disabled: multipleNodesAreSelected || isInSidebar,
+        },
+    ];
 
-    menu.addItem((item) =>
-        item
-            .setTitle('Export column')
-            .setIcon('file-text')
-            .onClick(() => {
-                exportColumn(view);
-            })
-            .setDisabled(multipleNodesAreSelected || isInSidebar),
-    );
-
-    menu.showAtMouseEvent(event);
+    renderContextMenu(event, menuItems);
 };

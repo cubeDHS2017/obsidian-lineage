@@ -19,7 +19,7 @@ export const persistActiveNodeInPluginSettings = (view: LineageView) => {
     if (state[path] === sectionNumber) return;
     state[path] = sectionNumber;
     view.plugin.settings.dispatch({
-        type: 'DOCUMENT/SET_ACTIVE_NODE',
+        type: 'settings/document/persist-active-section',
         payload: {
             sectionNumber: sectionNumber,
             path: path,

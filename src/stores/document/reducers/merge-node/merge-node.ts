@@ -1,6 +1,6 @@
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import { VerticalDirection } from 'src/stores/document/document-store-actions';
-import { findAdjacentSiblingNode } from 'src/lib/tree-utils/find/find-adjacent-sibling-node';
+import { findSiblingNodeInColumn } from 'src/lib/tree-utils/find/find-sibling-node-in-column';
 import { deleteNodeById } from 'src/lib/tree-utils/delete/delete-node-by-id';
 import { cleanAndSortColumns } from 'src/lib/tree-utils/sort/clean-and-sort-columns';
 import { moveOrphanGroupsToANewParent } from 'src/lib/tree-utils/move/move-orphan-groups-to-a-new-parent';
@@ -19,7 +19,7 @@ export const mergeNode = (
     action: MergeNodeAction,
 ) => {
     const mergedNode = action.payload.activeNodeId;
-    const adjacentNode = findAdjacentSiblingNode(
+    const adjacentNode = findSiblingNodeInColumn(
         document.columns,
         mergedNode,
         action.payload.direction,

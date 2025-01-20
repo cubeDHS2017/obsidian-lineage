@@ -1,7 +1,7 @@
 import {
     CustomHotkeys,
     DocumentPreferences,
-    LeftSidebarActiveTab,
+    LeftSidebarTab,
     LineageDocumentFormat,
     Settings,
     ViewType,
@@ -10,6 +10,16 @@ import {
     changeZoomLevel,
     ChangeZoomLevelAction,
 } from 'src/stores/settings/reducers/change-zoom-level';
+import {
+    StyleRulesAction,
+    updateStyleRules,
+} from 'src/stores/settings/reducers/update-style-rules/update-style-rules';
+import { Hotkey } from 'obsidian';
+import { CommandName } from 'src/lang/hotkey-groups';
+import { toggleEditorState } from 'src/stores/settings/reducers/toggle-editor-state';
+import { setHotkeyAsBlank } from 'src/stores/settings/reducers/set-hotkey-as-blank';
+import { PersistedViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+import { persistCollapsedSections } from 'src/stores/settings/reducers/persist-collapsed-sections';
 
 export type SettingsActions =
     | {
@@ -70,12 +80,6 @@ export type SettingsActions =
           };
       }
     | {
-          type: 'SET_COLUMNS_GAP';
-          payload: {
-              gap: number;
-          };
-      }
-    | {
           type: 'SET_CARDS_GAP';
           payload: { gap: number };
       }
@@ -89,10 +93,7 @@ export type SettingsActions =
           type: 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE';
       }
     | {
-          type: 'VIEW/SCROLLING/SET_REVEAL_CHILDREN';
-          payload: {
-              reveal: boolean;
-          };
+          type: 'settings/view/scrolling/toggle-vertical-scrolling-mode';
       }
     | {
           type: 'SET_LIMIT_PREVIEW_HEIGHT';
@@ -123,7 +124,7 @@ export type SettingsActions =
     | { type: 'view/left-sidebar/set-width'; payload: { width: number } }
     | {
           type: 'view/left-sidebar/set-active-tab';
-          payload: { tab: LeftSidebarActiveTab };
+          payload: { tab: LeftSidebarTab };
       }
     | {
           type: 'settings/pinned-nodes/persist';
@@ -140,19 +141,96 @@ export type SettingsActions =
               section: string;
           };
       }
-    | { type: 'view/modes/gap-between-cards/toggle' };
+    | { type: 'view/modes/gap-between-cards/toggle' }
+    | { type: 'settings/view/modes/toggle-outline-mode' }
+    | StyleRulesAction
+    | {
+          type: 'settings/view/set-node-indentation-width';
+          payload: {
+              width: number;
+          };
+      }
+    | {
+          type: 'settings/view/set-maintain-edit-mode';
+          payload: { maintain: boolean };
+      }
+    | {
+          type: 'settings/view/theme/set-inactive-node-opacity';
+          payload: { opacity: number };
+      }
+    | {
+          type: 'settings/view/theme/set-active-branch-color';
+          payload: { color: string | undefined };
+      }
+    | HotkeySettingsActions
+    | PersistCollapsedSectionsAction
+    | {
+          type: 'settings/view/set-always-show-card-buttons';
+          payload: {
+              show: boolean;
+          };
+      };
 
+export type PersistCollapsedSectionsAction = {
+    type: 'settings/document/persist-collapsed-sections';
+    payload: {
+        path: string;
+        sections: string[];
+    };
+};
 export type PersistActiveNodeAction = {
-    type: 'DOCUMENT/SET_ACTIVE_NODE';
+    type: 'settings/document/persist-active-section';
     payload: {
         path: string;
         sectionNumber: string;
     };
 };
 
+export type ToggleEditorStateAction = {
+    type: 'settings/hotkeys/toggle-editor-state';
+    payload: { command: CommandName; type: 'primary' | 'secondary' };
+};
+
+export type SetHotkeyBlankAction = {
+    type: 'settings/hotkeys/set-blank';
+    payload: {
+        command: CommandName;
+        type: 'primary' | 'secondary';
+    };
+};
+export type HotkeySettingsActions =
+    | UpdateHotkeyAction
+    | ResetHotkeyAction
+    | {
+          type: 'settings/hotkeys/reset-all';
+      }
+    | {
+          type: 'settings/hotkeys/apply-preset';
+          payload: { preset: CustomHotkeys };
+      }
+    | ToggleEditorStateAction
+    | SetHotkeyBlankAction;
+
+export type UpdateHotkeyAction = {
+    type: 'settings/hotkeys/set-custom-hotkey';
+    payload: {
+        hotkey: Hotkey;
+        command: CommandName;
+        type: 'primary' | 'secondary';
+    };
+};
+export type ResetHotkeyAction = {
+    type: 'settings/hotkeys/reset-custom-hotkey';
+    payload: {
+        command: CommandName;
+        type: 'primary' | 'secondary';
+    };
+};
+
 const updateState = (store: Settings, action: SettingsActions) => {
     if (action.type === 'DELETE_DOCUMENT_PREFERENCES') {
         delete store.documents[action.payload.path];
+        delete store.styleRules.documents[action.payload.path];
     } else if (action.type === 'SET_DOCUMENT_TYPE') {
         if (!store.documents[action.payload.path]) {
             store.documents[action.payload.path] = {
@@ -163,6 +241,9 @@ const updateState = (store: Settings, action: SettingsActions) => {
                     sections: [],
                     activeSection: null,
                 },
+                outline: {
+                    collapsedSections: [],
+                },
             };
         } else {
             store.documents[action.payload.path].documentFormat =
@@ -172,7 +253,7 @@ const updateState = (store: Settings, action: SettingsActions) => {
         if (store.documents[action.payload.path]) {
             store.documents[action.payload.path].viewType = action.payload.type;
         }
-    } else if (action.type === 'DOCUMENT/SET_ACTIVE_NODE') {
+    } else if (action.type === 'settings/document/persist-active-section') {
         if (store.documents[action.payload.path]) {
             store.documents[action.payload.path].activeSection =
                 action.payload.sectionNumber;
@@ -181,6 +262,12 @@ const updateState = (store: Settings, action: SettingsActions) => {
         const preferences = store.documents[action.payload.oldPath];
         delete store.documents[action.payload.oldPath];
         store.documents[action.payload.newPath] = preferences;
+
+        if (store.styleRules.documents[action.payload.oldPath]) {
+            const rules = store.styleRules.documents[action.payload.oldPath];
+            delete store.styleRules.documents[action.payload.oldPath];
+            store.styleRules.documents[action.payload.newPath] = rules;
+        }
     } else if (action.type === 'SET_CUSTOM_HOTKEYS') {
         store.hotkeys.customHotkeys = action.payload.customHotkeys;
     } else if (action.type === 'SET_FONT_SIZE') {
@@ -225,21 +312,20 @@ const updateState = (store: Settings, action: SettingsActions) => {
         }
         document.pinnedSections.activeSection = action.payload.section;
     } else if (action.type === 'VIEW/SCROLLING/TOGGLE_SCROLLING_MODE') {
-        store.view.scrolling.horizontalScrollingMode =
-            store.view.scrolling.horizontalScrollingMode ===
-            'reveal-active-card'
-                ? 'keep-active-card-at-center'
-                : 'reveal-active-card';
+        store.view.scrolling.centerActiveNodeH =
+            !store.view.scrolling.centerActiveNodeH;
+
         store.view.scrolling = {
             ...store.view.scrolling,
         };
-    } else if (action.type === 'VIEW/SCROLLING/SET_REVEAL_CHILDREN') {
-        store.view.scrolling.revealChildren = action.payload.reveal;
+    } else if (
+        action.type === 'settings/view/scrolling/toggle-vertical-scrolling-mode'
+    ) {
+        store.view.scrolling.centerActiveNodeV =
+            !store.view.scrolling.centerActiveNodeV;
         store.view.scrolling = {
             ...store.view.scrolling,
         };
-    } else if (action.type === 'SET_COLUMNS_GAP') {
-        store.view.columnsGap = action.payload.gap;
     } else if (action.type === 'SET_CARDS_GAP') {
         store.view.cardsGap = action.payload.gap;
     } else if (action.type === 'view/left-sidebar/set-width') {
@@ -250,6 +336,85 @@ const updateState = (store: Settings, action: SettingsActions) => {
         store.view.leftSidebarActiveTab = action.payload.tab;
     } else if (action.type === 'view/modes/gap-between-cards/toggle') {
         store.view.applyGapBetweenCards = !store.view.applyGapBetweenCards;
+    } else if (action.type === 'settings/view/modes/toggle-outline-mode') {
+        store.view.outlineMode = !store.view.outlineMode;
+        if (store.view.outlineMode) {
+            store.view.scrolling.centerActiveNodeH = false;
+            store.view.scrolling = {
+                ...store.view.scrolling,
+            };
+        }
+    } else if (action.type === 'settings/view/set-node-indentation-width') {
+        store.view.nodeIndentationWidth = action.payload.width;
+    } else if (action.type === 'settings/view/set-maintain-edit-mode') {
+        store.view.maintainEditMode = action.payload.maintain;
+    } else if (
+        action.type === 'settings/view/theme/set-inactive-node-opacity'
+    ) {
+        store.view.theme.inactiveNodeOpacity = action.payload.opacity;
+    } else if (action.type === 'settings/view/theme/set-active-branch-color') {
+        if (action.payload.color) {
+            store.view.theme.activeBranchColor = action.payload.color;
+        } else {
+            delete store.view.theme.activeBranchColor;
+        }
+    } else if (action.type === 'settings/hotkeys/set-custom-hotkey') {
+        const customHotkey =
+            store.hotkeys.customHotkeys[action.payload.command];
+        if (!customHotkey) {
+            store.hotkeys.customHotkeys[action.payload.command] = {
+                [action.payload.type]: action.payload.hotkey,
+            };
+        } else {
+            customHotkey[action.payload.type] = {
+                ...customHotkey[action.payload.type],
+                ...action.payload.hotkey,
+            };
+        }
+        store.hotkeys.customHotkeys = { ...store.hotkeys.customHotkeys };
+    } else if (action.type === 'settings/hotkeys/reset-custom-hotkey') {
+        const customHotkey =
+            store.hotkeys.customHotkeys[action.payload.command];
+        if (customHotkey) {
+            delete customHotkey[action.payload.type];
+        }
+        store.hotkeys.customHotkeys = { ...store.hotkeys.customHotkeys };
+    } else if (action.type === 'settings/hotkeys/apply-preset') {
+        const entries = Object.entries(action.payload.preset) as [
+            command: CommandName,
+            hotkeys: {
+                primary?: PersistedViewHotkey;
+                secondary?: PersistedViewHotkey;
+            },
+        ][];
+        for (const [command, customHotkeys] of entries) {
+            if (!store.hotkeys.customHotkeys[command]) {
+                store.hotkeys.customHotkeys[command] = {};
+            }
+            if (customHotkeys.primary) {
+                store.hotkeys.customHotkeys[command]!.primary =
+                    customHotkeys.primary;
+            }
+            if (customHotkeys.secondary) {
+                store.hotkeys.customHotkeys[command]!.secondary =
+                    customHotkeys.secondary;
+            }
+        }
+        store.hotkeys.customHotkeys = {
+            ...store.hotkeys.customHotkeys,
+        };
+    } else if (action.type === 'settings/hotkeys/reset-all') {
+        store.hotkeys.customHotkeys = {};
+    } else if (action.type === 'settings/hotkeys/toggle-editor-state') {
+        toggleEditorState(store, action);
+    } else if (action.type === 'settings/hotkeys/set-blank') {
+        setHotkeyAsBlank(store, action);
+    } else if (action.type === 'settings/document/persist-collapsed-sections') {
+        persistCollapsedSections(store, action);
+    } else if (action.type === 'settings/view/set-always-show-card-buttons') {
+        store.view.alwaysShowCardButtons = action.payload.show;
+    } else if (action.type.startsWith('settings/style-rules')) {
+        updateStyleRules(store, action);
     }
 };
 export const settingsReducer = (

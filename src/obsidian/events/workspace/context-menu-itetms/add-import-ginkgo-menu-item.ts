@@ -12,7 +12,7 @@ export const addImportGinkgoMenuItem = (
     const allJson = files.every((file) => file.extension === 'json');
     if (!allJson) return;
     menu.addItem((item) => {
-        item.setTitle(lang.import_from_gingko);
+        item.setTitle(lang.ocm_import_from_gingko);
         item.setIcon(customIcons.cards.name);
 
         item.onClick(async () => {

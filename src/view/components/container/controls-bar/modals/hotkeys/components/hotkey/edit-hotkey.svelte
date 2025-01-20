@@ -2,18 +2,20 @@
     import { Hotkey } from 'obsidian';
     import { RotateCcw, X } from 'lucide-svelte';
 
-    import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
-    import { hotkeyStore } from 'src/stores/hotkeys/hotkey-store';
-    import { Modifiers } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-commands-dictionary';
+    import { CommandName } from 'src/lang/hotkey-groups';
+    import { Modifiers } from 'src/view/actions/keyboard-shortcuts/helpers/commands/update-view-hotkeys-dictionary';
     import { isMacLike, modKey } from 'src/view/actions/keyboard-shortcuts/helpers/keyboard-events/mod-key';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
     import { getView } from 'src/view/components/container/context';
+    import { lang } from 'src/lang/lang';
+    import EditEditorState from './editor-state/edit-editor-state.svelte';
+    import { StatefulViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
-    export let isCustom: boolean | undefined;
-    export let hotkey: Hotkey;
+    export let hotkey: StatefulViewHotkey;
     export let commandName: CommandName;
     export let isPrimary: boolean;
     export let onCancel: () => void;
+    const view = getView();
 
     let key = hotkey.key;
     let MOD = hotkey.modifiers.includes('Mod');
@@ -25,9 +27,8 @@
     const onKeyDown = (e: KeyboardEvent) => {
         e.preventDefault();
         if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) return;
-        if (e.key === ' ' || e.key==="META") return;
-        const value = e.key.toUpperCase();
-        key = value.length === 1 ? value.toUpperCase() : value;
+        if (e.key === ' ' || e.key === 'META') return;
+        key = e.key;
         save();
     };
 
@@ -49,32 +50,31 @@
     };
 
     const save = () => {
-        let modifiers: Hotkey['modifiers'] =[]
+        let modifiers: Hotkey['modifiers'] = [];
 
         if (MOD) modifiers.push('Mod');
         if (SHIFT) modifiers.push('Shift');
         if (ALT) modifiers.push('Alt');
         if (CTRL && isMacLike) modifiers.push('Ctrl');
-        hotkeyStore.dispatch({
-            type: 'HOTKEY/UPDATE',
+        view.plugin.settings.dispatch({
+            type: 'settings/hotkeys/set-custom-hotkey',
             payload: {
                 hotkey: {
                     key,
                     modifiers,
                 },
-                primary: isPrimary,
+                type: isPrimary ? 'primary' : 'secondary',
                 command: commandName,
             },
         });
     };
-    const view = getView();
     // eslint-disable-next-line no-undef
     const reset = () => {
-        hotkeyStore.dispatch({
-            type: 'HOTKEY/RESET',
+        view.plugin.settings.dispatch({
+            type: 'settings/hotkeys/reset-custom-hotkey',
             payload: {
                 command: commandName,
-                primary: isPrimary,
+                type: isPrimary ? 'primary' : 'secondary',
             },
         });
         setTimeout(() => {
@@ -82,13 +82,14 @@
             ALT = hotkey.modifiers.includes('Alt');
             SHIFT = hotkey.modifiers.includes('Shift');
             CTRL = hotkey.modifiers.includes('Ctrl');
-            key = hotkey.key
+            key = hotkey.key;
         });
-       focusContainer(view);
+        focusContainer(view);
     };
 </script>
 
 <div class="container">
+    <EditEditorState {hotkey} {commandName} {isPrimary}/>
     <div class="hotkey-container">
         <div class="modifiers">
             {#if isMacLike}
@@ -116,13 +117,16 @@
         />
     </div>
     <div class="save-and-cancel-buttons">
-        <button aria-label="Go back" class="hotkey-button"
-                on:click={onCancel}
-            ><X class="svg-icon" size={8} /></button
+        <button
+            aria-label={lang.modals_hk_editor_cancel}
+            class="hotkey-button"
+            on:click={onCancel}><X class="svg-icon" size={8} /></button
         >
-        <button aria-label="Reset" class="hotkey-button" disabled={!isCustom}
-                on:click={reset}
-            ><RotateCcw class="svg-icon" size={8} /></button
+        <button
+            aria-label={lang.settings_reset}
+            class="hotkey-button"
+            disabled={(hotkey.key.length>0 && !hotkey.isCustom)}
+            on:click={reset}><RotateCcw class="svg-icon" size={8} /></button
         >
     </div>
 </div>
@@ -144,7 +148,7 @@
         width: 115px;
         height: 25px;
         text-align: center;
-        font-size:14px;
+        font-size: 14px;
     }
 
     .modifiers {
@@ -177,9 +181,10 @@
         padding: 2px;
         cursor: pointer;
     }
-    .hotkey-key{
+    .hotkey-key {
         color: lightgrey;
         background-color: #175c5a;
-        border-color: #227f7d
+        border-color: #227f7d;
     }
+
 </style>

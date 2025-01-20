@@ -1,7 +1,7 @@
 import invariant from 'tiny-invariant';
 import { getActiveView } from '../../../getters/lineage-view/card/get-active-view';
 
-const SEL_SEARCH_TOGGLE = `button[aria-label${'Toggle search input'}]`;
+const SEL_SEARCH_TOGGLE = `button[aria-label="${'Toggle search input'}"]`;
 
 export const toggleSearchQuery = async () => {
     const view = await getActiveView();

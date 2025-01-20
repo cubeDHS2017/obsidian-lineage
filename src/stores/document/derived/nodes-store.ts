@@ -2,6 +2,7 @@ import { LineageView } from 'src/view/view';
 import { derived } from 'src/lib/store/derived';
 import { Column, NodeGroup } from 'src/stores/document/document-state-type';
 import { findColumn } from 'src/stores/document/derived/groups-store';
+import { sortTreeNodes } from 'src/lib/tree-utils/sort/sort-tree-nodes';
 
 export const findGroup = (
     columns: Column[],
@@ -28,5 +29,11 @@ export const nodesStore = (
             if (!group) return [];
         }
         return group.nodes;
+    });
+};
+
+export const singleColumnNodesStore = (view: LineageView) => {
+    return derived(view.documentStore, (state) => {
+        return sortTreeNodes(state.document.columns);
     });
 };

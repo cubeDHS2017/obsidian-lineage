@@ -23,6 +23,10 @@ export class WorkerPromise<Input, Output, Shared = never> {
         });
     };
 
+    terminate = () => {
+        this.worker.terminate();
+    };
+
     private onMessage = (
         message: MessageEvent<{ id: number; payload: Output }>,
     ) => {

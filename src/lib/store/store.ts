@@ -1,12 +1,14 @@
 import { Unsubscriber, Updater, Writable } from 'svelte/store';
 
+export const NO_UPDATE = Symbol('NO_UPDATE');
+
 export type Subscriber<T, U> = (
     value: T,
     action?: U,
     firstRun?: boolean,
 ) => void;
 
-export type Reducer<T, U> = (store: T, action: U) => T;
+export type Reducer<T, U> = (store: T, action: U) => T | typeof NO_UPDATE;
 
 export type OnError<U> = (
     error: Error,
@@ -69,8 +71,11 @@ export class Store<T, U> implements Writable<T> {
         while (this.actionQueue.length > 0) {
             const action = this.actionQueue.shift();
             try {
-                this.value = this.reducer(this.value, action!);
-                this.notifySubscribers(action);
+                const newValue = this.reducer(this.value, action!);
+                if (newValue !== NO_UPDATE) {
+                    this.value = newValue;
+                    this.notifySubscribers(action);
+                }
             } catch (error) {
                 this.onError(error, 'reducer', action);
             }

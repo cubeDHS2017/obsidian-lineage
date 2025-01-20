@@ -1,6 +1,7 @@
-import { DocumentStore, ViewStore } from 'src/view/view';
-import { NodeId } from 'src/stores/document/document-state-type';
 import { traverseDown } from 'src/lib/tree-utils/get/traverse-down';
+import { getView } from 'src/view/components/container/context';
+
+export const DND_ACTIVE_CLASS = 'is-dragged';
 
 const toggleDraggedNodeVisibility = (
     node: HTMLElement,
@@ -11,18 +12,21 @@ const toggleDraggedNodeVisibility = (
         const parent = node.matchParent('#' + data.id) as HTMLElement;
         if (parent) {
             parent.style.display = visible ? 'flex' : 'none';
+            /* used to find the right most non-empty column*/
+            parent.toggleClass(DND_ACTIVE_CLASS, !visible);
         }
     });
 };
 
 export type DraggableData = {
     id: string;
-    documentStore: DocumentStore;
-    viewStore: ViewStore;
     isInSidebar: boolean;
 };
 
 export const draggable = (node: HTMLElement, data: DraggableData) => {
+    const view = getView();
+    const viewStore = view.viewStore;
+    const documentStore = view.documentStore;
     if (data.isInSidebar) return;
     node.draggable = true;
 
@@ -35,13 +39,12 @@ export const draggable = (node: HTMLElement, data: DraggableData) => {
         ) {
             event.dataTransfer.setData('text/plain', data.id);
             setTimeout(() => {
-                const childGroups: NodeId[] = [];
-                traverseDown(
-                    childGroups,
-                    data.documentStore.getValue().document.columns,
+                const childGroups = traverseDown(
+                    documentStore.getValue().document.columns,
                     data.id,
+                    false,
                 );
-                data.viewStore.dispatch({
+                viewStore.dispatch({
                     type: 'SET_DRAG_STARTED',
                     payload: { nodeId: data.id, childGroups },
                 });
@@ -54,7 +57,7 @@ export const draggable = (node: HTMLElement, data: DraggableData) => {
 
     node.addEventListener('dragstart', handleDragstart);
     const handleDragEnd = () => {
-        data.viewStore.dispatch({ type: 'DOCUMENT/SET_DRAG_ENDED' });
+        viewStore.dispatch({ type: 'DOCUMENT/SET_DRAG_ENDED' });
         toggleDraggedNodeVisibility(node, data, true);
     };
     node.addEventListener('dragend', handleDragEnd);

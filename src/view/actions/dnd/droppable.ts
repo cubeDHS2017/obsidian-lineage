@@ -1,6 +1,6 @@
-import { DocumentStore, ViewStore } from 'src/view/view';
 import { Direction } from 'src/stores/document/document-store-actions';
 import { isId } from 'src/helpers/id';
+import { getView } from 'src/view/components/container/context';
 
 const getDropPosition = (event: DragEvent, targetElement: HTMLElement) => {
     const boundingBox = targetElement.getBoundingClientRect();
@@ -21,14 +21,12 @@ export const dropClasses = {
     right: 'lineage__drop-node-under',
 };
 const classesList = Object.values(dropClasses);
-type Props = {
-    documentStore: DocumentStore;
-    viewStore: ViewStore;
-};
-export const droppable = (
-    node: HTMLElement,
-    { documentStore, viewStore }: Props,
-) => {
+
+export const droppable = (node: HTMLElement) => {
+    const view = getView();
+    const viewStore = view.viewStore;
+    const documentStore = view.documentStore;
+
     function HandleDragLeave(event: DragEvent) {
         if (!(event.currentTarget instanceof HTMLElement)) return;
         event.currentTarget.removeClasses(classesList);

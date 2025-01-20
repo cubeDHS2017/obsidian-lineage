@@ -12,11 +12,16 @@ export const moveNodeAsChild = (
     document: Pick<LineageDocument, 'columns'>,
     node: NodeId,
     targetNode: NodeId,
+    moveToTheStart: boolean,
 ) => {
     const targetGroup = findChildGroup(document.columns, targetNode);
     if (targetGroup) {
-        targetGroup.nodes.push(node);
-        targetGroup.nodes = [...targetGroup.nodes];
+        if (moveToTheStart) {
+            /* used when moving a node with no sibling down*/
+            targetGroup.nodes = [node, ...targetGroup.nodes];
+        } else {
+            targetGroup.nodes = [...targetGroup.nodes, node];
+        }
     } else {
         const currentColumnIndex = findNodeColumn(document.columns, targetNode);
         let targetColumn: Column | undefined;

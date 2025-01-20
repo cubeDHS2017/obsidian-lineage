@@ -9,6 +9,7 @@ export const migrateSettings = (settings: Settings | Settings_0_5_4) => {
                 viewType: 'lineage',
                 activeSection: null,
                 pinnedSections: null,
+                outline: null,
             };
         }
     }

@@ -1,22 +1,23 @@
-import { Hotkey } from 'obsidian';
-
-import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
+import { CommandName } from 'src/lang/hotkey-groups';
+import { StyleRule } from 'src/stores/settings/types/style-rules-types';
+import { PersistedViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export type CustomHotkeys = {
     [command in CommandName]?: {
-        primary?: Hotkey;
-        secondary?: Hotkey;
+        primary?: PersistedViewHotkey;
+        secondary?: PersistedViewHotkey;
     };
 };
 export type Theme = {
     containerBg?: string;
     activeBranchBg?: string;
+    activeBranchColor?: string;
+    inactiveNodeOpacity: number;
 };
 
-export type ScrollingMode = 'reveal-active-card' | 'keep-active-card-at-center';
 export type ScrollingSettings = {
-    horizontalScrollingMode: ScrollingMode;
-    revealChildren: boolean;
+    centerActiveNodeH: boolean;
+    centerActiveNodeV: boolean;
 };
 
 export type LineageDocumentFormat = 'outline' | 'sections' | 'html-element';
@@ -30,9 +31,12 @@ export type DocumentPreferences = {
         sections: string[];
         activeSection: string | null;
     } | null;
+    outline: {
+        collapsedSections: string[];
+    } | null;
 };
 
-export type LeftSidebarActiveTab = 'pinned-cards' | 'recent-cards';
+export type LeftSidebarTab = 'pinned-cards' | 'recent-cards';
 
 export type Settings = {
     documents: Record<string, DocumentPreferences>;
@@ -43,7 +47,6 @@ export type Settings = {
         fontSize: number;
         theme: Theme;
         cardWidth: number;
-        columnsGap: number;
         cardsGap: number;
         minimumCardHeight?: number;
         scrolling: ScrollingSettings;
@@ -52,10 +55,17 @@ export type Settings = {
         showMinimap: boolean;
         showLeftSidebar: boolean;
         leftSidebarWidth: number;
-        leftSidebarActiveTab: LeftSidebarActiveTab;
+        leftSidebarActiveTab: LeftSidebarTab;
         applyGapBetweenCards: boolean;
+        outlineMode: boolean;
+        nodeIndentationWidth: number;
+        maintainEditMode: boolean;
+        alwaysShowCardButtons: boolean;
     };
     general: {
         defaultDocumentFormat: LineageDocumentFormat;
+    };
+    styleRules: {
+        documents: { [path: string]: { rules: StyleRule[] } };
     };
 };

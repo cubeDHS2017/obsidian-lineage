@@ -15,12 +15,12 @@ export const defaultViewState = (): ViewState => ({
             showHistorySidebar: false,
             showHelpSidebar: false,
             showSettingsSidebar: false,
+            showStyleRulesModal: false,
         },
     },
     document: {
         editing: {
             activeNodeId: '',
-            disableEditConfirmation: false,
             isInSidebar: false,
         },
         activeBranch: {
@@ -28,6 +28,7 @@ export const defaultViewState = (): ViewState => ({
             childGroups: new Set<string>(),
             sortedParentNodes: [],
             column: '',
+            node: '',
         },
         dnd: {
             node: '',
@@ -36,6 +37,10 @@ export const defaultViewState = (): ViewState => ({
         activeNode: '',
         activeNodesOfColumn: {},
         selectedNodes: new Set<string>(),
+        pendingConfirmation: {
+            disableEdit: null,
+            deleteNode: new Set<string>(),
+        },
     },
     navigationHistory: {
         items: [],
@@ -52,12 +57,28 @@ export const defaultViewState = (): ViewState => ({
     recentNodes: {
         activeNode: '',
     },
+    styleRules: {
+        nodeStyles: new Map(),
+        allMatches: new Map(),
+    },
+    keyboard: {
+        shift: false,
+    },
+    hotkeys: {
+        searchTerm: '',
+        conflictingHotkeys: new Map(),
+    },
+    outline: {
+        collapsedParents: new Set(),
+        hiddenNodes: new Set(),
+    },
 });
 export type ActiveBranch = {
     childGroups: Set<string>;
     sortedParentNodes: NodeId[];
     group: string;
     column: string;
+    node: string;
 };
 export type DNDState = {
     childGroups: Set<string>;
@@ -65,6 +86,5 @@ export type DNDState = {
 };
 export type EditingState = {
     activeNodeId: string;
-    disableEditConfirmation: boolean;
     isInSidebar: boolean;
 };

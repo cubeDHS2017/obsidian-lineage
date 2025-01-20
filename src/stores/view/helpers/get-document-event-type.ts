@@ -56,3 +56,30 @@ export const getDocumentEventType = (type: ActionType): DocumentEventType => {
 
     return result;
 };
+
+export const STRUCTURE_AND_CONTENT = new Set<DocumentStoreAction['type']>([
+    // full
+    'HISTORY/APPLY_NEXT_SNAPSHOT',
+    'HISTORY/APPLY_PREVIOUS_SNAPSHOT',
+    'HISTORY/SELECT_SNAPSHOT',
+    'DOCUMENT/LOAD_FILE',
+    'RESET_STORE',
+    // partial
+    'DOCUMENT/MERGE_NODE',
+    'DOCUMENT/SPLIT_NODE',
+    'DOCUMENT/DELETE_NODE',
+    'DOCUMENT/EXTRACT_BRANCH',
+    'DOCUMENT/CUT_NODE',
+]);
+
+export const CONTENT_ONLY = new Set<DocumentStoreAction['type']>([
+    'DOCUMENT/SET_NODE_CONTENT',
+    'DOCUMENT/FORMAT_HEADINGS',
+]);
+
+export const STRUCTURE_ONLY = new Set<DocumentStoreAction['type']>([
+    'DOCUMENT/DROP_NODE',
+    'DOCUMENT/MOVE_NODE',
+    'DOCUMENT/INSERT_NODE',
+    'DOCUMENT/PASTE_NODE',
+]);

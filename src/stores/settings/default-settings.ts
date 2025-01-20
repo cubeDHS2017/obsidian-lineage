@@ -1,8 +1,9 @@
 import { Settings } from './settings-type';
 
 export const DEFAULT_CARD_WIDTH = 550;
-export const DEFAULT_COLUMNS_GAP = 150;
-export const DEFAULT_CARDS_GAP = 150;
+export const DEFAULT_CARDS_GAP = 100;
+export const DEFAULT_INDENTATION_WIDTH = 60;
+export const DEFAULT_INACTIVE_NODE_OPACITY = 25;
 export const DEFAULT_SETTINGS = (): Settings => ({
     documents: {},
     hotkeys: {
@@ -10,13 +11,14 @@ export const DEFAULT_SETTINGS = (): Settings => ({
     },
     view: {
         fontSize: 16,
-        theme: {},
+        theme: {
+            inactiveNodeOpacity: DEFAULT_INACTIVE_NODE_OPACITY,
+        },
         cardWidth: DEFAULT_CARD_WIDTH,
-        columnsGap: DEFAULT_COLUMNS_GAP,
         cardsGap: DEFAULT_CARDS_GAP,
         scrolling: {
-            revealChildren: false,
-            horizontalScrollingMode: 'reveal-active-card',
+            centerActiveNodeH: false,
+            centerActiveNodeV: true,
         },
         limitPreviewHeight: true,
         zoomLevel: 1,
@@ -25,8 +27,15 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         leftSidebarWidth: 500,
         leftSidebarActiveTab: 'pinned-cards',
         applyGapBetweenCards: false,
+        outlineMode: false,
+        nodeIndentationWidth: DEFAULT_INDENTATION_WIDTH,
+        maintainEditMode: true,
+        alwaysShowCardButtons: false,
     },
     general: {
         defaultDocumentFormat: 'sections',
+    },
+    styleRules: {
+        documents: {},
     },
 });

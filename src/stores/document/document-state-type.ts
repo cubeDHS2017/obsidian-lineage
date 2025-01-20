@@ -12,6 +12,7 @@ export type Sections = {
     id_section: Record<string, string>;
 };
 export type DocumentMeta = {
+    /** nodes that are parents*/
     groupParentIds: Set<string>;
 };
 export type DocumentState = {
@@ -61,6 +62,7 @@ export type SnapshotContext = {
     action: UndoableAction;
     contentOfAffectedSection: string;
     numberOfCharacters: number;
+    affectedSections?: string[];
 };
 
 export type Snapshot = {

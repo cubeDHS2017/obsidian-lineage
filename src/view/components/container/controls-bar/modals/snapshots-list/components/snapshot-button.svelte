@@ -1,8 +1,6 @@
 <script lang="ts">
     import { relativeTime } from 'src/helpers/relative-time';
-    import {
-        actionInfo
-    } from 'src/view/components/container/controls-bar/modals/snapshots-list/components/helpers/action-info';
+    import { snapshotActionLang } from 'src/lang/snapshot-action-lang';
     import { Snapshot } from 'src/stores/document/document-state-type';
     import { getView } from '../../../../context';
     import { Notice } from 'obsidian';
@@ -15,7 +13,7 @@
     const view = getView();
     const documentStore = view.documentStore;
     const viewStore = view.viewStore;
-    const infoFactory = actionInfo[snapshot.context.action.type];
+    const infoFactory = snapshotActionLang[snapshot.context.action.type];
     invariant(infoFactory);
     const info = infoFactory(snapshot);
 
@@ -42,7 +40,11 @@
     }}
 >
     <div class="icon-wrapper">
-        <svelte:component class="svg-icon label" this={info.icon} />
+        {#if 'iconHtml' in info}
+            {@html info.iconHtml}
+        {:else}
+            <svelte:component this={info.icon} class="svg-icon label" />
+        {/if}
     </div>
     <div class="snapshot-content">
         <div class="snapshot-body">
@@ -75,8 +77,8 @@
         border-radius: 4px;
         gap: 4px;
         height: 66px;
-        width: 330px;
-        background-color:  var(--background-secondary);
+       flex:1;
+        background-color: var(--background-secondary);
     }
 
     .selected {
@@ -121,10 +123,15 @@
         display: block;
         white-space: nowrap;
         overflow: hidden;
-        max-width: 190px;
+        max-width: 200px;
         text-overflow: ellipsis;
         font-style: italic;
         opacity: 0.9;
+    }
+    @media (max-width: 720px) {
+        .snapshot-card-content {
+            max-width: 30vw;
+        }
     }
 
     .snapshot-context {
@@ -136,7 +143,7 @@
     }
     .snapshot-section-number {
         font-size: 11px;
-        color: var(--color-base-40);
+        color: var(--color-base-60);
         min-width: 16px;
         text-align: left;
         margin-left: auto;

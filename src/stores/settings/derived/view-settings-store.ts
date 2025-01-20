@@ -15,3 +15,12 @@ export const LeftSidebarActiveTabStore = (view: LineageView) =>
 
 export const ApplyGapBetweenCardsStore = (view: LineageView) =>
     derived(view.plugin.settings, (state) => state.view.applyGapBetweenCards);
+
+export const OutlineModeStore = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.outlineMode);
+
+export const MaintainEditMode = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.maintainEditMode);
+
+export const AlwaysShowCardButtons = (view: LineageView) =>
+    derived(view.plugin.settings, (state) => state.view.alwaysShowCardButtons);

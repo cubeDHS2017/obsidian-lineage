@@ -9,12 +9,23 @@ import { onPluginError } from 'src/lib/store/on-plugin-error';
 import { getDocumentFormat } from 'src/obsidian/events/workspace/helpers/get-document-format';
 import { branchToOutline } from 'src/lib/data-conversion/branch-to-x/branch-to-outline';
 import { branchToHtmlElement } from 'src/lib/data-conversion/branch-to-x/branch-to-html-element';
+import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 
 export const extractBranch = async (view: LineageView) => {
     try {
         invariant(view.file);
         invariant(view.file.parent);
         const viewState = view.viewStore.getValue();
+
+        const isEditing = Boolean(viewState.document.editing.activeNodeId);
+        if (isEditing) {
+            saveNodeContent(view);
+            setTimeout(() => {
+                extractBranch(view);
+            }, 100);
+            return;
+        }
+
         const documentState = view.documentStore.getValue();
         const branch = getBranch(
             documentState.document.columns,

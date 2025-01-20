@@ -5,13 +5,15 @@ export const showSearchResultsInMinimap = (view: LineageView) => {
     const viewState = viewStore.getValue();
     const settingsStore = view.plugin.settings;
     const settingsState = settingsStore.getValue();
-    if (settingsState.view.showMinimap) {
-        view.minimapStore.setSearchResults(
-            Array.from(viewState.search.results),
-        );
-    } else {
-        if (viewState.search.results.size > 0) {
-            settingsStore.dispatch({ type: 'VIEW/TOGGLE_MINIMAP' });
+    if (viewState.search.showInput) {
+        if (!settingsState.view.showMinimap) {
+            if (viewState.search.results.size > 0) {
+                settingsStore.dispatch({ type: 'VIEW/TOGGLE_MINIMAP' });
+                view.documentSearch.searchTriggeredMinimap = true;
+            }
         }
+    } else if (view.documentSearch.searchTriggeredMinimap) {
+        settingsStore.dispatch({ type: 'VIEW/TOGGLE_MINIMAP' });
+        view.documentSearch.searchTriggeredMinimap = false;
     }
 };

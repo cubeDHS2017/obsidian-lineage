@@ -12,6 +12,10 @@ import { NodeNavigationAction } from 'src/stores/view/reducers/ui/navigate-activ
 import { SetActivePinnedNodeAction } from 'src/stores/view/reducers/pinned-cards/set-active-pinned-node';
 import { SetActiveRecentNodeAction } from 'src/stores/view/reducers/recent-nodes/set-active-recent-node';
 import { ToggleShowAllNodesAction } from 'src/stores/view/reducers/search/toggle-show-all-nodes';
+import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
+import { LeftSidebarTab } from 'src/stores/settings/settings-type';
+import { ConflictingHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
+import { Column } from 'src/stores/document/document-state-type';
 
 export type ViewStoreAction =
     | SearchAction
@@ -19,7 +23,13 @@ export type ViewStoreAction =
     | ViewDocumentAction
     | NodeSelectionAction
     | NodeHistoryNavigationAction
-    | SidebarActions;
+    | SidebarActions
+    | StyleRulesViewActions
+    | KeyboardEventAction
+    | ViewHotkeysAction
+    | OutlineAction
+    | SelectionActions
+    | PersistedStateActions;
 
 export type SearchAction =
     | SetSearchQueryAction
@@ -32,7 +42,8 @@ export type ViewUIAction =
     | ToggleHelpSidebarAction
     | ToggleHistorySidebarAction
     | ToggleSettingsSidebarAction
-    | { type: 'CLOSE_MODALS'; payload?: { closeAllModals: boolean } };
+    | { type: 'CLOSE_MODALS'; payload?: { closeAllModals: boolean } }
+    | { type: 'view/modals/toggle-style-rules' };
 
 export type ToggleEditModeAction = {
     type: 'view/main/enable-edit';
@@ -43,6 +54,9 @@ export type ToggleEditModeAction = {
 
 export type DisableEditModeAction = {
     type: 'view/main/disable-edit';
+    context?: {
+        modKey?: boolean;
+    };
 };
 
 export type ViewDocumentAction =
@@ -52,10 +66,23 @@ export type ViewDocumentAction =
     | SetDragCanceled
     | UpdateActiveBranchAction
     | {
-          type: 'DOCUMENT/CONFIRM_DISABLE_EDIT';
+          type: 'view/confirmation/reset/disable-edit';
       }
     | {
-          type: 'DOCUMENT/RESET_DISABLE_EDIT_CONFIRMATION';
+          type: 'view/confirmation/reset/delete-node';
+      }
+    | {
+          type: 'view/confirmation/confirm/delete-node';
+          payload: {
+              id: string;
+              includeSelection?: boolean;
+          };
+      }
+    | {
+          type: 'view/confirmation/confirm/disable-edit';
+          payload: {
+              id: string;
+          };
       }
     | { type: 'DOCUMENT/CLEAR_SELECTION' };
 type ToggleHistorySidebarAction = {
@@ -68,13 +95,9 @@ type ToggleSettingsSidebarAction = {
     type: 'UI/TOGGLE_SETTINGS_SIDEBAR';
 };
 type SetActiveNodeAction = {
-    type: 'DOCUMENT/SET_ACTIVE_NODE';
+    type: `view/set-active-node/${'mouse' | 'mouse-silent' | 'search' | 'document'}`;
     payload: {
         id: string;
-    };
-    context?: {
-        modKey: boolean;
-        source?: 'mouse';
     };
 };
 export type NodeSelectionAction =
@@ -97,8 +120,76 @@ export type EnableEditInSidebar = {
     payload: {
         id: string;
     };
+    context: {
+        activeSidebarTab: LeftSidebarTab;
+    };
 };
 
 export type DisableEditInSidebar = {
     type: 'view/sidebar/disable-edit';
+    context?: {
+        modKey?: boolean;
+    };
+};
+
+export type StyleRulesViewActions = UpdateStyleRulesResultAction;
+
+export type UpdateStyleRulesResultAction = {
+    type: 'view/style-rules/update-results';
+    payload: {
+        results: StyleRulesResult | null;
+    };
+};
+
+export type KeyboardEventAction =
+    | {
+          type: 'view/keyboard/shift/down';
+      }
+    | {
+          type: 'view/keyboard/shift/up';
+      };
+
+export type ViewHotkeysAction =
+    | SetSearchTermAction
+    | UpdateConflictingHotkeysAction;
+export type SetSearchTermAction = {
+    type: 'view/hotkeys/set-search-term';
+    payload: {
+        searchTerm: string;
+    };
+};
+export type UpdateConflictingHotkeysAction = {
+    type: 'view/hotkeys/update-conflicts';
+    payload: {
+        conflicts: ConflictingHotkeys;
+    };
+};
+
+export type OutlineAction =
+    | {
+          type: 'view/outline/toggle-collapse-node';
+          payload: { id: string; columns: Column[] };
+      }
+    | {
+          type: 'view/outline/refresh-collapsed-nodes';
+          payload: { columns: Column[] };
+      }
+    | {
+          type: 'view/outline/toggle-collapse-all';
+          payload: { columns: Column[] };
+      };
+
+export type SelectionActions = {
+    type: 'view/selection/set-selection';
+    payload: { ids: string[] };
+};
+
+export type PersistedStateActions = {
+    type: 'view/persisted-state/load-persisted-collapsed-parents';
+    payload: {
+        collapsedIds: string[];
+    };
+    context: {
+        columns: Column[];
+    };
 };

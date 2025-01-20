@@ -1,11 +1,13 @@
 <script lang="ts">
-    import { hotkeyStore } from '../../../../../../stores/hotkeys/hotkey-store';
+    import { lang } from 'src/lang/lang';
+    import { getView } from 'src/view/components/container/context';
 
     let searchTerm = '';
+    const view = getView();
 
     $: {
-        hotkeyStore.dispatch({
-            type: 'UI/SET_SEARCH_TERM',
+        view.viewStore.dispatch({
+            type: 'view/hotkeys/set-search-term',
             payload: {
                 searchTerm,
             },
@@ -18,12 +20,12 @@
             bind:value={searchTerm}
             class="search-input"
             enterkeyhint="search"
-            placeholder={'Filter'}
+            placeholder={lang.modals_hk_input_placeholder}
             spellcheck="false"
             type="search"
         />
         <div
-            aria-label={'Clear'}
+            aria-label={lang.tlb_search_clear}
             class="search-input-clear-button"
             on:click={() => {
                     searchTerm = '';

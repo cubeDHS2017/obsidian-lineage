@@ -3,14 +3,14 @@
     import EditHotkey from './edit-hotkey.svelte';
     import clx from 'classnames';
 
-    import { CommandName } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
-    import { ExtendedHotkey } from 'src/stores/hotkeys/hotkey-store';
+    import { CommandName } from 'src/lang/hotkey-groups';
     import { writable } from 'svelte/store';
     import { getView } from 'src/view/components/container/context';
     import { onMount } from 'svelte';
     import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
+    import { StatefulViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
-    export let hotkey: ExtendedHotkey;
+    export let hotkey: StatefulViewHotkey;
     export let commandName: CommandName;
     export let isPrimary: boolean;
     const view = getView();
@@ -25,6 +25,16 @@
             }
         });
     });
+
+    const makeBlank = () => {
+        view.plugin.settings.dispatch({
+            type: 'settings/hotkeys/set-blank',
+            payload: {
+                command: commandName,
+                type: isPrimary ? 'primary' : 'secondary',
+            },
+        });
+    };
 </script>
 
 <div
@@ -47,10 +57,13 @@
             onCancel={() => editing.set(false)}
             {isPrimary}
             {commandName}
-            isCustom={hotkey.isCustom}
         />
     {:else}
-        <RenderHotkey {hotkey} enableEditing={() => editing.set(true)} />
+        <RenderHotkey
+            {hotkey}
+            enableEditing={() => editing.set(true)}
+            {makeBlank}
+        />
     {/if}
 </div>
 

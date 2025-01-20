@@ -42,7 +42,7 @@ const context = await esbuild.context({
 	treeShaking: true,
 	outfile: "temp/vault/.obsidian/plugins/lineage-dev/main.js",
 	plugins: [
-		inlineWorkerPlugin(),
+		inlineWorkerPlugin({ minify: prod }),
 		esbuildSvelte({
 			compilerOptions: {
 				css: true

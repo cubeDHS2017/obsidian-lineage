@@ -8,7 +8,7 @@
 }
 .active-sibling,.active-parent,.inactive-node{
     & .cm-comment{
-        color: var(--text-muted);
+        color: var(--text-muted) !important;
     }
 }
 

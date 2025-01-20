@@ -27,6 +27,7 @@
 
 
     .snapshots-list {
+        width: 400px;
         display: flex;
         flex-direction: column;
         gap:  var(--size-4-2);
@@ -35,5 +36,10 @@
         overflow-y: auto;
         padding-left: var(--size-4-2);
         padding-right: var(--size-4-2);
+    }
+    @media (max-width: 720px) {
+        .snapshots-list {
+            width: initial;
+        }
     }
 </style>

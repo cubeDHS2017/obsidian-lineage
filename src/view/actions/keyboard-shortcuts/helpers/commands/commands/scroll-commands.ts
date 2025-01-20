@@ -1,51 +1,46 @@
-import { isActive } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
-import { PluginCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/command-names';
 import { scrollNode } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/scroll-node';
 import { Modifier } from 'obsidian';
-import { alignBranch } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { DefaultViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
 export const scrollCommands = () => {
     const modifiers: Modifier[] = ['Mod', 'Alt'];
     return [
         {
             name: 'scroll_right',
-            check: isActive,
             callback: (view) => {
                 scrollNode(view, 'right');
             },
-            hotkeys: [{ key: 'L', modifiers: modifiers }],
+            hotkeys: [{ key: 'L', modifiers: modifiers, editorState: 'both' }],
         },
         {
             name: 'scroll_left',
-            check: isActive,
             callback: (view) => {
                 scrollNode(view, 'left');
             },
-            hotkeys: [{ key: 'H', modifiers: modifiers }],
+            hotkeys: [{ key: 'H', modifiers: modifiers, editorState: 'both' }],
         },
         {
             name: 'scroll_up',
-            check: isActive,
             callback: (view) => {
                 scrollNode(view, 'up');
             },
-            hotkeys: [{ key: 'K', modifiers: modifiers }],
+            hotkeys: [{ key: 'K', modifiers: modifiers, editorState: 'both' }],
         },
         {
             name: 'scroll_down',
-            check: isActive,
             callback: (view) => {
                 scrollNode(view, 'down');
             },
-            hotkeys: [{ key: 'J', modifiers: modifiers }],
+            hotkeys: [{ key: 'J', modifiers: modifiers, editorState: 'both' }],
         },
         {
             name: 'align_branch',
-            check: isActive,
             callback: (view) => {
-                alignBranch(view);
+                view.alignBranch.align({
+                    type: 'view/align-branch/center-node',
+                });
             },
-            hotkeys: [{ key: 'G', modifiers: modifiers }],
+            hotkeys: [{ key: 'G', modifiers: modifiers, editorState: 'both' }],
         },
-    ] satisfies PluginCommand[];
+    ] satisfies DefaultViewCommand[];
 };
