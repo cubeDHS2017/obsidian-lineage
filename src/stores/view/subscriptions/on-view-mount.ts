@@ -44,7 +44,7 @@ export const onViewMount = (view: LineageView) => {
     if (!view.file) return subscriptions;
     setInitialActiveNode(view);
     loadCollapsedSectionsFromSettings(view);
-    updateActiveBranch(viewStore, documentState, 'none');
+    updateActiveBranch(viewStore, documentState);
     if (view.isActive && isEmptyDocument(documentState.document.content)) {
         enableEditMode(viewStore, documentState);
     }
@@ -62,7 +62,6 @@ export const onViewMount = (view: LineageView) => {
     view.rulesProcessor.onRulesUpdate();
     view.zoomFactor = view.plugin.settings.getValue().view.zoomLevel;
 
-    view.alignBranch.align({ type: 'view/life-cycle/mount' });
     subscriptions.add(watchViewSize(view));
     return subscriptions;
 };

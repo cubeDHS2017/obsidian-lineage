@@ -1,5 +1,4 @@
 import { ViewState } from 'src/stores/view/view-state-type';
-import { NodeId } from 'src/stores/document/document-state-type';
 
 export const defaultViewState = (): ViewState => ({
     search: {
@@ -75,7 +74,7 @@ export const defaultViewState = (): ViewState => ({
 });
 export type ActiveBranch = {
     childGroups: Set<string>;
-    sortedParentNodes: NodeId[];
+    sortedParentNodes: string[];
     group: string;
     column: string;
     node: string;

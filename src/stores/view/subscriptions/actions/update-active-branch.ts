@@ -1,19 +1,26 @@
 import { ViewStore } from 'src/view/view';
 import { DocumentState } from 'src/stores/document/document-state-type';
-import { ChangeType } from 'src/stores/view/reducers/document/helpers/update-active-branch';
+import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
 
 export const updateActiveBranch = (
     viewStore: ViewStore,
     documentState: DocumentState,
-    changeType: ChangeType,
+    documentAction?: DocumentStoreAction,
 ) => {
-    viewStore.dispatch({
-        type: 'UPDATE_ACTIVE_BRANCH',
-        payload: {
-            columns: documentState.document.columns,
-        },
-        context: {
-            changeType,
-        },
-    });
+    if (documentAction) {
+        viewStore.dispatch({
+            type: 'view/update-active-branch?source=document',
+            context: {
+                columns: documentState.document.columns,
+                documentAction,
+            },
+        });
+    } else {
+        viewStore.dispatch({
+            type: 'view/update-active-branch?source=view',
+            context: {
+                columns: documentState.document.columns,
+            },
+        });
+    }
 };

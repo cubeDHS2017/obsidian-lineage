@@ -1,7 +1,7 @@
 import { calculateScrollLeft } from 'src/lib/align-element/helpers/calculate-scroll-left';
 
 import { THRESHOLD } from 'src/lib/align-element/constants';
-import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 import { getElementById } from 'src/lib/align-element/helpers/get-element-by-id';
 
 export const alignElementHorizontally = (

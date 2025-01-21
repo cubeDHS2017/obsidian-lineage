@@ -1,9 +1,6 @@
 import { LineageView } from 'src/view/view';
 import { delay } from 'src/helpers/delay';
 import { delayAlign } from 'src/stores/view/subscriptions/effects/align-branch/helpers/delay-align';
-import { ActiveNodesOfColumn } from 'src/stores/view/view-state-type';
-import { Column } from 'src/stores/document/document-state-type';
-import { adjustScrollBehavior } from 'src/stores/view/subscriptions/effects/align-branch/helpers/adjust-scroll-behavior';
 import { ActiveBranch } from 'src/stores/view/default-view-state';
 import { createAlignBranchActions } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/create-align-branch-actions';
 import { runAlignBranchActions } from 'src/stores/view/subscriptions/effects/align-branch/run-align-branch-actions/run-align-branch-actions';
@@ -15,38 +12,11 @@ import {
 } from 'src/stores/view/view-store-actions';
 import { SettingsActions } from 'src/stores/settings/settings-reducer';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
-import {
-    ActionCategory,
-    actionCategory,
-    actionCategoryPriority,
-} from 'src/stores/view/subscriptions/effects/align-branch/constants/action-category';
 import { waitForActiveNodeToStopMoving } from 'src/lib/align-element/helpers/wait-for-active-node-to-stop-moving';
+import { createContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 import { SilentError } from 'src/lib/errors/errors';
-
-export type PartialDOMRect = Pick<DOMRect, 'top' | 'height'>;
-
-export type AlignBranchState = {
-    rects: Map<string, PartialDOMRect>;
-};
-
-export type AlignBranchSettings = {
-    behavior: ScrollBehavior;
-    centerActiveNodeH: boolean;
-    centerActiveNodeV: boolean;
-    zoomLevel: number;
-};
-
-export type AlignBranchContext = {
-    previousActiveBranch: ActiveBranch | null;
-    columns: Column[];
-    activeBranch: ActiveBranch;
-    container: HTMLElement;
-    containerRect: DOMRect;
-    outlineMode: boolean;
-    alignBranchSettings: AlignBranchSettings;
-    state: AlignBranchState;
-    activeNodesOfColumn: ActiveNodesOfColumn;
-};
+import { actionPriority } from 'src/stores/view/subscriptions/effects/align-branch/constants/action-priority';
+import { logger } from 'src/helpers/logger';
 
 export type PluginAction =
     | DocumentStoreAction
@@ -63,87 +33,82 @@ export type PreviousScrollBehavior = {
     behavior: ScrollBehavior;
 };
 
-export type AlignEvent = {
-    category: ActionCategory;
-    action: PluginAction['type'];
-    priority: number;
-    ts: number;
-};
-
 export class AlignBranch {
+    private isRunning: boolean = false;
+    private currentEvent: {
+        action: PluginAction;
+        controller: AbortController;
+        priority: number;
+    } | null = null;
+
     private previousActiveBranch: ActiveBranch | null = null;
 
-    private previousEvent: AlignEvent | null = null;
     constructor(public view: LineageView) {}
 
-    align = async (action: PluginAction) => {
-        if (skipAlign(this.view, action)) return;
-
-        const delay_ms = delayAlign(action);
-        if (delay_ms > 0) await delay(delay_ms);
-        await this.waitForPreviousEvent(action);
-
-        const context = this.createContext(action);
-        const actions = createAlignBranchActions(context, action);
-
-        requestAnimationFrame(() => {
-            runAlignBranchActions(context, actions);
-        });
-        this.saveActiveBranch(context);
-    };
-
-    private createContext = (action: PluginAction) => {
-        const settings = this.view.plugin.settings.getValue();
-        const container = this.view.container!;
-        const documentState = this.view.documentStore.getValue();
-        const viewState = this.view.viewStore.getValue();
-        const activeBranch = viewState.document.activeBranch;
-
-        const behavior = adjustScrollBehavior(action);
-
-        const context: AlignBranchContext = {
-            previousActiveBranch: this.previousActiveBranch,
-            activeBranch: activeBranch,
-            columns: documentState.document.columns,
-            container,
-            activeNodesOfColumn: viewState.document.activeNodesOfColumn,
-            containerRect: container.getBoundingClientRect(),
-            outlineMode: settings.view.outlineMode,
-            alignBranchSettings: {
-                centerActiveNodeH: settings.view.scrolling.centerActiveNodeH,
-                centerActiveNodeV: settings.view.scrolling.centerActiveNodeV,
-                zoomLevel: settings.view.zoomLevel,
-                behavior: behavior,
-            },
-            state: {
-                rects: new Map(),
-            },
-        };
-        return context;
-    };
-
-    private saveActiveBranch(context: AlignBranchContext) {
-        this.previousActiveBranch = context.activeBranch;
-    }
-
-    private waitForPreviousEvent = async (action: PluginAction) => {
-        const category = actionCategory.get(action.type)!;
-        if (category === 'other') {
-            throw new SilentError('unsupported event: ' + action.type);
+    align = (action: PluginAction) => {
+        const priority = actionPriority.get(action.type);
+        if (typeof priority !== 'number') {
+            throw new SilentError(action.type + ' not allowed');
         }
-        const event: AlignEvent = {
-            action: action.type,
-            category: category!,
-            priority: actionCategoryPriority.get(category)!,
-            ts: Date.now(),
-        };
-        if (this.previousEvent) {
-            if (event.priority < this.previousEvent.priority) {
-                if (event.ts - this.previousEvent.ts < 500) {
-                    await waitForActiveNodeToStopMoving(this.view);
-                }
+
+        if (this.currentEvent) {
+            if (priority >= this.currentEvent.priority) {
+                this.currentEvent.controller.abort();
+            } else {
+                return;
             }
         }
-        this.previousEvent = event;
+        this.currentEvent = {
+            action,
+            priority,
+            controller: new AbortController(),
+        };
+        if (!this.isRunning) {
+            this.run();
+        }
+    };
+
+    private run = async () => {
+        this.isRunning = true;
+        while (this.currentEvent) {
+            const event = this.currentEvent;
+            try {
+                if (skipAlign(this.view, event.action)) {
+                    if (this.currentEvent === event) this.currentEvent = null;
+                    continue;
+                }
+
+                const delay_ms = delayAlign(event.action);
+                if (delay_ms > 0) {
+                    await delay(delay_ms, event.controller.signal);
+                }
+
+                const context = createContext(
+                    this.view,
+                    event.action,
+                    this.previousActiveBranch,
+                );
+
+                const actions = createAlignBranchActions(context, event.action);
+
+                requestAnimationFrame(() => {
+                    runAlignBranchActions(
+                        context,
+                        actions,
+                        event.controller.signal,
+                    );
+                    this.previousActiveBranch = context.activeBranch;
+                });
+                await waitForActiveNodeToStopMoving(
+                    this.view,
+                    event.controller.signal,
+                );
+            } catch (e) {
+                logger.error(e);
+            }
+            if (this.currentEvent === event) this.currentEvent = null;
+        }
+
+        this.isRunning = false;
     };
 }

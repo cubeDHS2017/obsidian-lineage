@@ -107,7 +107,7 @@ describe('update-tree-state', () => {
                 node: activeNodeId,
             } satisfies ActiveBranch,
         };
-        updateActiveBranch(input.state, input.document.columns, 'structure');
+        updateActiveBranch(input.state, input.document.columns, true);
         expect(input.state.activeBranch).toEqual(output.activeBranch);
     });
 });

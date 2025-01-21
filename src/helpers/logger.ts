@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+
 type Logger = {
     debug: (...message: unknown[]) => void;
     info: (...message: unknown[]) => void;
@@ -34,3 +35,16 @@ const createLogger = (): Logger => {
 };
 
 export const logger = createLogger();
+
+/*let i = 0;
+export const AlignBranchLogger = (action: PluginAction) => {
+    const id = i++;
+    let t = 0;
+    return {
+        log: (...params: any[]) => {
+            const delta = t > 0 ? Date.now() - t : 0;
+            t = Date.now();
+            console.log(`[${id}] [${action.type}] [${delta}]`, ...params);
+        },
+    };
+}*/

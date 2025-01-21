@@ -1,4 +1,4 @@
-import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 import { alignElementVertically } from 'src/lib/align-element/align-element-vertically';
 
 export const alignParentsNodes = (

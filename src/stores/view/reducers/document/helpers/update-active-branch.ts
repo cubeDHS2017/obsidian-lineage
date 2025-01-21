@@ -5,17 +5,30 @@ import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id
 import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
 import { DocumentViewState } from 'src/stores/view/view-state-type';
 import { removeStaleActiveNodes } from 'src/stores/view/reducers/document/helpers/remove-stale-active-nodes';
+import { compareActiveBranch } from 'src/stores/view/reducers/document/helpers/compare-active-branch';
+import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
 
-export type ChangeType = 'none' | 'structure';
+export type UpdateActiveBranchAction =
+    | {
+          type: 'view/update-active-branch?source=view';
+          context: {
+              columns: Column[];
+          };
+      }
+    | {
+          type: 'view/update-active-branch?source=document';
+          context: {
+              columns: Column[];
+              documentAction: DocumentStoreAction;
+          };
+      };
 
-export type UpdateActiveBranchAction = {
-    type: 'UPDATE_ACTIVE_BRANCH';
-    payload: {
-        columns: Column[];
-    };
-    context: {
-        changeType: ChangeType;
-    };
+export type ActiveBranch = {
+    childGroups: Set<string>;
+    sortedParentNodes: string[];
+    group: string;
+    column: string;
+    node: string;
 };
 
 export const updateActiveBranch = (
@@ -24,7 +37,7 @@ export const updateActiveBranch = (
         'activeBranch' | 'activeNode' | 'activeNodesOfColumn'
     >,
     columns: Column[],
-    changeType: ChangeType,
+    isDocumentAction: boolean,
 ) => {
     if (!state.activeNode) return;
     const sortedParents = traverseUp(columns, state.activeNode).reverse();
@@ -34,33 +47,22 @@ export const updateActiveBranch = (
         throw new Error('could not find group for node ' + state.activeNode);
     const columnId = columns[findNodeColumn(columns, state.activeNode)].id;
 
-    const needsUpdate =
-        state.activeNode !== state.activeBranch.node ||
-        childGroups.length !== state.activeBranch.childGroups.size ||
-        sortedParents.length !== state.activeBranch.sortedParentNodes.length ||
-        group.parentId !== state.activeBranch.group ||
-        columnId !== state.activeBranch.column ||
-        childGroups.some(
-            (group) => !state.activeBranch.childGroups.has(group),
-        ) ||
-        sortedParents.some(
-            (node, i) => node !== state.activeBranch.sortedParentNodes[i],
-        );
-
-    if (needsUpdate) {
-        state.activeBranch = {
-            childGroups: new Set<string>(childGroups),
-            sortedParentNodes: sortedParents,
-            group: group.parentId,
-            column: columnId,
-            node: state.activeNode,
-        };
+    const newActiveBranch = {
+        childGroups: new Set<string>(childGroups),
+        sortedParentNodes: sortedParents,
+        group: group.parentId,
+        column: columnId,
+        node: state.activeNode,
+    };
+    const same = compareActiveBranch(state.activeBranch, newActiveBranch);
+    if (!same) {
+        state.activeBranch = newActiveBranch;
     }
     if (!state.activeNodesOfColumn[columnId])
         state.activeNodesOfColumn[columnId] = {};
     state.activeNodesOfColumn[columnId][group.parentId] = state.activeNode;
 
-    if (changeType === 'structure') {
+    if (isDocumentAction) {
         state.activeNodesOfColumn = removeStaleActiveNodes(
             columns,
             state.activeNodesOfColumn,

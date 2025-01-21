@@ -1,8 +1,6 @@
 import { AlignBranchAction } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/create-align-branch-actions';
-import {
-    AlignBranchContext,
-    PluginAction,
-} from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { PluginAction } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 
 export const lazyVerticalScrollingMode = (
     context: Pick<AlignBranchContext, 'previousActiveBranch' | 'activeBranch'>,

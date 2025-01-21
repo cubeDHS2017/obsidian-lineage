@@ -3,7 +3,7 @@ import {
     TOOLBAR_HEIGHT,
 } from 'src/lib/align-element/constants';
 
-import { PartialDOMRect } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { PartialDOMRect } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 
 export const calculateScrollTopRelative = (
     elementRect: DOMRect,

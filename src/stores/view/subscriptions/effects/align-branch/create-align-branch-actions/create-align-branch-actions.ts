@@ -1,9 +1,7 @@
 import { forceCenterActiveNodeV } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/force-center-active-node-v';
 import { lazyVerticalScrollingMode } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/lazy-vertical-scrolling-mode';
-import {
-    AlignBranchContext,
-    PluginAction,
-} from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
+import { PluginAction } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
 import { outlineScrollingActions } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/outline-scrolling-actions';
 import { forceCenterActiveNodeH } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/force-center-active-node-h';
 
@@ -34,6 +32,9 @@ export const createAlignBranchActions = (
     action: PluginAction,
 ): AlignBranchAction[] => {
     const actions: AlignBranchAction[] = [];
+    if (action.type === 'view/update-active-branch?source=document') {
+        action = action.context.documentAction;
+    }
 
     if (action.type === 'view/align-branch/reveal-node') {
         /* used to keep active node visible while editing*/

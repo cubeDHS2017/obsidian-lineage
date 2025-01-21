@@ -39,7 +39,7 @@ export const onDocumentStateUpdate = (
         e.createOrDelete || e.dropOrMove || e.changeHistory || e.clipboard;
     if (structuralChange) {
         setActiveNode(view, action);
-        updateActiveBranch(viewStore, documentState, 'structure');
+        updateActiveBranch(viewStore, documentState, action);
         viewStore.dispatch({
             type: 'view/outline/refresh-collapsed-nodes',
             payload: {
@@ -72,9 +72,10 @@ export const onDocumentStateUpdate = (
     }
 
     // effects
-    if (structuralChange || e.content) {
+    if (e.content) {
         view.alignBranch.align(action);
-
+    }
+    if (structuralChange || e.content) {
         view.rulesProcessor.onDocumentUpdate(action);
     }
 

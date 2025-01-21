@@ -127,12 +127,10 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         onDragStart(state.document, action);
     } else if (action.type === 'DOCUMENT/SET_DRAG_ENDED') {
         onDragEnd(state.document);
-    } else if (action.type === 'UPDATE_ACTIVE_BRANCH') {
-        updateActiveBranch(
-            state.document,
-            action.payload.columns,
-            action.context.changeType,
-        );
+    } else if (action.type === 'view/update-active-branch?source=view') {
+        updateActiveBranch(state.document, action.context.columns, false);
+    } else if (action.type === 'view/update-active-branch?source=document') {
+        updateActiveBranch(state.document, action.context.columns, true);
     } else if (action.type === 'NAVIGATION/NAVIGATE_FORWARD') {
         navigateActiveNodeHistory(state.document, state, true);
     } else if (action.type === 'NAVIGATION/NAVIGATE_BACK') {

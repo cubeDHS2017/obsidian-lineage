@@ -3,7 +3,7 @@ import { THRESHOLD } from 'src/lib/align-element/constants';
 import {
     AlignBranchContext,
     PartialDOMRect,
-} from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+} from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 import { calculateScrollTopRelative } from 'src/lib/align-element/helpers/calculate-scroll-top-relative';
 import { getElementById } from 'src/lib/align-element/helpers/get-element-by-id';
 

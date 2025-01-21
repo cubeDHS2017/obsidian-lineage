@@ -1,5 +1,5 @@
 import { alignElementVertically } from 'src/lib/align-element/align-element-vertically';
-import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
 
 export const alignInactiveColumns = (context: AlignBranchContext) => {

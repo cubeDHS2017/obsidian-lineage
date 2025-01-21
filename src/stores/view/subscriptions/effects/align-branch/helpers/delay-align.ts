@@ -7,8 +7,15 @@ export const delayAlign = (action: PluginAction) => {
         action.type === 'VIEW/TOGGLE_MINIMAP'
     ) {
         delay = 300;
-    } else if (action.type === 'DOCUMENT/DROP_NODE') {
-        delay = 32;
+    } else if (action.type === 'WORKSPACE/RESIZE') {
+        delay = 50;
+    } else if (action.type === 'view/life-cycle/mount') {
+        delay = 16;
+    } else if (action.type === 'view/update-active-branch?source=document') {
+        action = action.context.documentAction;
+        if (action.type === 'DOCUMENT/INSERT_NODE') {
+            delay = 32;
+        }
     }
     return delay;
 };

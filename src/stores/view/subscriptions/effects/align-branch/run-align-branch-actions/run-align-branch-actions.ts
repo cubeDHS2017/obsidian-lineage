@@ -1,4 +1,4 @@
-import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 import { AlignBranchAction } from 'src/stores/view/subscriptions/effects/align-branch/create-align-branch-actions/create-align-branch-actions';
 import { scrollFirstColumnToTheLeft } from 'src/stores/view/subscriptions/effects/align-branch/run-align-branch-actions/actions/scroll-first-column-to-the-left';
 import { alignElementVertically } from 'src/lib/align-element/align-element-vertically';
@@ -10,10 +10,12 @@ import { alignInactiveColumns } from 'src/stores/view/subscriptions/effects/alig
 export const runAlignBranchActions = (
     context: AlignBranchContext,
     actions: AlignBranchAction[],
+    signal: AbortSignal,
 ) => {
     actions = actions.sort((a, b) => a.action.localeCompare(b.action));
     const activeNode = context.activeBranch.node;
     for (const action of actions) {
+        if (signal.aborted) return;
         const type = action.action;
         if (type === '10/first-column/horizontal/move-to-the-left') {
             scrollFirstColumnToTheLeft(context);

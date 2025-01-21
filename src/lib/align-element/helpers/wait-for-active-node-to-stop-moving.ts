@@ -6,7 +6,10 @@ const LOOP_DELAY_MS = 10;
 const MAX_ATTEMPTS = 100;
 const REQUIRED_MATCHES = 5;
 
-export const waitForActiveNodeToStopMoving = async (view: LineageView) => {
+export const waitForActiveNodeToStopMoving = async (
+    view: LineageView,
+    signal: AbortSignal,
+) => {
     const activeBranch = view.viewStore.getValue().document.activeBranch;
 
     let columnEl: HTMLElement | undefined;
@@ -18,7 +21,7 @@ export const waitForActiveNodeToStopMoving = async (view: LineageView) => {
     let lastScrollLeft = -1;
 
     const container = view.container!;
-    while (retries < MAX_ATTEMPTS) {
+    while (retries < MAX_ATTEMPTS && !signal.aborted) {
         if (!columnEl) {
             columnEl = getElementById(container, activeBranch.column)!;
         } else {
