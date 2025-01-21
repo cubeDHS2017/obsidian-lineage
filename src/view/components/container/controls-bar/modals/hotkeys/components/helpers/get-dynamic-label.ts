@@ -8,10 +8,10 @@ export const HotkeysThatBehaveDifferentlyInOutlineMode: Set<CommandName> =
 export type DynamicLabelState = { outlineMode: boolean };
 
 export const getDynamicLabel = (
-    state: DynamicLabelState,
     name: CommandName,
+    outlineMode: boolean,
 ): string => {
-    if (state.outlineMode) {
+    if (outlineMode) {
         if (name === 'go_down') {
             return hotkeysLang['navigate_to_previous_node'];
         } else if (name === 'go_up') {

@@ -14,7 +14,7 @@
 
 <div class="command">
     <span class="label"
-        >{getDynamicLabel(labelState, commandHotkeys.name)}
+        >{getDynamicLabel(commandHotkeys.name, labelState.outlineMode)}
 
         {#if HotkeysThatBehaveDifferentlyInOutlineMode.has(commandHotkeys.name)}
             <span

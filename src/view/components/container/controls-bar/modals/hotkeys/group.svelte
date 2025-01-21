@@ -14,9 +14,7 @@
     <div class="hotkey-group-name">{groupName}</div>
     <div class="hotkeys-list">
         {#each group as commandHotkeys (commandHotkeys.name)}
-            {#if !(labelState.outlineMode && (commandHotkeys.name === 'navigate_to_next_node' || commandHotkeys.name === 'navigate_to_previous_node'))}
-                <Hotkey {commandHotkeys} {labelState} />
-            {/if}
+            <Hotkey {commandHotkeys} {labelState} />
         {/each}
     </div>
 </div>
@@ -30,7 +28,7 @@
     .hotkeys-list {
         display: flex;
         flex-direction: column;
-        gap:var(--size-4-2);
+        gap: var(--size-4-2);
         overflow-y: auto;
     }
 
@@ -40,5 +38,4 @@
         font-size: 16px;
         color: var(--color-base-70);
     }
-
 </style>
