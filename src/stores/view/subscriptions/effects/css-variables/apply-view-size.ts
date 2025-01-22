@@ -8,12 +8,13 @@ export const applyViewSize = (view: LineageView) => {
         '.lineage-main',
     ) as HTMLElement | null;
     if (!viewElement) return;
+    const rect = viewElement.getBoundingClientRect();
     view.containerEl.style.setProperty(
         cssVariables.viewWidth,
-        `${viewElement.innerWidth - PADDING_H}px`,
+        `${rect.width - PADDING_H}px`,
     );
     view.containerEl.style.setProperty(
         cssVariables.viewHeight,
-        `${viewElement.innerHeight - PADDING_V}px`,
+        `${rect.height - PADDING_V}px`,
     );
 };
