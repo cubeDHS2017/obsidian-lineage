@@ -15,7 +15,7 @@ import { groupArrayByProperty } from 'src/helpers/group-array-by-property';
 import { lang } from 'src/lang/lang';
 import Lineage from 'src/main';
 import { OutlineModeStore } from 'src/stores/settings/derived/view-settings-store';
-import { getDynamicLabel } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
+import { getDynamicLabel } from 'src/view/components/container/modals/hotkeys/components/helpers/get-dynamic-label';
 
 export const CustomHotkeysStore = (plugin: Lineage) =>
     derived(plugin.settings, (state) => state.hotkeys.customHotkeys);

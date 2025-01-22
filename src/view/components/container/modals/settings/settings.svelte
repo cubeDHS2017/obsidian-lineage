@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { renderSettings } from 'src/view/actions/settings/render-settings';
+    import { renderSettings } from '../../../../actions/settings/render-settings';
 </script>
 
 <div class="lineage-modal" id="lineage-view-settings" tabindex="0">

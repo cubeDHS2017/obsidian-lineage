@@ -3,12 +3,14 @@
     import EditHotkey from './edit-hotkey.svelte';
     import clx from 'classnames';
 
-    import { CommandName } from 'src/lang/hotkey-groups';
+    import { CommandName } from '../../../../../../../lang/hotkey-groups';
     import { writable } from 'svelte/store';
-    import { getView } from 'src/view/components/container/context';
+    import { getView } from '../../../../context';
     import { onMount } from 'svelte';
-    import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
-    import { StatefulViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import { focusContainer } from '../../../../../../../stores/view/subscriptions/effects/focus-container';
+    import {
+        StatefulViewHotkey
+    } from '../../../../../../actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
     export let hotkey: StatefulViewHotkey;
     export let commandName: CommandName;

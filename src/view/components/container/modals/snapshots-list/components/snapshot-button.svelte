@@ -1,11 +1,11 @@
 <script lang="ts">
-    import { relativeTime } from 'src/helpers/relative-time';
-    import { snapshotActionLang } from 'src/lang/snapshot-action-lang';
-    import { Snapshot } from 'src/stores/document/document-state-type';
-    import { getView } from '../../../../context';
+    import { relativeTime } from '../../../../../../helpers/relative-time';
+    import { snapshotActionLang } from '../../../../../../lang/snapshot-action-lang';
+    import { Snapshot } from '../../../../../../stores/document/document-state-type';
+    import { getView } from '../../../context';
     import { Notice } from 'obsidian';
     import invariant from 'tiny-invariant';
-    import { lang } from 'src/lang/lang';
+    import { lang } from '../../../../../../lang/lang';
 
     export let snapshot: Snapshot;
     export let active: boolean;

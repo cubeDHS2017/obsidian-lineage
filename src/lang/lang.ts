@@ -198,7 +198,7 @@ export const lang = {
     controls_zoom_in: 'Zoom in',
     controls_zoom_out: 'Zoom out',
     controls_zoom_reset: 'Reset (hold shift to undo)',
-    controls_zoom_presets: '',
+    controls_zoom_presets: 'Zoom menu',
     hk_zoom_in: 'Zoom in',
     hk_zoom_out: 'Zoom out',
     hk_zoom_reset: 'Reset zoom',
@@ -244,6 +244,11 @@ export const lang = {
     hk_outline_toggle_collapse: 'Collapse/expand card',
     hk_outline_toggle_collapse_all: 'Collapse/expand all cards',
     hkg_outline: 'Outline',
+
+    // toolbar
+    settings_vertical_toolbar_icons: 'Vertical toolbar icons',
+    settings_vertical_toolbar_icons_desc:
+        'Configure what icons appear in the vertical toolbar',
 
     // space between cards
     controls_gap_between_cards: 'Space between cards',

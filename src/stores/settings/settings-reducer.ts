@@ -20,6 +20,7 @@ import { toggleEditorState } from 'src/stores/settings/reducers/toggle-editor-st
 import { setHotkeyAsBlank } from 'src/stores/settings/reducers/set-hotkey-as-blank';
 import { PersistedViewHotkey } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 import { persistCollapsedSections } from 'src/stores/settings/reducers/persist-collapsed-sections';
+import { ToolbarButton } from 'src/view/modals/vertical-toolbar-buttons/vertical-toolbar-buttons';
 
 export type SettingsActions =
     | {
@@ -168,6 +169,13 @@ export type SettingsActions =
           type: 'settings/view/set-always-show-card-buttons';
           payload: {
               show: boolean;
+          };
+      }
+    | {
+          type: 'settings/view/vertical-toolbar/set-hidden-button';
+          payload: {
+              id: ToolbarButton;
+              hide: boolean;
           };
       };
 
@@ -413,6 +421,22 @@ const updateState = (store: Settings, action: SettingsActions) => {
         persistCollapsedSections(store, action);
     } else if (action.type === 'settings/view/set-always-show-card-buttons') {
         store.view.alwaysShowCardButtons = action.payload.show;
+    } else if (
+        action.type === 'settings/view/vertical-toolbar/set-hidden-button'
+    ) {
+        if (action.payload.hide) {
+            store.view.hiddenVerticalToolbarButtons = Array.from(
+                new Set([
+                    ...store.view.hiddenVerticalToolbarButtons,
+                    action.payload.id,
+                ]),
+            );
+        } else {
+            store.view.hiddenVerticalToolbarButtons =
+                store.view.hiddenVerticalToolbarButtons.filter(
+                    (b) => b !== action.payload.id,
+                );
+        }
     } else if (action.type.startsWith('settings/style-rules')) {
         updateStyleRules(store, action);
     }

@@ -1,11 +1,11 @@
 <script lang="ts">
-    import ControlsBar from './controls-bar/controls-container.svelte';
+    import VerticalToolbar from './toolbar-vertical/vertical-toolbar.svelte';
     import Container from './container-wrapper.svelte';
     import Breadcrumbs from './breadcrumbs/breadcrumbs.svelte';
     import Toolbar from './toolbar/toolbar.svelte';
-    import Settings from './controls-bar/modals/settings/settings.svelte';
-    import FileHistory from 'src/view/components/container/controls-bar/modals/snapshots-list/file-histoy.svelte';
-    import Hotkeys from 'src/view/components/container/controls-bar/modals/hotkeys/hotkeys.svelte';
+    import Settings from 'src/view/components/container/modals/settings/settings.svelte';
+    import FileHistory from 'src/view/components/container/modals/snapshots-list/file-histoy.svelte';
+    import Hotkeys from 'src/view/components/container/modals/hotkeys/hotkeys.svelte';
     import { LineageView } from '../../view';
     import Lineage from '../../../main';
     import { setContext } from 'svelte';
@@ -38,7 +38,7 @@
         <Container />
         <Toolbar />
         <Breadcrumbs />
-        <ControlsBar />
+        <VerticalToolbar />
         {#if $controls.showHistorySidebar}
             <FileHistory />
         {:else if $controls.showHelpSidebar}

@@ -2,12 +2,12 @@
     import Group from './group.svelte';
     import Front from './front.svelte';
     import NumberOfConflicts from './status-bar.svelte';
-    import { FilteredHotkeysStore } from 'src/stores/settings/derived/view-hotkeys-store';
-    import { getView } from 'src/view/components/container/context';
+    import { FilteredHotkeysStore } from '../../../../../stores/settings/derived/view-hotkeys-store';
+    import { getView } from '../../context';
     import {
         DynamicLabelState
-    } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
-    import { OutlineModeStore } from 'src/stores/settings/derived/view-settings-store';
+    } from 'src/view/components/container/modals/hotkeys/components/helpers/get-dynamic-label';
+    import { OutlineModeStore } from '../../../../../stores/settings/derived/view-settings-store';
 
     const view = getView();
     const store = FilteredHotkeysStore(view);

@@ -2,10 +2,10 @@
     import {
         HotkeyEditorState,
         ViewHotkey
-    } from '../../../../../../../../actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
-    import { customIcons } from '../../../../../../../../../helpers/load-custom-icons';
+    } from '../../../../../../../actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import { customIcons } from '../../../../../../../../helpers/load-custom-icons';
     import { Notice } from 'obsidian';
-    import { lang } from '../../../../../../../../../lang/lang';
+    import { lang } from '../../../../../../../../lang/lang';
 
     export let hotkey: ViewHotkey;
     export let onClick: (() => void) | undefined = undefined;

@@ -1,11 +1,13 @@
 <script lang="ts">
-    import Hotkey from 'src/view/components/container/controls-bar/modals/hotkeys/components/hotkey/hotkey.svelte';
-    import { StatefulViewCommand } from 'src/view/actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import Hotkey from './hotkey/hotkey.svelte';
+    import {
+        StatefulViewCommand
+    } from '../../../../../actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
     import {
         DynamicLabelState,
         getDynamicLabel,
         HotkeysThatBehaveDifferentlyInOutlineMode
-    } from 'src/view/components/container/controls-bar/modals/hotkeys/components/helpers/get-dynamic-label';
+    } from 'src/view/components/container/modals/hotkeys/components/helpers/get-dynamic-label';
     import { Info } from 'lucide-svelte';
 
     export let commandHotkeys: StatefulViewCommand;

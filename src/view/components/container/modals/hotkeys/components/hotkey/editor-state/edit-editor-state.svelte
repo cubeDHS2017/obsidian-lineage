@@ -1,11 +1,9 @@
 <script lang="ts">
-    import {
-        ViewHotkey
-    } from '../../../../../../../../actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
+    import { ViewHotkey } from '../../../../../../../actions/keyboard-shortcuts/helpers/commands/default-view-hotkeys';
 
     import EditorState from './render-editor-state.svelte';
-    import { CommandName } from '../../../../../../../../../lang/hotkey-groups';
-    import { getView } from '../../../../../../context';
+    import { CommandName } from '../../../../../../../../lang/hotkey-groups';
+    import { getView } from '../../../../../context';
 
     export let hotkey: ViewHotkey;
     export let commandName: CommandName;

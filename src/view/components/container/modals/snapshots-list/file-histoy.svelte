@@ -1,8 +1,8 @@
 <script lang="ts">
     import SnapshotButton from './components/snapshot-button.svelte';
-    import { updateRelativeTime } from 'src/view/actions/update-relative-time';
-    import { historyStore } from 'src/stores/document/derived/history-store';
-    import { getView } from '../../../context';
+    import { updateRelativeTime } from '../../../../actions/update-relative-time';
+    import { historyStore } from '../../../../../stores/document/derived/history-store';
+    import { getView } from '../../context';
 
     const view = getView();
     const history = historyStore(view)
