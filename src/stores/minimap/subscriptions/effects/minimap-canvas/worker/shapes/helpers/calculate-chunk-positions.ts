@@ -221,6 +221,7 @@ export const calculateChunkPositions = (
 
                     if (
                         !(nextChunk && nextChunk.match(/[A-Z\d]/)) &&
+                        content[i - 1] &&
                         !content[i - 1].match(/[.!?]/) &&
                         !abbrevRegex.test(previousChunk) &&
                         !(content[i - 1] === 'e' && nextChunk === 'g') &&

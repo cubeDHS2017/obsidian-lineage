@@ -3,16 +3,14 @@ import { mapBranchesToText } from 'src/view/actions/keyboard-shortcuts/helpers/c
 import { LineageView } from 'src/view/view';
 import { Notice } from 'obsidian';
 import { lang } from 'src/lang/lang';
+import { getActiveNodes } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/get-active-nodes';
 
 export const copyActiveBranchesToClipboard = async (
     view: LineageView,
     formatted: boolean,
+    isInSidebar: boolean,
 ) => {
-    const document = view.viewStore.getValue().document;
-    const nodes =
-        document.selectedNodes.size > 0
-            ? Array.from(document.selectedNodes)
-            : [document.activeNode];
+    const nodes = getActiveNodes(view, isInSidebar);
     const text = mapBranchesToText(
         view.documentStore.getValue().document,
         nodes,

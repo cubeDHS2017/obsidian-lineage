@@ -1,13 +1,13 @@
 import { LineageView } from 'src/view/view';
 import { Notice } from 'obsidian';
 import { lang } from 'src/lang/lang';
+import { getActiveNodes } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/clipboard/get-active-nodes';
 
-export const copyActiveNodesToClipboard = async (view: LineageView) => {
-    const document = view.viewStore.getValue().document;
-    const nodes =
-        document.selectedNodes.size > 0
-            ? Array.from(document.selectedNodes)
-            : [document.activeNode];
+export const copyActiveNodesToClipboard = async (
+    view: LineageView,
+    isInSidebar: boolean,
+) => {
+    const nodes = getActiveNodes(view, isInSidebar);
     const text = nodes
         .map((id) => view.documentStore.getValue().document.content[id].content)
         .join('\n\n');
