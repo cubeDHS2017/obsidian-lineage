@@ -4,6 +4,7 @@ import invariant from 'tiny-invariant';
 import { MinimapState } from 'src/stores/minimap/minimap-state-type';
 import { debouncedApplyScrollPosition } from 'src/stores/minimap/subscriptions/effects/scroll-indicator/apply-scroll-position';
 import { setScrollbarPosition } from 'src/stores/minimap/subscriptions/actions/set-scrollbar-position/set-scrollbar-position';
+import { debouncedUpdateVisibleRange } from 'src/stores/minimap/subscriptions/effects/update-visible-range';
 
 export const onMinimapStateUpdate = (
     view: LineageView,
@@ -20,5 +21,6 @@ export const onMinimapStateUpdate = (
         }
     } else if (action.type === 'minimap/set-scroll-position') {
         debouncedApplyScrollPosition(state.scrollInfo, view.getMinimapDom());
+        debouncedUpdateVisibleRange(view);
     }
 };

@@ -21,6 +21,7 @@ export type CanvasWorkerProps =
               canvas: OffscreenCanvas;
               canvasId: string;
               theme: MinimapTheme;
+              canvas_height_cpx: number;
           };
       }
     | {
@@ -36,6 +37,13 @@ export type CanvasWorkerProps =
               document: LineageDocument;
               activeNodeId: string;
               canvasId: string;
+          };
+      }
+    | {
+          type: 'minimap/set/scroll-position';
+          payload: {
+              canvasId: string;
+              scroll_position_cpx: number;
           };
       };
 
@@ -58,6 +66,7 @@ self.onmessage = (message: MessageEvent) => {
                     ctx,
                     event.payload.canvas,
                     event.payload.theme,
+                    event.payload.canvas_height_cpx,
                 ),
             };
         }
@@ -75,6 +84,10 @@ self.onmessage = (message: MessageEvent) => {
             result = viewCanvas.minimap.setDocument(
                 event.payload.document,
                 event.payload.canvasId,
+            );
+        } else if (event.type === 'minimap/set/scroll-position') {
+            result = viewCanvas.minimap.setScrollPosition(
+                event.payload.scroll_position_cpx,
             );
         }
     }

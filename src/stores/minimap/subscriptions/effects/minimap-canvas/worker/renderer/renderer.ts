@@ -1,7 +1,7 @@
 import { MinimapTheme } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/consts/minimap-theme';
 import { ShapesAndRanges } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/shapes/shapes-and-ranges';
-import { LINE_HEIGHT_CPX } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/consts/constants';
 import { drawLines } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/renderer/helpers/draw-lines';
+import { VisibleRange } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/renderer/visible-range-manager';
 
 export class Renderer {
     private shapes: ShapesAndRanges;
@@ -19,11 +19,9 @@ export class Renderer {
         this.shapes = shapes;
     }
 
-    drawDocument = (theme: MinimapTheme) => {
-        const totalHeight = this.shapes.getTotalLines() * LINE_HEIGHT_CPX;
+    drawDocument = (theme: MinimapTheme, range: VisibleRange) => {
+        this.canvas.height = range.end_cpx - range.start_cpx;
 
-        this.canvas.height = totalHeight;
-
-        drawLines(this.ctx, this.shapes.getLines(), theme);
+        drawLines(this.ctx, this.shapes.getLines(), theme, range);
     };
 }
