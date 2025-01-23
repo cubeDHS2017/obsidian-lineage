@@ -1,4 +1,4 @@
-import { EditorPosition, MarkdownView, TFile } from 'obsidian';
+import { Editor, EditorPosition, MarkdownView, TFile } from 'obsidian';
 import { LineageView } from 'src/view/view';
 import { AdjustHeight } from 'src/view/actions/inline-editor/expandable-textarea-action';
 import { vimEnterInsertMode } from 'src/obsidian/helpers/inline-editor/helpers/vim-enter-insert-mode';
@@ -36,6 +36,10 @@ export class InlineEditor {
 
     getCursor() {
         return this.inlineView.editor.getCursor();
+    }
+
+    getEditor(): Editor {
+        return this.inlineView.editor;
     }
 
     deleteNodeCursor(nodeId: string) {
