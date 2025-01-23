@@ -12,10 +12,7 @@ export const delayAlign = (action: PluginAction) => {
     } else if (action.type === 'view/life-cycle/mount') {
         delay = 16;
     } else if (action.type === 'view/update-active-branch?source=document') {
-        action = action.context.documentAction;
-        if (action.type === 'DOCUMENT/INSERT_NODE') {
-            delay = 32;
-        }
+        delay = 16;
     }
     return delay;
 };

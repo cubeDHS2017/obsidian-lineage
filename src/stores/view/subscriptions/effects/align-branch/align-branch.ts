@@ -82,6 +82,7 @@ export class AlignBranch {
                 if (delay_ms > 0) {
                     await delay(delay_ms, event.controller.signal);
                 }
+                await this.view.inlineEditor.mounting;
 
                 const context = createContext(
                     this.view,

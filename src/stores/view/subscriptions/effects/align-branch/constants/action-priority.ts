@@ -2,7 +2,7 @@ import { PluginAction } from 'src/stores/view/subscriptions/effects/align-branch
 
 const actionPriorityRecord: Partial<Record<PluginAction['type'], number>> = {
     'view/life-cycle/mount': 100,
-    'view/update-active-branch?source=document': 100,
+    'view/update-active-branch?source=document': 90,
     'DOCUMENT/JUMP_TO_NODE': 90,
     'NAVIGATION/SELECT_NEXT_NODE': 90,
     'DOCUMENT/NAVIGATE_USING_KEYBOARD': 90,

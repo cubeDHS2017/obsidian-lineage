@@ -4,7 +4,7 @@ import { delay } from 'src/helpers/delay';
 
 const LOOP_DELAY_MS = 10;
 const MAX_ATTEMPTS = 100;
-const REQUIRED_MATCHES = 5;
+const REQUIRED_MATCHES = 20;
 
 export const waitForActiveNodeToStopMoving = async (
     view: LineageView,
