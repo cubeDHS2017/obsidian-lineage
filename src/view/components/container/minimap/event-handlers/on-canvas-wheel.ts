@@ -2,9 +2,10 @@ import { dpx_to_cpx } from 'src/view/components/container/minimap/event-handlers
 import { LineageView } from 'src/view/view';
 import invariant from 'tiny-invariant';
 
-export const onCanvasWheel = (e: WheelEvent, view: LineageView) => {
-    e.preventDefault();
-
+export const refreshScrollPosition = (
+    view: LineageView,
+    delta_y_dpx: number,
+) => {
     const minimapStore = view.getMinimapStore();
     const state = minimapStore.getValue().scrollInfo;
     const dom = view.getMinimapDom();
@@ -12,7 +13,7 @@ export const onCanvasWheel = (e: WheelEvent, view: LineageView) => {
     const minimapContainer = dom.canvasContainer.parentElement;
     invariant(minimapContainer);
 
-    const scrollAmount_cpx = dpx_to_cpx(e.deltaY);
+    const scrollAmount_cpx = dpx_to_cpx(delta_y_dpx);
 
     const containerHeight_cpx = dpx_to_cpx(minimapContainer.clientHeight);
 
@@ -28,4 +29,9 @@ export const onCanvasWheel = (e: WheelEvent, view: LineageView) => {
             ),
         },
     });
+};
+
+export const onCanvasWheel = (e: WheelEvent, view: LineageView) => {
+    e.preventDefault();
+    refreshScrollPosition(view, e.deltaY);
 };
