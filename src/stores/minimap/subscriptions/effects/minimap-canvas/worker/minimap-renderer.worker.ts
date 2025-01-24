@@ -45,6 +45,12 @@ export type CanvasWorkerProps =
               canvasId: string;
               scroll_position_cpx: number;
           };
+      }
+    | {
+          type: 'minimap/draw-document';
+          payload: {
+              canvasId: string;
+          };
       };
 
 export type MinimapEvent = {
@@ -89,6 +95,8 @@ self.onmessage = (message: MessageEvent) => {
             result = viewCanvas.minimap.setScrollPosition(
                 event.payload.scroll_position_cpx,
             );
+        } else if (event.type === 'minimap/draw-document') {
+            viewCanvas.minimap.drawDocument();
         }
     }
     self.postMessage({

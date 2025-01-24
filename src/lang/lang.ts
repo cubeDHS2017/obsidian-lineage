@@ -39,7 +39,7 @@ export const lang = {
     modals_snapshots_updated_card: 'Updated card ',
     modal_hk_editor_state_on: 'Enable only when the editor is active',
     modal_hk_editor_state_off: 'Enable only when the editor is inactive',
-    modal_hk_editor_state_both: "Enable regardless of the editor's state",
+    modal_hk_editor_state_both: 'Enable regardless of the editor state',
 
     // save
     card_btn_save: 'Save',

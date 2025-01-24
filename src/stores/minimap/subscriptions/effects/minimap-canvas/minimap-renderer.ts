@@ -43,14 +43,14 @@ export class MinimapRenderer {
         };
     };
 
+    drawDocument = () => {
+        this.renderer.drawDocument(this.state.theme, this.range.visibleRange);
+    };
+
     setScrollPosition = (scroll_position_cpx: number) => {
         const shouldRerender =
             this.range.updateScrollPosition(scroll_position_cpx);
         if (shouldRerender) {
-            this.renderer.drawDocument(
-                this.state.theme,
-                this.range.visibleRange,
-            );
             return this.range.visibleRange;
         }
         return null;

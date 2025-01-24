@@ -18,9 +18,18 @@ const updateVisibleRange = async (view: LineageView) => {
 
     // payload is truthy only when the range is different
     if (payload && 'start_cpx' in payload) {
-        const canvas = view.getMinimapDom().canvas;
-        const marginTop = cpx_to_dpx(payload.start_cpx) + 'px';
-        canvas.style.marginTop = marginTop;
+        const dom = view.getMinimapDom();
+        const canvas = dom.canvas;
+        requestAnimationFrame(async () => {
+            const marginTop = cpx_to_dpx(payload.start_cpx) + 'px';
+            await minimapWorker.run({
+                type: 'minimap/draw-document',
+                payload: {
+                    canvasId: canvasId,
+                },
+            });
+            canvas.style.marginTop = marginTop;
+        });
     }
 };
 
