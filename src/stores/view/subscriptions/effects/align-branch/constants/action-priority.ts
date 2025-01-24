@@ -15,7 +15,6 @@ const actionPriorityRecord: Partial<Record<PluginAction['type'], number>> = {
     'view/align-branch/reveal-node': 30,
     'DOCUMENT/SET_NODE_CONTENT': 30,
     'view/set-active-node/document': 20,
-    'view/update-active-branch?source=view': 20,
     'view/main/disable-edit': 20,
     'view/main/enable-edit': 20,
     'view/outline/toggle-collapse-node': 10,

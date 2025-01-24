@@ -1,5 +1,4 @@
 import { LineageView } from 'src/view/view';
-import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { isEmptyDocument } from 'src/stores/view/subscriptions/helpers/is-empty-document';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
@@ -44,7 +43,6 @@ export const onViewMount = (view: LineageView) => {
     if (!view.file) return subscriptions;
     setInitialActiveNode(view);
     loadCollapsedSectionsFromSettings(view);
-    updateActiveBranch(viewStore, documentState);
     if (view.isActive && isEmptyDocument(documentState.document.content)) {
         enableEditMode(viewStore, documentState);
     }

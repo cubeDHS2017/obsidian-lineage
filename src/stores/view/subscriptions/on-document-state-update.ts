@@ -5,7 +5,6 @@ import {
     getDocumentEventType,
 } from 'src/stores/view/helpers/get-document-event-type';
 import { setActiveNode } from 'src/stores/view/subscriptions/actions/set-active-node';
-import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { enableEditMode } from 'src/stores/view/subscriptions/actions/enable-edit-mode';
 import { removeObsoleteNavigationItems } from 'src/stores/view/subscriptions/actions/remove-obsolete-navigation-items';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
@@ -39,7 +38,14 @@ export const onDocumentStateUpdate = (
         e.createOrDelete || e.dropOrMove || e.changeHistory || e.clipboard;
     if (structuralChange) {
         setActiveNode(view, action);
-        updateActiveBranch(viewStore, documentState, action);
+
+        viewStore.dispatch({
+            type: 'view/update-active-branch?source=document',
+            context: {
+                columns: documentState.document.columns,
+                documentAction: action,
+            },
+        });
         viewStore.dispatch({
             type: 'view/outline/refresh-collapsed-nodes',
             payload: {

@@ -246,9 +246,9 @@ export const lang = {
     hkg_outline: 'Outline',
 
     // toolbar
-    settings_vertical_toolbar_icons: 'Vertical toolbar icons',
+    settings_vertical_toolbar_icons: 'Vertical toolbar buttons',
     settings_vertical_toolbar_icons_desc:
-        'Configure what icons appear in the vertical toolbar',
+        'Configure what buttons appear in the vertical toolbar',
 
     // space between cards
     controls_gap_between_cards: 'Space between cards',

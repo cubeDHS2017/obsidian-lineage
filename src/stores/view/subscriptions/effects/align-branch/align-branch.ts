@@ -33,83 +33,85 @@ export type PreviousScrollBehavior = {
     behavior: ScrollBehavior;
 };
 
+type AlignEvent = {
+    action: PluginAction;
+    controller: AbortController;
+    priority: number;
+    completed: boolean;
+};
+
 export class AlignBranch {
-    private isRunning: boolean = false;
-    private currentEvent: {
-        action: PluginAction;
-        controller: AbortController;
-        priority: number;
-    } | null = null;
+    private previousEvent: AlignEvent | null = null;
 
     private previousActiveBranch: ActiveBranch | null = null;
 
     constructor(public view: LineageView) {}
 
     align = (action: PluginAction) => {
+        if (action.type === 'view/update-active-branch?source=view') {
+            action = action.context.viewAction;
+        }
+
         const priority = actionPriority.get(action.type);
         if (typeof priority !== 'number') {
             throw new SilentError(action.type + ' not allowed');
         }
-
-        if (this.currentEvent) {
-            if (priority >= this.currentEvent.priority) {
-                this.currentEvent.controller.abort();
+        if (this.previousEvent && !this.previousEvent.completed) {
+            if (priority >= this.previousEvent.priority) {
+                this.previousEvent.controller.abort();
             } else {
                 return;
             }
         }
-        this.currentEvent = {
+        const event: AlignEvent = {
             action,
             priority,
             controller: new AbortController(),
+            completed: false,
         };
-        if (!this.isRunning) {
-            this.run();
-        }
+        this.run(event);
+        this.previousEvent = event;
     };
 
-    private run = async () => {
-        this.isRunning = true;
-        while (this.currentEvent) {
-            const event = this.currentEvent;
-            try {
-                if (skipAlign(this.view, event.action)) {
-                    if (this.currentEvent === event) this.currentEvent = null;
-                    continue;
-                }
+    private run = async (event: AlignEvent) => {
+        try {
+            if (skipAlign(this.view, event.action)) {
+                event.completed = true;
+                return;
+            }
 
-                const delay_ms = delayAlign(event.action);
-                if (delay_ms > 0) {
-                    await delay(delay_ms, event.controller.signal);
-                }
-                await this.view.inlineEditor.mounting;
+            const delay_ms = delayAlign(event.action);
+            if (delay_ms > 0) {
+                await delay(delay_ms, event.controller.signal);
+            }
+            await this.view.inlineEditor.mounting;
 
-                const context = createContext(
-                    this.view,
-                    event.action,
-                    this.previousActiveBranch,
-                );
+            const context = createContext(
+                this.view,
+                event.action,
+                this.previousActiveBranch,
+            );
+            this.previousActiveBranch = context.activeBranch;
 
-                const actions = createAlignBranchActions(context, event.action);
-
+            const actions = createAlignBranchActions(context, event.action);
+            if (!event.controller.signal.aborted) {
                 requestAnimationFrame(() => {
                     runAlignBranchActions(
                         context,
                         actions,
                         event.controller.signal,
                     );
-                    this.previousActiveBranch = context.activeBranch;
                 });
-                await waitForActiveNodeToStopMoving(
-                    this.view,
-                    event.controller.signal,
-                );
-            } catch (e) {
-                logger.error(e);
+                if (context.alignBranchSettings.behavior === 'smooth') {
+                    await waitForActiveNodeToStopMoving(
+                        this.view,
+                        event.controller.signal,
+                    );
+                }
             }
-            if (this.currentEvent === event) this.currentEvent = null;
+        } catch (e) {
+            logger.error(e);
         }
-
-        this.isRunning = false;
+        event.completed = true;
     };
 }

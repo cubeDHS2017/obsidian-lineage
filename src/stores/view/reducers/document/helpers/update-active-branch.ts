@@ -7,12 +7,14 @@ import { DocumentViewState } from 'src/stores/view/view-state-type';
 import { removeStaleActiveNodes } from 'src/stores/view/reducers/document/helpers/remove-stale-active-nodes';
 import { compareActiveBranch } from 'src/stores/view/reducers/document/helpers/compare-active-branch';
 import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
+import { ViewStoreAction } from 'src/stores/view/view-store-actions';
 
 export type UpdateActiveBranchAction =
     | {
           type: 'view/update-active-branch?source=view';
           context: {
               columns: Column[];
+              viewAction: ViewStoreAction;
           };
       }
     | {
