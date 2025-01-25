@@ -31,6 +31,7 @@ export const DEFAULT_SETTINGS = (): Settings => ({
         nodeIndentationWidth: DEFAULT_INDENTATION_WIDTH,
         maintainEditMode: true,
         alwaysShowCardButtons: false,
+        hiddenVerticalToolbarButtons: [],
     },
     general: {
         defaultDocumentFormat: 'sections',

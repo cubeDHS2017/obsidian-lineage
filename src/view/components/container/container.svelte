@@ -83,7 +83,8 @@
         }
     };
 
-    const centerActiveNode = (event: MouseEvent)=>{
+    const centerActiveNode = (event: MouseEvent) => {
+        if (!event.shiftKey) return;
         const target = event.target as HTMLElement;
         if (target.closest('.lng-prev') || target.closest('.active-node')) {
             return;
@@ -91,7 +92,7 @@
         view.alignBranch.align({
             type: 'view/align-branch/center-node',
         });
-    }
+    };
 
     let containerRef: HTMLElement | null = null;
     onMount(() => {

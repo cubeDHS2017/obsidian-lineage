@@ -18,13 +18,15 @@ export const LINE_HEIGHT_DPX = cpx_to_dpx(LINE_HEIGHT_CPX);
 export const onCanvasClick = (e: MouseEvent, view: LineageView) => {
     const minimapStore = view.getMinimapStore();
     const dom = view.getMinimapDom();
-    const rect = dom.canvas.getBoundingClientRect();
+    const rect = dom.canvasContainer.getBoundingClientRect();
 
     const domY = e.clientY - rect.top;
 
+    const minimapState = minimapStore.getValue();
+
     const y = dpx_to_cpx(domY);
 
-    const ranges = minimapStore.getValue().ranges.cards;
+    const ranges = minimapState.ranges.cards;
     const cardId = findCardAtPosition(y, ranges);
     if (cardId) {
         view.viewStore.dispatch({

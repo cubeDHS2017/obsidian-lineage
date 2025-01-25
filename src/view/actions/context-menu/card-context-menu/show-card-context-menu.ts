@@ -87,11 +87,11 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
             disabled: multipleNodesAreSelected,
         },
         { type: 'separator' },
-        !multipleNodesAreSelected && !hasChildren
+        isInSidebar || (!multipleNodesAreSelected && !hasChildren)
             ? {
                   title: lang.cm_copy,
                   icon: 'documents',
-                  action: () => copyActiveNodesToClipboard(view),
+                  action: () => copyActiveNodesToClipboard(view, isInSidebar),
               }
             : {
                   title: lang.cm_copy,
@@ -103,7 +103,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
                               : lang.cm_copy_branch,
                           icon: 'lineage-cards',
                           action: () =>
-                              copyActiveBranchesToClipboard(view, true),
+                              copyActiveBranchesToClipboard(view, true, false),
                       },
                       {
                           title: multipleNodesAreSelected
@@ -111,14 +111,14 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
                               : lang.cm_copy_branch_wo_formatting,
                           icon: 'file-text',
                           action: () =>
-                              copyActiveBranchesToClipboard(view, false),
+                              copyActiveBranchesToClipboard(view, false, false),
                       },
                       {
                           title: multipleNodesAreSelected
                               ? lang.cm_copy_section_wo_subitems
                               : lang.cm_copy_sections_wo_subitems,
                           icon: 'file-text',
-                          action: () => copyActiveNodesToClipboard(view),
+                          action: () => copyActiveNodesToClipboard(view, false),
                       },
                   ],
               },

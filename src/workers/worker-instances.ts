@@ -11,13 +11,16 @@ import type { StatusBarWorkerResult } from 'src/obsidian/status-bar/helpers/stat
 // @ts-ignore
 import StatusBarWorker from 'src/obsidian/status-bar/helpers/status-bar.worker';
 import { DocumentProgressProps } from 'src/obsidian/status-bar/helpers/calculate-document-prorgess';
+import { VisibleRange } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/renderer/visible-range-manager';
 
 export const minimapWorker = new WorkerPromise<
     CanvasWorkerProps,
-    null | {
-        totalDrawnHeight_cpx: number;
-        cardRanges: CardRanges;
-    },
+    | null
+    | {
+          totalDrawnHeight_cpx: number;
+          cardRanges: CardRanges;
+      }
+    | VisibleRange,
     OffscreenCanvas
 >(new DrawMinimapWorker());
 

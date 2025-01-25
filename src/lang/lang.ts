@@ -39,7 +39,7 @@ export const lang = {
     modals_snapshots_updated_card: 'Updated card ',
     modal_hk_editor_state_on: 'Enable only when the editor is active',
     modal_hk_editor_state_off: 'Enable only when the editor is inactive',
-    modal_hk_editor_state_both: "Enable regardless of the editor's state",
+    modal_hk_editor_state_both: 'Enable regardless of the editor state',
 
     // save
     card_btn_save: 'Save',
@@ -198,7 +198,7 @@ export const lang = {
     controls_zoom_in: 'Zoom in',
     controls_zoom_out: 'Zoom out',
     controls_zoom_reset: 'Reset (hold shift to undo)',
-    controls_zoom_presets: '',
+    controls_zoom_presets: 'Zoom menu',
     hk_zoom_in: 'Zoom in',
     hk_zoom_out: 'Zoom out',
     hk_zoom_reset: 'Reset zoom',
@@ -244,6 +244,11 @@ export const lang = {
     hk_outline_toggle_collapse: 'Collapse/expand card',
     hk_outline_toggle_collapse_all: 'Collapse/expand all cards',
     hkg_outline: 'Outline',
+
+    // toolbar
+    settings_vertical_toolbar_icons: 'Vertical toolbar buttons',
+    settings_vertical_toolbar_icons_desc:
+        'Configure what buttons appear in the vertical toolbar',
 
     // space between cards
     controls_gap_between_cards: 'Space between cards',

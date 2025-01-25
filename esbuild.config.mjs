@@ -11,63 +11,69 @@ if you want to view the source, please visit the github repository of this plugi
 */
 `;
 
-const prod = process.argv[2] === "production";
+const prod = process.argv[2] === 'production';
 
-const context = await esbuild.context({
-	banner: {
-		js: banner
-	},
-	entryPoints: ["src/main.ts"],
-	bundle: true,
-	external: [
-		"obsidian",
-		"electron",
-		"@codemirror/autocomplete",
-		"@codemirror/collab",
-		"@codemirror/commands",
-		"@codemirror/language",
-		"@codemirror/lint",
-		"@codemirror/search",
-		"@codemirror/state",
-		"@codemirror/view",
-		"@lezer/common",
-		"@lezer/highlight",
-		"@lezer/lr",
-		...builtins
-	],
-	format: "cjs",
-	target: "es2021",
-	logLevel: "info",
-	sourcemap: prod ? false : "inline",
-	treeShaking: true,
-	outfile: "temp/vault/.obsidian/plugins/lineage-dev/main.js",
-	plugins: [
-		inlineWorkerPlugin({ minify: prod }),
-		esbuildSvelte({
-			compilerOptions: {
-				css: true
-			},
-			preprocess: sveltePreprocess(),
-			filterWarnings: (warning) => {
-				// disable a11y warnings
-				return !(warning.code.startsWith("a11y-"));
-			}
+const options = {
+    banner: {
+        js: banner,
+    },
+    entryPoints: ['src/main.ts'],
+    bundle: true,
+    external: [
+        'obsidian',
+        'electron',
+        '@codemirror/autocomplete',
+        '@codemirror/collab',
+        '@codemirror/commands',
+        '@codemirror/language',
+        '@codemirror/lint',
+        '@codemirror/search',
+        '@codemirror/state',
+        '@codemirror/view',
+        '@lezer/common',
+        '@lezer/highlight',
+        '@lezer/lr',
+        ...builtins,
+    ],
+    format: 'cjs',
+    target: 'es2021',
+    logLevel: 'info',
+    sourcemap: prod ? false : 'inline',
+    treeShaking: true,
+    outfile: 'temp/vault/.obsidian/plugins/lineage-dev/main.js',
+    plugins: [
+        inlineWorkerPlugin({ minify: prod }),
+        esbuildSvelte({
+            compilerOptions: {
+                css: true,
+            },
+            preprocess: sveltePreprocess(),
+            filterWarnings: (warning) => {
+                // disable a11y warnings
+                return !warning.code.startsWith('a11y-');
+            },
+        }),
+    ],
+};
+const context = await esbuild.context(options);
 
-		})
-
-	]
-});
-
-const cssContext = await esbuild.context({
-	entryPoints: ["src/styles/styles.css",],
-	bundle: true,
-	outfile: "temp/vault/.obsidian/plugins/lineage-dev/styles.css"
-});
+const cssOptions = {
+    entryPoints: ['src/styles/styles.css'],
+    bundle: true,
+    outfile: 'temp/vault/.obsidian/plugins/lineage-dev/styles.css',
+};
+const cssContext = await esbuild.context(cssOptions);
 
 if (prod) {
-	await context.rebuild();
-	await cssContext.rebuild();
-	process.exit(0);
+    await esbuild.build({
+        ...options,
+        define: { 'process.env.NODE_ENV': '"production"' },
+    });
+    await esbuild.build({
+        ...cssOptions,
+        define: { 'process.env.NODE_ENV': '"production"' },
+    });
+    process.exit(0);
 } else {
-	await Promise.all([cssContext.watch(), context.watch()]);
+    await Promise.all([cssContext.watch(), context.watch()]);
 }

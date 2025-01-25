@@ -5,10 +5,12 @@ import {
     MinimapTheme,
     minimapTheme,
 } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/consts/minimap-theme';
+import { VisibleRangeManager } from 'src/stores/minimap/subscriptions/effects/minimap-canvas/worker/renderer/visible-range-manager';
 
 export class MinimapRenderer {
     private renderer: Renderer;
     private shapes: ShapesAndRanges;
+    private range: VisibleRangeManager;
 
     private state: {
         theme: MinimapTheme;
@@ -20,9 +22,11 @@ export class MinimapRenderer {
         ctx: OffscreenCanvasRenderingContext2D,
         canvas: OffscreenCanvas,
         theme: MinimapTheme,
+        canvas_height_cpx: number,
     ) {
         this.shapes = new ShapesAndRanges();
         this.renderer = new Renderer(ctx, canvas, this.shapes);
+        this.range = new VisibleRangeManager(canvas_height_cpx);
         this.state.theme = theme;
     }
 
@@ -32,10 +36,23 @@ export class MinimapRenderer {
 
     setDocument = (document: LineageDocument, canvasId: string) => {
         const shapes = this.shapes.calculateDocument(document, canvasId);
-        this.renderer.drawDocument(this.state.theme);
+        this.renderer.drawDocument(this.state.theme, this.range.visibleRange);
         return {
             totalDrawnHeight_cpx: shapes.totalDrawnHeight_cpx,
             cardRanges: shapes.cardRanges,
         };
+    };
+
+    drawDocument = () => {
+        this.renderer.drawDocument(this.state.theme, this.range.visibleRange);
+    };
+
+    setScrollPosition = (scroll_position_cpx: number) => {
+        const shouldRerender =
+            this.range.updateScrollPosition(scroll_position_cpx);
+        if (shouldRerender) {
+            return this.range.visibleRange;
+        }
+        return null;
     };
 }

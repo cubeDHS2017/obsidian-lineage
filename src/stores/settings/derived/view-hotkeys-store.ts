@@ -11,10 +11,11 @@ import {
     ConflictingHotkeys,
     HotkeysSearchTerm,
 } from 'src/stores/view/derived/hotkeys-store';
-import { hotkeysLang } from 'src/lang/hotkeys-lang';
 import { groupArrayByProperty } from 'src/helpers/group-array-by-property';
 import { lang } from 'src/lang/lang';
 import Lineage from 'src/main';
+import { OutlineModeStore } from 'src/stores/settings/derived/view-settings-store';
+import { getDynamicLabel } from 'src/view/components/container/modals/hotkeys/components/helpers/get-dynamic-label';
 
 export const CustomHotkeysStore = (plugin: Lineage) =>
     derived(plugin.settings, (state) => state.hotkeys.customHotkeys);
@@ -132,12 +133,19 @@ export const ConflictLabeledHotkeysStore = (view: LineageView) =>
 type GroupedHotkeys = Record<GroupName, StatefulViewCommand[]>;
 export const FilteredHotkeysStore = (view: LineageView) =>
     derived(
-        [ConflictLabeledHotkeysStore(view), HotkeysSearchTerm(view)],
-        ([hotkeys, searchTerm]) => {
+        [
+            ConflictLabeledHotkeysStore(view),
+            HotkeysSearchTerm(view),
+            OutlineModeStore(view),
+        ],
+        ([hotkeys, searchTerm, outlineMode]) => {
             let array: StatefulViewCommand[] = [];
             if (searchTerm) {
                 array = hotkeys.hotkeys.filter((c) => {
-                    const fullName = hotkeysLang[c.name].toLowerCase();
+                    const fullName = getDynamicLabel(
+                        c.name,
+                        outlineMode,
+                    ).toLowerCase();
                     return (
                         fullName.includes(searchTerm) ||
                         c.group.toLowerCase().includes(searchTerm)

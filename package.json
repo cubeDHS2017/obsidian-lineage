@@ -1,6 +1,6 @@
 {
     "name": "lineage",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "description": "",
     "scripts": {
         "dev": "node esbuild.config.mjs",
@@ -9,7 +9,8 @@
         "test:watch": "vitest",
         "test": "vitest run",
         "test:e2e": "playwright test",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "lint": "eslint src"
     },
     "keywords": [],
     "author": "",

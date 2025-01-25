@@ -50,7 +50,8 @@
     }
 
     .active-parent-bridge-left {
-        left: -10px;
+        width: 12px;
+        left: -12px;
         background-color: var(--bg-color);
     }
     .active-node-bridge {

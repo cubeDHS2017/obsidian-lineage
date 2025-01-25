@@ -19,13 +19,14 @@ export const drawDocument = async (view: LineageView) => {
         },
     });
     invariant(payload);
-
-    minimapStore.dispatch({
-        type: 'minimap/set-card-ranges',
-        payload: {
-            ranges: payload.cardRanges,
-            height_cpx: payload.totalDrawnHeight_cpx,
-        },
-    });
+    if ('cardRanges' in payload) {
+        minimapStore.dispatch({
+            type: 'minimap/set-card-ranges',
+            payload: {
+                ranges: payload.cardRanges,
+                height_cpx: payload.totalDrawnHeight_cpx,
+            },
+        });
+    }
 };
 export const debouncedDrawDocument = debounce(drawDocument, 100);

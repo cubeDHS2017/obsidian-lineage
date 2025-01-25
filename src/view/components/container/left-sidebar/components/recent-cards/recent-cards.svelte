@@ -101,6 +101,7 @@
         gap: 20px;
         flex: 1 1 auto;
         padding-bottom: 10px;
+        overflow-y: auto;
     }
 
 

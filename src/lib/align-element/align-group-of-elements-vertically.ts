@@ -1,5 +1,5 @@
 import { getCombinedBoundingClientRect } from 'src/lib/align-element/helpers/get-combined-client-rect';
-import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/align-branch';
+import { AlignBranchContext } from 'src/stores/view/subscriptions/effects/align-branch/helpers/create-context';
 import { alignVertically } from 'src/lib/align-element/align-element-vertically';
 import { getElementById } from 'src/lib/align-element/helpers/get-element-by-id';
 

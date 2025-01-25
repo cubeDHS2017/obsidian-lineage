@@ -1,4 +1,4 @@
-import { EditorPosition, MarkdownView, TFile } from 'obsidian';
+import { Editor, EditorPosition, MarkdownView, TFile } from 'obsidian';
 import { LineageView } from 'src/view/view';
 import { AdjustHeight } from 'src/view/actions/inline-editor/expandable-textarea-action';
 import { vimEnterInsertMode } from 'src/obsidian/helpers/inline-editor/helpers/vim-enter-insert-mode';
@@ -18,6 +18,7 @@ export class InlineEditor {
     #nodeId: string | null = null;
     target: HTMLElement | null = null;
     private onChangeSubscriptions: Set<() => void> = new Set();
+    #mounting: Promise<void> = Promise.resolve();
     private subscriptions: Set<() => void> = new Set();
     private cursorPositions: Map<string, EditorPosition> = new Map();
 
@@ -30,12 +31,20 @@ export class InlineEditor {
         this.#nodeId = value;
     }
 
+    get mounting() {
+        return this.#mounting;
+    }
+
     getContent() {
         return this.inlineView.editor.getValue();
     }
 
     getCursor() {
         return this.inlineView.editor.getCursor();
+    }
+
+    getEditor(): Editor {
+        return this.inlineView.editor;
     }
 
     deleteNodeCursor(nodeId: string) {
@@ -56,6 +65,11 @@ export class InlineEditor {
             this.unloadNode();
         }
 
+        let resolve = () => {};
+        this.#mounting = new Promise((_resolve) => {
+            resolve = _resolve;
+        });
+
         const content =
             this.view.documentStore.getValue().document.content[nodeId]
                 ?.content;
@@ -75,6 +89,7 @@ export class InlineEditor {
         this.restoreCursor();
         this.lockFile();
         this.fixVimWhenZooming();
+        setTimeout(() => resolve(), Math.max(16, content.length / 60));
     }
 
     focus = () => {

@@ -4,13 +4,13 @@ type SvgStyleType = 'fill' | 'stroke';
 const svgWrapper = (innerSVG: string, mode: SvgStyleType = 'stroke') =>
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="svg-icon" ${mode === 'fill' ? 'stroke="transparent" fill="currentColor"' : 'stroke="currentColor" fill="transparent"'}> ${innerSVG.trim().replace(/\n/g, '')}</svg>`;
 
-type Icon = {
+export type CustomIcon = {
     name: string;
     svg: string;
     mode: SvgStyleType;
 };
 
-const cards: Icon = {
+const cards: CustomIcon = {
     name: 'lineage-cards',
     svg: `
     <path
@@ -20,13 +20,13 @@ const cards: Icon = {
     mode: 'fill',
 };
 
-const split: Icon = {
+const split: CustomIcon = {
     name: 'lineage-split',
     svg: `<path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M12 22v-8.3a4 4 0 0 0-1.172-2.872L3 3"/><path d="m15 9 6-6"/>`,
     mode: 'stroke',
 };
 
-const alignH: Icon = {
+const alignH: CustomIcon = {
     name: 'lineage-align-horizontal',
     svg: `<g> 
             <rect width="20" height="12" x="2" y="6" rx="2"/> 
@@ -35,7 +35,7 @@ const alignH: Icon = {
     mode: 'stroke',
 };
 
-const alignV: Icon = {
+const alignV: CustomIcon = {
     name: 'lineage-align-vertical',
     svg: `<g> 
             <rect width="18" height="12" x="3" y="6" rx="2"/> 
@@ -51,7 +51,7 @@ const alignV: Icon = {
     mode: 'stroke',
 };
 
-const gap: Icon = {
+const gap: CustomIcon = {
     name: 'cards-gap',
     svg: `  
                 <rect width="20" height="12" x="-11.600009" y="6" rx="2" />
@@ -66,7 +66,7 @@ const gap: Icon = {
     mode: 'stroke',
 };
 
-const outline: Icon = {
+const outline: CustomIcon = {
     name: 'outline',
     svg: `<path d="M 7.563873,12 H 21.24698" />
   <path d="M 7.56116,18 H 21.159058" />
@@ -74,7 +74,7 @@ const outline: Icon = {
     mode: 'stroke',
 };
 
-const cursorOff: Icon = {
+const cursorOff: CustomIcon = {
     name: 'cursor-off',
     svg: `<path d="m 8.0036101,3.8555957 h 1 a 3,3 0 0 1 2.9999999,3 3,3 0 0 1 3,-3 h 1" />
   <path d="m 16.00361,19.855596 h -1 a 3,3 0 0 1 -3,-3 3,3 0 0 1 -2.9999999,3 h -1" />
@@ -83,7 +83,7 @@ const cursorOff: Icon = {
     mode: 'stroke',
 };
 
-const cursor: Icon = {
+const cursor: CustomIcon = {
     name: 'cursor',
     svg: `<path d="m 8.0036101,3.8555957 h 1 a 3,3 0 0 1 2.9999999,3 3,3 0 0 1 3,-3 h 1" />
   <path d="m 16.00361,19.855596 h -1 a 3,3 0 0 1 -3,-3 3,3 0 0 1 -2.9999999,3 h -1" />

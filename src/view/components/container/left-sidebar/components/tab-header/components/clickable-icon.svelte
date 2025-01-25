@@ -43,7 +43,7 @@
             color: var(--color-base-10);
         }
         & .lineage-view .sidebar-tabs-header .clickable-icon:active {
-            color: var(--icon-color-active);
+            color: var(--color-base-10);
         }
     }
     .clickable-icon--active {

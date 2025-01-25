@@ -39,7 +39,13 @@ export const onViewStateUpdate = (
     }
     if (activeNodeChange && activeNodeHasChanged) {
         // this should be handled internally
-        updateActiveBranch(viewStore, documentState, 'none');
+        viewStore.dispatch({
+            type: 'view/update-active-branch?source=view',
+            context: {
+                columns: documentState.document.columns,
+                viewAction: action,
+            },
+        });
         persistActiveNodeInPluginSettings(view);
         view.plugin.statusBar.updateProgressIndicatorAndChildCount(view);
     }
@@ -68,7 +74,12 @@ export const onViewStateUpdate = (
     }
 
     // effects
-    if (activeNodeChange || e.search || e.editMainSplit) {
+    if (
+        e.search ||
+        e.editMainSplit ||
+        action.type === 'view/update-active-branch?source=document' ||
+        action.type === 'view/update-active-branch?source=view'
+    ) {
         view.alignBranch.align(action);
     }
     if (!container || !view.isViewOfFile) return;
