@@ -4,7 +4,6 @@ import {
     getViewEventType,
     ViewEventType,
 } from 'src/stores/view/helpers/get-view-event-type';
-import { updateActiveBranch } from 'src/stores/view/subscriptions/actions/update-active-branch';
 import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe-clear-selection';
 import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
