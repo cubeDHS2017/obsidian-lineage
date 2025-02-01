@@ -26,6 +26,8 @@ export const derived = <Value, Action extends { type: string }, DerivedValue>(
                         }
                     },
                 );
+            } else {
+                run(derivedValue, undefined, true);
             }
 
             return () => {
