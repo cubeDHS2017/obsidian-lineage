@@ -42,7 +42,7 @@ const updateDocumentState = (
     ) {
         updateActiveNode(state.document, action.payload.id, state);
     } else if (action.type === 'DOCUMENT/NAVIGATE_USING_KEYBOARD') {
-        navigateUsingKeyboard(state.document, state, action);
+        navigateUsingKeyboard(state.document, state, action, context.columns);
     } else if (action.type === 'SEARCH/SET_QUERY') {
         setSearchQuery(state, action.payload.query);
     } else if (action.type === 'SEARCH/SET_RESULTS') {
@@ -140,7 +140,7 @@ const updateDocumentState = (
     } else if (action.type === 'NAVIGATION/NAVIGATE_BACK') {
         navigateActiveNodeHistory(state.document, state);
     } else if (action.type === 'DOCUMENT/JUMP_TO_NODE') {
-        jumpToNode(state.document, state, action);
+        jumpToNode(state.document, state, action, context.columns);
     } else if (action.type === 'NAVIGATION/REMOVE_OBSOLETE') {
         removeDeletedNavigationItems(state, action.payload.content);
     } else if (action.type === 'SEARCH/TOGGLE_FUZZY_MODE') {

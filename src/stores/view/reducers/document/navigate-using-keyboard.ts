@@ -9,7 +9,6 @@ export type ChangeActiveNodeAction = {
     type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD';
     payload: {
         direction: AllDirections;
-        columns: Column[];
     };
     context: {
         shiftKey?: boolean;
@@ -21,9 +20,10 @@ export const navigateUsingKeyboard = (
     documentState: DocumentViewState,
     state: Pick<ViewState, 'navigationHistory' | 'outline'>,
     action: ChangeActiveNodeAction,
+    columns: Column[],
 ) => {
     const nextNode = findNextActiveNodeOnKeyboardNavigation(
-        action.payload.columns,
+        columns,
         documentState.activeNode,
         action.payload.direction,
         documentState.activeNodesOfColumn,
@@ -31,7 +31,14 @@ export const navigateUsingKeyboard = (
         action.context.shiftKey,
     );
     if (nextNode) {
-        updateSelectionState(documentState, nextNode, action);
+        updateSelectionState(
+            columns,
+            documentState,
+            nextNode,
+            action.payload.direction === 'up' ||
+                action.payload.direction === 'down',
+            Boolean(action.context.shiftKey),
+        );
         updateActiveNode(documentState, nextNode, state);
     }
 };

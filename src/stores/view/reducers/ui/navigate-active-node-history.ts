@@ -3,6 +3,7 @@ import { updateNavigationState } from 'src/stores/document/reducers/history/help
 import { DocumentViewState, ViewState } from 'src/stores/view/view-state-type';
 
 import { RemoveObsoleteNavigationItemsAction } from 'src/stores/view/reducers/ui/helpers/remove-deleted-navigation-items';
+import { resetSelectionState } from 'src/stores/view/reducers/document/helpers/reset-selection-state';
 
 export type NodeHistoryNavigationAction =
     | {
@@ -24,5 +25,6 @@ export const navigateActiveNodeHistory = (
         state.navigationHistory = { ...state.navigationHistory };
         updateActiveNode(documentState, newItem, null);
         state.recentNodes.activeNode = newItem;
+        resetSelectionState(documentState);
     }
 };

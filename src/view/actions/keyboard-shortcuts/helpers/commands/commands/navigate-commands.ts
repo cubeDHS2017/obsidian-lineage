@@ -30,7 +30,6 @@ const spatialNavigation = (view: LineageView, direction: AllDirections) => {
         type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
         payload: {
             direction: direction,
-            columns: view.documentStore.getValue().document.columns,
         },
         context: {
             outlineMode: outlineModeSelector(view),
@@ -61,7 +60,6 @@ const jump = (view: LineageView, target: JumpTarget) => {
         type: 'DOCUMENT/JUMP_TO_NODE',
         payload: {
             target,
-            columns: view.documentStore.getValue().document.columns,
         },
     });
 };

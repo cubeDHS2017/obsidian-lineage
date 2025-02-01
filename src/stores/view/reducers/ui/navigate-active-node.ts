@@ -2,6 +2,7 @@ import { updateActiveNode } from 'src/stores/view/reducers/document/helpers/upda
 import { DocumentViewState, ViewState } from 'src/stores/view/view-state-type';
 import { Sections } from 'src/stores/document/document-state-type';
 import { findNextNode } from 'src/lib/tree-utils/find/find-next-node';
+import { resetSelectionState } from 'src/stores/view/reducers/document/helpers/reset-selection-state';
 
 export type NodeNavigationAction = {
     type: 'NAVIGATION/SELECT_NEXT_NODE';
@@ -25,6 +26,8 @@ export const navigateActiveNode = (
         action.payload.direction,
         action.context.outlineMode ? state.outline.hiddenNodes : null,
     );
-    if (nextNode && nextNode !== documentState.activeNode)
+    if (nextNode && nextNode !== documentState.activeNode) {
         updateActiveNode(documentState, nextNode, state);
+        resetSelectionState(documentState);
+    }
 };

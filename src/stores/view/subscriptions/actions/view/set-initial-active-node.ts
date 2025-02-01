@@ -8,15 +8,18 @@ export const setInitialActiveNode = (view: LineageView) => {
     const settings = view.plugin.settings.getValue();
     const path = view.file!.path;
     const persistedSection = settings.documents[path]?.activeSection;
-    const sections = documentState.sections;
     if (persistedSection) {
-        id = maybeGetIdOfSection(sections, persistedSection);
+        id = maybeGetIdOfSection(documentState.sections, persistedSection);
     }
     const mostRecentActiveSection = documentState.history.context.activeSection;
     if (!id && mostRecentActiveSection) {
-        id = maybeGetIdOfSection(sections, mostRecentActiveSection);
+        id = maybeGetIdOfSection(
+            documentState.sections,
+            mostRecentActiveSection,
+        );
     }
     if (!id) return;
+    viewStore.setContext(documentState.document);
     viewStore.dispatch({
         type: 'view/set-active-node/document',
         payload: {
