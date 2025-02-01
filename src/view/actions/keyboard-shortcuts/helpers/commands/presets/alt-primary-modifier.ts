@@ -61,4 +61,14 @@ export const AltPrimaryModifier: CustomHotkeys = {
             modifiers: ['Alt'],
         },
     },
+    add_parent_sibling: {
+        secondary: {
+            key: 'H',
+            modifiers: ['Alt'],
+        },
+        primary: {
+            key: 'ArrowLeft',
+            modifiers: ['Alt'],
+        },
+    },
 };

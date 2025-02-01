@@ -18,7 +18,7 @@
 </script>
 
 <FloatingButton
-    label={collapsed ? lang.card_btn_collapse_card : lang.card_btn_expand_card}
+    label={collapsed? lang.card_btn_expand_card: lang.card_btn_collapse_card}
     on:click={toggleCollapse}
     position="collapse"
 >

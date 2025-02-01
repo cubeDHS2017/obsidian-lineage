@@ -20,6 +20,7 @@ export const lang = {
     card_btn_add_card_below: 'Add card below',
     hk_add_above_and_split: 'Add card above and split at cursor',
     card_btn_add_card_above: 'Add card above',
+    hk_add_parent_sibling: 'Add card after parent',
     hk_add_child_and_split: 'Add child card and split at cursor',
     card_btn_add_child_card: 'Add child card',
     hkg_create_cards: 'Create cards',
@@ -275,7 +276,7 @@ export const lang = {
     sidebar_no_pinned_cards: 'No pinned cards',
 
     // rules
-    modals_rules_add_rule: 'Add rule',
+    modals_rules_add_rule: 'New rule',
     modals_rules_no_rules: 'No rules',
     controls_rules: 'Rule-based styles',
     modals_rules_matches: 'Number of matches',

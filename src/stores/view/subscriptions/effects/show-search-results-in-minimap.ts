@@ -13,7 +13,9 @@ export const showSearchResultsInMinimap = (view: LineageView) => {
             }
         }
     } else if (view.documentSearch.searchTriggeredMinimap) {
-        settingsStore.dispatch({ type: 'VIEW/TOGGLE_MINIMAP' });
+        if (settingsState.view.showMinimap) {
+            settingsStore.dispatch({ type: 'VIEW/TOGGLE_MINIMAP' });
+        }
         view.documentSearch.searchTriggeredMinimap = false;
     }
 };

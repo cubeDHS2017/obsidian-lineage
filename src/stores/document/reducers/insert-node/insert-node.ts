@@ -1,15 +1,16 @@
 import { insertChild } from 'src/lib/tree-utils/insert/insert-child';
 import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
-import { Direction } from 'src/stores/document/document-store-actions';
+import { AllDirections } from 'src/stores/document/document-store-actions';
 import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import invariant from 'tiny-invariant';
 import { id } from 'src/helpers/id';
+import { insertParentSibling } from 'src/lib/tree-utils/insert/insert-parent-sibling';
 
 export type CreateNodeAction = {
     type: 'DOCUMENT/INSERT_NODE';
     payload: {
-        position: Direction;
+        position: AllDirections;
         activeNodeId: string;
         content?: string;
     };
@@ -29,6 +30,8 @@ export const insertNode = (
             newNodeId,
             !!action.payload.content,
         );
+    } else if (payload.position === 'left') {
+        insertParentSibling(document, payload.activeNodeId, newNodeId);
     } else {
         const columnIndex = findNodeColumn(
             document.columns,
