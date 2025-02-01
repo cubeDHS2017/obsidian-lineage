@@ -24,8 +24,9 @@ export const saveNodeAndInsertNode = (
         },
     });
     if (content) {
+        const newNodeId = view.viewStore.getValue().document.activeNode;
         if (direction === 'down' || direction === 'right') {
-            view.inlineEditor.setNodeCursor(nodeId, { line: 0, ch: 0 });
+            view.inlineEditor.setNodeCursor(newNodeId, { line: 0, ch: 0 });
         }
     }
 };
