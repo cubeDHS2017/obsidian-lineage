@@ -8,7 +8,11 @@ export type Subscriber<T, U> = (
     firstRun?: boolean,
 ) => void;
 
-export type Reducer<T, U> = (store: T, action: U) => T | typeof NO_UPDATE;
+export type Reducer<T, U, C> = (
+    store: T,
+    action: U,
+    context: C,
+) => T | typeof NO_UPDATE;
 
 export type OnError<U> = (
     error: Error,
@@ -16,20 +20,22 @@ export type OnError<U> = (
     action?: U,
 ) => void;
 
-export class Store<T, U> implements Writable<T> {
+export class Store<T, U, C = never> implements Writable<T> {
     private value: T;
     private subscribers: Set<Subscriber<T, U>> = new Set();
     private isProcessing: boolean = false;
     private actionQueue: U[] = [];
-
+    private context: C;
     constructor(
         initialValue: T,
-        reducer?: Reducer<T, U>,
+        reducer?: Reducer<T, U, C>,
         onError?: OnError<U>,
+        context?: C,
     ) {
         this.value = initialValue;
         if (reducer) this.reducer = reducer;
         if (onError) this.onError = onError;
+        if (context) this.context = context;
     }
 
     getValue(): T {
@@ -71,7 +77,11 @@ export class Store<T, U> implements Writable<T> {
         while (this.actionQueue.length > 0) {
             const action = this.actionQueue.shift();
             try {
-                const newValue = this.reducer(this.value, action!);
+                const newValue = this.reducer(
+                    this.value,
+                    action!,
+                    this.context,
+                );
                 if (newValue !== NO_UPDATE) {
                     this.value = newValue;
                     this.notifySubscribers(action);
@@ -83,7 +93,7 @@ export class Store<T, U> implements Writable<T> {
         this.isProcessing = false;
     }
 
-    private readonly reducer: Reducer<T, U> = () => this.value;
+    private readonly reducer: Reducer<T, U, C> = () => this.value;
     // eslint-disable-next-line no-console
     private readonly onError: OnError<U> = (error) => console.error(error);
 
@@ -96,4 +106,8 @@ export class Store<T, U> implements Writable<T> {
             }
         }
     }
+
+    setContext = (context: C) => {
+        this.context = context;
+    };
 }

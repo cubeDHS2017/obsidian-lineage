@@ -18,8 +18,6 @@ export const onViewStateUpdate = (
     action: ViewStoreAction,
     localState: { previousActiveNode: string },
 ) => {
-    const documentStore = view.documentStore;
-    const documentState = documentStore.getValue();
     const viewStore = view.viewStore;
     const viewState = viewStore.getValue();
     const container = view.container;
@@ -37,14 +35,6 @@ export const onViewStateUpdate = (
         localState.previousActiveNode = viewState.document.activeNode;
     }
     if (activeNodeChange && activeNodeHasChanged) {
-        // this should be handled internally
-        viewStore.dispatch({
-            type: 'view/update-active-branch?source=view',
-            context: {
-                columns: documentState.document.columns,
-                viewAction: action,
-            },
-        });
         persistActiveNodeInPluginSettings(view);
         view.plugin.statusBar.updateProgressIndicatorAndChildCount(view);
     }
@@ -77,7 +67,7 @@ export const onViewStateUpdate = (
         e.search ||
         e.editMainSplit ||
         action.type === 'view/update-active-branch?source=document' ||
-        action.type === 'view/update-active-branch?source=view'
+        (activeNodeChange && activeNodeHasChanged)
     ) {
         view.alignBranch.align(action);
     }

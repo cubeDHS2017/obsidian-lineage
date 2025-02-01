@@ -123,7 +123,6 @@ export const defaultViewHotkeys = (): DefaultViewCommand[] => [
                 type: 'view/outline/toggle-collapse-node',
                 payload: {
                     id: view.viewStore.getValue().document.activeNode,
-                    columns: view.documentStore.getValue().document.columns,
                 },
             });
         },
@@ -136,9 +135,6 @@ export const defaultViewHotkeys = (): DefaultViewCommand[] => [
             if (!get(singleColumnStore(view))) return;
             view.viewStore.dispatch({
                 type: 'view/outline/toggle-collapse-all',
-                payload: {
-                    columns: view.documentStore.getValue().document.columns,
-                },
             });
         },
         hotkeys: [{ key: '=', modifiers: ['Alt', 'Mod'], editorState: 'both' }],

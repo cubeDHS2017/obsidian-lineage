@@ -7,9 +7,14 @@ export const expandParentsOfActiveNode = (
     columns: Column[],
 ) => {
     const parents = state.document.activeBranch.sortedParentNodes;
+    let update = false;
     for (const parent of parents) {
         if (state.outline.collapsedParents.has(parent)) {
             expandNode(state, columns, parent);
+            update = true;
         }
+    }
+    if (update) {
+        state.outline = { ...state.outline };
     }
 };

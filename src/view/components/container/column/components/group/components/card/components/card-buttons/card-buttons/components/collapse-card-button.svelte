@@ -12,7 +12,6 @@
             type: 'view/outline/toggle-collapse-node',
             payload: {
                 id: nodeId,
-                columns: view.documentStore.getValue().document.columns,
             },
         });
     };

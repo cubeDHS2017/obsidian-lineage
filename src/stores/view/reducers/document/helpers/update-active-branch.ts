@@ -20,7 +20,6 @@ export type UpdateActiveBranchAction =
     | {
           type: 'view/update-active-branch?source=document';
           context: {
-              columns: Column[];
               documentAction: DocumentStoreAction;
           };
       };

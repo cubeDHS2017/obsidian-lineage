@@ -15,7 +15,6 @@ import { ToggleShowAllNodesAction } from 'src/stores/view/reducers/search/toggle
 import { StyleRulesResult } from 'src/stores/view/subscriptions/effects/style-rules/helpers/process-style-rules';
 import { LeftSidebarTab } from 'src/stores/settings/settings-type';
 import { ConflictingHotkeys } from 'src/obsidian/helpers/get-used-hotkeys';
-import { Column } from 'src/stores/document/document-state-type';
 
 export type ViewStoreAction =
     | SearchAction
@@ -168,15 +167,13 @@ export type UpdateConflictingHotkeysAction = {
 export type OutlineAction =
     | {
           type: 'view/outline/toggle-collapse-node';
-          payload: { id: string; columns: Column[] };
+          payload: { id: string };
       }
     | {
           type: 'view/outline/refresh-collapsed-nodes';
-          payload: { columns: Column[] };
       }
     | {
           type: 'view/outline/toggle-collapse-all';
-          payload: { columns: Column[] };
       };
 
 export type SelectionActions = {
@@ -188,8 +185,5 @@ export type PersistedStateActions = {
     type: 'view/persisted-state/load-persisted-collapsed-parents';
     payload: {
         collapsedIds: string[];
-    };
-    context: {
-        columns: Column[];
     };
 };

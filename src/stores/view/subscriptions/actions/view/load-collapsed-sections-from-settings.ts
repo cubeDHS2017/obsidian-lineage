@@ -20,9 +20,6 @@ export const loadCollapsedSectionsFromSettings = (view: LineageView) => {
             payload: {
                 collapsedIds,
             },
-            context: {
-                columns: documentState.document.columns,
-            },
         });
     }
 };
