@@ -3,17 +3,25 @@ import { insertBlockId } from 'src/view/actions/context-menu/card-context-menu/h
 import { Notice } from 'obsidian';
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 
-export const copyLinkToBlock = async (view: LineageView) => {
+export const copyLinkToBlock = async (
+    view: LineageView,
+    isInSidebar: boolean,
+) => {
     const file = view.file;
     if (!file) return;
     const viewState = view.viewStore.getValue();
-    const activeNode = viewState.document.activeNode;
+    const activeTab = view.plugin.settings.getValue().view.leftSidebarActiveTab;
+    const activeNode = isInSidebar
+        ? activeTab === 'pinned-cards'
+            ? viewState.pinnedNodes.activeNode
+            : viewState.recentNodes.activeNode
+        : viewState.document.activeNode;
 
     const isEditing = Boolean(viewState.document.editing.activeNodeId);
     if (isEditing) {
         saveNodeContent(view);
         setTimeout(() => {
-            copyLinkToBlock(view);
+            copyLinkToBlock(view, isInSidebar);
         }, 100);
         return;
     }

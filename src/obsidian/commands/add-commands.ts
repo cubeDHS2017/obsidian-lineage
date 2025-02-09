@@ -88,7 +88,7 @@ const createCommands = (plugin: Lineage) => {
             if (checking) {
                 return Boolean(view);
             }
-            copyLinkToBlock(view!);
+            copyLinkToBlock(view!, false);
         },
     });
 

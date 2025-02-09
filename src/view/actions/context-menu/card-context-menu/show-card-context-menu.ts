@@ -83,7 +83,7 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
         {
             title: lang.cm_copy_link_to_block,
             icon: 'links-coming-in',
-            action: () => copyLinkToBlock(view),
+            action: () => copyLinkToBlock(view, isInSidebar),
             disabled: multipleNodesAreSelected,
         },
         { type: 'separator' },
@@ -141,11 +141,14 @@ export const showCardContextMenu = (event: MouseEvent, view: LineageView) => {
                 : lang.cm_pin_in_left_sidebar,
             icon: isPinned ? 'pin-off' : 'pin',
             action: () => {
+                const id = isInSidebar
+                    ? viewState.pinnedNodes.activeNode
+                    : activeNode;
                 documentStore.dispatch({
                     type: isPinned
                         ? 'document/pinned-nodes/unpin'
                         : 'document/pinned-nodes/pin',
-                    payload: { id: activeNode },
+                    payload: { id: id },
                 });
             },
             disabled: isInRecentCardsList || multipleNodesAreSelected,
