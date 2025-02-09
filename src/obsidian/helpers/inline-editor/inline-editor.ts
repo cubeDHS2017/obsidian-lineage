@@ -193,11 +193,12 @@ export class InlineEditor {
     }
 
     private setActiveEditor = () => {
-        this.view.plugin.app.workspace.activeEditor = this.inlineView;
+        // @ts-ignore
+        this.view.plugin.app.workspace._activeEditor = this.inlineView;
     };
 
     private invokeAndDeleteOnChangeSubscriptions = () => {
-        if (this.onChangeSubscriptions.size)
+        if (this.onChangeSubscriptions.size > 0)
             for (const subscription of this.onChangeSubscriptions) {
                 subscription();
                 this.onChangeSubscriptions.delete(subscription);
