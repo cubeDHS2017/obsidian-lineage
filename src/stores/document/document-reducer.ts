@@ -49,7 +49,12 @@ const updateDocumentState = (
         if (!update) return NO_UPDATE;
         newActiveNodeId = action.payload.nodeId;
     } else if (action.type === 'DOCUMENT/INSERT_NODE') {
-        newActiveNodeId = insertNode(state.document, action);
+        newActiveNodeId = insertNode(
+            state.document,
+            action.payload.position,
+            action.payload.activeNodeId,
+            action.payload.content,
+        );
     } else if (action.type === 'DOCUMENT/DELETE_NODE') {
         affectedNodeContent =
             state.document.content[action.payload.activeNodeId];

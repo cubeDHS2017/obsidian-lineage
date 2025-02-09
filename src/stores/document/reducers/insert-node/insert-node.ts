@@ -17,42 +17,34 @@ export type CreateNodeAction = {
 };
 export const insertNode = (
     document: LineageDocument,
-    action: Pick<CreateNodeAction, 'payload'>,
+    position: AllDirections | 'right-last',
+    activeNodeId: string,
+    content?: string,
     newNodeId = id.node(),
 ) => {
-    const payload = action.payload;
-    invariant(payload.activeNodeId);
+    invariant(activeNodeId);
 
-    if (payload.position === 'right') {
-        insertChild(
-            document,
-            payload.activeNodeId,
-            newNodeId,
-            !!action.payload.content,
-        );
-    } else if (payload.position === 'left') {
-        insertParentSibling(document, payload.activeNodeId, newNodeId);
+    if (position === 'right') {
+        insertChild(document, activeNodeId, newNodeId, !content);
+    } else if (position === 'right-last') {
+        insertChild(document, activeNodeId, newNodeId, false);
+    } else if (position === 'left') {
+        insertParentSibling(document, activeNodeId, newNodeId);
     } else {
-        const columnIndex = findNodeColumn(
-            document.columns,
-            payload.activeNodeId,
-        );
+        const columnIndex = findNodeColumn(document.columns, activeNodeId);
         const column = document.columns[columnIndex];
         invariant(column);
-        const group = findGroupByNodeId([column], payload.activeNodeId);
-        invariant(group, 'could not find group of ' + payload.activeNodeId);
+        const group = findGroupByNodeId([column], activeNodeId);
+        invariant(group, 'could not find group of ' + activeNodeId);
 
-        const groupIndex = group.nodes.findIndex(
-            (c) => c === payload.activeNodeId,
-        );
+        const groupIndex = group.nodes.findIndex((c) => c === activeNodeId);
 
-        const insertionIndex =
-            action.payload.position === 'up' ? groupIndex : groupIndex + 1;
+        const insertionIndex = position === 'up' ? groupIndex : groupIndex + 1;
         group.nodes.splice(insertionIndex, 0, newNodeId);
         group.nodes = [...group.nodes];
     }
     document.content[newNodeId] = {
-        content: action.payload.content || '',
+        content: content || '',
     };
 
     return newNodeId;

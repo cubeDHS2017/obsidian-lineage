@@ -27,13 +27,9 @@ export const pasteNode = (
     for (const branch of branches.reverse()) {
         insertNode(
             document,
-            {
-                payload: {
-                    activeNodeId: targetNode,
-                    position: position,
-                    content: branch.content[branch.nodeId]?.content,
-                },
-            },
+            position === 'right' ? 'right-last' : position,
+            targetNode,
+            branch.content[branch.nodeId]?.content,
             branch.nodeId,
         );
         pastChildGroups(document, branch);
