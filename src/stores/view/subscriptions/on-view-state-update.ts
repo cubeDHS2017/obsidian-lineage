@@ -4,7 +4,6 @@ import {
     getViewEventType,
     ViewEventType,
 } from 'src/stores/view/helpers/get-view-event-type';
-import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe-clear-selection';
 import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
@@ -47,15 +46,6 @@ export const onViewStateUpdate = (
                 },
             });
         }
-    }
-
-    if (
-        activeNodeChange &&
-        activeNodeHasChanged &&
-        type !== 'DOCUMENT/NAVIGATE_USING_KEYBOARD' &&
-        type !== 'DOCUMENT/JUMP_TO_NODE'
-    ) {
-        maybeClearSelection(view, action);
     }
 
     if (action.type === 'SEARCH/SET_QUERY') {

@@ -41,6 +41,8 @@ const updateDocumentState = (
         action.type === 'view/set-active-node/search'
     ) {
         updateActiveNode(state.document, action.payload.id, state);
+        if (!state.document.selectedNodes.has(state.document.activeNode))
+            resetSelectionState(state.document);
     } else if (action.type === 'DOCUMENT/NAVIGATE_USING_KEYBOARD') {
         navigateUsingKeyboard(state.document, state, action, context.columns);
     } else if (action.type === 'SEARCH/SET_QUERY') {

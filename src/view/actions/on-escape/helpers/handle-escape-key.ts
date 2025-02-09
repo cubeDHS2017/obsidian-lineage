@@ -37,7 +37,7 @@ export const handleEscapeKey = (view: LineageView) => {
             type: 'SEARCH/TOGGLE_INPUT',
         });
         return true;
-    } else if (selection.size > 1) {
+    } else if (selection.size > 0) {
         viewStore.dispatch({
             type: 'DOCUMENT/CLEAR_SELECTION',
         });
