@@ -17,4 +17,10 @@ export type MinimapStoreAction =
           payload: {
               position_cpx: number;
           };
+      }
+    | {
+          type: 'minimap/set-container-height';
+          payload: {
+              height_cpx: number;
+          };
       };

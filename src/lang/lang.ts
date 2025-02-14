@@ -27,9 +27,9 @@ export const lang = {
     modals_snapshots_created_card: 'Created card ',
 
     // edit
-    settings_general_maintain_edit_mode: 'Maintain edit mode',
+    settings_general_maintain_edit_mode: 'Maintain editing mode',
     settings_general_maintain_edit_mode_desc:
-        'Keeps edit mode active when switching to a different card using the mouse or keyboard',
+        'Maintain editing mode when switching to a different card using the mouse or keyboard',
     card_btn_edit: 'Edit',
     hk_enable_edit_mode: 'Edit card',
     hk_enable_edit_mode_and_place_cursor_at_start:
