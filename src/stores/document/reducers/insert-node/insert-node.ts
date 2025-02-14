@@ -25,7 +25,7 @@ export const insertNode = (
     invariant(activeNodeId);
 
     if (position === 'right') {
-        insertChild(document, activeNodeId, newNodeId, !content);
+        insertChild(document, activeNodeId, newNodeId, !!content);
     } else if (position === 'right-last') {
         insertChild(document, activeNodeId, newNodeId, false);
     } else if (position === 'left') {
