@@ -10,40 +10,39 @@ import { LINE_HEIGHT_CPX } from 'src/stores/minimap/subscriptions/effects/minima
 import { CardRanges } from 'src/stores/minimap/minimap-state-type';
 
 export class ShapesAndRanges {
-    private lines: MinimapLine[] = [];
-    private totalLines: number = 0;
-    private cardRanges: CardRanges = {};
+    #lines: MinimapLine[] = [];
+    #isEmpty = true;
+    #totalLines: number = 0;
+    #cardRanges: CardRanges = {};
 
     calculateDocument(document: LineageDocument, canvasId: string) {
         const tree = columnsToExtendedJson(document.columns, document.content);
         const blocks = calculateWordBlocks(tree, canvasId);
 
-        this.lines = blocks.lines;
-        this.totalLines = blocks.totalLines;
+        this.#lines = blocks.lines;
+        this.#totalLines = blocks.totalLines;
         calculateIndentationLines(blocks.lines);
+        this.#isEmpty =
+            blocks.lines.length === 0 ||
+            blocks.lines.every(
+                (line) =>
+                    line.wordBlocks.length === 1 && line.wordBlocks[0].empty,
+            );
 
-        this.cardRanges = createYRangeMap(this.lines);
+        this.#cardRanges = createYRangeMap(this.#lines);
 
         return {
-            totalLines: this.totalLines,
-            totalDrawnHeight_cpx: this.totalLines * LINE_HEIGHT_CPX,
-            cardRanges: this.cardRanges,
+            totalLines: this.#totalLines,
+            totalDrawnHeight_cpx: this.#totalLines * LINE_HEIGHT_CPX,
+            cardRanges: this.#cardRanges,
         };
     }
 
-    getLines() {
-        return this.lines;
+    get lines(): MinimapLine[] {
+        return this.#lines;
     }
 
-    getTotalLines() {
-        return this.totalLines;
-    }
-
-    getCardRange(cardId: string) {
-        return this.cardRanges[cardId];
-    }
-
-    getCardRanges() {
-        return this.cardRanges;
+    get isEmpty(): boolean {
+        return this.#isEmpty;
     }
 }
