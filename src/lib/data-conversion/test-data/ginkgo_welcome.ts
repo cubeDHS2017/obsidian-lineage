@@ -412,7 +412,8 @@ The same happens with *expert writers*. They start off only being really think a
 
 **Gingko Writer is explicitly designed to allow you to think like this**, no matter what your skill level is.
 
-> <span data-section="1.1.1.1.1"/>"As, therefore, in the case of animate bodies and organisms a certain magnitude is necessary, and a magnitude which may be easily embraced in one view; so in the plot, a certain length is necessary, and a length which can be easily embraced by the memory."
+<span data-section="1.1.1.1.1"/>
+> "As, therefore, in the case of animate bodies and organisms a certain magnitude is necessary, and a magnitude which may be easily embraced in one view; so in the plot, a certain length is necessary, and a length which can be easily embraced by the memory."
 <div style="text-align:right;">— *Aristotle, Poetics VII*</div>
 
 #### <span data-section="1.1.1.2"/>Levels of Detail - Sculpting Your Ideas
@@ -420,7 +421,8 @@ By being able to see your work from many different "levels of detail" (big pictu
 
 Once you've learned how to use Gingko Writer fluidly, writing becomes less about grinding through from start to end, and more like **sculpting your ideas**.
 
-> <span data-section="1.1.1.2.1"/>"That goal will become clearer, will emerge slowly but surely, much as the rough draught turns into a sketch, and the sketch into a painting through the serious work done on it, through the elaboration of the original vague idea and through the consolidation of the first fleeting and passing thought."
+<span data-section="1.1.1.2.1"/>
+> "That goal will become clearer, will emerge slowly but surely, much as the rough draught turns into a sketch, and the sketch into a painting through the serious work done on it, through the elaboration of the original vague idea and through the consolidation of the first fleeting and passing thought."
 <div style="text-align:right;">— *Vincent van Gogh*</div>
 
 ### <span data-section="1.1.2"/>Specific Use-cases

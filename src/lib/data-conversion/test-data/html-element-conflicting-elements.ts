@@ -14,7 +14,8 @@ display: none;
 }
 \`\`\`
 
-> <span data-section="5"/>quote
+<span data-section="5"/>
+> quote
 
 <span data-section="6"/>
 
@@ -22,7 +23,8 @@ display: none;
 | --- | --- |
 | 1   | 2   |
 
-> <span data-section="7"/>[!info]
+<span data-section="7"/>
+> [!info]
 > information
 
 <span data-section="8"/><!--comment -->`;
