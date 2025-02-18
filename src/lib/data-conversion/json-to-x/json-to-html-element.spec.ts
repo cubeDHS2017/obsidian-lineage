@@ -6,6 +6,8 @@ import { ginkgo_welcome } from 'src/lib/data-conversion/test-data/ginkgo_welcome
 import { ginkgo_academic_paper } from 'src/lib/data-conversion/test-data/ginkgo_acedemic_paper';
 import { html_element_conflicting_elements } from 'src/lib/data-conversion/test-data/html-element-conflicting-elements';
 import { htmlCommentToJson } from 'src/lib/data-conversion/x-to-json/html-comment-to-json';
+import { htmlElementToJson } from 'src/lib/data-conversion/x-to-json/html-element-to-json';
+import { jsonToHtmlComment } from './json-to-html-comment';
 
 describe('json to html element', () => {
     it('case 1', () => {
@@ -149,5 +151,27 @@ describe('json to html element', () => {
 
         const output = ['#🙄' + createHtmlElementMarker('', 1) + ' text'];
         expect(jsonToHtmlElement(input)).toEqual(output.join('\n'));
+    });
+
+    it('html comments matches html elements', () => {
+        const pairs = [
+            [
+                html_element_conflicting_elements.mdWithHtmlComment,
+                html_element_conflicting_elements.mdWithHtmlElement,
+            ],
+            [
+                ginkgo_academic_paper.annotatedMd,
+                ginkgo_academic_paper.mdWithHtmlElement,
+            ],
+        ];
+        for (const [htmlComments, htmlElements] of pairs) {
+            const jsonFromHtmlElements = htmlElementToJson(htmlElements);
+            const jsonFromHtmlComments = htmlCommentToJson(htmlComments);
+            const toHtmlElement = jsonToHtmlElement(jsonFromHtmlElements);
+            const toHtmlComment = jsonToHtmlComment(jsonFromHtmlComments);
+            expect(jsonFromHtmlElements).toEqual(jsonFromHtmlComments);
+            expect(toHtmlElement).toEqual(htmlElements);
+            expect(toHtmlComment).toEqual(htmlComments);
+        }
     });
 });

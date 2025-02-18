@@ -106,7 +106,7 @@
                 'space-between-cards': applyGapBetweenCards,
                 'zoom-reset': showUndoRestZoomButton
                     ? true
-                    : zoomLevel && zoomLevel !== 1
+                    : zoomLevel !== 1
             }) as Partial<Record<ToolbarButton, boolean>>;;
         },
     );
@@ -122,7 +122,7 @@
                 'zoom-out': zoomLevel <= minZoomLevel,
                 'zoom-reset': showUndoRestZoomButton
                     ? false
-                    : zoomLevel === 1 || !zoomLevel,
+                    : zoomLevel === 1,
             } as Partial<Record<ToolbarButton, boolean>>;
         },
     );

@@ -12,6 +12,11 @@
     import { minimapReducer } from 'src/stores/minimap/minimap-reducer';
     import { MinimapStoreAction } from 'src/stores/minimap/minimap-store-actions';
     import { minimapSubscriptions } from 'src/stores/minimap/subscriptions/minimap-subscriptions';
+    import {
+        MinimapScrollOffsetStore,
+        ScrollThumbHeightStore,
+        ScrollThumbPositionStore
+    } from 'src/stores/minimap/derived/scrollbar-stores';
 
     const view = getView();
     view.minimapStore = new Store(
@@ -35,14 +40,28 @@
             if (unsub) unsub();
         };
     });
+
+    const thumbHeight = ScrollThumbHeightStore(view);
+    const thumbPosition = ScrollThumbPositionStore(view);
+    const containerOffset = MinimapScrollOffsetStore(view);
+
 </script>
 
 <div class="minimap-container" on:wheel={onWheel}>
-    <div class="canvas-container" on:click={onClick} on:mousemove={onMousemove}>
+    <div
+        class="canvas-container"
+        on:click={onClick}
+        on:mousemove={onMousemove}
+        style={`transform: translateY(${$containerOffset}px)`}
+    >
         <Indicators />
         <canvas id="minimap"></canvas>
     </div>
-    <div class="scroll-indicator" id="scrollIndicator"></div>
+    <div
+        class="scroll-indicator"
+        id="scrollIndicator"
+        style={`height: ${$thumbHeight}px; transform: translateY(${$thumbPosition}px)`}
+    ></div>
 </div>
 
 <style>

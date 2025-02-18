@@ -24,7 +24,7 @@ export const jsonToHtmlElement = (
             const tag = content.match(/^#[^\s#\uFEFF\u200B]+/)?.[0];
             content = `${tag}${marker}${content.slice(tag!.length)}`;
         } else if (content.startsWith('>')) {
-            content = `> ${marker}${content.slice(1).trim()}`;
+            content = `${marker}\n${content}`;
         } else if (content.match(/^[-*+]\s\[.\]\s/)) {
             // tasks
             const taskPrefix = content.match(/^[-*+]\s\[.\]\s/)?.[0];

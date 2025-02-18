@@ -59,4 +59,5 @@ export const hotkeysLang = {
     toggle_collapse: lang.hk_outline_toggle_collapse,
     toggle_collapse_all: lang.hk_outline_toggle_collapse_all,
     toggle_outline_mode: lang.hk_toggle_outline_mode,
+    add_parent_sibling: lang.hk_add_parent_sibling,
 };

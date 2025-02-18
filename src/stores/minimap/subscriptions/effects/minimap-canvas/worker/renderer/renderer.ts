@@ -21,7 +21,13 @@ export class Renderer {
 
     drawDocument = (theme: MinimapTheme, range: VisibleRange) => {
         this.canvas.height = range.end_cpx - range.start_cpx;
-
-        drawLines(this.ctx, this.shapes.getLines(), theme, range);
+        if (this.shapes.isEmpty) {
+            this.ctx.clearRect(
+                0,
+                0,
+                this.ctx.canvas.width,
+                this.ctx.canvas.height,
+            );
+        } else drawLines(this.ctx, this.shapes.lines, theme, range);
     };
 }

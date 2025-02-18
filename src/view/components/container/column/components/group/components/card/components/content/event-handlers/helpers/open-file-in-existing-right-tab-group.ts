@@ -27,6 +27,7 @@ export const openFileInExistingRightTabGroup = (
         );
         if (linkedFile) {
             newLeaf.openFile(linkedFile);
+            workspace.setActiveLeaf(newLeaf);
             return true;
         }
     }

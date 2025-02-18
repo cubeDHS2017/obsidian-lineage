@@ -26,8 +26,14 @@ import { refreshCollapsedNodes } from 'src/stores/view/reducers/outline/refresh-
 import { toggleCollapseAllNodes } from 'src/stores/view/reducers/outline/toggle-collapse-all-nodes';
 import { collapseNode } from 'src/stores/view/reducers/outline/helpers/collapse-node';
 import { expandParentsOfActiveNode } from 'src/stores/view/reducers/outline/expand-parents-of-active-node';
+import { LineageDocument } from 'src/stores/document/document-state-type';
 
-const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
+const updateDocumentState = (
+    state: ViewState,
+    action: ViewStoreAction,
+    context: LineageDocument,
+) => {
+    const activeNode = state.document.activeNode;
     if (
         action.type === 'view/set-active-node/mouse' ||
         action.type === 'view/set-active-node/mouse-silent' ||
@@ -35,8 +41,10 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         action.type === 'view/set-active-node/search'
     ) {
         updateActiveNode(state.document, action.payload.id, state);
+        if (!state.document.selectedNodes.has(state.document.activeNode))
+            resetSelectionState(state.document);
     } else if (action.type === 'DOCUMENT/NAVIGATE_USING_KEYBOARD') {
-        navigateUsingKeyboard(state.document, state, action);
+        navigateUsingKeyboard(state.document, state, action, context.columns);
     } else if (action.type === 'SEARCH/SET_QUERY') {
         setSearchQuery(state, action.payload.query);
     } else if (action.type === 'SEARCH/SET_RESULTS') {
@@ -127,16 +135,14 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
         onDragStart(state.document, action);
     } else if (action.type === 'DOCUMENT/SET_DRAG_ENDED') {
         onDragEnd(state.document);
-    } else if (action.type === 'view/update-active-branch?source=view') {
-        updateActiveBranch(state.document, action.context.columns, false);
     } else if (action.type === 'view/update-active-branch?source=document') {
-        updateActiveBranch(state.document, action.context.columns, true);
+        updateActiveBranch(state.document, context.columns, true);
     } else if (action.type === 'NAVIGATION/NAVIGATE_FORWARD') {
         navigateActiveNodeHistory(state.document, state, true);
     } else if (action.type === 'NAVIGATION/NAVIGATE_BACK') {
         navigateActiveNodeHistory(state.document, state);
     } else if (action.type === 'DOCUMENT/JUMP_TO_NODE') {
-        jumpToNode(state.document, state, action);
+        jumpToNode(state.document, state, action, context.columns);
     } else if (action.type === 'NAVIGATION/REMOVE_OBSOLETE') {
         removeDeletedNavigationItems(state, action.payload.content);
     } else if (action.type === 'SEARCH/TOGGLE_FUZZY_MODE') {
@@ -186,27 +192,32 @@ const updateDocumentState = (state: ViewState, action: ViewStoreAction) => {
     } else if (action.type === 'view/hotkeys/update-conflicts') {
         state.hotkeys.conflictingHotkeys = action.payload.conflicts;
     } else if (action.type === 'view/outline/toggle-collapse-node') {
-        toggleCollapseNode(state, action.payload.columns, action.payload.id);
+        toggleCollapseNode(state, context.columns, action.payload.id);
     } else if (action.type === 'view/outline/refresh-collapsed-nodes') {
-        refreshCollapsedNodes(state, action.payload.columns);
+        refreshCollapsedNodes(state, context.columns);
     } else if (action.type === 'view/outline/toggle-collapse-all') {
-        toggleCollapseAllNodes(state, action.payload.columns);
+        toggleCollapseAllNodes(state, context.columns);
     } else if (action.type === 'view/selection/set-selection') {
         state.document.selectedNodes = new Set(action.payload.ids);
     } else if (
         action.type === 'view/persisted-state/load-persisted-collapsed-parents'
     ) {
         for (const id of action.payload.collapsedIds) {
-            collapseNode(state, action.context.columns, id);
+            collapseNode(state, context.columns, id);
         }
-        expandParentsOfActiveNode(state, action.context.columns);
+        expandParentsOfActiveNode(state, context.columns);
         state.outline = { ...state.outline };
+    }
+    if (activeNode !== state.document.activeNode) {
+        updateActiveBranch(state.document, context.columns, false);
+        expandParentsOfActiveNode(state, context.columns);
     }
 };
 export const viewReducer = (
     store: ViewState,
     action: ViewStoreAction,
+    context: LineageDocument,
 ): ViewState => {
-    updateDocumentState(store, action);
+    updateDocumentState(store, action, context);
     return store;
 };

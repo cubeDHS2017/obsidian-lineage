@@ -23,6 +23,7 @@ export const onDocumentStateUpdate = (
     const viewStore = view.viewStore;
     const container = view.container;
 
+    viewStore.setContext(documentState.document);
     const type = action.type;
 
     const e: DocumentEventType | null = getDocumentEventType(
@@ -42,15 +43,11 @@ export const onDocumentStateUpdate = (
         viewStore.dispatch({
             type: 'view/update-active-branch?source=document',
             context: {
-                columns: documentState.document.columns,
                 documentAction: action,
             },
         });
         viewStore.dispatch({
             type: 'view/outline/refresh-collapsed-nodes',
-            payload: {
-                columns: documentState.document.columns,
-            },
         });
         documentStore.dispatch({
             type: 'document/pinned-nodes/remove-stale-nodes',

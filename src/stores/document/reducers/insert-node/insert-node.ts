@@ -1,55 +1,50 @@
 import { insertChild } from 'src/lib/tree-utils/insert/insert-child';
 import { findNodeColumn } from 'src/lib/tree-utils/find/find-node-column';
-import { Direction } from 'src/stores/document/document-store-actions';
+import { AllDirections } from 'src/stores/document/document-store-actions';
 import { findGroupByNodeId } from 'src/lib/tree-utils/find/find-group-by-node-id';
 import { LineageDocument } from 'src/stores/document/document-state-type';
 import invariant from 'tiny-invariant';
 import { id } from 'src/helpers/id';
+import { insertParentSibling } from 'src/lib/tree-utils/insert/insert-parent-sibling';
 
 export type CreateNodeAction = {
     type: 'DOCUMENT/INSERT_NODE';
     payload: {
-        position: Direction;
+        position: AllDirections;
         activeNodeId: string;
         content?: string;
     };
 };
 export const insertNode = (
     document: LineageDocument,
-    action: Pick<CreateNodeAction, 'payload'>,
+    position: AllDirections | 'right-last',
+    activeNodeId: string,
+    content?: string,
     newNodeId = id.node(),
 ) => {
-    const payload = action.payload;
-    invariant(payload.activeNodeId);
+    invariant(activeNodeId);
 
-    if (payload.position === 'right') {
-        insertChild(
-            document,
-            payload.activeNodeId,
-            newNodeId,
-            !!action.payload.content,
-        );
+    if (position === 'right') {
+        insertChild(document, activeNodeId, newNodeId, !!content);
+    } else if (position === 'right-last') {
+        insertChild(document, activeNodeId, newNodeId, false);
+    } else if (position === 'left') {
+        insertParentSibling(document, activeNodeId, newNodeId);
     } else {
-        const columnIndex = findNodeColumn(
-            document.columns,
-            payload.activeNodeId,
-        );
+        const columnIndex = findNodeColumn(document.columns, activeNodeId);
         const column = document.columns[columnIndex];
         invariant(column);
-        const group = findGroupByNodeId([column], payload.activeNodeId);
-        invariant(group, 'could not find group of ' + payload.activeNodeId);
+        const group = findGroupByNodeId([column], activeNodeId);
+        invariant(group, 'could not find group of ' + activeNodeId);
 
-        const groupIndex = group.nodes.findIndex(
-            (c) => c === payload.activeNodeId,
-        );
+        const groupIndex = group.nodes.findIndex((c) => c === activeNodeId);
 
-        const insertionIndex =
-            action.payload.position === 'up' ? groupIndex : groupIndex + 1;
+        const insertionIndex = position === 'up' ? groupIndex : groupIndex + 1;
         group.nodes.splice(insertionIndex, 0, newNodeId);
         group.nodes = [...group.nodes];
     }
     document.content[newNodeId] = {
-        content: action.payload.content || '',
+        content: content || '',
     };
 
     return newNodeId;

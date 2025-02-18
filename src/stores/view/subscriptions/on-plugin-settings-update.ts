@@ -54,12 +54,8 @@ export const onPluginSettingsUpdate = (
         });
     } else if (type === 'settings/view/modes/toggle-outline-mode') {
         if (state.view.outlineMode) {
-            const columns = view.documentStore.getValue().document.columns;
             view.viewStore.dispatch({
                 type: 'view/outline/refresh-collapsed-nodes',
-                payload: {
-                    columns,
-                },
             });
         }
     }

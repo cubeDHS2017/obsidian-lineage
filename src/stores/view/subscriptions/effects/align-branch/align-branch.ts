@@ -48,10 +48,6 @@ export class AlignBranch {
     constructor(public view: LineageView) {}
 
     align = (action: PluginAction) => {
-        if (action.type === 'view/update-active-branch?source=view') {
-            action = action.context.viewAction;
-        }
-
         const priority = actionPriority.get(action.type);
         if (typeof priority !== 'number') {
             throw new SilentError(action.type + ' not allowed');

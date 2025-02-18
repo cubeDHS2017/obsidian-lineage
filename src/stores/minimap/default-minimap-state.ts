@@ -7,6 +7,7 @@ export const defaultMinimapState = (): MinimapState => ({
     scrollInfo: {
         totalDrawnHeight_cpx: 0,
         scrollPosition_cpx: 0,
+        containerHeight_cpx: 0,
     },
     ranges: {
         cards: {},

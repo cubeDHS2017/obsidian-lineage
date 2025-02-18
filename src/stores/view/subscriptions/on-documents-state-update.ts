@@ -2,6 +2,7 @@ import { LineageView } from 'src/view/view';
 import { DocumentsStoreAction } from 'src/stores/documents/documents-store-actions';
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
+import { refreshScrollPosition } from 'src/view/components/container/minimap/event-handlers/on-canvas-wheel';
 
 export const onDocumentsStateUpdate = (
     view: LineageView,
@@ -12,6 +13,7 @@ export const onDocumentsStateUpdate = (
         if (view.viewStore.getValue().document.editing.activeNodeId) {
             saveNodeContent(view);
         }
+        refreshScrollPosition(view, 0);
     }
     if (
         action.type === 'WORKSPACE/SET_ACTIVE_LINEAGE_VIEW' ||

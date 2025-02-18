@@ -11,7 +11,6 @@ export const selectionCommands = () => {
                     type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
                     payload: {
                         direction: 'up',
-                        columns: view.documentStore.getValue().document.columns,
                     },
                     context: {
                         shiftKey: true,
@@ -37,7 +36,6 @@ export const selectionCommands = () => {
                     type: 'DOCUMENT/NAVIGATE_USING_KEYBOARD',
                     payload: {
                         direction: 'down',
-                        columns: view.documentStore.getValue().document.columns,
                     },
                     context: {
                         shiftKey: true,
@@ -64,7 +62,6 @@ export const selectionCommands = () => {
                     type: 'DOCUMENT/JUMP_TO_NODE',
                     payload: {
                         target: 'end-of-column',
-                        columns: view.documentStore.getValue().document.columns,
                     },
                     context: {
                         shiftKey: true,
@@ -84,7 +81,6 @@ export const selectionCommands = () => {
                     type: 'DOCUMENT/JUMP_TO_NODE',
                     payload: {
                         target: 'start-of-column',
-                        columns: view.documentStore.getValue().document.columns,
                     },
                     context: {
                         shiftKey: true,
@@ -108,7 +104,6 @@ export const selectionCommands = () => {
                     type: 'DOCUMENT/JUMP_TO_NODE',
                     payload: {
                         target: 'end-of-group',
-                        columns: view.documentStore.getValue().document.columns,
                     },
                     context: {
                         shiftKey: true,
@@ -132,7 +127,6 @@ export const selectionCommands = () => {
                     type: 'DOCUMENT/JUMP_TO_NODE',
                     payload: {
                         target: 'start-of-group',
-                        columns: view.documentStore.getValue().document.columns,
                     },
                     context: {
                         shiftKey: true,

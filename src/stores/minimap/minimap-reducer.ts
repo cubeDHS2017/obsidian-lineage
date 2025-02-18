@@ -12,6 +12,8 @@ const updateDocumentState = (
         state.activeCardId = action.payload.id;
     } else if (action.type === 'minimap/set-scroll-position') {
         state.scrollInfo.scrollPosition_cpx = action.payload.position_cpx;
+    } else if (action.type === 'minimap/set-container-height') {
+        state.scrollInfo.containerHeight_cpx = action.payload.height_cpx;
     }
 };
 export const minimapReducer = (

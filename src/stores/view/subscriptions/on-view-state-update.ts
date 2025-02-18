@@ -4,7 +4,6 @@ import {
     getViewEventType,
     ViewEventType,
 } from 'src/stores/view/helpers/get-view-event-type';
-import { maybeClearSelection } from 'src/stores/view/subscriptions/actions/maybe-clear-selection';
 import { updateSearchResults } from 'src/stores/view/subscriptions/actions/update-search-results';
 import { focusContainer } from 'src/stores/view/subscriptions/effects/focus-container';
 import { persistActiveNodeInPluginSettings } from 'src/stores/view/subscriptions/actions/persist-active-node-in-plugin-settings';
@@ -18,8 +17,6 @@ export const onViewStateUpdate = (
     action: ViewStoreAction,
     localState: { previousActiveNode: string },
 ) => {
-    const documentStore = view.documentStore;
-    const documentState = documentStore.getValue();
     const viewStore = view.viewStore;
     const viewState = viewStore.getValue();
     const container = view.container;
@@ -37,14 +34,6 @@ export const onViewStateUpdate = (
         localState.previousActiveNode = viewState.document.activeNode;
     }
     if (activeNodeChange && activeNodeHasChanged) {
-        // this should be handled internally
-        viewStore.dispatch({
-            type: 'view/update-active-branch?source=view',
-            context: {
-                columns: documentState.document.columns,
-                viewAction: action,
-            },
-        });
         persistActiveNodeInPluginSettings(view);
         view.plugin.statusBar.updateProgressIndicatorAndChildCount(view);
     }
@@ -59,15 +48,6 @@ export const onViewStateUpdate = (
         }
     }
 
-    if (
-        activeNodeChange &&
-        activeNodeHasChanged &&
-        type !== 'DOCUMENT/NAVIGATE_USING_KEYBOARD' &&
-        type !== 'DOCUMENT/JUMP_TO_NODE'
-    ) {
-        maybeClearSelection(view, action);
-    }
-
     if (action.type === 'SEARCH/SET_QUERY') {
         updateSearchResults(view);
     }
@@ -77,7 +57,7 @@ export const onViewStateUpdate = (
         e.search ||
         e.editMainSplit ||
         action.type === 'view/update-active-branch?source=document' ||
-        action.type === 'view/update-active-branch?source=view'
+        (activeNodeChange && activeNodeHasChanged)
     ) {
         view.alignBranch.align(action);
     }

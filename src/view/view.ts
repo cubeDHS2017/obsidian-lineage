@@ -12,7 +12,10 @@ import { documentReducer } from 'src/stores/document/document-reducer';
 import { Unsubscriber } from 'svelte/store';
 import { OnError, Store } from 'src/lib/store/store';
 import { defaultDocumentState } from 'src/stores/document/default-document-state';
-import { DocumentState } from 'src/stores/document/document-state-type';
+import {
+    DocumentState,
+    LineageDocument,
+} from 'src/stores/document/document-state-type';
 import { clone } from 'src/helpers/clone';
 import { extractFrontmatter } from 'src/view/helpers/extract-frontmatter';
 import { DocumentStoreAction } from 'src/stores/document/document-store-actions';
@@ -48,7 +51,7 @@ import { logger } from 'src/helpers/logger';
 export const LINEAGE_VIEW_TYPE = 'lineage';
 
 export type DocumentStore = Store<DocumentState, DocumentStoreAction>;
-export type ViewStore = Store<ViewState, ViewStoreAction>;
+export type ViewStore = Store<ViewState, ViewStoreAction, LineageDocument>;
 export type MinimapStore = Store<MinimapState, MinimapStoreAction>;
 
 export class LineageView extends TextFileView {
@@ -63,7 +66,7 @@ export class LineageView extends TextFileView {
     alignBranch: AlignBranch;
     id: string;
     zoomFactor: number;
-    private minimapDom: MinimapDomElements | null = null;
+    minimapDom: MinimapDomElements | null = null;
 
     private readonly onDestroyCallbacks: Set<Unsubscriber> = new Set();
     private activeFilePath: null | string;
@@ -77,10 +80,11 @@ export class LineageView extends TextFileView {
             documentReducer,
             this.onViewStoreError as OnError<DocumentStoreAction>,
         );
-        this.viewStore = new Store(
+        this.viewStore = new Store<ViewState, ViewStoreAction, LineageDocument>(
             defaultViewState(),
             viewReducer,
             this.onViewStoreError as OnError<ViewStoreAction>,
+            this.documentStore.getValue().document,
         );
 
         this.id = id.view();

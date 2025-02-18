@@ -1,5 +1,5 @@
 import { LineageView } from 'src/view/view';
-import { openFileInExistingRightTabGroup } from 'src/view/components/container/column/components/group/components/card/components/content/event-handlers/helpers/open-file-in-existing-right-tab-group';
+import { openFileInNewSplit } from 'src/view/components/container/column/components/group/components/card/components/content/event-handlers/open-file-in-new-split';
 
 const selectCard = (view: LineageView, id: string) => {
     view.viewStore.dispatch({
@@ -8,15 +8,6 @@ const selectCard = (view: LineageView, id: string) => {
             id: id,
         },
     });
-};
-
-const handleFile = (view: LineageView, link: string) => {
-    const path = view.documentStore.getValue().file.path;
-    if (!link || !path) return;
-    const success = openFileInExistingRightTabGroup(view, link, path);
-    if (!success) {
-        view.plugin.app.workspace.openLinkText(link, path, 'split');
-    }
 };
 
 const handleHeading = (view: LineageView, link: string) => {
@@ -71,6 +62,7 @@ export const handleLinks = (view: LineageView, e: MouseEvent) => {
         e.stopPropagation();
         handleHeading(view, link);
     } else {
-        handleFile(view, link);
+        e.stopPropagation();
+        openFileInNewSplit(view, link);
     }
 };

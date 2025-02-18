@@ -9,6 +9,7 @@ export const hotkeyGroups = {
         'add_child',
         'add_below',
         'add_above',
+        'add_parent_sibling',
         'add_child_and_split',
         'add_below_and_split',
         'add_above_and_split',

@@ -1,4 +1,4 @@
-import { Direction } from 'src/stores/document/document-store-actions';
+import { AllDirections } from 'src/stores/document/document-store-actions';
 import { saveNodeContent } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/save-node-content';
 
 import { isEditing } from 'src/view/actions/keyboard-shortcuts/helpers/commands/commands/helpers/is-editing';
@@ -6,7 +6,7 @@ import { LineageView } from 'src/view/view';
 
 export const saveNodeAndInsertNode = (
     view: LineageView,
-    direction: Direction,
+    direction: AllDirections,
     content = '',
     activeNodeId?: string,
 ) => {
@@ -24,8 +24,9 @@ export const saveNodeAndInsertNode = (
         },
     });
     if (content) {
+        const newNodeId = view.viewStore.getValue().document.activeNode;
         if (direction === 'down' || direction === 'right') {
-            view.inlineEditor.setNodeCursor(nodeId, { line: 0, ch: 0 });
+            view.inlineEditor.setNodeCursor(newNodeId, { line: 0, ch: 0 });
         }
     }
 };

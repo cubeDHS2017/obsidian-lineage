@@ -46,6 +46,24 @@ export const createCommands = () => {
             ],
         },
         {
+            name: 'add_parent_sibling',
+            callback: (view) => {
+                saveNodeAndInsertNode(view, 'left');
+            },
+            hotkeys: [
+                {
+                    key: 'ArrowLeft',
+                    modifiers: ['Mod'],
+                    editorState: 'editor-off',
+                },
+                {
+                    key: 'H',
+                    modifiers: ['Mod'],
+                    editorState: 'both',
+                },
+            ],
+        },
+        {
             name: 'add_above_and_split',
             callback: (view) => {
                 if (isEditing(view)) addNodeAndSplitAtCursor(view, 'up');

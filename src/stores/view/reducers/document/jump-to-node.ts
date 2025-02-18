@@ -13,7 +13,6 @@ export type JumpToNodeAction = {
     type: 'DOCUMENT/JUMP_TO_NODE';
     payload: {
         target: JumpTarget;
-        columns: Column[];
     };
     context?: {
         shiftKey: boolean;
@@ -24,14 +23,21 @@ export const jumpToNode = (
     documentViewState: DocumentViewState,
     state: Pick<ViewState, 'navigationHistory'>,
     action: JumpToNodeAction,
+    columns: Column[],
 ) => {
     const nextNode = findNextActiveNode(
-        action.payload.columns,
+        columns,
         documentViewState.activeNode,
         action,
     );
     if (nextNode) {
-        updateSelectionState(documentViewState, nextNode, action);
+        updateSelectionState(
+            columns,
+            documentViewState,
+            nextNode,
+            true,
+            Boolean(action.context?.shiftKey),
+        );
         updateActiveNode(documentViewState, nextNode, state);
     }
 };

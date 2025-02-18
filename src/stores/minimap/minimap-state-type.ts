@@ -9,6 +9,7 @@ export type CardRanges = {
 export type ScrollInfo = {
     scrollPosition_cpx: number;
     totalDrawnHeight_cpx: number;
+    containerHeight_cpx: number;
 };
 export type MinimapDomElements = {
     canvas: HTMLCanvasElement;
