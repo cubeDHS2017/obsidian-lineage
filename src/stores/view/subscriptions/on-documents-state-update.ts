@@ -13,7 +13,7 @@ export const onDocumentsStateUpdate = (
         if (view.viewStore.getValue().document.editing.activeNodeId) {
             saveNodeContent(view);
         }
-        refreshScrollPosition(view, 0);
+        if (view.minimapStore) refreshScrollPosition(view, 0);
     }
     if (
         action.type === 'WORKSPACE/SET_ACTIVE_LINEAGE_VIEW' ||
